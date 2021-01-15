@@ -1,4 +1,4 @@
-const interfaceList = []
+let interfaceList = []
 const fillMargin = (len) => Array(len).fill(' ').join('')
 
 const createInterfaceItem = (str) => `${str}:string`
@@ -26,7 +26,8 @@ module.exports = function (data) {
     const { req_params } = data
     if (req_params.length === 0) return null
     interfaceList.push(createInterface(req_params, 'ReqParams'))
-    const interface = interfaceList.join('\n\n')
+    const interface = interfaceList.join('\n\n')+'\n\n'
+    interfaceList = []
     return interface
 }
 

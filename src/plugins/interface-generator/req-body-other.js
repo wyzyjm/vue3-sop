@@ -1,4 +1,4 @@
-const interfaceList = []
+let interfaceList = []
 
 const firstUpperCase = ([first, ...rest]) => first.toUpperCase() + rest.join('')
 const fillMargin = (len) => Array(len).fill(' ').join('')
@@ -15,7 +15,8 @@ const createInterfaceItem = (key, val, required) => {
 const createInterfaceItemDescription = (str) => str ? `//${str}` : ''
 
 const createInterface = (obj, key) => {
-    const { properties, required } = obj
+    let { properties, required } = obj
+    required = required || []
     const items = Object.keys(properties).map(v => {
         return [createInterfaceItem(v, properties[v], required.includes(v)), createInterfaceItemDescription(properties[v].description)]
     })
@@ -32,12 +33,16 @@ const createInterface = (obj, key) => {
     return str
 }
 
+module.exports = (() => {
 
-module.exports = function (data) {
-    const { req_body_other } = data
-    if (!req_body_other) return null
-    interfaceList.push(createInterface(JSON.parse(req_body_other), 'ReqBody'))
-    const interface = interfaceList.join('\n\n')
-    return interface
-}
+    return function (data) {
+        const { req_body_other } = data
+        if (!req_body_other) return null
+        interfaceList.push(createInterface(JSON.parse(req_body_other), 'ReqBody'))
+        const interface = interfaceList.join('\n\n') + '\n\n'
+        interfaceList = []
+        return interface
+    }
+
+})()
 

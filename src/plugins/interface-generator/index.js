@@ -1,29 +1,19 @@
 const config = require('./config')
 const util = require('./util')
+const getBaseInfo = require('./base-info')
 const getResBody = require('./res-body')
 const getReqQuery = require('./req-query')
 const getReqParams = require('./req-params')
 const getReqBodyOther = require('./req-body-other')
 const writeFile = require('./file')
 
-const { baseURL, token, version } = config
+const { baseURL, token } = config
 const { toCamel, fetch } = util
 
 
 const getApiDetail = (id) => fetch(`${baseURL}/api/interface/get?token=${token}&id=${id}`)
-const getAllApi = (id) => fetch(`${baseURL}/api/interface/list?token=${token}&catid=${id}&limit=10`)
+const getAllApi = (id) => fetch(`${baseURL}/api/interface/list?token=${token}&catid=${id}&limit=1000`)
 
-const getBaseInfo = ({ project_id, _id, title }) => {
-    const url = `${baseURL}/project/${project_id}/interface/api/${_id}`
-    return `
-/**
- * 文档地址：${url}
- * 生成日期：${new Date()}
- * 生成工具版本：${version}
- * 接口名称：${title}
- */
-`
-}
 
 
 const getRequestFunction = ({ path, method }, arg) => {
@@ -61,18 +51,12 @@ const createInterface = (id) => {
         let fileData = ''
 
         fileData += baseInfo || ''
-        fileData += '\n\n'
         fileData += resBody || ''
-        fileData += '\n\n'
         fileData += reqQuery || ''
-        fileData += '\n\n'
         fileData += reqParams || ''
-        fileData += '\n\n'
         fileData += reqBodyOther || ''
-        fileData += '\n\n'
         fileData += requestFunction || ''
         writeFile(`../../api/${id}-${toCamel(data.path).replace('/', '')}.ts`, fileData)
-
     })
 
 }
@@ -82,7 +66,7 @@ const createInterfaceByProject = (id) => {
         const { data, errcode, errmsg } = response.data
         if (errcode) return
         data.list.forEach(v => {
-            createInterface(v._id, v.path)
+            createInterface(v._id)
         })
     })
 }

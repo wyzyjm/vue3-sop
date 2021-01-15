@@ -1,4 +1,4 @@
-const interfaceList = []
+let interfaceList = []
 
 const firstUpperCase = ([first, ...rest]) => first.toUpperCase() + rest.join('')
 const fillMargin = (len) => Array(len).fill(' ').join('')
@@ -35,9 +35,10 @@ const createInterface = (obj, key) => {
 
 module.exports = function (data) {
     const { res_body } = data
-    if (!res_body) return
+    if (!res_body) return null
     interfaceList.push(createInterface(JSON.parse(res_body), 'ResBody'))
-    const interface = interfaceList.join('\n\n')
+    const interface = interfaceList.join('\n\n')+'\n\n'
+    interfaceList = []
     return interface
 }
 

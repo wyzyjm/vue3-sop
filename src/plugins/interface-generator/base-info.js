@@ -1,13 +1,13 @@
-module.exports = function (data) {
-    const { title } = data
-    var text = `
-    /**
-     * 文档地址：
-     * 生成日期：${new Date()}
-     * 生成工具版本：v0.0.1
-     * 接口名称：${title}
-     * 请求参数：
-     */`
-
-    return text
+const config = require('./config')
+const { baseURL, version } = config
+module.exports =({ project_id, _id, title }) => {
+    const url = `${baseURL}/project/${project_id}/interface/api/${_id}`
+    return `
+/**
+ * 文档地址：${url}
+ * 生成日期：${new Date()}
+ * 生成工具版本：${version}
+ * 接口名称：${title}
+ */
+`
 }
