@@ -27,7 +27,7 @@ const getBaseInfo = ({ project_id, _id, title }) => {
 
 
 const getRequestFunction = ({ path, method }, arg) => {
-    const request = `import request from '../src/plugins/request'`
+    const request = `import request from '../plugins/request'`
     const Params = `interface Params extends ${['ReqQuery', 'ReqParams', 'ReqBody'].filter(v => arg[v])} {}`
     const ParamsKey = 'POST,PUT,PATCH'.indexOf(method) === -1 ? 'params' : 'data'
     return (
