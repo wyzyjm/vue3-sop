@@ -5,6 +5,7 @@ const getResBody = require('./res-body')
 const getReqQuery = require('./req-query')
 const getReqParams = require('./req-params')
 const getReqBodyOther = require('./req-body-other')
+const getRequestFunction = require('./request-function')
 const writeFile = require('./file')
 
 const { baseURL, token } = config
@@ -14,23 +15,6 @@ const { toCamel, fetch } = util
 const getApiDetail = (id) => fetch(`${baseURL}/api/interface/get?token=${token}&id=${id}`)
 const getAllApi = (id) => fetch(`${baseURL}/api/interface/list?token=${token}&catid=${id}&limit=1000`)
 
-
-
-const getRequestFunction = ({ path, method }, arg) => {
-    const request = `import request from '../plugins/request'`
-    const Params = `interface Params extends ${['ReqQuery', 'ReqParams', 'ReqBody'].filter(v => arg[v])} {}`
-    const ParamsKey = 'POST,PUT,PATCH'.indexOf(method) === -1 ? 'params' : 'data'
-    return (
-        `${Params}\n\n${request}\nexport default (params: Params)=> { 
-    return request({
-        url:'${path}',
-        method:'${method}',
-        ${ParamsKey}:params
-    })
-}`
-    )
-
-}
 
 const createInterface = (id) => {
     getApiDetail(id).then(response => {
@@ -80,7 +64,5 @@ if (argv.includes('project')) {
 } else {
     createInterface(argv[argv.length - 1])
 }
-
-console.log(process.argv)
 
 // node index.js 460  or node index.js project 59
