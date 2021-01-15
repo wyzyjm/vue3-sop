@@ -36,7 +36,7 @@ const createInterface = (obj, key) => {
 module.exports = function (data) {
     const { res_body } = data
     if (!res_body) return
-    interfaceList.push(createInterface(JSON.parse(res_body), 'ReqBody'))
+    interfaceList.push(createInterface(JSON.parse(res_body), 'ResBody'))
     const interface = interfaceList.join('\n\n')
     return interface
 }
