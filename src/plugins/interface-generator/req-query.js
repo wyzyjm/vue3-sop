@@ -2,7 +2,7 @@ let interfaceList = []
 const fillMargin = (len) => Array(len).fill(' ').join('')
 
 const createInterfaceItem = (str, required) => `${str}:${required ? '' : '?'}string`
-const createInterfaceItemDescription = (str) => str ? `//${str}` : ''
+const createInterfaceItemDescription = (str) => str ? `/**${str}*/` : ''
 
 const createInterface = (arr, key) => {
     const items = arr.map(v => {
@@ -23,6 +23,7 @@ const createInterface = (arr, key) => {
 
 
 module.exports = function (data) {
+    debugger
     const { req_query } = data
     if (req_query.length === 0) return null
     interfaceList.push(createInterface(req_query, 'ReqQuery'))

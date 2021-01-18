@@ -34,13 +34,15 @@
 <script lang="ts">
 import { useWindowSize } from '@vueuse/core'
 import { url } from 'inspector'
-import { defineComponent, ref, reactive } from 'vue'
+import { defineComponent, ref, reactive, computed } from 'vue'
 import SubMenu from './components/sub-menu.vue'
+import { useRoute } from 'vue-router'
+import {menuItem} from 'element-plus'
 
 export default defineComponent({
   components: { SubMenu },
   setup() {
-    // 基本配置
+    // 布局配置
     const layout = reactive({
       container: {
         height: useWindowSize().height,
@@ -57,11 +59,19 @@ export default defineComponent({
       },
     })
 
+    const route = useRoute()
+
+    const findActiveMenu = (subMenu, openeds) => {}
+
     // 菜单配置
     const menu = reactive({
-      'default-openeds': ['1', '3'],
+      'default-openeds': computed(() => {
+        const { path } = route
+        return findActiveMenu(menu.subMenu, [])
+      }),
       'background-color': '#4d4d4d',
       'text-color': '#fff',
+      router: true,
       subMenu: [
         {
           icon: 'el-icon-message',
@@ -69,7 +79,7 @@ export default defineComponent({
           title: '导航1',
           menuItem: [
             {
-              index: '1-1',
+              index: '/test1',
               title: '标题1',
             },
           ],
