@@ -30,8 +30,13 @@
           <sub-menu :subMenu="menu.subMenu"></sub-menu>
         </el-menu>
       </el-aside>
-      <el-main>
-        <router-view />
+      <el-main class="main">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item v-for="item in route.matched" :key="item.path" :to="item.path">{{item.meta.title}}</el-breadcrumb-item>
+        </el-breadcrumb>
+        <el-container class="mt20">
+          <router-view />
+        </el-container>
       </el-main>
     </el-container>
   </el-container>
@@ -94,6 +99,7 @@ export default defineComponent({
     return {
       menu,
       layout,
+      route,
     }
   },
 })
@@ -108,5 +114,8 @@ export default defineComponent({
 }
 .menu {
   border-right: none;
+}
+.main {
+  border: 10px solid #e8ecef;
 }
 </style>
