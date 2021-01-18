@@ -2,7 +2,7 @@ let interfaceList = []
 const fillMargin = (len) => Array(len).fill(' ').join('')
 
 const createInterfaceItem = (str) => `${str}:string`
-const createInterfaceItemDescription = (str) => str ? `//${str}` : ''
+const createInterfaceItemDescription = (str) => str ? `/**${str}*/` : ''
 
 const createInterface = (arr, key) => {
     const items = arr.map(v => {

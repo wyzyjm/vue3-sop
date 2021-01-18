@@ -12,7 +12,7 @@ const createInterfaceItem = (key, val, required) => {
     }
 }
 
-const createInterfaceItemDescription = (str) => str ? `//${str}` : ''
+const createInterfaceItemDescription = (str) => str ? `/**${str}*/` : ''
 
 const createInterface = (obj, key) => {
     let { properties, required } = obj
