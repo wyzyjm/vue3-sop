@@ -2,9 +2,10 @@ import Vue from 'vue'
 import App from './app.vue'
 import router from './router'
 import store from './store'
+import './ui/element'
+import './hooks/composition-api'
 
 Vue.config.productionTip = false
-
 new Vue({
   router,
   store,
