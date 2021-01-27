@@ -1,10 +1,6 @@
 <template>
   <div>
-    <div class="ce-form" v-if="form">
-      <s-form ref="form" v-bind="form" :uid="uid" @reset="reset" @search="search">
-        <slot name="form"></slot>
-      </s-form>
-    </div>
+    <slot name="form"></slot>
     <slot name="top"></slot>
     <Table border v-bind="$attrs" v-on="$listeners" v-loading="tableIsLoading" :uid="uid" :data="tableData">
       <slot></slot>
@@ -12,7 +8,7 @@
     <slot name="bottom"></slot>
     <div v-if="page !== false" class="ce-pagination">
       <slot name="page"></slot>
-      <Page @current-change="currentChange" @size-change="sizeChange" :uid="uid" :total="total" :page-sizes="[10, 20, 30, 40, 50, 100, 200]" v-if="page !== false" ref="page"></Page>
+      <Page :page-size="params.pagination.pageSize" layout="prev, pager, next, jumper,sizes,total" :current-page="params.pagination.currentPage" @current-change="currentChange" @size-change="sizeChange" @pageInit="pageInit" :page-sizes="[10, 20, 50, 100]" :uid="uid" :total="total" v-bind="page===true?{}:page" v-if="page !== false" ref="page"></Page>
     </div>
   </div>
 </template>
@@ -31,7 +27,7 @@ export default {
         this.sUID === this.uid ||
         (this.sUID === 'all' && this.sEvent === 'update')
       ) {
-        this.getData()
+        this.change()
       }
     },
   },
@@ -48,13 +44,6 @@ export default {
       sEvent: (state) => state.table[event],
       sParams: (state) => state.table[params],
     }),
-    formItems() {
-      try {
-        return Object.keys(this.form.model)
-      } catch {
-        return []
-      }
-    },
   },
   props: {
     uid: {
@@ -66,8 +55,10 @@ export default {
     init: {
       default: true,
     },
-    form: [Object, Boolean],
-    page:  [Object, Boolean],
+    page: {
+      type: [Object, Boolean],
+      default: true,
+    },
     props: {
       default() {
         return {
@@ -82,7 +73,10 @@ export default {
       timer: null,
       params: {
         form: {},
-        pagination: {},
+        pagination: {
+          pageSize: 10,
+          currentPage: 1,
+        },
       },
       tableData: [],
       tableIsLoading: false,
@@ -138,27 +132,30 @@ export default {
         })
       }
     },
-    search(params) {
+    // 供查询表单调用
+    formSearch(params) {
       this.params.form = params
-      if (this.$listeners.search) {
-        return this.$emit('search', params)
+      if (this.page !== false) {
+        // 如果存在分页组件，在查询条件变更的情况下，改变分页到第一页，并触发查询事件
+        return this.$refs.page.$children
+          .find((v) => v.$listeners['current-change'])
+          .$emit('current-change', 1)
       } else {
-        if (this.page !== false) {
-          // 如果存在分页组件，在查询条件变更的情况下，改变分页到第一页，并触发查询事件
-          return this.$refs.page.$children
-            .find((v) => v.$listeners['current-change'])
-            .$emit('current-change', 1)
-        } else {
-          return this.change()
-        }
+        return this.change()
       }
     },
-    reset(params) {
-      if (this.$listeners.reset) {
-        return this.$emit('reset', params)
-      } else {
-        return (this.params.form = params)
-      }
+    // 供查询表单调用
+    formReset(params) {
+      this.params.form = params
+    },
+    // 供查询表单调用
+    formInit(params) {
+      console.log('formInit', params)
+      this.params.form = params
+    },
+    pageInit(params) {
+      console.log('pageInit', params)
+      this.params.pagination = { ...this.params.pagination, ...params }
     },
     sizeChange(pageSize) {
       this.params.pagination.pageSize = pageSize
@@ -168,23 +165,13 @@ export default {
       this.params.pagination.currentPage = currentPage
       this.change()
     },
-    async getData() {
-      try {
-        if (this.page !== false) {
-          this.params.pagination = await this.$refs.page.getParams()
-        }
-        if (this.form) {
-          this.params.form = await this.$refs.form.getParams()
-        }
-        return this.change()
-      } catch (error) {
-        console.log(error)
-      }
-    },
   },
-  mounted() {
+  created() {
     if (this.init) {
-      this.getData()
+      setTimeout(() => {
+        console.log('tableInit')
+        this.change()
+      })
     }
   },
 }

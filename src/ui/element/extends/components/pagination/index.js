@@ -35,9 +35,8 @@ export default {
     on['current-change'] = (val) => {
       const query = {
         currentPage: val,
-        pageSize: props.pageSize
+        pageSize: props.pageSize || props['page-size']
       }
-
       this.params.set(query).then(() => {
         this.$emit('current-change', val)
       })
@@ -45,7 +44,7 @@ export default {
 
     on['size-change'] = (val) => {
       const query = {
-        currentPage: props.currentPage,
+        currentPage: props.currentPage || props['current-page'],
         pageSize: val
       }
       this.params.set(query).then(() => {
@@ -61,7 +60,7 @@ export default {
   created() {
     const query = this.params.get()
     if (query) {
-      this.$emit('init', query)
+      this.$emit('pageInit', query)
     }
   }
 

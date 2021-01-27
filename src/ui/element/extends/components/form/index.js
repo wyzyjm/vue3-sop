@@ -14,7 +14,10 @@ addRule(COMPONENT_NAME, {
 
 const props = {
 	uid: {
-		default: 0
+		default() {
+			// 如果挂载到table下面，默认使用table的uid
+			return this.TABLE_PROVIDE ? this.TABLE_PROVIDE.uid : 0
+		}
 	},
 }
 
@@ -41,6 +44,11 @@ export default {
 			FORM_PROVIDE: this
 		}
 	},
+	inject: {
+		TABLE_PROVIDE: {
+			default: null
+		}
+	},
 	data() {
 		return {
 			params: new Params(COMPONENT_NAME, this),
@@ -60,11 +68,19 @@ export default {
 			const res = await this.getParams()
 			await this.params.set(res)
 			this.$emit('search', res)
+			// 如果挂载到table下面，触发table下面相应的处理事件
+			if (this.TABLE_PROVIDE) {
+				this.TABLE_PROVIDE.formSearch(res)
+			}
 		},
 		reset() {
 			this.params.clear()
 			this.$refs.form.resetFields()
-			this.$emit('reset', this.initialData)
+			this.$emit('reset', { ...this.initialData })
+			// 如果挂载到table下面，触发table下面相应的处理事件
+			if (this.TABLE_PROVIDE) {
+				this.TABLE_PROVIDE.formReset({ ...this.initialData })
+			}
 		},
 		clear() {
 			this.params.clear()
@@ -79,7 +95,11 @@ export default {
 		this.$initialData = JSON.parse(JSON.stringify(this.$attrs.model))
 		const query = this.params.get()
 		if (query) {
-			this.$emit('init', query)
+			this.$emit('formInit', query)
+			// 如果挂载到table下面，触发table下面相应的处理事件
+			if (this.TABLE_PROVIDE) {
+				this.TABLE_PROVIDE.formInit(query)
+			}
 		}
 	},
 }

@@ -1,6 +1,16 @@
 <template>
   <div>
-    <s-simple-table :data="table.data" :cols="table.cols"></s-simple-table>
+    <s-simple-table :data="table.data" :cols="table.cols">
+      <s-form slot="form" :model="form" inline>
+        <s-form-item label="生产单ID" prop="orderCode">
+          <s-input v-model="form.orderCode"></s-input>
+        </s-form-item>
+        <s-form-item>
+          <s-button type="primary" run="form.search">查询</s-button>
+          <s-button run="form.reset">重置</s-button>
+        </s-form-item>
+      </s-form>
+    </s-simple-table>
   </div>
 </template>
 <script>
@@ -44,8 +54,13 @@ export default defineComponent({
       ],
     })
 
+    const form = reactive({
+      orderCode: '',
+    })
+
     return {
       table,
+      form,
     }
   },
 })
