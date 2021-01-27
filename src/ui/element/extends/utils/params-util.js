@@ -1,5 +1,6 @@
 const rules = {}
 
+
 export const get = (type, vm, field) => {
   const params = vm.$route.query
   const uid = vm.uid
@@ -25,7 +26,8 @@ export const set = (type, vm, params) => {
   const uid = vm.uid
   const newQuery = { [`${type}.${uid}`]: rules[type].componentization(params) }
   return new Promise(resolve => {
-    if (JSON.stringify(newQuery) === JSON.stringify(vm.$route.query)) {
+
+    if (Object.keys(newQuery).every(v => vm.$route.query[v] == newQuery[v])) {
       resolve(params)
     } else {
       vm.$router.replace({
