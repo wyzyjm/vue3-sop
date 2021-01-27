@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ce-simple-table">
     <slot name="form"></slot>
     <slot name="top"></slot>
     <Table border v-bind="$attrs" v-on="$listeners" v-loading="tableIsLoading" :uid="uid" :data="tableData">
@@ -99,17 +99,7 @@ export default {
       this.total = total
     },
     parseData(params) {
-      if (typeof this.data === 'string') {
-        this.tableIsLoading = true
-        return this.$api(this.data, params).then(
-          (response) => {
-            this.setTableData(response)
-          },
-          () => {
-            this.tableIsLoading = false
-          }
-        )
-      } else if (typeof this.data === 'function') {
+      if (typeof this.data === 'function') {
         this.tableIsLoading = true
         return this.data(params).then(
           (response) => {
@@ -119,6 +109,8 @@ export default {
             this.tableIsLoading = false
           }
         )
+      } else if (Array.isArray(this.data)) {
+        this.tableData = this.data
       }
     },
     change() {
@@ -150,11 +142,9 @@ export default {
     },
     // 供查询表单调用
     formInit(params) {
-      console.log('formInit', params)
       this.params.form = params
     },
     pageInit(params) {
-      console.log('pageInit', params)
       this.params.pagination = { ...this.params.pagination, ...params }
     },
     sizeChange(pageSize) {
@@ -169,7 +159,6 @@ export default {
   created() {
     if (this.init) {
       setTimeout(() => {
-        console.log('tableInit')
         this.change()
       })
     }
@@ -177,11 +166,12 @@ export default {
 }
 </script>
 <style>
-.ce-pagination {
+.ce-simple-table .ce-pagination {
   padding: 20px 0;
   overflow: hidden;
 }
-.ce-pagination .el-pagination {
+.ce-simple-table .ce-pagination .el-pagination {
   float: right;
 }
+
 </style>

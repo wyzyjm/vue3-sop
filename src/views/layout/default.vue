@@ -1,5 +1,5 @@
 <template>
-  <el-container :style="{height:`${layout.container.height}px`}">
+  <el-container type :style="{height:`${layout.container.height}px`}">
     <el-header :height="`${layout.header.height}px`" :style="{
       background:layout.header.background,
       color:layout.header.color,
@@ -34,9 +34,7 @@
         <el-breadcrumb separator="/">
           <el-breadcrumb-item v-for="item in route.matched" :key="item.path" :to="item.path">{{item.meta.title}}</el-breadcrumb-item>
         </el-breadcrumb>
-        <el-container class="mt20">
-          <router-view />
-        </el-container>
+        <router-view />
       </el-main>
     </el-container>
   </el-container>
