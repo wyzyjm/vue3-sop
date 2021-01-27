@@ -173,5 +173,4 @@ export default {
 .ce-simple-table .ce-pagination .el-pagination {
   float: right;
 }
-
 </style>

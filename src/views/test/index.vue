@@ -22,6 +22,10 @@ export default defineComponent({
       data: getTableData,
       cols: [
         {
+          type: 'expand',
+          prop: () => <s-simple-table data={table.data} cols={table.cols} />,
+        },
+        {
           showOverflowTooltip: true,
           label: '工单名称',
           prop: 'groupName',
