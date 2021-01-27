@@ -1,6 +1,6 @@
 <template>
   <div>
-    <s-s-table :data="table.data" :cols="table.cols"></s-s-table>
+    <s-simple-table :data="table.data" :cols="table.cols"></s-simple-table>
   </div>
 </template>
 <script>

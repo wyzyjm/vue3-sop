@@ -1,6 +1,6 @@
-import { isPromise, isFunction } from '../../utils/get-type'
 
-
+const isPromise = (s) => Object.prototype.toString.call(s) === '[object Promise]'
+const isFunction = (s) => typeof s === 'function'
 /**
  * form.submit
  * form.reset

@@ -1,24 +1,61 @@
-/* eslint-disable no-empty */
 <template>
   <div>
+    <div class="ce-form" v-if="form">
+      <s-form ref="form" v-bind="form" :uid="uid" @reset="reset" @search="search">
+        <slot name="form"></slot>
+      </s-form>
+    </div>
+    <slot name="top"></slot>
     <Table border v-bind="$attrs" v-on="$listeners" v-loading="tableIsLoading" :uid="uid" :data="tableData">
       <slot></slot>
     </Table>
-    <slot name="footer"></slot>
-    <div v-if="page!==false" class="ce-pagination">
+    <slot name="bottom"></slot>
+    <div v-if="page !== false" class="ce-pagination">
       <slot name="page"></slot>
-      <Page @init="pageInit" :currentPage="currentPage" :pageSize="pageSize" @current-change="currentChange" v-bind="page" @size-change="sizeChange" :uid="uid" :total="total" ref="page"></Page>
+      <Page @current-change="currentChange" @size-change="sizeChange" :uid="uid" :total="total" :page-sizes="[10, 20, 30, 40, 50, 100, 200]" v-if="page !== false" ref="page"></Page>
     </div>
   </div>
 </template>
-
 <script>
 import Table from './table'
 import Page from './pagination'
-import events from '../utils/events'
+import tryGetOnlyArray from '../utils/data-patch-v1/try-get-only-array'
+import tryGetPaginationParams from '../utils/data-patch-v1/try-get-pagination-params'
+import { mapState } from 'vuex'
+import { timestamp, uid, event, params } from '../store'
 
 export default {
+  watch: {
+    sTimestamp() {
+      if (
+        this.sUID === this.uid ||
+        (this.sUID === 'all' && this.sEvent === 'update')
+      ) {
+        this.getData()
+      }
+    },
+  },
+  provide() {
+    return {
+      TABLE_PROVIDE: this,
+    }
+  },
   components: { Table, Page },
+  computed: {
+    ...mapState({
+      sTimestamp: (state) => state.table[timestamp],
+      sUID: (state) => state.table[uid],
+      sEvent: (state) => state.table[event],
+      sParams: (state) => state.table[params],
+    }),
+    formItems() {
+      try {
+        return Object.keys(this.form.model)
+      } catch {
+        return []
+      }
+    },
+  },
   props: {
     uid: {
       default: 0,
@@ -29,72 +66,126 @@ export default {
     init: {
       default: true,
     },
-    params: {
-      default: null,
+    form: [Object, Boolean],
+    page:  [Object, Boolean],
+    props: {
+      default() {
+        return {
+          data: 'data',
+          total: 'total',
+        }
+      },
     },
-    page: [Object, Boolean],
   },
   data() {
     return {
+      timer: null,
+      params: {
+        form: {},
+        pagination: {},
+      },
       tableData: [],
       tableIsLoading: false,
       total: undefined,
-      currentPage: 1,
-      pageSize: 10,
-      otherParams: undefined,
     }
   },
   methods: {
-    async change(params) {
-      this.tableIsLoading = true
-      try {
-        const res = await this.data(params)
-
-        console.log(111,res);
-        this.tableData = res.data
-        this.total = res.total
-        this.tableIsLoading = false
-      } catch (err) {
-        this.tableIsLoading = false
-        this.tableData = []
-        this.total = undefined
-        console.error(err)
+    setTableData(response) {
+      const data = response ? response.data || response : []
+      this.tableIsLoading = false
+      let tableData = data[this.props.data]
+      let total = data[this.props.total]
+      if (!Array.isArray(tableData)) {
+        tableData = tryGetOnlyArray(data).data
+      }
+      if (typeof total !== 'number') {
+        total = tryGetPaginationParams(data).total
+      }
+      this.tableData = tableData
+      this.total = total
+    },
+    parseData(params) {
+      if (typeof this.data === 'string') {
+        this.tableIsLoading = true
+        return this.$api(this.data, params).then(
+          (response) => {
+            this.setTableData(response)
+          },
+          () => {
+            this.tableIsLoading = false
+          }
+        )
+      } else if (typeof this.data === 'function') {
+        this.tableIsLoading = true
+        return this.data(params).then(
+          (response) => {
+            this.setTableData(response)
+          },
+          () => {
+            this.tableIsLoading = false
+          }
+        )
       }
     },
-    mergeParams(isResetCurrentPage = false) {
-      if (isResetCurrentPage) {
-        this.currentPage = 1
+    change() {
+      if (Array.isArray(this.data)) {
+        this.tableData = this.data
+      } else {
+        return this.parseData({
+          ...this.params.form,
+          ...this.params.pagination,
+          ...this.sParams,
+        })
       }
-      this.change({
-        ...this.params,
-        ...this.otherParams,
-        currentPage: this.currentPage,
-        pageSize: this.pageSize,
-      })
     },
-    otherParamsChange(params) {
-      this.otherParams = params
-      this.mergeParams(true)
+    search(params) {
+      this.params.form = params
+      if (this.$listeners.search) {
+        return this.$emit('search', params)
+      } else {
+        if (this.page !== false) {
+          // 如果存在分页组件，在查询条件变更的情况下，改变分页到第一页，并触发查询事件
+          return this.$refs.page.$children
+            .find((v) => v.$listeners['current-change'])
+            .$emit('current-change', 1)
+        } else {
+          return this.change()
+        }
+      }
+    },
+    reset(params) {
+      if (this.$listeners.reset) {
+        return this.$emit('reset', params)
+      } else {
+        return (this.params.form = params)
+      }
     },
     sizeChange(pageSize) {
-      this.pageSize = pageSize
-      this.mergeParams(false)
+      this.params.pagination.pageSize = pageSize
+      this.change()
     },
     currentChange(currentPage) {
-      this.currentPage = currentPage
-      this.mergeParams(false)
+      this.params.pagination.currentPage = currentPage
+      this.change()
     },
-    pageInit(pageParams) {
-      const { currentPage, pageSize } = pageParams
-      this.currentPage = currentPage
-      this.pageSize = pageSize
+    async getData() {
+      try {
+        if (this.page !== false) {
+          this.params.pagination = await this.$refs.page.getParams()
+        }
+        if (this.form) {
+          this.params.form = await this.$refs.form.getParams()
+        }
+        return this.change()
+      } catch (error) {
+        console.log(error)
+      }
     },
   },
-  created() {
-    events.$on(`table.${this.uid}.update`, this.otherParamsChange)
-  },
-  beforeDestroy() {
-    events.$off(`table.${this.uid}.update`, this.otherParamsChange)
+  mounted() {
+    if (this.init) {
+      this.getData()
+    }
   },
 }
 </script>

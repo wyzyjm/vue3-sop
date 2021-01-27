@@ -33,7 +33,7 @@ function getArrayFromJSON(json, result, basePath = '') {
 
 	for (i = 0, l = keys.length; i < l; i++) {
 		key = keys[i]
-		if (Array.Array.isArray(json[key])) {
+		if (Array.isArray(json[key])) {
 			addMatchedPath(result, key, basePath)
 		}
 	}
