@@ -5,6 +5,9 @@ import test from "./test"
 export default [
     {
         path: "/",
+        meta:{
+            title:'首页'
+        },
         component: Layout,
         children: [
             ...test
