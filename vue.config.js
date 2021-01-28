@@ -32,5 +32,20 @@ module.exports = {
     https: false, // https:{type:Boolean}
     open: true, // 配置自动启动浏览器
     hot: true
+  },
+  configureWebpack: {
+    resolve: { extensions: [".ts", ".tsx"] },
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          loader: 'ts-loader',
+          exclude: /node_modules/,
+          options: {
+            appendTsSuffixTo: [/\.vue$/],
+          }
+        }
+      ]
+    }
   }
 };

@@ -17,6 +17,8 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import { getTableData } from './service'
+
+
 export default defineComponent({
   setup() {
     const table = reactive({

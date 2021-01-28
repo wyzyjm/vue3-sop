@@ -25,8 +25,8 @@ const createInterface = (arr, key) => {
 module.exports = function (data) {
     const { req_params } = data
     if (req_params.length === 0) return null
-    interfaceList.push(createInterface(req_params, 'ReqParams'))
     interfaceList = []
+    interfaceList.push(createInterface(req_params, 'ReqParams'))
     return interfaceList.join('\n\n')+'\n\n'
 }
 
