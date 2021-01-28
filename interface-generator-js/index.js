@@ -1,5 +1,4 @@
 const config = require('./config')
-const util = require('./util')
 const getBaseInfo = require('./base-info')
 const getResBody = require('./res-body')
 const getReqQuery = require('./req-query')
@@ -9,7 +8,7 @@ const getRequestFunction = require('./request-function')
 const writeFile = require('./file')
 
 const { baseURL, token } = config
-const { toCamel, fetch } = util
+const fetch = require('axios')
 
 
 const getApiDetail = (id) => fetch(`${baseURL}/api/interface/get?token=${token}&id=${id}`)
@@ -40,7 +39,7 @@ const createInterface = (id) => {
         fileData += reqParams || ''
         fileData += reqBodyOther || ''
         fileData += requestFunction || ''
-        writeFile(`../../api/${id}-${toCamel(data.path).replace('/', '')}.ts`, fileData)
+        writeFile(`../src/api/${id}-${data.method.toLocaleLowerCase()}${data.path.toLocaleLowerCase().replace(/\//g, '-')}.ts`, fileData)
     })
 
 }
@@ -54,6 +53,7 @@ const createInterfaceByProject = (id) => {
         })
     })
 }
+
 
 
 const { argv } = process

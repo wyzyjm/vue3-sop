@@ -1,95 +1,74 @@
 <template>
-  <el-table
-    :data="tableData"
-    height="250">
-    <el-table-column
-      prop="date"
-      label="日期"
-      width="150">
-    </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="province"
-      label="省份"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="city"
-      label="市区"
-      width="120">
-    </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址"
-      width="300">
-    </el-table-column>
-    <el-table-column
-      prop="zip"
-      label="邮编"
-      width="120">
-    </el-table-column>
-  </el-table>
+  <div>
+    <breadcrumb />
+    <s-simple-table :data="table.data" :cols="table.cols">
+      <s-form slot="form" :model="form" inline>
+        <s-form-item label="生产单ID" prop="orderCode">
+          <s-input v-model="form.orderCode"></s-input>
+        </s-form-item>
+        <s-form-item>
+          <s-button type="primary" run="form.search">查询</s-button>
+          <s-button run="form.reset">重置</s-button>
+        </s-form-item>
+      </s-form>
+    </s-simple-table>
+  </div>
 </template>
-
 <script>
-  export default {
-    data() {
-      return {
-        tableData: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }]
-      }
+import { defineComponent, reactive } from '@vue/composition-api'
+
+
+export default defineComponent({
+  setup() {
+    const table = reactive({
+      cols: [
+        {
+          type: 'expand',
+          prop: ({ row }) => (
+            <s-simple-table uid={row.id} data={table.data} cols={table.cols} />
+          ),
+        },
+        {
+          showOverflowTooltip: true,
+          label: '工单名称',
+          prop: 'groupName',
+        },
+        {
+          label: '生产单ID',
+          prop: 'orderCode',
+          width: '160px',
+        },
+        {
+          label: '客户名称',
+          prop: 'custName',
+        },
+        {
+          label: '分公司',
+          prop: 'subCompanyName',
+        },
+        {
+          label: '订单来源',
+          prop: 'orderSourceName',
+        },
+        {
+          label: '状态',
+          prop: 'workStatus',
+        },
+        {
+          label: '创建日期',
+          prop: 'strCreateDate',
+        },
+      ],
+    })
+
+    const form = reactive({
+      orderCode: '',
+    })
+
+    return {
+      table,
+      form,
     }
-  }
+  },
+})
 </script>
