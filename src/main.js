@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import './ui/element'
 import './hooks/composition-api'
+import './components'
 
 Vue.config.productionTip = false
 new Vue({

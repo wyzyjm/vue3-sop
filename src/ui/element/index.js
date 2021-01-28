@@ -11,5 +11,7 @@ import "../normalize.css"
 import "../zxx.css"
 
 
-Vue.use(Element)
+Vue.use(Element,{
+    size:'medium'
+})
 Vue.use(ElementExtends)

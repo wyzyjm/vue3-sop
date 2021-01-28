@@ -1,5 +1,6 @@
 <template>
   <div>
+    <breadcrumb />
     <s-simple-table :data="table.data" :cols="table.cols">
       <s-form slot="form" :model="form" inline>
         <s-form-item label="生产单ID" prop="orderCode">
@@ -23,7 +24,9 @@ export default defineComponent({
       cols: [
         {
           type: 'expand',
-          prop: () => <s-simple-table data={table.data} cols={table.cols} />,
+          prop: ({ row }) => (
+            <s-simple-table uid={row.id} data={table.data} cols={table.cols} />
+          ),
         },
         {
           showOverflowTooltip: true,
