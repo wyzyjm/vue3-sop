@@ -4,7 +4,8 @@ import ElementExtends from './extends'
 
 
 // 默认UI样式
-import "./theme-new/index.css"
+import "./sop-theme/index.css"
+
 // 浏览器重置
 import "../normalize.css"
 // 快捷样式

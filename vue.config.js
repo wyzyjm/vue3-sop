@@ -23,7 +23,12 @@ module.exports = {
     // 配置高于chainWebpack中关于css loader的配置
     requireModuleExtension: true, // 是否开启支持‘foo.module.css’样式
     extract: true, // 是否使用css分离插件 ExtractTextPlugin，采用独立样式文件载入，不采用<style>方式内联至html文件中
-    sourceMap: false // 是否在构建样式地图，false将提高构建速度
+    sourceMap: false, // 是否在构建样式地图，false将提高构建速度
+    loaderOptions: {
+      sass: {
+        prependData: `@import "~@/ui/public.scss";`
+      }
+    }
   },
   productionSourceMap: false, // 是否生成map文件
   devServer: {
