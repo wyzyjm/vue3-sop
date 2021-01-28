@@ -8,7 +8,7 @@
 // 主题变量 
 $sop-header-bg: #2F2F2F;
 $sop-header-height: 60px;
-$sop-sider-width: 260px;
+$sop-sider-width: 220px;
 $sop-sider-bg: #2F2F2F;
 
 // 颜色 
@@ -32,7 +32,7 @@ $sop-img-size-lg:80px;
 {
     .mr-#{$i}
     {
-        margin-right:11px;
+        margin-right:$i +'px';
     }
     .mt-#{$i}
     {
