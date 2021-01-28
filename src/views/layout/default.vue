@@ -57,7 +57,7 @@ export default defineComponent({
         background: '#343434',
       },
       aside: {
-        width: 220,
+        width: 260,
         color: '#fff',
         background: '#4d4d4d',
       },
