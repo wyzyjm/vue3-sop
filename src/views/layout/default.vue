@@ -31,9 +31,6 @@
 
       <!-- 主体内容 -->
       <el-main class="main">
-        <el-breadcrumb separator="/">
-          <el-breadcrumb-item v-for="item in route.matched" :key="item.path" :to="item.path">{{item.meta.title}}</el-breadcrumb-item>
-        </el-breadcrumb>
         <router-view />
       </el-main>
     </el-container>
@@ -95,7 +92,6 @@ export default defineComponent({
     return {
       menu,
       layout,
-      route
     }
   },
 })
