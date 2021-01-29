@@ -2,9 +2,6 @@
   <div>
     <breadcrumb />
     <s-simple-table :data="table.data" :cols="table.cols">
-
-      <s-button slot="top" @click="$store.commit('table/update')">纯纯粹粹</s-button>
-
       <s-form slot="form" :model="form" inline>
         <s-form-item label="生产单ID" prop="orderCode">
           <s-input v-model="form.orderCode"></s-input>

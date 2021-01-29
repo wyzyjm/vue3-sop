@@ -40,7 +40,7 @@ export default {
     props['destroy-on-close'] = true
     props['visible'] = this.visible
     on['close'] = (val) => {
-      this.$store.commit('ui.dialog.close', { _uid: this.uid })
+      this.$store.commit('dialog/close', { _uid: this.uid })
       this.$emit('close', val)
     }
     return h('el-dialog', {
