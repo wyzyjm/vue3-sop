@@ -18,7 +18,7 @@ import Page from './pagination'
 import tryGetOnlyArray from '../utils/data-patch-v1/try-get-only-array'
 import tryGetPaginationParams from '../utils/data-patch-v1/try-get-pagination-params'
 import { mapState } from 'vuex'
-import { timestamp, uid, event, params } from '../store'
+import { timestamp, uid, event, params } from '../store/config'
 
 export default {
   watch: {

@@ -4,7 +4,6 @@ import createLogger from 'vuex/dist/logger'
 import * as state from './state'
 import * as mutations from './mutations'
 import modules from './modules'
-import uiStore from '@/ui/element/extends/store'
 
 
 Vue.use(Vuex)
@@ -12,8 +11,8 @@ Vue.use(Vuex)
 const isDebug = process.env.NODE_ENV==='development'
 
 const options = {
-  state: { ...state, ...uiStore.state },
-  mutations: { ...mutations, ...uiStore.mutations },
+  state,
+  mutations,
   modules,
   strict: isDebug,
   plugins: isDebug ? [createLogger()] : []

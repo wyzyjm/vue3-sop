@@ -1,5 +1,5 @@
 import { mapState } from 'vuex'
-import { timestamp, uid, event, params } from '../../store'
+import { timestamp, uid, event, params } from '../../store/config'
 
 const props = {
   uid: {

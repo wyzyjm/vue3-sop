@@ -54,12 +54,12 @@ export default defineComponent({
       header: {
         height: 60,
         color: '#fff',
-        background: '#343434',
+        background: '#2F2F2F',
       },
       aside: {
         width: 260,
         color: '#fff',
-        background: '#4d4d4d',
+        background: '#2F2F2F',
       },
     })
 
@@ -71,7 +71,7 @@ export default defineComponent({
         const { matched } = route
         return matched[matched.length - 1].path
       }),
-      'background-color': '#4d4d4d',
+      'background-color': '#363636',
       'text-color': '#fff',
       router: true,
       subMenu: [
