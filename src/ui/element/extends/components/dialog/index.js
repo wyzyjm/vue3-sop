@@ -43,10 +43,13 @@ export default {
       this.$store.commit('dialog/close', { _uid: this.uid })
       this.$emit('close', val)
     }
+
+    const component = (!this.component.render && this.component.default.render) ? this.component.default : this.component
+
     return h('el-dialog', {
       props,
       on
-    }, [this.visible, this.visible && h(this.component, { props: this.sParams })])
+    }, [this.visible, this.visible && h(component, { props: this.sParams })])
   },
 
 }

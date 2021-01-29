@@ -2,6 +2,11 @@
   <div>
     <breadcrumb />
     <s-simple-table :data="table.data" :cols="table.cols">
+      <div slot="top" class="mb20">
+        <s-dialog title="弹窗标题" :component="require('./dialog/dialog-test.vue')"></s-dialog>
+        <el-button @click="$store.commit('dialog/open',{propsTest:'user'})">dialog测试</el-button>
+      </div>
+
       <s-form slot="form" :model="form" inline>
         <s-form-item label="生产单ID" prop="orderCode">
           <s-input v-model="form.orderCode"></s-input>
