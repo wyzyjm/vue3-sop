@@ -84,11 +84,21 @@ export default defineComponent({
               index: '/setting/role/list',
               title: '角色管理',
             },
+            {
+              index: '/setting/provider/list',
+              title: '服务商管理',
+              children: [
+                  {
+                    index: '/setting/provider/add',
+                    title: '新增服务商', 
+                  }
+              ]
+            },
           ],
         },
         {
           icon: 'el-icon-s-help',
-          index: '1',
+          index: '2',
           title: '生产设置',
           menuItem: [
             {

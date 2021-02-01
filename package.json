@@ -11,6 +11,7 @@
     "@vue/composition-api": "^1.0.0-rc.1",
     "@vueuse/core": "^4.0.10",
     "axios": "^0.21.1",
+    "babel-plugin-syntax-async-generators": "^6.13.0",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.0",
     "js-base64": "^3.6.0",
