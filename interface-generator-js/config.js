@@ -1,5 +1,5 @@
 module.exports = {
     baseURL: 'http://10.12.52.224:3000',
-    token: 'd4b5a389c43b75fbb6e6921c990b25469f6701cd220f5715bf2aa68ad3b60797',
+    token: '07798c54b35ce778d1ddf2cf4b2abead2e327cc9140671229cb5625a88d748f2',
     version: 'js-v0.1'
 } 

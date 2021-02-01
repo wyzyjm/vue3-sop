@@ -5,6 +5,7 @@
       <div slot="top" class="mb20">
         <s-dialog title="弹窗标题" :component="require('./dialog/dialog-test.vue')"></s-dialog>
         <el-button @click="$store.commit('dialog/open',{propsTest:'user'})">dialog测试</el-button>
+        <el-button @click="$store.commit('table/update')">表格刷新测试</el-button>
       </div>
 
       <s-form slot="form" :model="form" inline>
@@ -25,6 +26,12 @@ import { getTableData } from './service'
 
 export default defineComponent({
   setup() {
+    const view = () => {
+      return getTableData().then((response) => {
+        console.log(111, response)
+      })
+    }
+
     const table = reactive({
       data: getTableData,
       cols: [
@@ -63,6 +70,16 @@ export default defineComponent({
         {
           label: '创建日期',
           prop: 'strCreateDate',
+        },
+        {
+          label: '操作',
+          prop: () => {
+            return [
+              <s-button data-pid="user" type="text" onClick={view}>
+                查看
+              </s-button>,
+            ]
+          },
         },
       ],
     })

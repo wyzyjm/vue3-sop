@@ -16,12 +16,12 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import getTableData from '@/api/470-get-security-intentionmobileblacklist-list'
+import getTableData from '@/api/1348-get-role-list'
 
 export default defineComponent({
   setup() {
     const table = reactive({
-      data:getTableData,
+      data: getTableData,
       cols: [
         {
           type: 'expand',
