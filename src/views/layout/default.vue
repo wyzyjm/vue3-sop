@@ -78,11 +78,11 @@ export default defineComponent({
         {
           icon: 'el-icon-message',
           index: '1',
-          title: '导航1',
+          title: '系统设置',
           menuItem: [
             {
-              index: '/test',
-              title: '标题1',
+              index: '/setting/role/list',
+              title: '角色管理',
             },
           ],
         },
