@@ -9,7 +9,6 @@
         class="menu" 
         v-bind="menu" 
         text-color="#fff"
-        active-text-color="#fff"
         background-color="#2F2F2F">
         <sub-menu :subMenu="menu.subMenu"></sub-menu>
       </el-menu>
