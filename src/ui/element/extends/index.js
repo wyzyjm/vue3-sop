@@ -8,7 +8,8 @@ import Text from './components/form/text'
 import Tabs from './components/tabs'
 import Dialog from './components/dialog'
 import SimpleTable from './components/simple-table'
-import { TabPane, Input, FormItem } from 'element-ui'
+import FormItem from './components/form/item'
+import { TabPane, Input } from 'element-ui'
 
 const components = {
   Form,

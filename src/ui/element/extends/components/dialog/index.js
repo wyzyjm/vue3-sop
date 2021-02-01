@@ -39,17 +39,18 @@ export default {
     const on = { ...this.$listeners }
     props['destroy-on-close'] = true
     props['visible'] = this.visible
-    on['close'] = (val) => {
-      this.$store.commit('dialog/close', { _uid: this.uid })
-      this.$emit('close', val)
-    }
+
 
     const component = (!this.component.render && this.component.default.render) ? this.component.default : this.component
 
     return h('el-dialog', {
       props,
-      on
-    }, [this.visible, this.visible && h(component, { props: this.sParams })])
+      on: {
+        'update:visible': (isOpen) => {
+          this.$store.commit(`dialog/${isOpen ? 'open' : 'close'}`, { _uid: this.uid })
+        }
+      },
+    }, [this.visible, this.visible && h(component, { on, props: this.sParams })])
   },
 
 }

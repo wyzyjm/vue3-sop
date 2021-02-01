@@ -1,10 +1,12 @@
 <template>
   <div>
     <breadcrumb />
+    <s-dialog width="500px" title="新增角色组" @close="$store.commit('dialog/close',{_uid:'add-role-group'})" :component="require('./dialog/add-role-group')" uid="add-role-group" />
+    <s-dialog width="500px" title="新增角色" @close="$store.commit('dialog/close',{_uid:'add-role'})" :component="require('./dialog/add-role')" uid="add-role" />
     <s-simple-table :data="table.data" :cols="table.cols">
       <div slot="top" class="mb20">
-        <s-button type="primary" @click="addRoleGroup">新增角色组</s-button>
-        <s-button type="primary" @click="addRole">新增角色</s-button>
+        <s-button type="primary" @click="$store.commit('dialog/open',{_uid:'add-role-group'})">新增角色组</s-button>
+        <s-button type="primary" @click="$store.commit('dialog/open',{_uid:'add-role'})">新增角色</s-button>
         <s-button type="primary" @click="functionAuthorization">功能授权</s-button>
         <s-button type="primary" @click="productionOrganizationAuthorization">生产组织授权</s-button>
         <s-button type="primary" @click="salesChannelsAuthorization">售卖渠道授权</s-button>
@@ -26,11 +28,19 @@ import { defineComponent, reactive } from '@vue/composition-api'
 import getTableData from '@/api/1348-get-role-list'
 
 export default defineComponent({
-  setup() {
+  setup(props, { root }) {
     const edit = () => {}
-    const disable = () => {}
-    const addRoleGroup = () => {}
-    const addRole = () => {}
+    const disable = () => {
+      console.log(1)
+    }
+    const addRoleGroup = () => {
+      root.$store.commit('dialog/open', {
+        _uid: 'add-role-group',
+      })
+    }
+    const addRole = () => {
+      console.log(2)
+    }
     const functionAuthorization = () => {}
     const productionOrganizationAuthorization = () => {}
     const salesChannelsAuthorization = () => {}

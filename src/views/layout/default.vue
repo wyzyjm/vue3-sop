@@ -88,7 +88,7 @@ export default defineComponent({
         },
         {
           icon: 'el-icon-s-help',
-          index: '1',
+          index: '2',
           title: '生产设置',
           menuItem: [
             {
