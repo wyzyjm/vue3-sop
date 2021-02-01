@@ -3,7 +3,7 @@ import ErrorPage404 from '../views/layout/404'
 import ErrorPage403 from '../views/layout/403'
 import test from "./test"
 import setting from "./setting"
-import produce from "./produce/index"
+import produce from "./produce"
 export default [
     {
         path: "/",
