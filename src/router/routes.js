@@ -2,7 +2,7 @@ import Layout from '../views/layout/default'
 import ErrorPage404 from '../views/layout/404'
 import ErrorPage403 from '../views/layout/403'
 import test from "./test"
-import ProduceSetting from "./produce-setting/index"
+import Produce from "./produce/index"
 export default [
     {
         path: "/",
@@ -12,7 +12,7 @@ export default [
         component: Layout,
         children: [
             ...test,
-            ...ProduceSetting
+            ...Produce
         ]
     },
     {
