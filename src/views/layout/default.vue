@@ -5,7 +5,11 @@
       <a class="logo">
         <img src="@/assets/logo.png" class=".mr-11 .w-100" />
       </a>
-      <el-menu class="menu" v-bind="menu">
+      <el-menu 
+        class="menu" 
+        v-bind="menu" 
+        text-color="#fff"
+        background-color="#2F2F2F">
         <sub-menu :subMenu="menu.subMenu"></sub-menu>
       </el-menu>
     </el-aside>
@@ -57,7 +61,7 @@ export default defineComponent({
         background: '#2F2F2F',
       },
       aside: {
-        width: 260,
+        width: 240,
         color: '#fff',
         background: '#2F2F2F',
       },
@@ -126,7 +130,6 @@ export default defineComponent({
   width: $sop-sider-width;
   background: $sop-sider-bg;
   height: 100%;
-  text-align: center;
 }
 .sop-herder {
   background: $sop-header-bg;
