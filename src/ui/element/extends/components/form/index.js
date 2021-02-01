@@ -23,7 +23,7 @@ const props = {
 
 export default {
 	render(h) {
-		const props = { ...this.$attrs }
+		const props = { ...this.$attrs, model: this.model }
 		const on = { ...this.$listeners }
 
 		return h('el-form', {
@@ -51,6 +51,7 @@ export default {
 	},
 	data() {
 		return {
+			model: {},
 			params: new Params(COMPONENT_NAME, this),
 			initialData: {},
 		}
@@ -58,7 +59,7 @@ export default {
 	methods: {
 		async getParams() {
 			const valid = await this.$refs.form.validate()
-			return valid ? Promise.resolve(this.$attrs.model) : Promise.reject(this.$attrs.model)
+			return valid ? Promise.resolve(this.model) : Promise.reject(this.model)
 		},
 		async submit() {
 			const res = await this.getParams()
@@ -85,15 +86,22 @@ export default {
 		clear() {
 			this.params.clear()
 			this.$refs.form.resetFields()
-			this.$emit('clear', this.$attrs.model)
+			this.$emit('clear', this.model)
+		},
+		setModel(key, value) {
+			if (!Object.prototype.hasOwnProperty.call(this.model, key)) {
+				this.$set(this.model, key, value)
+			} else {
+				this.model[key] = value
+			}
 		}
 	},
 	created() {
-		if (!this.$attrs.model) {
-			throw new Error('表单的（model）参数不能为空')
-		}
-		this.$initialData = JSON.parse(JSON.stringify(this.$attrs.model))
+		this.initialData = JSON.parse(JSON.stringify(this.model))
 		const query = this.params.get()
+		if (this.$attrs.model) {
+			this.model = this.$attrs.model
+		}
 		if (query) {
 			this.$emit('formInit', query)
 			// 如果挂载到table下面，触发table下面相应的处理事件

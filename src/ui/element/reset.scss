@@ -1,0 +1,9 @@
+/**
+ * Element 样式重置（为保持重置样式统一管理）
+ */
+#app {
+    .el-menu-item.is-active {
+        color: $sop-color-white;
+        background-color: $sop-color-theme !important;
+    }
+}

@@ -6,8 +6,8 @@
         <s-form-item label="服务流程名称" prop="orderCode">
           <s-input v-model="form.orderCode"></s-input>
         </s-form-item>
-        <s-form-item label="状态" prop="orderCode">
-          <el-select v-model="value" placeholder="请选择">
+        <s-form-item label="状态">
+          <el-select v-model="form.state" placeholder="请选择">
             <el-option
               v-for="item in table.options"
               :key="item.value"
@@ -81,10 +81,10 @@ export default defineComponent({
       ],
       options: [
         {
-          value: '1',
+          value: 1,
           label: '停用'
         }, {
-          value: '2',
+          value: 2,
           label: '启用'
         }
       ]
@@ -92,6 +92,7 @@ export default defineComponent({
 
     const form = reactive({
       orderCode: '',
+      state: 1,
       relation: ''
     })
 
