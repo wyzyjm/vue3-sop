@@ -86,6 +86,17 @@ export default defineComponent({
             },
           ],
         },
+        {
+          icon: 'el-icon-s-help',
+          index: '1',
+          title: '生产设置',
+          menuItem: [
+            {
+              index: '/produce/service-flow',
+              title: '服务流程设置',
+            },
+          ]
+        }
       ],
     })
 
