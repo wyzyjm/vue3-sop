@@ -3,6 +3,7 @@ import Table from './components/table'
 import Pagination from './components/pagination'
 import Button from './components/form/button'
 import Panel from './components/panel'
+import Group from './components/form/group'
 import Upload from './components/form/upload'
 import Text from './components/form/text'
 import Tabs from './components/tabs'
@@ -21,6 +22,7 @@ const components = {
   Tabs,
   Upload,
   Text,
+  Group,
   Dialog,
   SimpleTable,
   TabPane,
