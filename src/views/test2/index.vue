@@ -1,6 +1,5 @@
 <template>
   <div>
-    <breadcrumb />
     <s-simple-table :data="table.data" :cols="table.cols">
       <s-form slot="form" :model="form" inline>
         <s-form-item label="生产单ID" prop="orderCode">
