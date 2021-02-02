@@ -6,34 +6,34 @@
  * 接口名称：列表查询
  */
 export interface Data {
-  currentPage:number    
-  list:any[]            
-  pageSize:number       
-  total:number          
-  totalPage:number      
+  currentPage: number
+  list: any[]
+  pageSize: number
+  total: number
+  totalPage: number
 }
 
 export interface ResBody {
-  code:string      /**code值*/
-  data:Data        /**数据*/
-  msg:string       /**消息说明*/
-  status:number    /**状态值*/
+  code: string      /**code值*/
+  data: Data        /**数据*/
+  msg: string       /**消息说明*/
+  status: number    /**状态值*/
 }
 
 export interface ReqQuery {
-  roleName?:string       /**角色名称*/
-  state?:string          /**状态*/
-  roleGroupId?:string    /**角色组id*/
-  isSpVisible?:string    /**是否服务商可见*/
+  roleName?: string       /**角色名称*/
+  state?: string          /**状态*/
+  roleGroupId?: string    /**角色组id*/
+  isSpVisible?: string    /**是否服务商可见*/
 }
 
-interface _Params extends ReqQuery {}
+interface _Params extends ReqQuery { }
 
 import request from '../plugins/axios/index.js'
-export default (params: _Params)=> { 
-    return request({
-        url:'/role/list',
-        method:'GET',
-        params:params
-    })
+export default (params: _Params) => {
+  return request({
+    url: '/role/list',
+    method: 'GET',
+    params: params
+  })
 }

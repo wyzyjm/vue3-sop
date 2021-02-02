@@ -1,6 +1,6 @@
 
 const props = {
-    tag: {
+    component: {
         default: 'el-input'
     },
     label: {
@@ -20,10 +20,10 @@ const props = {
 export default {
     render(h) {
         const blurArr = ['el-input']
-        const event = blurArr.includes(this.tag) ? 'blur' : 'change'
+        const event = blurArr.includes(this.component) ? 'blur' : 'change'
         const rules = Array.isArray(this.rules) ? this.rules.map(rule => {
             if (typeof rule === 'string' && rule === 'required') {
-                return { required: true, message: `请${event==='blur' ? '输入' : '选择'}${this.label}`, tirgger: event }
+                return { required: true, message: `请${event === 'blur' ? '输入' : '选择'}${this.label}`, tirgger: event }
             }
             return rule
         }) : []
@@ -42,7 +42,6 @@ export default {
         const props = { ...this.$attrs }
         const on = { ...this.$listeners }
 
-
         if (!this.$slots.default && this.FORM_PROVIDE && !Object.prototype.hasOwnProperty.call(this.FORM_PROVIDE.model, this.prop) && this.prop) {
             this.FORM_PROVIDE.setModel(this.prop, this.defaultValue)
         }
@@ -53,16 +52,22 @@ export default {
             this.$emit('input', val)
         }
 
+        const renderConfig = {
+            props,
+            on
+        }
+
+        if (this.component.indexOf('el') !== 0) {
+            renderConfig.attrs = props
+        }
+
         return h('el-form-item', {
             props: {
                 rules,
                 label: this.label,
                 prop: this.prop,
             }
-        }, [h(this.tag, {
-            props,
-            on
-        })])
+        }, [h(this.component, renderConfig)])
     },
     inject: {
         FORM_PROVIDE: {
