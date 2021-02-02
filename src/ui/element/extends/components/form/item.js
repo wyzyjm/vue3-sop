@@ -25,6 +25,15 @@ export default {
             if (typeof rule === 'string' && rule === 'required') {
                 return { required: true, message: `请${event === 'blur' ? '输入' : '选择'}${this.label}`, tirgger: event }
             }
+
+            if (typeof rule === 'string' && rule === 'email') {
+                return { pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/, message: `请${event === 'blur' ? '输入' : '选择'}${this.label}`, tirgger: event }
+            }
+
+            if (typeof rule === 'string' && rule === 'mobile') {
+                return { pattern: /^1\d{10}$/, message: `请${event === 'blur' ? '输入' : '选择'}${this.label}`, tirgger: event }
+            }
+
             return rule
         }) : []
 
