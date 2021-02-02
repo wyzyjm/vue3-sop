@@ -4,6 +4,6 @@ export default [
         meta:{
             title:'角色管理'
         },
-        component: () => import(/* webpackChunkName: "role-list" */ '@/views/setting/role/list')
+        component: () => import(/* webpackChunkName: "role-list" */ '@/views/system-setting/role/list')
     }
 ]

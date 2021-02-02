@@ -86,11 +86,11 @@ export default defineComponent({
           title: '系统设置',
           menuItem: [
             {
-              index: '/setting/role/list',
+              index: '/system-setting/role/list',
               title: '角色管理',
             },
             {
-              index: '/setting/provider/list',
+              index: '/system-setting/provider/list',
               title: '服务商管理',
             },
           ],
