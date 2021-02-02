@@ -1,7 +1,6 @@
 <template>
   <div>
-    <breadcrumb />
-    <s-simple-table :data="table.data" :cols="table.cols">
+    <s-simple-table :data="data" :cols="cols">
       <s-form slot="form" :model="form" inline>
         <s-form-item label="服务流程名称" prop="orderCode">
           <s-input v-model="form.orderCode"></s-input>
@@ -9,7 +8,7 @@
         <s-form-item label="状态">
           <el-select v-model="form.state" placeholder="请选择">
             <el-option
-              v-for="item in table.options"
+              v-for="item in options"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -26,7 +25,7 @@
         </s-form-item>
       </s-form>
       <div slot="top" class="mb20">
-        <el-button type="primary">新增流程</el-button>
+        <el-button type="primary" @click="addFlow">新增流程</el-button>
         <el-button type="primary" @click="$store.commit('dialog/open',{propsTest:'flow'})">复制流程</el-button>
       </div>
     </s-simple-table>
@@ -34,11 +33,11 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive } from '@vue/composition-api'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import { getTableData } from './service'
 
 export default defineComponent({
-  setup() {
+  setup(props, { root }) {
     const table = reactive({
       data: getTableData,
       cols: [
@@ -96,9 +95,17 @@ export default defineComponent({
       relation: ''
     })
 
+    function addFlow() {
+      root.$router.push({
+        path: "/",
+        query: {}
+      });
+    }
+
     return {
-      table,
+      ...toRefs(table),
       form,
+      addFlow
     }
   },
 })

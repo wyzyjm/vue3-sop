@@ -35,6 +35,7 @@
 
       <!-- 主体内容 -->
       <el-main class="main">
+        <breadcrumb class="mb15" />
         <router-view />
       </el-main>
     </el-container>

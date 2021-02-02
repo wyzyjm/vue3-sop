@@ -1,6 +1,5 @@
 <template>
   <div>
-    <breadcrumb />
     <s-dialog width="500px" title="新增角色组" @close="$store.commit('dialog/close',{_uid:'add-role-group'})" :component="require('./dialog/add-role-group')" uid="add-role-group" />
     <s-dialog width="500px" title="新增角色" @close="$store.commit('dialog/close',{_uid:'add-role'})" :component="require('./dialog/add-role')" uid="add-role" />
     <s-simple-table :data="table.data" :cols="table.cols">
