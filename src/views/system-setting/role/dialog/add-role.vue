@@ -18,7 +18,7 @@
 import { defineComponent, reactive } from '@vue/composition-api'
 import roleSave from '@/api/1382-post-role-save'
 import roleUpdate from '@/api/1384-post-role-update'
-import getRoleDropDownList from '@/api/1388-get-role-drop-down-list'
+import useOptions from '../hooks/use-options'
 export default defineComponent({
   props: {
     isEdit: {
@@ -48,10 +48,7 @@ export default defineComponent({
       })
     }
 
-    let options = {}
-    getRoleDropDownList().then(({ data }) => {
-      options = data
-    })
+    const options = useOptions()
 
     return {
       form,

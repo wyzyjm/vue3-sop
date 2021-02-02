@@ -10,10 +10,11 @@
         <s-button type="primary" @click="productionOrganizationAuthorization">生产组织授权</s-button>
         <s-button type="primary" @click="salesChannelsAuthorization">售卖渠道授权</s-button>
       </div>
-      <s-form slot="form" :model="form" inline>
-        <s-form-item label="生产单ID" prop="orderCode">
-          <s-input v-model="form.orderCode"></s-input>
-        </s-form-item>
+      <s-form slot="form" inline>
+        <s-form-item label="角色名称" prop="roleName" />
+        <s-form-item label="状态" :props="{label:'key'}" :data="options.state" prop="state" component="s-group" tag="el-radio-group" />
+        <s-form-item label="角色组" :data="options.roleGroup" prop="roleGroupId" component="s-group" />
+        <s-form-item label="服务商可见" :data="options.isSpVisible" prop="isSpVisible" component="s-group" tag="el-radio-group" />
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
           <s-button run="form.reset">重置</s-button>
@@ -26,6 +27,7 @@
 import { defineComponent, reactive } from '@vue/composition-api'
 import getTableData from '@/api/1348-get-role-list'
 import setRoleState from '@/api/1386-post-role-state'
+import useOptions from './hooks/use-options'
 export default defineComponent({
   setup(props, { root }) {
     const functionAuthorization = () => {}
@@ -98,12 +100,11 @@ export default defineComponent({
       ],
     })
 
-    const form = reactive({
-      orderCode: '',
-    })
+    const options = useOptions()
+
     return {
       table,
-      form,
+      options,
       functionAuthorization,
       productionOrganizationAuthorization,
       salesChannelsAuthorization,
