@@ -65,9 +65,6 @@ export default {
         let tag = this.tag
         let children = []
 
-        console.log(this.parsedData)
-
-
         if (!this.parsedData || this.parsedData.length === 0) {
             return h('div', this.status)
         }
@@ -75,7 +72,6 @@ export default {
 
 
         if (tag.includes('el-select')) {
-            tag = 'el-select'
             children = this.parsedData.map(v => {
                 return h(tag.split('>')[1] || 'el-option', {
                     props: {
@@ -84,10 +80,10 @@ export default {
                     }
                 })
             })
+            tag = 'el-select'
         }
 
         if (tag.includes('el-radio-group')) {
-            tag = 'el-radio-group'
             children = this.parsedData.map(v => {
                 return h(tag.split('>')[1] || 'el-radio', {
                     props: {
@@ -96,10 +92,10 @@ export default {
                     }
                 })
             })
+            tag = 'el-radio-group'
         }
 
         if (tag.includes('el-checkbox-group')) {
-            tag = 'el-checkbox-group'
             children = this.parsedData.map(v => {
                 return h(tag.split('>')[1] || 'el-checkbox', {
                     props: {
@@ -108,6 +104,7 @@ export default {
                     }
                 })
             })
+            tag = 'el-checkbox-group'
         }
 
         return h(tag, {
