@@ -25,27 +25,20 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import getTableData from '@/api/1348-get-role-list'
-
+import setRoleState from '@/api/1386-post-role-state'
 export default defineComponent({
   setup(props, { root }) {
-    const edit = () => {}
-    const disable = () => {
-      console.log(1)
-    }
-    const addRoleGroup = () => {
-      root.$store.commit('dialog/open', {
-        _uid: 'add-role-group',
-      })
-    }
-    const addRole = () => {
-      console.log(2)
-    }
     const functionAuthorization = () => {}
     const productionOrganizationAuthorization = () => {}
     const salesChannelsAuthorization = () => {}
 
     const table = reactive({
       data: getTableData,
+      // data: [
+      //   {
+      //     roleName: '测试',
+      //   },
+      // ],
       cols: [
         {
           showOverflowTooltip: true,
@@ -76,10 +69,27 @@ export default defineComponent({
           label: '操作项',
           prop: ({ row }) => {
             return [
-              <s-button type="text" click={edit.bind(row)}>
+              <s-button
+                type="text"
+                onClick={() => {
+                  root.$store.commit('dialog/open', {
+                    _uid: 'add-role',
+                    isEdit: true,
+                    data: row,
+                  })
+                }}
+              >
                 编辑
               </s-button>,
-              <s-button type="text" click={disable.bind(row)}>
+              <s-button
+                type="text"
+                onClick={() => {
+                  return setRoleState(row).then(({ msg }) => {
+                    console.log(msg)
+                    root.$store.commit('table/update')
+                  })
+                }}
+              >
                 停用
               </s-button>,
             ]
@@ -94,8 +104,6 @@ export default defineComponent({
     return {
       table,
       form,
-      addRoleGroup,
-      addRole,
       functionAuthorization,
       productionOrganizationAuthorization,
       salesChannelsAuthorization,

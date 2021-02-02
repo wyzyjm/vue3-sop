@@ -12,19 +12,19 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
+import roleGroupSave from '@/api/1368-post-role-group-save'
 export default defineComponent({
   setup() {
-    const save = (f) => {
-      console.log(f)
+    const save = (form) => {
+      return roleGroupSave(form).then(({ msg }) => {
+        console.log(msg)
+      })
     }
 
     const form = reactive({
       roleGroupName: '',
+      remark: '',
     })
-
-    setTimeout(() => {
-      form.roleGroupName = '999'
-    }, 2000)
 
     return {
       save,

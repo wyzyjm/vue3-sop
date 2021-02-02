@@ -54,6 +54,8 @@ export default {
                         this.status = '暂无数据'
                     }
                 })
+            } else {
+                this.status = '暂无数据'
             }
 
 
