@@ -1,6 +1,6 @@
 <template>
   <div>
-    <s-form label-width="100px" @submit="save">
+    <s-form label-width="110px" @submit="save">
       <s-form-item label="角色名称" :rules="['required']" prop="roleName" />
       <s-form-item label="角色组名称" :rules="['required']" prop="roleGroupName" />
       <s-form-item label="关联设计器" :data="[]" prop="sjq" component="s-group" kief="3"></s-form-item>

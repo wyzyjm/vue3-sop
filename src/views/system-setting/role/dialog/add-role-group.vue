@@ -1,6 +1,6 @@
 <template>
   <div>
-    <s-form :model="form" label-width="100px" @submit="save">
+    <s-form :model="form" label-width="110px" @submit="save">
       <s-form-item label="角色组名称" :rules="['required']" prop="roleGroupName" />
       <s-form-item label="描述" type="textarea" prop="remark" />
       <s-form-item>

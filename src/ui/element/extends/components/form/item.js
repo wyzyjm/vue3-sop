@@ -38,11 +38,13 @@ export default {
         }) : []
 
 
+        const label=this.label?this.label+'：':this.label
+
         if (this.$slots.default) {
             return h('el-form-item', {
                 props: {
                     rules,
-                    label: this.label,
+                    label,
                     prop: this.prop,
                 }
             }, this.$slots.default)
@@ -73,7 +75,7 @@ export default {
         return h('el-form-item', {
             props: {
                 rules,
-                label: this.label,
+                label,
                 prop: this.prop,
             }
         }, [h(this.component, renderConfig)])
