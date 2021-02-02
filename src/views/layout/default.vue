@@ -92,12 +92,6 @@ export default defineComponent({
             {
               index: '/setting/provider/list',
               title: '服务商管理',
-              children: [
-                  {
-                    index: '/setting/provider/add',
-                    title: '新增服务商', 
-                  }
-              ]
             },
           ],
         },

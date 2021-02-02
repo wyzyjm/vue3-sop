@@ -2,7 +2,7 @@ import Layout from '../views/layout/default'
 import ErrorPage404 from '../views/layout/404'
 import ErrorPage403 from '../views/layout/403'
 import test from "./test"
-import setting from "./setting"
+import setting from "./setting/index"
 import produce from "./produce"
 export default [
     {

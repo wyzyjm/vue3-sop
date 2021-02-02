@@ -2,7 +2,6 @@
   <div class="provider-box">
     <s-simple-table :data="table.data" :cols="table.cols">
       <div slot="top" class="mb20">
-        <!-- <s-dialog title="弹窗标题" :component="require('./dialog/dialog-test.vue')"></s-dialog> -->
         <el-button type="primary">新增321</el-button>
       </div>
 
