@@ -1,47 +1,102 @@
-<!-- 服务商类型 -->
+<!--服务商类型-->
 <template>
-<div class=''>321</div>
+  <div class="box">
+      <div class="title-box">选择服务商类型</div>
+      <div class="flex-box">
+          <div class="item-flex" 
+          :class="(curId == item.value) ? 'active' : ''"
+          v-for="(item, idx) in list" :key="idx"
+          @click="handleType(item.value)">
+              <i class="icon iconfont" :class="item.icon"></i>
+              <p class="title">{{item.label}}</p>
+              <span class="desc">{{item.desc}}</span>
+              <i class="iconfont iconxuanzhongjiaobiao check" v-show="curId == item.value"></i>
+          </div>
+      </div>
+      <el-button type="primary" class="btn">确定</el-button>
+  </div>
 </template>
-
 <script>
-//这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
-//例如：import 《组件名称》 from '《组件路径》';
-
-export default {
-//import引入的组件需要注入到对象中才能使用
-components: {},
-data() {
-//这里存放数据
-return {
-
-};
-},
-//监听属性 类似于data概念
-computed: {},
-//监控data中的数据变化
-watch: {},
-//方法集合
-methods: {
-
-},
-//生命周期 - 创建完成（可以访问当前this实例）
-created() {
-
-},
-//生命周期 - 挂载完成（可以访问DOM元素）
-mounted() {
-
-},
-beforeCreate() {}, //生命周期 - 创建之前
-beforeMount() {}, //生命周期 - 挂载之前
-beforeUpdate() {}, //生命周期 - 更新之前
-updated() {}, //生命周期 - 更新之后
-beforeDestroy() {}, //生命周期 - 销毁之前
-destroyed() {}, //生命周期 - 销毁完成
-activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
-}
+    export default {
+        data () {
+            return {
+                curId: 1,
+                list: [
+                    {value: 1, label: '个人', desc: '务了包括制造、服务、IT互联网、建筑与房地产、外贸、物流、零售等14个主流行业近百个细分行业120万+企业客户', icon: 'iconiconfontzhizuobiaozhun023104'},
+                    {value: 2, label: '企业', desc: '务了包括制造、服务、IT互联网、建筑与房地产、外贸、物流、零售等14个主流行业近百个细分行业120万+企业客户', icon: 'iconqiye'}
+                ]
+            }
+        },
+        methods: {
+            handleType (type) {
+                this.curId = type
+            }
+        }
+    }
 </script>
 <style lang='scss' scoped>
-//@import url(); 引入公共css类
-
+@import url("../style.scss");
+    .box{
+        width:100%;
+        height:700px;
+        background: #fff;
+        border: 1px solid #EBEBEB;
+        border-radius: 6px;
+        .btn{
+            width:120px;
+            margin:80px auto;
+            display: block;
+        }
+        .flex-box{
+            display: flex;
+            align-items:center;
+            justify-content:space-around;
+            margin-top:100px;
+            .active{
+                border:1px solid #19B298 !important
+            }
+            .item-flex{
+                width:330px;
+                height:350px;
+                background: #fff;
+                text-align: center;
+                border: 1px solid #e1e1e1;
+                border-radius: 6px;
+                box-shadow: 0px 5px 5px 0px rgba(245, 245, 245, 0.5);
+                position: relative;
+                cursor: pointer;
+                .icon{
+                    width:100%;
+                    font-size: 80px;
+                    color:#19B298;
+                    display: block;
+                    padding-top:50px;
+                }
+                .title{
+                    font-size: 14px;
+                    color: #333;
+                    margin:20px 0;
+                }
+                .desc{
+                    display: block;
+                    width:calc(100% - 78px);
+                    max-height: 100px;
+                    margin-left:35px;
+                    overflow: hidden;
+                    // background: #0f0;
+                    color:#666;
+                    font-size: 12px;
+                    line-height: 24px;
+                    opacity: 0.8;
+                }
+                .check{
+                    color:#19B298;
+                    font-size: 60px;
+                    position: absolute;
+                    right:0;
+                    bottom: 0;
+                }
+            }
+        }
+    }
 </style>
