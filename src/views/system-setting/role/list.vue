@@ -1,11 +1,13 @@
 <template>
   <div>
-    <s-dialog width="500px" title="新增角色组" @close="$store.commit('dialog/close',{_uid:'add-role-group'})" :component="require('./dialog/add-role-group')" uid="add-role-group" />
-    <s-dialog width="500px" :title="role.title" @close="role.close" :component="require('./dialog/add-role')" uid="add-role" />
+
+    <role-dialog />
+    <role-group-dialog />
+
     <s-simple-table :data="table.data" :cols="table.cols">
       <div slot="top" class="mb20">
-        <s-button type="primary" @click="$store.commit('dialog/open',{_uid:'add-role-group'})">新增角色组</s-button>
-        <s-button type="primary" @click="role.add">新增角色</s-button>
+        <s-button type="primary" @click="roleGroupDialog.openAdd">新增角色组</s-button>
+        <s-button type="primary" @click="roleDialog.openAdd">新增角色</s-button>
         <s-button type="primary" @click="functionAuthorization">功能授权</s-button>
         <s-button type="primary" @click="productionOrganizationAuthorization">生产组织授权</s-button>
         <s-button type="primary" @click="salesChannelsAuthorization">售卖渠道授权</s-button>
@@ -28,36 +30,21 @@ import { defineComponent, reactive } from '@vue/composition-api'
 import getTableData from '@/api/1348-get-role-list'
 import setRoleState from '@/api/1386-post-role-state'
 import useOptions from './hooks/use-options'
+import RoleDialog, { dialog as roleDialog } from './dialog/role'
+import RoleGroupDialog, { dialog as roleGroupDialog } from './dialog/role'
 export default defineComponent({
+  components: { RoleDialog, RoleGroupDialog },
   setup(props, { root }) {
     const functionAuthorization = () => {}
     const productionOrganizationAuthorization = () => {}
     const salesChannelsAuthorization = () => {}
 
-    const role = reactive({
-      title: '新增角色',
-      add() {
-        role.title = '新增角色'
-        root.$store.commit('dialog/open', { _uid: 'add-role' })
-      },
-      edit(data) {
-        role.title = '编辑角色'
-        root.$store.commit('dialog/open', {
-          _uid: 'add-role',
-          isEdit: true,
-          data,
-        })
-      },
-      close() {
-        root.$store.commit('dialog/close', { _uid: 'add-role' })
-      },
-      setState(row) {
-        return setRoleState(row).then(({ msg }) => {
-          console.log(msg)
-          root.$store.commit('table/update')
-        })
-      },
-    })
+    const setState = (row) => {
+      return setRoleState(row).then(({ msg }) => {
+        console.log(msg)
+        root.$store.commit('table/update')
+      })
+    }
 
     const table = reactive({
       data: getTableData,
@@ -91,10 +78,10 @@ export default defineComponent({
           label: '操作项',
           prop: ({ row }) => {
             return [
-              <s-button type="text" onClick={() => role.edit(row)}>
+              <s-button type="text" onClick={() => roleDialog.openEdit(row)}>
                 编辑
               </s-button>,
-              <s-button type="text" onClick={() => role.setState(row)}>
+              <s-button type="text" onClick={() => setState(row)}>
                 {row.state ? '启用' : '停用'}
               </s-button>,
             ]
@@ -106,7 +93,8 @@ export default defineComponent({
     const options = useOptions()
 
     return {
-      role,
+      roleGroupDialog,
+      roleDialog,
       table,
       options,
       functionAuthorization,
