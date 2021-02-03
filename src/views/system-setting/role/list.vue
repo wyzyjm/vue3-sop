@@ -31,7 +31,7 @@ import getTableData from '@/api/1348-get-role-list'
 import setRoleState from '@/api/1386-post-role-state'
 import useOptions from './hooks/use-options'
 import RoleDialog, { dialog as roleDialog } from './dialog/role'
-import RoleGroupDialog, { dialog as roleGroupDialog } from './dialog/role'
+import RoleGroupDialog, { dialog as roleGroupDialog } from './dialog/role-group'
 export default defineComponent({
   components: { RoleDialog, RoleGroupDialog },
   setup(props, { root }) {
