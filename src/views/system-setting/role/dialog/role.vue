@@ -1,42 +1,60 @@
 <template>
-  <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :width="dialog.width">
-    <dialog-content @close="dialog.visible=false" :isEdit="component.isEdit" :data="component.data"></dialog-content>
-  </el-dialog>
+  <div>
+
+    <s-form :model="form" label-width="110px" @submit="save">
+      <s-form-item label="角色名称" :rules="['required']" prop="roleName" />
+      <s-form-item label="角色组名称" :data="options.roleGroup" :rules="['required']" prop="roleGroupId" component="s-group" />
+      <s-form-item label="关联设计器" :data="options.qtDesigner" prop="qtDesignerId" component="s-group" />
+      <s-form-item label="状态" :rules="['required']" :data="options.state" prop="state" component="s-group" tag="el-radio-group" />
+      <s-form-item label="服务商可见" :data="options.isSpVisible" :rules="['required']" prop="isSpVisible" component="s-group" tag="el-radio-group" />
+      <s-form-item label="描述" type="textarea" prop="remark" />
+      <s-form-item>
+        <s-button @click="$emit('close')">取消</s-button>
+        <s-button type="primary" run="form.submit">确定</s-button>
+      </s-form-item>
+    </s-form>
+  </div>
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import dialogContent from '../components/role'
-
-export const component = reactive({
-  isEdit: false,
-  data: undefined,
-})
-
-export const dialog = reactive({
-  title: '新增角色',
-  visible: false,
-  width: '500px',
-  close() {
-    dialog.visible = false
-  },
-  openAdd() {
-    dialog.title = '新增角色'
-    dialog.visible = true
-  },
-  openEdit(data) {
-    component.isEdit = true
-    component.data = data
-    dialog.title = '编辑角色'
-    dialog.visible = true
-  },
-})
-
+import roleSave from '@/api/1382-post-role-save'
+import roleUpdate from '@/api/1384-post-role-update'
+import useOptions from '../hooks/use-options'
 export default defineComponent({
-  components: { dialogContent },
-  setup() {
+  props: {
+    isEdit: {
+      default: false,
+    },
+    data: {
+      type: Object,
+    },
+  },
+  setup({ isEdit, data }) {
+    let form = reactive({
+      roleName: '',
+      roleGroupId: '',
+      isSpVisible: '',
+      qtDesignerId: '',
+      remark: '',
+      state: '',
+    })
+
+    if (isEdit) {
+      form = { ...form, ...data }
+    }
+
+    const save = (form) => {
+      return (isEdit ? roleSave(form) : roleUpdate(form)).then((response) => {
+        console.log(1, response)
+      })
+    }
+
+    const options = useOptions()
+
     return {
-      component,
-      dialog,
+      form,
+      save,
+      options,
     }
   },
 })

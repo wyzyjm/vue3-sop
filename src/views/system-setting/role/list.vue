@@ -1,8 +1,8 @@
 <template>
   <div>
 
-    <role-dialog />
-    <role-group-dialog />
+    <s-dialog v-bind="roleDialog" @close="roleDialog.close" :component="require('./dialog/role')" />
+    <s-dialog v-bind="roleGroupDialog" @close="roleGroupDialog.close" :component="require('./dialog/role-group')" />
 
     <s-simple-table :data="table.data" :cols="table.cols">
       <div slot="top" class="mb20">
@@ -30,11 +30,54 @@ import { defineComponent, reactive } from '@vue/composition-api'
 import getTableData from '@/api/1348-get-role-list'
 import setRoleState from '@/api/1386-post-role-state'
 import useOptions from './hooks/use-options'
-import RoleDialog, { dialog as roleDialog } from './dialog/role'
-import RoleGroupDialog, { dialog as roleGroupDialog } from './dialog/role-group'
 export default defineComponent({
-  components: { RoleDialog, RoleGroupDialog },
   setup(props, { root }) {
+    const roleDialog = reactive({
+      uid: 'role-dialog',
+      title: '新增角色',
+      width: '500px',
+      openAdd() {
+        roleDialog.title = '新增角色'
+        root.$store.commit('dialog/open', { _uid: roleDialog.uid })
+      },
+      openEdit(row) {
+        roleDialog.title = '编辑角色'
+        root.$store.commit('dialog/open', {
+          _uid: roleDialog.uid,
+          isEdit: true,
+          data: row,
+        })
+      },
+      close() {
+        root.$store.commit('dialog/close', {
+          _uid: roleDialog.uid,
+        })
+      },
+    })
+
+    const roleGroupDialog = reactive({
+      uid: 'role-group-dialog',
+      title: '新增角色组',
+      width: '500px',
+      openAdd() {
+        roleGroupDialog.title = '新增角色组'
+        root.$store.commit('dialog/open', { _uid: roleGroupDialog.uid })
+      },
+      openEdit(row) {
+        roleGroupDialog.title = '编辑角色组'
+        root.$store.commit('dialog/open', {
+          _uid: roleGroupDialog.uid,
+          isEdit: true,
+          data: row,
+        })
+      },
+      close() {
+        root.$store.commit('dialog/close', {
+          _uid: roleGroupDialog.uid,
+        })
+      },
+    })
+
     const functionAuthorization = () => {}
     const productionOrganizationAuthorization = () => {}
     const salesChannelsAuthorization = () => {}
