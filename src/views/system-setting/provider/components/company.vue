@@ -4,9 +4,10 @@
     <!--服务商基本信息-->
     <div class='module-box'>
         <div class="title-box">服务商基本信息</div>
-        <el-form :model="form" ref="form" label-width="140px" class="form-box">
+        <el-form :model="form" ref="form1" :rules="formRules" label-width="140px" class="form-box">
             <el-form-item label="公司全称：" prop="basicName" class="is-required">
-                <el-input class="w340" v-model="form.basicName" placeholder="请输入公司全称"></el-input>
+                <el-input class="w340" v-model="form.basicName" placeholder="请输入公司全称"
+                minlength="2" maxlength="100"></el-input>
             </el-form-item>
             <el-form-item label="合作类型：" prop="basicType" class="is-required">
                 <el-radio-group v-model="form.basicType">
@@ -14,7 +15,7 @@
                     <el-radio :label="2">非自营</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="公司简称：" prop="simpleName" class="is-required">
+            <el-form-item label="公司简称：" prop="simpleName">
                 <el-input class="w340" v-model="form.simpleName" placeholder="请输入公司简称"></el-input>
             </el-form-item>
             <el-form-item label="公司简介：" prop="basicDescribe">
@@ -39,11 +40,10 @@
                 <el-input class="w700" v-model="form.businessDescribe" placeholder="请输入业务介绍"
                 type="textarea" rows="4"></el-input>
             </el-form-item>
-            <el-form-item label="公司地址：" class="is-required">
+            <el-form-item label="公司地址：" class="is-required" prop="address">
             <el-cascader
                 :options="[]"
                 :props="{ expandTrigger: 'hover' }"
-                @change="handleCascader"
                 clearable
                 class="w340"
                 ref="cascader"
@@ -72,8 +72,8 @@
     <!--服务商注册信息-->
     <div class='module-box'>
         <div class="title-box">服务商注册信息</div>
-        <el-form :model="form" ref="form" label-width="140px" class="form-box">
-            <el-form-item label="成立时间：" class="is-required">
+        <el-form :model="form" ref="form2" :rules="formRules" label-width="140px" class="form-box">
+            <el-form-item label="成立时间：" class="is-required" prop="foundTime">
             <el-date-picker
                 class="w340"
                 v-model="form.foundTime"
@@ -81,23 +81,38 @@
                 placeholder="请选择成立时间"
             ></el-date-picker>
             </el-form-item>
-        <el-form-item label="注册资本：" class="is-required">
+        <el-form-item label="注册资本：" class="is-required" prop="registeredCapital">
           <el-input
             v-model="form.registeredCapital"
-            onkeyup="this.value=this.value.replace(/\D/g,'')"
             class="w300"
             placeholder
           ></el-input>
           <span class="ml14">万元</span>
         </el-form-item>
-        <el-form-item label="纳税人识别号：">
+        <el-form-item label="纳税人识别号：" prop="ratepayingNumber">
           <el-input
             v-model="form.ratepayingNumber"
+            maxlength="100"
             onkeyup="this.value=this.value.replace(/[^\w]/g,'')"
             class="w340"
             placeholder="请输入纳税人识别号"
           ></el-input>
-        </el-form-item>       
+        </el-form-item>      
+        <el-form-item label="营业执照上传：" prop="businessLicenceUrl" class="is-required">
+            <upload></upload>
+        </el-form-item>  
+        <el-form-item label="营业执照注册号：" prop="businessLicenceNumber" class="is-required">
+          <el-input
+            v-model="form.businessLicenceNumber"
+            onkeyup="this.value=this.value.replace(/[^\w]/g,'')"
+            maxlength="100"
+            class="w340"
+            placeholder="请输入营业执照注册号"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="税务登记证上传：" prop="registrationUrl" class="is-required">
+            <upload></upload>
+        </el-form-item>  
         <el-form-item label="税务登记证号：">
           <el-input
             v-model="form.registrationNumber"
@@ -109,12 +124,29 @@
         </el-form>
     </div>    
 
+    <!--法人信息-->
+    <div class='module-box'>
+        <div class="title-box">法人信息</div>
+        <el-form :model="form" ref="form3" :rules="formRules" label-width="140px" class="form-box">
+            <el-form-item label="法人姓名：" prop="legalPerson" class="is-required">
+                <el-input class="w340" v-model="form.legalPerson" placeholder="请输入法人姓名"
+                maxlength="50"
+                minlength="2"></el-input>
+            </el-form-item>
+            <el-form-item label="法人身份证上传：" prop="legalCredentialsNumber" class="is-required">
+                <upload type="idcard"></upload>
+            </el-form-item>  
+        </el-form>
+    </div>   
+
     <!--联系人信息-->
     <div class='module-box'>
         <div class="title-box">联系人信息</div>
-        <el-form :model="form" ref="form" label-width="140px" class="form-box">
+        <el-form :model="form" ref="form4" :rules="formRules" label-width="140px" class="form-box">
             <el-form-item label="联系人姓名：" prop="contactUsername" class="is-required">
-                <el-input class="w340" v-model="form.contactUsername" placeholder="请输入联系人姓名"></el-input>
+                <el-input class="w340" v-model="form.contactUsername" placeholder="请输入联系人姓名"
+                maxlength="50"
+                minlength="2"></el-input>
             </el-form-item>
             <el-form-item label="性别：" prop="contactSex" class="is-required">
                 <el-radio-group v-model="form.contactSex">
@@ -131,7 +163,7 @@
         </el-form>
     </div>   
     <div class="footer-box">
-        <el-button type="primary" >保存</el-button>
+        <el-button type="primary" @click="handleSave()">保存</el-button>
         <el-button class="ml20">取消</el-button>
     </div> 
 </div>
@@ -140,10 +172,13 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import { registeredCapitalVaild, contactPhoneVaild, contactEmailVaild } from "../utils/form-vaild";
+import Upload from "./upload";
 export default {
 //import引入的组件需要注入到对象中才能使用
-components: {},
+components: {
+    Upload
+},
 data() {
 //这里存放数据
 return {
@@ -182,7 +217,39 @@ return {
         basicType: 1, // 1、自营，2、非自营
         contactTel: '', // 联系人电话
         serviceStoptimeStr: '', // 服务到期时间
-    }
+    },
+    // 表单校验规则
+    formRules: {
+        basicName: [
+            { required: true, message: '请输入公司全称', trigger: 'blur' },
+            { min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' }
+        ],
+        registeredCapital: [
+            // { required: true, message: '请输入公司全称', trigger: 'blur' },
+            { validator: registeredCapitalVaild, trigger: 'blur' }
+        ],
+        foundTime: [
+            { type: 'date', required: true, message: '请选择成立时间', trigger: 'change' }
+        ],
+        businessLicenceNumber: [
+            { required: true, message: '请输入营业执照注册号', trigger: 'blur' },
+        ],
+        legalPerson: [
+            { required: true, message: '请输入法人姓名', trigger: 'blur' },
+            { min: 2, max: 100, message: '长度在 2 到 50 个字符', trigger: 'blur' }
+        ],
+        contactUsername: [
+            { required: true, message: '请输入联系人姓名', trigger: 'blur' },
+            { min: 2, max: 100, message: '长度在 2 到 50 个字符', trigger: 'blur' }
+        ],
+        contactPhone: [
+            { validator: contactPhoneVaild, trigger: 'blur' }
+        ],
+        contactEmail: [
+            { validator: contactEmailVaild, trigger: 'blur' }
+        ]
+    },
+    formArr: [1,2,3,4]
 }
 },
 //监听属性 类似于data概念
@@ -191,7 +258,21 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-
+    handleSave () {
+        let flag = true
+        this.formArr.map(v => {
+            this.$refs['form' + v].validate((valid) => {
+                if (!valid) {
+                    flag = valid
+                }
+            });
+        })
+        if (flag) {
+            console.log('success')
+        } else {
+            console.log('error')
+        }
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -213,18 +294,4 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
 @import url("../style.scss");
-    .module-box{
-        width:100%;
-        // height:691px;
-        margin-bottom:20px;
-        background: #fff;
-        border: 1px solid #EBEBEB;
-        border-radius: 6px;
-    }
-    .footer-box{
-        text-align: center;
-        margin:40px auto;
-        clear: both;
-
-    }
 </style>>

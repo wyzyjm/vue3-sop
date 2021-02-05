@@ -4,7 +4,7 @@
     <!--个人信息-->
     <div class='module-box'>
         <div class="title-box">个人信息</div>
-        <el-form :model="form" ref="form" label-width="140px" class="form-box">
+        <el-form :model="form" ref="form" :rules="formRules" label-width="140px" class="form-box">
             <el-form-item label="联系人姓名：" prop="contactUsername" class="is-required">
                 <el-input class="w340" v-model="form.contactUsername" placeholder="请输入联系人姓名"></el-input>
             </el-form-item>
@@ -20,8 +20,8 @@
             <el-form-item label="邮箱：" prop="contactEmail" class="is-required">
                 <el-input class="w340" v-model="form.contactEmail" placeholder="请输入联系人邮箱"></el-input>
             </el-form-item>
-            <el-form-item label="电话：" prop="contactEmail">
-                <el-input class="w340" v-model="form.contactEmail" placeholder="请输入联系人邮箱"></el-input>
+            <el-form-item label="电话：" prop="contactTel">
+                <el-input class="w340" v-model="form.contactTel" placeholder="请输入联系人电话"></el-input>
             </el-form-item>
             <el-form-item label="个人证件类型：" prop="legalCredentialsType">
                 <el-select
@@ -39,13 +39,16 @@
                     <el-option label="警察身份证" :value="8"></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="个人证件上传：" prop="legalCredentialsNumber" class="is-required">
+                <upload type="idcard"></upload>
+            </el-form-item>  
             <el-form-item label="个人证件号码：" prop="legalCredentialsNumber" class="is-required">
                 <el-input class="w340" v-model="form.legalCredentialsNumber" placeholder="请输入个人证件号码"></el-input>
             </el-form-item>
         </el-form>
     </div>   
     <div class="footer-box">
-        <el-button type="primary" >保存</el-button>
+        <el-button type="primary" @click="handleSave()">保存</el-button>
         <el-button class="ml20">取消</el-button>
     </div> 
 </div>
@@ -54,10 +57,13 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import { contactPhoneVaild, contactEmailVaild } from "../utils/form-vaild";
+import Upload from "./upload";
 export default {
 //import引入的组件需要注入到对象中才能使用
-components: {},
+components: {
+    Upload
+},
 data() {
 //这里存放数据
 return {
@@ -96,7 +102,27 @@ return {
         basicType: 1, // 1、自营，2、非自营
         contactTel: '', // 联系人电话
         serviceStoptimeStr: '', // 服务到期时间
-    }
+    },
+    // 表单校验规则
+    formRules: {
+        legalPerson: [
+            { required: true, message: '请输入法人姓名', trigger: 'blur' },
+            { min: 2, max: 100, message: '长度在 2 到 50 个字符', trigger: 'blur' }
+        ],
+        contactUsername: [
+            { required: true, message: '请输入联系人姓名', trigger: 'blur' },
+            { min: 2, max: 100, message: '长度在 2 到 50 个字符', trigger: 'blur' }
+        ],
+        contactPhone: [
+            { validator: contactPhoneVaild, trigger: 'blur' }
+        ],
+        contactEmail: [
+            { validator: contactEmailVaild, trigger: 'blur' }
+        ],
+        legalCredentialsType: [
+            { required: true, message: '请选择证件类型', trigger: 'change' }
+        ],        
+    },    
 }
 },
 //监听属性 类似于data概念
@@ -105,7 +131,15 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-
+    handleSave () {
+        this.$refs['form'].validate((valid) => {
+            if (valid) {
+                console.log('success')
+            } else {
+                console.log('error')
+            }
+        });
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -127,18 +161,4 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
 @import url("../style.scss");
-    .module-box{
-        width:100%;
-        // height:691px;
-        margin-bottom:20px;
-        background: #fff;
-        border: 1px solid #EBEBEB;
-        border-radius: 6px;
-    }
-    .footer-box{
-        text-align: center;
-        margin:40px auto;
-        clear: both;
-
-    }
 </style>>
