@@ -1,6 +1,6 @@
 <template>
   <div>
-    <s-dialog v-bind="dialog" @close="dialog.close" :component="require('./dialog/add-business-type')" />
+    <s-dialog v-bind="dialog" @close="dialog.close" :component="require('./dialog/add-phase')" />
 
     <s-simple-table :data="table.data" :cols="table.cols">
       <s-form slot="form" inline>
@@ -33,7 +33,7 @@ export default defineComponent({
     }
 
     const dialog = reactive({
-      title: '新增业务类型',
+      title: '新增阶段',
       width: '500px',
       openAdd() {
         root.$store.commit('dialog/open')

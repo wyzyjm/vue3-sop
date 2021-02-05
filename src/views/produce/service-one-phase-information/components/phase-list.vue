@@ -1,7 +1,6 @@
 <template>
   <div>
-    <s-dialog v-bind="dialog" @close="dialog.close" :component="require('../dialog/add-business-type')" />
-
+    <s-dialog v-bind="dialog" @close="dialog.close" :component="require('../dialog/add-phase')" />
     <s-simple-table :page="false" :data="table.data" :cols="table.cols"></s-simple-table>
   </div>
 </template>
