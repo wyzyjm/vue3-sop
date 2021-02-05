@@ -108,6 +108,10 @@ export default defineComponent({
               index: '/produce/business-type/list',
               title: '业务管理',
             },
+            {
+              index: '/produce/service-type/list',
+              title: '服务单状态管理',
+            },
           ]
         }
       ],
