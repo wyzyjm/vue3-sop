@@ -104,6 +104,18 @@ export default defineComponent({
               index: '/produce/service-flow',
               title: '服务流程设置',
             },
+            {
+              index: '/produce/business-type/list',
+              title: '业务管理',
+            },
+            {
+              index: '/produce/service-type/list',
+              title: '服务单状态管理',
+            },
+            {
+              index: '/produce/service-one-phase-information/list',
+              title: '客户呈现信息配置',
+            },
           ]
         }
       ],
