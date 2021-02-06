@@ -11,7 +11,7 @@
         </s-form-item>
       </s-form>
       <div slot="top">
-        <s-button type="primary" @click="dialog.openAdd">新增</s-button>
+        <s-button type="primary" @click="dialog.open">新增</s-button>
       </div>
     </s-simple-table>
   </div>
@@ -32,9 +32,10 @@ export default defineComponent({
     }
 
     const dialog = useDialog({
-      title: '新增业务类型',
+      dynamicTitle: (data) => (data.isEdit ? '编辑业务类型' : '新增业务类型'),
       width: '500px',
       uid: 'add-business-type',
+      component:require('./dialog/add-business-type')
     })
 
     const table = reactive({

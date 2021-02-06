@@ -9,8 +9,8 @@
 
     <s-simple-table :data="table.data" :cols="table.cols">
       <div slot="top" class="mb20">
-        <s-button type="primary" @click="roleGroupDialog.openAdd">新增角色组</s-button>
-        <s-button type="primary" @click="roleDialog.openAdd">新增角色</s-button>
+        <s-button type="primary" @click="roleGroupDialog.open">新增角色组</s-button>
+        <s-button type="primary" @click="roleDialog.open">新增角色</s-button>
         <s-button type="primary" @click="functionAuthorizationDialog.open">功能授权</s-button>
         <s-button type="primary" @click="productionOrganizationAuthorizationDialog.open">生产组织授权</s-button>
         <s-button type="primary" @click="salesChannelsAuthorizationDialog.open">售卖渠道授权</s-button>
@@ -38,14 +38,14 @@ import useDialog from '@/hooks/use-dialog'
 export default defineComponent({
   setup(props, { root }) {
     const roleDialog = useDialog({
+      dynamicTitle: (data) => (data.isEdit ? '编辑角色' : '新增角色'),
       uid: 'role-dialog',
-      title: '新增角色',
       component: require('./dialog/role'),
     })
 
     const roleGroupDialog = useDialog({
       uid: 'role-group-dialog',
-      title: '新增角色组',
+      dynamicTitle: (data) => (data.isEdit ? '编辑角色组' : '新增角色组'),
       component: require('./dialog/role-group'),
     })
 
@@ -106,7 +106,10 @@ export default defineComponent({
           label: '操作项',
           prop: ({ row }) => {
             return [
-              <s-button type="text" onClick={() => roleDialog.openEdit(row)}>
+              <s-button
+                type="text"
+                onClick={() => roleDialog.open({ data: row, isEdit: true })}
+              >
                 编辑
               </s-button>,
               <s-button type="text" onClick={() => setState(row)}>

@@ -7,6 +7,10 @@ export default (options) => {
             title: '标题',
             width: '600px',
             open(data) {
+                // 动态设置标题
+                if (typeof options.dynamicTitle === 'function') {
+                    dialog.title = options.dynamicTitle(data)
+                }
                 store.commit('dialog/open', { ...data, _uid: dialog.uid })
             },
             close() {
