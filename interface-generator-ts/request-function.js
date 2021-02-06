@@ -6,8 +6,11 @@ module.exports = ({ path, method }, arg) => {
     const ParamsKey = 'POST,PUT,PATCH'.indexOf(method) === -1 ? 'params' : 'data'
     return (
         `${Params}\n\n${request}\nexport default (params: _Params)=> { 
+    const url = '${path}'.replace(/{([^}]+)}/g, (r, $1) => {
+        return params[$1] || ''
+    })
     return request({
-        url:'${path}',
+        url,
         method:'${method}',
         ${ParamsKey}:params
     })
