@@ -19,11 +19,10 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import getTableData from '@/api/1348-get-role-list'
 import setRoleState from '@/api/1386-post-role-state'
 import PhaseList from './components/phase-list'
 import useDialog from '@/hooks/use-dialog'
-
+import getTableData from '@/api/1440-get-cust-service-show-config'
 export default defineComponent({
   components: { PhaseList },
   setup(props, { root }) {
@@ -50,23 +49,23 @@ export default defineComponent({
         {
           showOverflowTooltip: true,
           label: '服务单呈现名称',
-          prop: 'roleName',
+          prop: 'flowShowName',
         },
         {
           label: '名称编码',
-          prop: 'roleGroupName',
+          prop: 'flowShowCode',
         },
         {
           label: '版本',
-          prop: 'stateLable',
+          prop: 'version',
         },
         {
           label: '状态',
-          prop: 'isSpVisibleLable',
+          prop: 'statusName',
         },
         {
           label: '对应服务流程',
-          prop: 'createBy',
+          prop: 'businessFlowDefName',
         },
         {
           label: '流程版本',

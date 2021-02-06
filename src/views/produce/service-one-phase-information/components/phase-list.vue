@@ -1,13 +1,17 @@
 <template>
   <div>
+    <s-dialog v-bind="dialog" @close="dialog.close" />
+
     <s-simple-table :page="false" :data="table.data" :cols="table.cols"></s-simple-table>
   </div>
 </template>
 <script>
-import { defineComponent, reactive, ref } from '@vue/composition-api'
+import { defineComponent, reactive } from '@vue/composition-api'
 import getTableData from '@/api/1348-get-role-list'
 import setRoleState from '@/api/1386-post-role-state'
 import LinkList from './link-list'
+import useDialog from '@/hooks/use-dialog'
+
 export default defineComponent({
   props: {
     uid: {
@@ -23,11 +27,11 @@ export default defineComponent({
       })
     }
 
-    const linkListRef = ref(null)
-
-    const addNewLink = () => {
-      console.log(3, linkListRef)
-    }
+    const dialog = useDialog({
+      title: '新增环节',
+      width: '500px',
+      component: require('../dialog/add-link'),
+    })
 
     const table = reactive({
       data: getTableData,
@@ -35,7 +39,7 @@ export default defineComponent({
         {
           type: 'expand',
           prop: ({ row }) => {
-            return <LinkList ref={linkListRef} uid={row.id} />
+            return <LinkList uid={row.id} />
           },
         },
         {
@@ -73,7 +77,7 @@ export default defineComponent({
               // <s-button type="text" onClick={() => dialog.openEdit(row)}>
               //   编辑
               // </s-button>,
-              <s-button type="text" onClick={() => addNewLink(row)}>
+              <s-button type="text" onClick={() => dialog.open({data:row})}>
                 新增环节
               </s-button>,
             ]
@@ -83,6 +87,7 @@ export default defineComponent({
     })
 
     return {
+      dialog,
       table,
     }
   },

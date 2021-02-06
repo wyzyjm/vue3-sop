@@ -3,20 +3,23 @@
     <s-form :model="form" label-width="150px" @submit="save">
       <h2>服务单信息</h2>
 
-      <s-form-item label="服务单呈现名称" :rules="['required']" prop="roleGroupName" />
-      <s-form-item label="服务单名称编码" :rules="['required']" prop="roleGroupName" />
+      <s-form-item label="服务单呈现名称" :rules="['required']" prop="flowShowName" />
+      <s-form-item label="服务单名称编码" :rules="['required']" prop="flowShowCode" />
       <s-form-item label="版本" :rules="['required']" prop="roleGroupName" />
-      <s-form-item label="流程名称" :rules="['required']" prop="roleGroupName" />
+      <s-form-item label="流程名称" :rules="['required']" prop="businessFlowDefId" />
       <s-form-item label="流程版本" :rules="['required']" prop="roleGroupName" />
       <h2>阶段信息</h2>
-      <div v-for="(item,i) in form.phases" :key="i">
+      <div v-for="(item,i) in form.stageGroupDTOList" :key="i">
         <div>
           <s-button type="primary" @click="add(i)">添加</s-button>
           <s-button type="primary" @click="del(i)">删除</s-button>
         </div>
-        <s-form-item label="阶段名称" :rules="['required']" prop="roleGroupName" />
-        <s-form-item label="阶段编码" :rules="['required']" prop="roleGroupName" />
-        <s-form-item label="展示顺序" :rules="['required']" prop="roleGroupName" />
+        <s-form-item label="阶段名称" :rules="['required']" prop="stageName" />
+        <s-form-item label="阶段编码" :rules="['required']" prop="stageCode" />
+        <s-form-item label="展示顺序" :rules="['required']" prop="orderSort" />
+        <s-form-item label="未开始术语" :rules="['required']" prop="noStartTerm" />
+        <s-form-item label="进行中术语" :rules="['required']" prop="progressTerm" />
+        <s-form-item label="已完成术语" :rules="['required']" prop="finishedTerm" />
       </div>
 
       <s-form-item>
@@ -28,7 +31,7 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import roleGroupSave from '@/api/1368-post-role-group-save'
+import saveConfig from '@/api/1444-post-cust-service-show-config-addconfig'
 export default defineComponent({
   props: {
     isEdit: {
@@ -39,14 +42,20 @@ export default defineComponent({
     },
   },
   setup({ isEdit, data }) {
-    let form = reactive({
-      roleGroupName: '',
-      remark: '',
-      phases: [{ namea: 1 }],
+    const stageGroupDTOItem = reactive({
+      stageName: '',
+      stageCode: '',
+      orderSort: '',
+      noStartTerm: '',
+      progressTerm: '',
+      finishedTerm: '',
     })
 
-    const phase = reactive({
-      form: '111',
+    let form = reactive({
+      flowShowName: '',
+      flowShowCode: '',
+      businessFlowDefId: '',
+      stageGroupDTOList: [{ ...stageGroupDTOItem }],
     })
 
     if (isEdit) {
@@ -54,15 +63,14 @@ export default defineComponent({
     }
 
     const add = (i) => {
-      console.log(112, i, form.phases)
-      form.phases.splice(i + 1, 0, { ...phase })
+      form.stageGroupDTOList.splice(i + 1, 0, { ...stageGroupDTOItem })
     }
     const del = (i) => {
-      form.phases.splice(i, 1)
+      form.stageGroupDTOList.splice(i, 1)
     }
 
     const save = (form) => {
-      return roleGroupSave(form).then(({ msg }) => {
+      return saveConfig(form).then(({ msg }) => {
         console.log(msg)
       })
     }

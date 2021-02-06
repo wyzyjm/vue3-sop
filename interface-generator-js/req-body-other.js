@@ -2,13 +2,22 @@ let interfaceList = []
 
 const firstUpperCase = ([first, ...rest]) => first.toUpperCase() + rest.join('')
 const fillMargin = (len) => Array(len).fill(' ').join('')
+const getType=(type)=>{
+    if(type==='array'){
+       return 'any[]'
+    }
+    if(type==='integer'){
+       return 'number'
+    }
+    return type
+}
 const createInterfaceItem = (key, val, required) => {
     if (val.properties) {
         const type = firstUpperCase(key)
         interfaceList.push(createInterface(val, type))
         return `${key}${required ? '' : '?'}:${type}`
     } else {
-        return `${key}${required ? '' : '?'}:${val.type==='array'?'any[]':val.type}`
+        return `${key}${required ? '' : '?'}:${getType(val.type)}`
     }
 }
 
