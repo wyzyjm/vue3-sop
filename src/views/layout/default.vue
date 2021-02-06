@@ -93,6 +93,14 @@ export default defineComponent({
               index: '/system-setting/provider/list',
               title: '服务商管理',
             },
+            {
+              index: '/system-setting/staff/list',
+              title: '员工管理',
+            },
+            {
+              index: '/system-setting/document/list',
+              title: '文档管理',
+            },
           ],
         },
         {
