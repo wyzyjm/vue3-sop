@@ -3,14 +3,15 @@ module.exports = ({ path, method }, arg) => {
     const paramsExtends = ['ReqQuery', 'ReqParams', 'ReqBody'].filter(v => arg[v])
     const Params = paramsExtends.length ? `interface _Params extends ${paramsExtends} {}` : `interface _Params {}`
 
+    path = /{([^}]+)}/.test(path) ? `'${path}'.replace(/{([^}]+)}/g, (r, $1) => {
+        return params[$1] || ''
+    })`: `'${path}'`
+
     const ParamsKey = 'POST,PUT,PATCH'.indexOf(method) === -1 ? 'params' : 'data'
     return (
         `${Params}\n\n${request}\nexport default (params: _Params)=> { 
-    const url = '${path}'.replace(/{([^}]+)}/g, (r, $1) => {
-        return params[$1] || ''
-    })
     return request({
-        url,
+        url:${path},
         method:'${method}',
         ${ParamsKey}:params
     })
