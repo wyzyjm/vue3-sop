@@ -1,3 +1,4 @@
+import RouterView from '@/views/layout/router-view'
 export default [
     {
         path: 'service-one-phase-information',
@@ -5,7 +6,7 @@ export default [
             title: '客户呈现信息配置'
         },
         redirect: 'service-one-phase-information/list',
-        component: () => import(/* webpackChunkName: "service-one-phase-information" */ '@/views/produce/service-one-phase-information/index'),
+        component: RouterView,
         children: [{
             path: 'list',
             component: () => import(/* webpackChunkName: "service-one-phase-information" */ '@/views/produce/service-one-phase-information/list'),
