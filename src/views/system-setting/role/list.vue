@@ -1,11 +1,11 @@
 <template>
   <div>
 
-    <s-dialog v-bind="roleDialog" @close="roleDialog.close" :component="require('./dialog/role')" />
-    <s-dialog v-bind="roleGroupDialog" @close="roleGroupDialog.close" :component="require('./dialog/role-group')" />
-    <s-dialog v-bind="functionAuthorizationDialog" @close="functionAuthorizationDialog.close" :component="require('./dialog/function-authorization')" />
-    <s-dialog v-bind="productionOrganizationAuthorizationDialog" @close="productionOrganizationAuthorizationDialog.close" :component="require('./dialog/production-organization-authorization')" />
-    <s-dialog v-bind="salesChannelsAuthorizationDialog" @close="salesChannelsAuthorizationDialog.close" :component="require('./dialog/sales-channels-authorization')" />
+    <s-dialog v-bind="roleDialog" @close="roleDialog.close" />
+    <s-dialog v-bind="roleGroupDialog" @close="roleGroupDialog.close" />
+    <s-dialog v-bind="functionAuthorizationDialog" @close="functionAuthorizationDialog.close" />
+    <s-dialog v-bind="productionOrganizationAuthorizationDialog" @close="productionOrganizationAuthorizationDialog.close" />
+    <s-dialog v-bind="salesChannelsAuthorizationDialog" @close="salesChannelsAuthorizationDialog.close" />
 
     <s-simple-table :data="table.data" :cols="table.cols">
       <div slot="top" class="mb20">
@@ -33,100 +33,38 @@ import { defineComponent, reactive } from '@vue/composition-api'
 import getTableData from '@/api/1348-get-role-list'
 import setRoleState from '@/api/1386-post-role-state'
 import useOptions from './hooks/use-options'
+import useDialog from '@/hooks/use-dialog'
+
 export default defineComponent({
   setup(props, { root }) {
-    const roleDialog = reactive({
+    const roleDialog = useDialog({
       uid: 'role-dialog',
       title: '新增角色',
-      width: '500px',
-      openAdd() {
-        roleDialog.title = '新增角色'
-        root.$store.commit('dialog/open', { _uid: roleDialog.uid })
-      },
-      openEdit(row) {
-        roleDialog.title = '编辑角色'
-        root.$store.commit('dialog/open', {
-          _uid: roleDialog.uid,
-          isEdit: true,
-          data: row,
-        })
-      },
-      close() {
-        root.$store.commit('dialog/close', {
-          _uid: roleDialog.uid,
-        })
-      },
+      component: require('./dialog/role'),
     })
 
-    const roleGroupDialog = reactive({
+    const roleGroupDialog = useDialog({
       uid: 'role-group-dialog',
       title: '新增角色组',
-      width: '500px',
-      openAdd() {
-        roleGroupDialog.title = '新增角色组'
-        root.$store.commit('dialog/open', { _uid: roleGroupDialog.uid })
-      },
-      openEdit(row) {
-        roleGroupDialog.title = '编辑角色组'
-        root.$store.commit('dialog/open', {
-          _uid: roleGroupDialog.uid,
-          isEdit: true,
-          data: row,
-        })
-      },
-      close() {
-        root.$store.commit('dialog/close', {
-          _uid: roleGroupDialog.uid,
-        })
-      },
+      component: require('./dialog/role-group'),
     })
 
-    const functionAuthorizationDialog = reactive({
+    const functionAuthorizationDialog = useDialog({
       uid: 'function-authorization',
       title: '功能授权',
-      width: '500px',
-      open() {
-        root.$store.commit('dialog/open', {
-          _uid: functionAuthorizationDialog.uid,
-        })
-      },
-      close() {
-        root.$store.commit('dialog/close', {
-          _uid: functionAuthorizationDialog.uid,
-        })
-      },
+      component: require('./dialog/function-authorization'),
     })
 
-    const productionOrganizationAuthorizationDialog = reactive({
+    const productionOrganizationAuthorizationDialog = useDialog({
       uid: 'production-organization-authorization',
       title: '生产组织授权',
-      width: '500px',
-      open() {
-        root.$store.commit('dialog/open', {
-          _uid: productionOrganizationAuthorizationDialog.uid,
-        })
-      },
-      close() {
-        root.$store.commit('dialog/close', {
-          _uid: productionOrganizationAuthorizationDialog.uid,
-        })
-      },
+      component: require('./dialog/production-organization-authorization'),
     })
 
-    const salesChannelsAuthorizationDialog = reactive({
-      uid: 'production-organization-authorization',
-      title: '生产组织授权',
-      width: '500px',
-      open() {
-        root.$store.commit('dialog/open', {
-          _uid: salesChannelsAuthorizationDialog.uid,
-        })
-      },
-      close() {
-        root.$store.commit('dialog/close', {
-          _uid: salesChannelsAuthorizationDialog.uid,
-        })
-      },
+    const salesChannelsAuthorizationDialog = useDialog({
+      uid: 'sales-channels-authorization',
+      title: '售卖渠道授权',
+      component: require('./dialog/sales-channels-authorization'),
     })
 
     const setState = (row) => {

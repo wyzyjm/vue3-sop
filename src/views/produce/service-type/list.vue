@@ -1,6 +1,6 @@
 <template>
   <div>
-    <s-dialog v-bind="dialog" @close="dialog.close" :component="require('./dialog/add-business-type')" />
+    <s-dialog v-bind="dialog" @close="dialog.close" />
     <s-simple-table :data="table.data" :cols="table.cols">
       <s-form slot="form" inline>
         <s-form-item label="角色名称" prop="roleName" />
@@ -19,6 +19,7 @@
 import { defineComponent, reactive } from '@vue/composition-api'
 import getTableData from '@/api/1348-get-role-list'
 import setRoleState from '@/api/1386-post-role-state'
+import useDialog from '@/hooks/use-dialog'
 
 export default defineComponent({
   setup(props, { root }) {
@@ -29,23 +30,11 @@ export default defineComponent({
       })
     }
 
-
-
-    const dialog = reactive({
+    const dialog = useDialog({
+      uid: 'add-business-type',
       title: '新增业务类型',
       width: '500px',
-      openAdd() {
-        root.$store.commit('dialog/open')
-      },
-      openEdit(data) {
-        root.$store.commit('dialog/open', {
-          isEdit: true,
-          data,
-        })
-      },
-      close() {
-        root.$store.commit('dialog/close')
-      },
+      component: require('./dialog/add-business-type'),
     })
 
     const table = reactive({
@@ -83,7 +72,10 @@ export default defineComponent({
               <s-button type="text" onClick={() => setState(row)}>
                 {row.state ? '启用' : '停用'}
               </s-button>,
-              <s-button type="text" onClick={() => dialog.openEdit(row)}>
+              <s-button
+                type="text"
+                onClick={() => dialog.open({ data: row, isEdit: true })}
+              >
                 编辑
               </s-button>,
             ]
