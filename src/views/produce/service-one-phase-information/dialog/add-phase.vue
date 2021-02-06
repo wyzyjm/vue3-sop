@@ -4,7 +4,6 @@
       <s-form-item label="阶段名称" :rules="['required']" prop="roleGroupName" />
       <s-form-item label="阶段编码" :rules="['required']" prop="roleGroupName" />
       <s-form-item label="展示顺序" :rules="['required']" prop="roleGroupName" />
-      <s-form-item label="包含环节" :rules="['required']" prop="roleGroupName" />
       <s-form-item>
         <s-button @click="$emit('close')">取消</s-button>
         <s-button type="primary" run="form.submit">确定</s-button>
@@ -24,7 +23,8 @@ export default defineComponent({
       type: Object,
     },
   },
-  setup({ isEdit, data }) {
+  setup({ isEdit, data },{root,emit}) {
+    
     let form = reactive({
       roleGroupName: '',
       remark: '',
@@ -36,6 +36,13 @@ export default defineComponent({
 
     const save = (form) => {
       return roleGroupSave(form).then(({ msg }) => {
+        console.log(data)
+        root.$store.commit('table/update',{
+          _uid:data.id
+        })
+
+        emit('close')
+
         console.log(msg)
       })
     }

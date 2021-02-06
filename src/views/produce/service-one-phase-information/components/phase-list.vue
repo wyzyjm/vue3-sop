@@ -1,15 +1,19 @@
 <template>
   <div>
-    <s-dialog v-bind="dialog" @close="dialog.close" :component="require('../dialog/add-phase')" />
     <s-simple-table :page="false" :data="table.data" :cols="table.cols"></s-simple-table>
   </div>
 </template>
 <script>
-import { defineComponent, reactive } from '@vue/composition-api'
+import { defineComponent, reactive, ref } from '@vue/composition-api'
 import getTableData from '@/api/1348-get-role-list'
 import setRoleState from '@/api/1386-post-role-state'
 import LinkList from './link-list'
 export default defineComponent({
+  props: {
+    uid: {
+      required: true,
+    },
+  },
   components: { LinkList },
   setup(props, { root }) {
     const setState = (row) => {
@@ -19,30 +23,19 @@ export default defineComponent({
       })
     }
 
-    const dialog = reactive({
-      title: '新增业务类型',
-      width: '500px',
-      openAdd() {
-        root.$store.commit('dialog/open')
-      },
-      openEdit(data) {
-        root.$store.commit('dialog/open', {
-          isEdit: true,
-          data,
-        })
-      },
-      close() {
-        root.$store.commit('dialog/close')
-      },
-    })
+    const linkListRef = ref(null)
+
+    const addNewLink = () => {
+      console.log(3, linkListRef)
+    }
 
     const table = reactive({
       data: getTableData,
       cols: [
         {
           type: 'expand',
-          prop: () => {
-            return <LinkList />
+          prop: ({ row }) => {
+            return <LinkList ref={linkListRef} uid={row.id} />
           },
         },
         {
@@ -77,8 +70,11 @@ export default defineComponent({
               <s-button type="text" onClick={() => setState(row)}>
                 {row.state ? '启用' : '停用'}
               </s-button>,
-              <s-button type="text" onClick={() => dialog.openEdit(row)}>
-                编辑
+              // <s-button type="text" onClick={() => dialog.openEdit(row)}>
+              //   编辑
+              // </s-button>,
+              <s-button type="text" onClick={() => addNewLink(row)}>
+                新增环节
               </s-button>,
             ]
           },
@@ -87,7 +83,6 @@ export default defineComponent({
     })
 
     return {
-      dialog,
       table,
     }
   },

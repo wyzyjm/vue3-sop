@@ -1,7 +1,6 @@
 <template>
   <div>
     <s-dialog v-bind="dialog" @close="dialog.close" :component="require('./dialog/add-phase')" />
-
     <s-simple-table :data="table.data" :cols="table.cols">
       <s-form slot="form" inline>
         <s-form-item label="角色名称" prop="roleName" />
@@ -11,7 +10,9 @@
         </s-form-item>
       </s-form>
       <div slot="top">
-        <s-button type="primary" @click="dialog.openAdd">新增</s-button>
+        <router-link to="./add">
+          <s-button type="primary">新增</s-button>
+        </router-link>
       </div>
     </s-simple-table>
   </div>
@@ -35,8 +36,10 @@ export default defineComponent({
     const dialog = reactive({
       title: '新增阶段',
       width: '500px',
-      openAdd() {
-        root.$store.commit('dialog/open')
+      openAdd(data) {
+        root.$store.commit('dialog/open',{
+            data
+        })
       },
       openEdit(data) {
         root.$store.commit('dialog/open', {
@@ -54,7 +57,7 @@ export default defineComponent({
       cols: [
         {
           type: 'expand',
-          prop: () => <PhaseList />,
+          prop: ({ row }) => <PhaseList uid={row.id} />,
         },
         {
           showOverflowTooltip: true,
@@ -90,6 +93,12 @@ export default defineComponent({
               </s-button>,
               <s-button type="text" onClick={() => dialog.openEdit(row)}>
                 编辑
+              </s-button>,
+              <s-button
+                type="text"
+                onClick={() => dialog.openAdd({ data: row })}
+              >
+                新增阶段
               </s-button>,
             ]
           },

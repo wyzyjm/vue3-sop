@@ -1,12 +1,10 @@
 <template>
   <div>
-    <s-dialog v-bind="dialog" @close="dialog.close" :component="require('../dialog/add-phase')" />
-    <s-simple-table  :page="false" :data="table.data" :cols="table.cols"></s-simple-table>
+    <s-simple-table :page="false" :data="table.data" :cols="table.cols"></s-simple-table>
   </div>
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import getTableData from '@/api/1348-get-role-list'
 import setRoleState from '@/api/1386-post-role-state'
 
 export default defineComponent({
@@ -18,25 +16,12 @@ export default defineComponent({
       })
     }
 
-    const dialog = reactive({
-      title: '新增业务类型',
-      width: '500px',
-      openAdd() {
-        root.$store.commit('dialog/open')
-      },
-      openEdit(data) {
-        root.$store.commit('dialog/open', {
-          isEdit: true,
-          data,
-        })
-      },
-      close() {
-        root.$store.commit('dialog/close')
-      },
-    })
+    const edit = (row) => {
+      row.isEdit = true
+    }
 
     const table = reactive({
-      data: getTableData,
+      data: [],
       cols: [
         {
           showOverflowTooltip: true,
@@ -74,7 +59,7 @@ export default defineComponent({
               <s-button type="text" onClick={() => setState(row)}>
                 {row.state ? '启用' : '停用'}
               </s-button>,
-              <s-button type="text" onClick={() => dialog.openEdit(row)}>
+              <s-button type="text" onClick={() => edit(row)}>
                 编辑
               </s-button>,
             ]
@@ -83,8 +68,15 @@ export default defineComponent({
       ],
     })
 
+    const addTableCol = () => {
+      const tableColModel = reactive({
+        aaa: 1,
+      })
+      table.data.push(tableColModel)
+    }
+
     return {
-      dialog,
+      addTableCol,
       table,
     }
   },
