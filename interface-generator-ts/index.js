@@ -48,10 +48,8 @@ const createInterface = (id) => {
 }
 
 const createInterfaceByProject = (id) => {
-    console.log(444,id)
     getAllApi(id).then(response => {
         const { data, errcode } = response.data
-        console.log(5,data)
         if (errcode) return
         data.list.forEach(v => {
             createInterface(v._id)

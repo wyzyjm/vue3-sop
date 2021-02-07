@@ -7,11 +7,10 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import getTableData from '@/api/1348-get-role-list'
 import setRoleState from '@/api/1386-post-role-state'
 import LinkList from './link-list'
 import useDialog from '@/hooks/use-dialog'
-
+import getTableData from '@/api/1460-get-cust-service-show-config-nodelist-{stageid}'
 export default defineComponent({
   props: {
     uid: {
@@ -45,27 +44,27 @@ export default defineComponent({
         {
           showOverflowTooltip: true,
           label: '阶段名称',
-          prop: 'roleName',
+          prop: 'nodeName',
         },
         {
           label: '阶段编码',
-          prop: 'roleGroupName',
+          prop: 'nodeCode',
         },
         {
           label: '显示顺序',
-          prop: 'stateLable',
+          prop: 'orderSort',
         },
         {
           label: '未开始显示话术',
-          prop: 'isSpVisibleLable',
+          prop: 'noStartRetm',
         },
         {
           label: '生产中显示话术',
-          prop: 'createBy',
+          prop: 'progressTerm',
         },
         {
           label: '已完成显示话术',
-          prop: 'createTime',
+          prop: 'finishedTerm',
         },
         {
           label: '操作项',

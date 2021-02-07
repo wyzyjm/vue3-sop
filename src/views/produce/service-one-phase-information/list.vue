@@ -19,16 +19,15 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import setRoleState from '@/api/1386-post-role-state'
+import setStatus from '@/api/1470-get-cust-service-show-config-{id}-{status}'
 import PhaseList from './components/phase-list'
 import useDialog from '@/hooks/use-dialog'
 import getTableData from '@/api/1440-get-cust-service-show-config'
 export default defineComponent({
   components: { PhaseList },
   setup(props, { root }) {
-    const setState = (row) => {
-      return setRoleState(row).then(({ msg }) => {
-        console.log(msg)
+    const _setStatus = (row) => {
+      return setStatus(row).then(() => {
         root.$store.commit('table/update')
       })
     }
@@ -69,13 +68,21 @@ export default defineComponent({
         },
         {
           label: '流程版本',
-          prop: 'createTime',
+          prop: 'businessFlowDefVersion',
         },
         {
           label: '操作项',
           prop: ({ row }) => {
             return [
-              <s-button type="text" onClick={() => setState(row)}>
+              <s-button
+                type="text"
+                onClick={() =>
+                  _setStatus({
+                    id: row.id,
+                    status: 1 ^ row.status,
+                  })
+                }
+              >
                 {row.state ? '启用' : '停用'}
               </s-button>,
               <s-button
