@@ -12,7 +12,7 @@ const fetch = require('axios')
 
 
 const getApiDetail = (id) => fetch(`${baseURL}/api/interface/get?token=${token}&id=${id}`)
-const getAllApi = (id) => fetch(`${baseURL}/api/interface/list?token=${token}&catid=${id}&limit=1000`)
+const getAllApi = (id) => fetch(`${baseURL}/api/interface/list?token=${token}&project_id=${id}&limit=1000`)
 
 
 const createInterface = (id) => {
@@ -48,8 +48,10 @@ const createInterface = (id) => {
 }
 
 const createInterfaceByProject = (id) => {
+    console.log(444,id)
     getAllApi(id).then(response => {
         const { data, errcode } = response.data
+        console.log(5,data)
         if (errcode) return
         data.list.forEach(v => {
             createInterface(v._id)
