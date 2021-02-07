@@ -1,0 +1,40 @@
+
+/**
+ * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1464
+ * 生成日期：Sun Feb 07 2021 10:34:35 GMT+0800 (GMT+08:00)
+ * 生成工具版本：ts-v0.1
+ * 接口名称：通过id查询客户呈现阶段
+ */
+export interface Data {
+  id:number              /**主键*/
+  stageCode:string       /**阶段code*/
+  stageName:string       /**阶段名称*/
+  orderSort:number       /**排序*/
+  noStartTerm:string     /**未开始术语*/
+  progressTerm:string    /**进行中术语*/
+  finishedTerm:string    /**已完成术语*/
+}
+
+export interface ResBody {
+  code:string      
+  status:number    
+  msg:string       
+  data:Data        
+}
+
+export interface ReqParams {
+  stageId:string    
+}
+
+interface _Params extends ReqParams {}
+
+import request from '../plugins/axios/index.js'
+export default (params: _Params)=> { 
+    return request({
+        url:'/cust-service-show-config/stage/{stageId}'.replace(/{([^}]+)}/g, (r, $1) => {
+        return params[$1] || ''
+    }),
+        method:'GET',
+        params:params
+    })
+}
