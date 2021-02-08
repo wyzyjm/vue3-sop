@@ -31,15 +31,17 @@ export default defineComponent({
     let form = reactive({
       stageName: '',
       stageCode: '',
-      orderSort:'',
-      noStartTerm:'',
-      progressTerm:'',
-      finishedTerm:''
+      orderSort: '',
+      noStartTerm: '',
+      progressTerm: '',
+      finishedTerm: '',
     })
-
+    console.log(222, form, data)
     if (isEdit) {
-      console.log(2,data)
-      form = { ...form, ...data }
+      Object.keys(form).forEach((v) => {
+        console.log(111, v)
+        form[v] = data[v]
+      })
     }
 
     const save = (form) => {

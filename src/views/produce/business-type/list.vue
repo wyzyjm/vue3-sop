@@ -4,7 +4,8 @@
 
     <s-simple-table :data="table.data" :cols="table.cols">
       <s-form slot="form" inline>
-        <s-form-item label="角色名称" prop="roleName" />
+        <s-form-item label="业务类型" prop="name" />
+        <s-form-item label="状态" prop="status" component="s-group" :data="options.status" tag="el-radio-group" />
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
           <s-button run="form.reset">重置</s-button>
@@ -19,13 +20,14 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import getTableData from '@/api/1408-get-business-type-search'
-import setRoleState from '@/api/1386-post-role-state'
+import setBusinessType from '@/api/1406-put-business-type'
 import useDialog from '@/hooks/use-dialog'
+import useOptions from './hooks/use-options'
 
 export default defineComponent({
   setup(props, { root }) {
     const setState = (row) => {
-      return setRoleState(row).then(({ msg }) => {
+      return setBusinessType(row).then(({ msg }) => {
         console.log(msg)
         root.$store.commit('table/update')
       })
@@ -35,8 +37,15 @@ export default defineComponent({
       dynamicTitle: (data) => (data.isEdit ? '编辑业务类型' : '新增业务类型'),
       width: '500px',
       uid: 'add-business-type',
-      component:require('./dialog/add-business-type')
+      component: require('./dialog/add-business-type'),
     })
+
+    const options = useOptions()
+
+    const getLabel = (options, value) => {
+      const c = options.find((v) => v.value === value)
+      return c && c.label
+    }
 
     const table = reactive({
       data: getTableData,
@@ -44,15 +53,15 @@ export default defineComponent({
         {
           showOverflowTooltip: true,
           label: '业务名称',
-          prop: 'roleName',
+          prop: 'name',
         },
         {
           label: '业务code',
-          prop: 'roleGroupName',
+          prop: 'code',
         },
         {
           label: '状态',
-          prop: 'stateLable',
+          prop: 'status',
         },
         {
           label: '创建时间',
@@ -62,8 +71,16 @@ export default defineComponent({
           label: '操作项',
           prop: ({ row }) => {
             return [
-              <s-button type="text" onClick={() => setState(row)}>
-                {row.state ? '启用' : '停用'}
+              <s-button
+                type="text"
+                onClick={() =>
+                  setState({
+                    ...row,
+                    status: 1 ^ row.status,
+                  })
+                }
+              >
+                {getLabel(options.status, row.status)}
               </s-button>,
               <s-button
                 type="text"
@@ -80,6 +97,7 @@ export default defineComponent({
     return {
       dialog,
       table,
+      options
     }
   },
 })
