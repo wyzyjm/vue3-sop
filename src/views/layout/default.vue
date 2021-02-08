@@ -101,6 +101,10 @@ export default defineComponent({
               index: '/system-setting/document/list',
               title: '文档管理',
             },
+            {
+              index: '/system-setting/resource/list',
+              title: '资源管理',
+            },
           ],
         },
         {
@@ -125,7 +129,22 @@ export default defineComponent({
               title: '客户呈现信息配置',
             },
           ]
-        }
+        },
+        {
+          icon: 'el-icon-s-tools',
+          index: '3',
+          title: '我的工具',
+          menuItem: [
+            {
+              index: '/tool/log',
+              title: '操作日志',
+            },
+            {
+              index: '/tool/evaluate',
+              title: '复评',
+            },
+          ]
+        }        
       ],
     })
 

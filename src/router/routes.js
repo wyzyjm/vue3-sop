@@ -4,6 +4,7 @@ import ErrorPage403 from '../views/layout/403'
 import test from "./test"
 import systemSetting from "./system-setting/index"
 import produce from "./produce"
+import Tool from "./my-tool"
 export default [
     {
         path: "/",
@@ -14,7 +15,8 @@ export default [
         children: [
             ...test,
             ...systemSetting,
-            ...produce
+            ...produce,
+            ...Tool
         ]
     },
     {
