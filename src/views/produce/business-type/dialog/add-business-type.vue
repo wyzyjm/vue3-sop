@@ -15,7 +15,8 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import roleGroupSave from '@/api/1368-post-role-group-save'
+import saveBusinessType from '@/api/1404-post-business-type'
+import updateBusinessType from '@/api/1406-put-business-type'
 import useOptions from '../hooks/use-options'
 
 export default defineComponent({
@@ -41,9 +42,11 @@ export default defineComponent({
     }
 
     const save = (form) => {
-      return roleGroupSave(form).then(({ msg }) => {
-        console.log(msg)
-      })
+      return (isEdit ? updateBusinessType(form) : saveBusinessType(form)).then(
+        ({ msg }) => {
+          console.log(msg)
+        }
+      )
     }
 
     const options = useOptions()
