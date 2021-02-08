@@ -1,9 +1,10 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1512
- * 生成日期：Sun Feb 07 2021 15:27:06 GMT+0800 (GMT+08:00)
+ * 生成日期：Mon Feb 08 2021 10:23:11 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.1
  * 接口名称：查询业务流程节点列表
+ * 创建人：wuzongle@300.cn
  */
 export interface ResBody {
   code:string      

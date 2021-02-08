@@ -2,12 +2,12 @@ let interfaceList = []
 
 const firstUpperCase = ([first, ...rest]) => first.toUpperCase() + rest.join('')
 const fillMargin = (len) => Array(len).fill(' ').join('')
-const getType=(type)=>{
-    if(type==='array'){
-       return 'any[]'
+const getType = (type) => {
+    if (type === 'array') {
+        return 'any[]'
     }
-    if(type==='integer'){
-       return 'number'
+    if (type === 'integer') {
+        return 'number'
     }
     return type
 }

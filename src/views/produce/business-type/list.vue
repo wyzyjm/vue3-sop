@@ -18,7 +18,7 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import getTableData from '@/api/1348-get-role-list'
+import getTableData from '@/api/1408-get-business-type-search'
 import setRoleState from '@/api/1386-post-role-state'
 import useDialog from '@/hooks/use-dialog'
 
@@ -43,24 +43,16 @@ export default defineComponent({
       cols: [
         {
           showOverflowTooltip: true,
-          label: '角色名称',
+          label: '业务名称',
           prop: 'roleName',
         },
         {
-          label: '角色组',
+          label: '业务code',
           prop: 'roleGroupName',
         },
         {
           label: '状态',
           prop: 'stateLable',
-        },
-        {
-          label: '服务商可见',
-          prop: 'isSpVisibleLable',
-        },
-        {
-          label: '创建人',
-          prop: 'createBy',
         },
         {
           label: '创建时间',

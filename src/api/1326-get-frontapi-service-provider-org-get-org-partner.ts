@@ -1,9 +1,10 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/123/interface/api/1326
- * 生成日期：Sun Feb 07 2021 15:27:57 GMT+0800 (GMT+08:00)
+ * 生成日期：Mon Feb 08 2021 10:23:32 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.1
  * 接口名称：获取合作组织id及除了此服务商的所有服务商的组织树
+ * 创建人：付兵浩
  */
 export interface Data {
   partnerIdList:any[]         /**合作组织id*/

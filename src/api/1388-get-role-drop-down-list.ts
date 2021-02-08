@@ -1,9 +1,10 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1388
- * 生成日期：Sun Feb 07 2021 15:27:06 GMT+0800 (GMT+08:00)
+ * 生成日期：Mon Feb 08 2021 10:23:11 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.1
  * 接口名称：角色管理下拉列表
+ * 创建人：肖晓华
  */
 export interface Data {
   roleGroup:any[]      /**角色组*/

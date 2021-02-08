@@ -40,9 +40,9 @@ const createInterface = (id) => {
         fileData += reqBodyOther || ''
         fileData += requestFunction || ''
         writeFile(`../src/api/${id}-${data.method.toLocaleLowerCase()}${data.path.toLocaleLowerCase().replace(/\//g, '-')}.ts`, fileData)
-    }).catch(() => {
+    }).catch((err) => {
         console.log(`文档${id}遇到问题，无法自动生成`)
-        // console.log(err)
+        console.log(err)
     })
 
 }

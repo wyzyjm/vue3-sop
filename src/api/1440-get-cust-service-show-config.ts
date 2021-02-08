@@ -1,9 +1,10 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1440
- * 生成日期：Sun Feb 07 2021 15:27:06 GMT+0800 (GMT+08:00)
+ * 生成日期：Mon Feb 08 2021 10:23:11 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.1
  * 接口名称：客户呈现配置列表
+ * 创建人：wuzongle@300.cn
  */
 export interface ResBody {
   code:number      /**SYS0000("系统正常"),     SYS0001("系统错误"),     SYS0002("业务错误"),     SYS0003("认证失败");*/
