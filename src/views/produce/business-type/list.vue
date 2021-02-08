@@ -23,12 +23,26 @@ import getTableData from '@/api/1408-get-business-type-search'
 import setBusinessType from '@/api/1406-put-business-type'
 import useDialog from '@/hooks/use-dialog'
 import useOptions from './hooks/use-options'
+import { MessageBox } from 'element-ui'
 
 export default defineComponent({
   setup(props, { root }) {
-    const setState = (row) => {
-      return setBusinessType(row).then(({ msg }) => {
-        console.log(msg)
+    const setState = async (row) => {
+      if (row.status === 0) {
+        const isContinue = await MessageBox.confirm(
+          '停用后服务产品入驻将无法选择该业务类型，请确认是否继续停用？',
+          '停用',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+        )
+
+        if (!isContinue) return
+      }
+
+      return setBusinessType(row).then(() => {
         root.$store.commit('table/update')
       })
     }
@@ -70,6 +84,7 @@ export default defineComponent({
         {
           label: '操作项',
           prop: ({ row }) => {
+            row.status = 1
             return [
               <s-button
                 type="text"
@@ -80,7 +95,7 @@ export default defineComponent({
                   })
                 }
               >
-                {getLabel(options.status, row.status)}
+                {getLabel(options.status, 1 ^ row.status)}
               </s-button>,
               <s-button
                 type="text"
@@ -97,7 +112,7 @@ export default defineComponent({
     return {
       dialog,
       table,
-      options
+      options,
     }
   },
 })

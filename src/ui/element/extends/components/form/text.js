@@ -24,9 +24,9 @@ export default {
     // 选项
     if (this.options) {
       try {
-        content = this.option.filter(v => v.value === content)[0].label
+        content = this.options.filter(v => v.value === content)[0].label
       } catch (error) {
-        console.waring(error)
+        console.log(error)
       }
     }
 

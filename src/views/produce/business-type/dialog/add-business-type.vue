@@ -2,7 +2,8 @@
   <div>
     <s-form :model="form" label-width="110px" @submit="save">
       <s-form-item label="业务名称" :rules="['required']" prop="name" />
-      <s-form-item label="业务code" prop="code" />
+      <s-form-item label="业务code" v-if="isEdit" component="s-text" :content="form.code" prop="code" />
+      <s-form-item label="业务code" v-else prop="code" />
       <s-form-item label="状态" prop="status" component="s-group" :data="options.status" tag="el-radio-group" />
       <s-form-item label="描述" type="textarea" prop="description" />
       <s-form-item>
@@ -38,11 +39,6 @@ export default defineComponent({
     if (isEdit) {
       form = { ...form, ...data }
     }
-
-    setTimeout(()=>{
-      form.status =1
-      console.log(22,form)
-    },1000)
 
     const save = (form) => {
       return roleGroupSave(form).then(({ msg }) => {
