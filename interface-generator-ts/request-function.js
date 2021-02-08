@@ -4,7 +4,9 @@ module.exports = ({ path, method }, arg) => {
     const Params = paramsExtends.length ? `interface _Params extends ${paramsExtends} {}` : `interface _Params {}`
 
     path = /{([^}]+)}/.test(path) ? `'${path}'.replace(/{([^}]+)}/g, (r, $1) => {
-        return params[$1] || ''
+        const tmp=params[$1] || ''    
+        delete params[$1]
+        return tmp
     })`: `'${path}'`
 
     const ParamsKey = 'POST,PUT,PATCH'.indexOf(method) === -1 ? 'params' : 'data'
