@@ -17,7 +17,7 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import roleGroupSave from '@/api/1368-post-role-group-save'
+import _save from '@/api/1448-post-cust-service-show-config-addstage'
 export default defineComponent({
   props: {
     isEdit: {
@@ -36,24 +36,18 @@ export default defineComponent({
       progressTerm: '',
       finishedTerm: '',
     })
-    console.log(222, form, data)
     if (isEdit) {
-      Object.keys(form).forEach((v) => {
-        console.log(111, v)
-        form[v] = data[v]
-      })
+      form = { ...form, ...data }
     }
 
     const save = (form) => {
-      return roleGroupSave(form).then(({ msg }) => {
+      return _save(form).then(() => {
         console.log(data)
         root.$store.commit('table/update', {
           _uid: data.id,
         })
 
         emit('close')
-
-        console.log(msg)
       })
     }
 

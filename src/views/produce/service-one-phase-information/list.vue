@@ -23,6 +23,13 @@ import setStatus from '@/api/1470-get-cust-service-show-config-{id}-{status}'
 import PhaseList from './components/phase-list'
 import useDialog from '@/hooks/use-dialog'
 import getTableData from '@/api/1440-get-cust-service-show-config'
+import update from '@/api/1466-post-cust-service-show-config-{id}'
+import {
+  isEdit,
+  createEditRow,
+  saveEdit,
+  startEdit,
+} from './hooks/use-edit-row'
 export default defineComponent({
   components: { PhaseList },
   setup(props, { root }) {
@@ -33,6 +40,7 @@ export default defineComponent({
     }
 
     const dialog = useDialog({
+      uid: 'add-phase',
       title: '新增阶段',
       width: '500px',
       component: require('./dialog/add-phase'),
@@ -48,27 +56,33 @@ export default defineComponent({
         {
           showOverflowTooltip: true,
           label: '服务单呈现名称',
-          prop: 'flowShowName',
+          prop: ({ row }) => {
+            return createEditRow(row, 'flowShowName')
+          },
         },
         {
           label: '名称编码',
-          prop: 'flowShowCode',
-        },
-        {
-          label: '版本',
-          prop: 'version',
+          prop: ({ row }) => {
+            return createEditRow(row, 'flowShowCode')
+          },
         },
         {
           label: '状态',
-          prop: 'statusName',
+          prop: ({ row }) => {
+            return createEditRow(row, 'statusName')
+          },
         },
         {
           label: '对应服务流程',
-          prop: 'businessFlowDefName',
+          prop: ({ row }) => {
+            return createEditRow(row, 'businessFlowDefName')
+          },
         },
         {
           label: '流程版本',
-          prop: 'businessFlowDefVersion',
+          prop: ({ row }) => {
+            return createEditRow(row, 'businessFlowDefVersion')
+          },
         },
         {
           label: '操作项',
@@ -87,9 +101,17 @@ export default defineComponent({
               </s-button>,
               <s-button
                 type="text"
-                onClick={() => dialog.open({ data: row, isEdit: true })}
+                onClick={() =>
+                  isEdit(row)
+                    ? saveEdit(() => {
+                        return update(row).then(() => {
+                          root.$store.commit('table/update')
+                        })
+                      })
+                    : startEdit(row)
+                }
               >
-                编辑
+                {isEdit(row) ? '保存' : '编辑'}
               </s-button>,
               <s-button type="text" onClick={() => dialog.open({ data: row })}>
                 新增阶段
