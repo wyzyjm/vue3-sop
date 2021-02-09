@@ -5,6 +5,7 @@ export default [
         meta:{
             title:'生产设置'
         },
+        redirect: '/produce/service-flow',
         component: () => import(/* webpackChunkName: "produce" */ '@/views/produce'),
         children: [
             ...ServiceFlow

@@ -24,7 +24,7 @@
           <s-button run="form.reset">重置</s-button>
         </s-form-item>
       </s-form>
-      <div slot="top" class="mb20">
+      <div slot="top" class="mb15">
         <el-button type="primary" @click="addFlow">新增流程</el-button>
         <el-button type="primary" @click="$store.commit('dialog/open',{propsTest:'flow'})">复制流程</el-button>
       </div>
@@ -97,7 +97,7 @@ export default defineComponent({
 
     function addFlow() {
       root.$router.push({
-        path: "/",
+        path: "/produce/add-flow",
         query: {}
       });
     }
