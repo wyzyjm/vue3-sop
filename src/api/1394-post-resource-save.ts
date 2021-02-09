@@ -1,11 +1,31 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1394
- * 生成日期：Tue Feb 02 2021 14:19:29 GMT+0800 (GMT+08:00)
+ * 生成日期：Mon Feb 08 2021 10:23:11 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.1
  * 接口名称：资源添加
+ * 创建人：肖晓华
  */
-interface _Params {}
+export interface ResBody {
+  code:null        
+  data:null        
+  msg:null         
+  status:number    
+}
+
+export interface ReqBody {
+  parentId:number           
+  resourceCode:string       
+  resourceName:string       
+  resourceType:string       
+  resourceUrl:string        
+  resourceUrlType:string    
+  resourceIcon:string       
+  resourceSort:string       
+  state:string              
+}
+
+interface _Params extends ReqBody {}
 
 import request from '../plugins/axios/index.js'
 export default (params: _Params)=> { 

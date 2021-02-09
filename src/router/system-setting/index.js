@@ -1,5 +1,8 @@
 import Provider from "./provider" // 服务商
-import Role from "./role" // 服务商
+import Role from "./role" // 角色
+import Documents from "./document" // 文档
+import Staff from "./staff" // 员工
+import Resource from "./resource" // 资源
 export default [
     {
         path: '/system-setting',
@@ -9,7 +12,10 @@ export default [
         component: () => import(/* webpackChunkName: "setting" */ '@/views/system-setting'),
         children: [
             ...Provider,
-            ...Role
+            ...Role,
+            ...Documents,
+            ...Staff,
+            ...Resource
         ]
     }
 ]

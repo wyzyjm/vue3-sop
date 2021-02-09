@@ -93,6 +93,18 @@ export default defineComponent({
               index: '/system-setting/provider/list',
               title: '服务商管理',
             },
+            {
+              index: '/system-setting/staff/list',
+              title: '员工管理',
+            },
+            {
+              index: '/system-setting/document/list',
+              title: '文档管理',
+            },
+            {
+              index: '/system-setting/resource/list',
+              title: '资源管理',
+            },
           ],
         },
         {
@@ -104,8 +116,35 @@ export default defineComponent({
               index: '/produce/service-flow',
               title: '服务流程设置',
             },
+            {
+              index: '/produce/business-type/list',
+              title: '业务管理',
+            },
+            {
+              index: '/produce/service-type/list',
+              title: '服务单状态管理',
+            },
+            {
+              index: '/produce/service-one-phase-information/list',
+              title: '客户呈现信息配置',
+            },
           ]
-        }
+        },
+        {
+          icon: 'el-icon-s-tools',
+          index: '3',
+          title: '我的工具',
+          menuItem: [
+            {
+              index: '/tool/log',
+              title: '操作日志',
+            },
+            {
+              index: '/tool/evaluate',
+              title: '复评',
+            },
+          ]
+        }        
       ],
     })
 

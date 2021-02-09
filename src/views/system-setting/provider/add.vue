@@ -1,8 +1,8 @@
 <template>
   <div class="box">
       <!-- <Category></Category> -->
-      <company></company>
-      <!-- <personal></personal> -->
+      <!-- <company></company> -->
+      <personal></personal>
   </div>
 </template>
 <script>

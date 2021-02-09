@@ -67,6 +67,7 @@ export default {
         let tag = this.tag
         let children = []
 
+
         if (!this.parsedData || this.parsedData.length === 0) {
             return h('div', this.status)
         }
@@ -89,22 +90,21 @@ export default {
             children = this.parsedData.map(v => {
                 return h(tag.split('>')[1] || 'el-radio', {
                     props: {
-                        label: v[this.props.label],
-                        value: v[this.props.value]
+                        label: v[this.props.value]
                     }
-                })
+                }, v[this.props.label])
             })
             tag = 'el-radio-group'
         }
+
 
         if (tag.includes('el-checkbox-group')) {
             children = this.parsedData.map(v => {
                 return h(tag.split('>')[1] || 'el-checkbox', {
                     props: {
-                        label: v[this.props.label],
-                        value: v[this.props.value]
+                        label: v[this.props.value]
                     }
-                })
+                }, v[this.props.label])
             })
             tag = 'el-checkbox-group'
         }
