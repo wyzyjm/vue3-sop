@@ -27,7 +27,7 @@ import getTableData from '@/api/1416-get-product-line-search'
 import useDialog from '@/hooks/use-dialog'
 import useState from '@/hooks/use-state/disable-state'
 import _setState from '@/api/1414-put-product-line-status'
-
+import useSafeParams from '@/hooks/use-router-util/sale-params'
 export default defineComponent({
   setup(props, { root }) {
     const { setState, getStateText, options } = useState(
@@ -64,7 +64,7 @@ export default defineComponent({
     })
 
     const view = (data) => {
-      root.$router.push(`./detail/${JSON.stringify(data)}`)
+      root.$router.push(`./detail/${useSafeParams(data)}`)
     }
 
     const table = reactive({
