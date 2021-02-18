@@ -12,44 +12,30 @@
 import { defineComponent, reactive } from '@vue/composition-api'
 import getTableData from '@/api/1424-get-sales-channel-treelist'
 import useDialog from '@/hooks/use-dialog'
-import useOptions from './hooks/use-options'
+import useState from '@/hooks/use-state/disable-state'
 import _update from '@/api/1436-put-sales-channel'
-
-import { MessageBox } from 'element-ui'
 
 export default defineComponent({
   setup(props, { root }) {
-    const setState = async (row) => {
-      if (row.status === 0) {
-        const isContinue = await MessageBox.confirm(
-          '请确认是否停用该售卖渠道？',
-          '停用',
-          {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          }
-        )
-
-        if (!isContinue) return
+    const { setState, getStateText } = useState(
+      {
+        message: '请确认是否停用该售卖渠道？',
+      },
+      (row) => {
+        row.status = 1 ^ row.status
+        return _update(row).then(() => {
+          root.$store.commit('table/update')
+        })
       }
+    )
 
-      return _update(row).then(() => {
-        root.$store.commit('table/update')
-      })
-    }
     const dialog = useDialog({
       uid: 'add-service-type',
       title: '新增业务类型',
       width: '500px',
       component: require('./dialog/add-sales-channels'),
     })
-    const options = useOptions()
 
-    const getLabel = (options, value) => {
-      const c = options.find((v) => v.value === value)
-      return c && c.label
-    }
     const table = reactive({
       data: getTableData,
       cols: [
@@ -75,7 +61,7 @@ export default defineComponent({
         },
         {
           label: '状态',
-          prop: 'status',
+          prop: (row) => getStateText(row.status),
         },
         {
           label: '创建时间',
@@ -84,7 +70,7 @@ export default defineComponent({
         {
           label: '操作',
           prop: ({ row }) => {
-            // row.status=0
+            row.status = 1
             return [
               <s-button
                 type="text"
@@ -92,16 +78,8 @@ export default defineComponent({
               >
                 编辑
               </s-button>,
-              <s-button
-                type="text"
-                onClick={() =>
-                  setState({
-                    ...row,
-                    status: 1 ^ row.status,
-                  })
-                }
-              >
-                {getLabel(options.status, 1 ^ row.status)}
+              <s-button type="text" onClick={() => setState(row)}>
+                {getStateText(1 ^ row.status)}
               </s-button>,
             ]
           },

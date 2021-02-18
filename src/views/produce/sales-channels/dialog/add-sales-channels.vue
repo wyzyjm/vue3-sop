@@ -4,8 +4,8 @@
       <s-form-item label="渠道名称" :rules="['required']" prop="name" />
       <s-form-item label="渠道编码" v-if="isEdit" component="s-text" :content="form.code" prop="code" />
       <s-form-item label="渠道编码" v-else prop="code" />
-      <s-form-item label="选择上级渠道" prop="status" component="s-group" :data="options.status" />
-      <s-form-item label="状态" prop="status" component="s-group" :data="options.status" tag="el-radio-group" />
+      <s-form-item label="选择上级渠道" prop="status" component="s-group" :data="options" />
+      <s-form-item label="状态" prop="status" component="s-group" :data="options" tag="el-radio-group" />
       <s-form-item label="描述" type="textarea" prop="description" />
       <s-form-item>
         <s-button @click="$emit('close')">取消</s-button>
@@ -16,7 +16,7 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import useOptions from '../hooks/use-options'
+import useState from '@/hooks/use-state/disable-state'
 import _save from '@/api/1430-post-sales-channel'
 import _update from '@/api/1436-put-sales-channel'
 export default defineComponent({
@@ -48,7 +48,7 @@ export default defineComponent({
       })
     }
 
-    const options = useOptions()
+    const { options } = useState()
 
     return {
       save,

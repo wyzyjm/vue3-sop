@@ -5,7 +5,7 @@
     <s-simple-table :data="table.data" :cols="table.cols">
       <s-form slot="form" inline>
         <s-form-item label="业务类型" prop="name" />
-        <s-form-item label="状态" prop="status" component="s-group" :data="options.status" tag="el-radio-group" />
+        <s-form-item label="状态" prop="status" component="s-group" :data="options" tag="el-radio-group" />
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
           <s-button run="form.reset">重置</s-button>
@@ -22,30 +22,21 @@ import { defineComponent, reactive } from '@vue/composition-api'
 import getTableData from '@/api/1408-get-business-type-search'
 import setBusinessType from '@/api/1406-put-business-type'
 import useDialog from '@/hooks/use-dialog'
-import useOptions from './hooks/use-options'
-import { MessageBox } from 'element-ui'
+import useState from '@/hooks/use-state/disable-state'
 
 export default defineComponent({
   setup(props, { root }) {
-    const setState = async (row) => {
-      if (row.status === 0) {
-        const isContinue = await MessageBox.confirm(
-          '停用后服务产品入驻将无法选择该业务类型，请确认是否继续停用？',
-          '停用',
-          {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          }
-        )
-
-        if (!isContinue) return
+    const { setState, getStateText, options } = useState(
+      {
+        message: '停用后服务产品入驻将无法选择该业务类型，请确认是否继续停用？',
+      },
+      (row) => {
+        row.status = 1 ^ row.status
+        return setBusinessType(row).then(() => {
+          root.$store.commit('table/update')
+        })
       }
-
-      return setBusinessType(row).then(() => {
-        root.$store.commit('table/update')
-      })
-    }
+    )
 
     const dialog = useDialog({
       dynamicTitle: (data) => (data.isEdit ? '编辑业务类型' : '新增业务类型'),
@@ -53,13 +44,6 @@ export default defineComponent({
       uid: 'add-business-type',
       component: require('./dialog/add-business-type'),
     })
-
-    const options = useOptions()
-
-    const getLabel = (options, value) => {
-      const c = options.find((v) => v.value === value)
-      return c && c.label
-    }
 
     const table = reactive({
       data: getTableData,
@@ -75,7 +59,7 @@ export default defineComponent({
         },
         {
           label: '状态',
-          prop: 'status',
+          prop: (row) => getStateText(row.status),
         },
         {
           label: '创建时间',
@@ -86,16 +70,8 @@ export default defineComponent({
           prop: ({ row }) => {
             row.status = 1
             return [
-              <s-button
-                type="text"
-                onClick={() =>
-                  setState({
-                    ...row,
-                    status: 1 ^ row.status,
-                  })
-                }
-              >
-                {getLabel(options.status, 1 ^ row.status)}
+              <s-button type="text" onClick={() => setState(row)}>
+                {getStateText(1 ^ row.status)}
               </s-button>,
               <s-button
                 type="text"

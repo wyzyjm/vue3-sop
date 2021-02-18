@@ -17,7 +17,7 @@
 import { defineComponent, reactive } from '@vue/composition-api'
 import updateServiceType from '@/api/1520-put-service-order-status'
 import saveServiceType from '@/api/1516-post-service-order-status'
-import useOptions from '../hooks/use-options'
+import useState from '@/hooks/use-state/disable-state'
 
 export default defineComponent({
   props: {
@@ -49,7 +49,7 @@ export default defineComponent({
       )
     }
 
-    const options = useOptions()
+    const { options } = useState()
 
     return {
       save,

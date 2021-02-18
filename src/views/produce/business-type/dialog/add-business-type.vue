@@ -17,7 +17,7 @@
 import { defineComponent, reactive } from '@vue/composition-api'
 import saveBusinessType from '@/api/1404-post-business-type'
 import updateBusinessType from '@/api/1406-put-business-type'
-import useOptions from '../hooks/use-options'
+import useState from '@/hooks/use-state/disable-state'
 
 export default defineComponent({
   props: {
@@ -49,7 +49,7 @@ export default defineComponent({
       )
     }
 
-    const options = useOptions()
+    const { options } = useState()
 
     return {
       save,
