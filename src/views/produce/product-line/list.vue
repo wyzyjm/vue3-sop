@@ -63,6 +63,10 @@ export default defineComponent({
       component: require('./dialog/import'),
     })
 
+    const view = (data) => {
+      root.$router.push(`./detail/${JSON.stringify(data)}`)
+    }
+
     const table = reactive({
       checked: [],
       data: getTableData,
@@ -109,6 +113,9 @@ export default defineComponent({
               </s-button>,
               <s-button type="text" onClick={() => setState(row)}>
                 {getStateText(1 ^ row.status)}
+              </s-button>,
+              <s-button type="text" onClick={() => view(row)}>
+                查看
               </s-button>,
             ]
           },
