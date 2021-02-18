@@ -132,6 +132,10 @@ export default defineComponent({
               index: '/produce/sales-channels/list',
               title: '售卖渠道管理',
             },
+            {
+              index: '/produce/product-line/list',
+              title: '产品线管理',
+            },
           ]
         },
         {

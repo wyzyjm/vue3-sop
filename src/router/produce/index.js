@@ -3,6 +3,7 @@ import BusinessType from './business-type' //业务设置，业务类型设置
 import ServiceType from './service-type' //服务单状态管理
 import ServiceOnePhaseInformation from './service-one-phase-information' //服务单状态管理
 import SalesChannels from './sales-channels'  //售卖渠道管理
+import ProductLine from './product-line'  //产品线管理
 export default [
     {
         path: '/produce',
@@ -15,7 +16,8 @@ export default [
             ...BusinessType,
             ...ServiceType,
             ...ServiceOnePhaseInformation,
-            ...SalesChannels
+            ...SalesChannels,
+            ...ProductLine
         ]
     }
 ]
