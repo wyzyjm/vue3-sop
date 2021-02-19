@@ -1,7 +1,10 @@
-module.exports = ({ path, method }, arg) => {
+module.exports = ({ path, method, reqBodyIsArray }, arg) => {
     const request = `import request from '../plugins/axios/index.js'`
     const paramsExtends = ['ReqQuery', 'ReqParams', 'ReqBody'].filter(v => arg[v])
     const Params = paramsExtends.length ? `interface _Params extends ${paramsExtends} {}` : `interface _Params {}`
+
+
+
 
     path = /{([^}]+)}/.test(path) ? `'${path}'.replace(/{([^}]+)}/g, (r, $1) => {
         const tmp=params[$1] || ''    
@@ -11,7 +14,7 @@ module.exports = ({ path, method }, arg) => {
 
     const ParamsKey = 'POST,PUT,PATCH'.indexOf(method) === -1 ? 'params' : 'data'
     return (
-        `${Params}\n\n${request}\nexport default (params: _Params)=> { 
+        `${Params}\n\n${request}\nexport default (params: ${reqBodyIsArray ? '_Params[]' : '_Params'})=> { 
     return request({
         url:${path},
         method:'${method}',

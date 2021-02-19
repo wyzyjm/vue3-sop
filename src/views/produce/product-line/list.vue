@@ -107,7 +107,7 @@ export default defineComponent({
             return [
               <s-button
                 type="text"
-                onClick={() => dialog.open({ data: row, isEdit: true })}
+                onClick={() => productionSetDialog.open({ data: row, isEdit: true })}
               >
                 生产设置
               </s-button>,
