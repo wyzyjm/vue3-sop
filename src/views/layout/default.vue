@@ -136,6 +136,10 @@ export default defineComponent({
               index: '/produce/product-line/list',
               title: '产品线管理',
             },
+            {
+              index: '/produce/service-product/list',
+              title: '服务产品管理',
+            },
           ]
         },
         {

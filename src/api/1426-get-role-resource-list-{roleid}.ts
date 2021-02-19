@@ -1,8 +1,8 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1426
- * 生成日期：Fri Feb 19 2021 10:32:13 GMT+0800 (GMT+08:00)
- * 生成工具版本：ts-v0.1
+ * 生成日期：Fri Feb 19 2021 13:39:19 GMT+0800 (GMT+08:00)
+ * 生成工具版本：ts-v0.0.2
  * 接口名称：功能授权-回显查询
  * 创建人：肖晓华
  */
@@ -25,7 +25,7 @@ interface _Params extends ReqParams,ReqBody {}
 import request from '../plugins/axios/index.js'
 export default (params: _Params[])=> { 
     return request({
-        url:'/role/resource/list/{roleId}'.replace(/{([^}]+)}/g, (r, $1) => {
+        url:'/role/resource/list/{roleId}'.replace(/{([^}]+)}/g, (r: string, $1: string) => {
         const tmp=params[$1] || ''    
         delete params[$1]
         return tmp

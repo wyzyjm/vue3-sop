@@ -6,7 +6,7 @@ module.exports = ({ path, method, reqBodyIsArray }, arg) => {
 
 
 
-    path = /{([^}]+)}/.test(path) ? `'${path}'.replace(/{([^}]+)}/g, (r, $1) => {
+    path = /{([^}]+)}/.test(path) ? `'${path}'.replace(/{([^}]+)}/g, (r: string, $1: string) => {
         const tmp=params[$1] || ''    
         delete params[$1]
         return tmp
