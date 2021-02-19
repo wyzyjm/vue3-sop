@@ -12,14 +12,14 @@
         </s-form-item>
       </s-form>
       <div slot="top" class="mb20">
-        <el-button type="primary" @click="dialog.open">新增</el-button>
+        <el-button type="primary" @click="add">新增</el-button>
         <el-button type="primary" @click="importDialog.open">导入映射</el-button>
         <el-button type="primary" @click="productionSetDialog.open">生产流程</el-button>
       </div>
     </s-simple-table>
-    <s-dialog v-bind="dialog" @close="dialog.close" />
     <s-dialog v-bind="productionSetDialog" @close="productionSetDialog.close" />
     <s-dialog v-bind="importDialog" @close="importDialog.close" />
+    <s-dialog v-bind="relatedDialog" @close="relatedDialog.close" />
   </div>
 </template>
 <script>
@@ -40,18 +40,19 @@ export default defineComponent({
       })
     })
 
-    const dialog = useDialog({
-      uid: 'add',
-      dynamicTitle: (data) => (data.isEdit ? '编辑产品线' : '新增产品线'),
-      width: '500px',
-      component: require('./dialog/add'),
-    })
 
     const productionSetDialog = useDialog({
       uid: 'productionSetDialog',
       title: '生产流程',
       width: '800px',
       component: require('./dialog/production-set'),
+    })
+
+    const relatedDialog = useDialog({
+      uid: 'relatedDialog',
+      title: '关联映射',
+      width: '800px',
+      component: require('./dialog/related'),
     })
 
     const importDialog = useDialog({
@@ -63,6 +64,12 @@ export default defineComponent({
 
     const view = (data) => {
       root.$router.push(`./detail/${useSafeParams(data)}`)
+    }
+    const add = () => {
+      root.$router.push(`./add`)
+    }
+    const edit = (data) => {
+      root.$router.push(`./edit/${useSafeParams(data)}`)
     }
 
     const table = reactive({
@@ -76,7 +83,11 @@ export default defineComponent({
         },
         {
           label: '服务产品名称',
-          prop: 'name',
+          prop: ({ row }) => (
+            <s-button type="text" onClick={view}>
+              {row.name}
+            </s-button>
+          ),
         },
         {
           label: '服务产品编码',
@@ -107,11 +118,17 @@ export default defineComponent({
               >
                 生产流程
               </s-button>,
+              <s-button
+                type="text"
+                onClick={() => relatedDialog.open({ data: row, isEdit: true })}
+              >
+                关联映射
+              </s-button>,
               <s-button type="text" onClick={() => setState(row)}>
                 {getStateText(1 ^ row.status)}
               </s-button>,
-              <s-button type="text" onClick={() => view(row)}>
-                查看
+              <s-button type="text" onClick={() => edit(row)}>
+                编辑
               </s-button>,
             ]
           },
@@ -122,9 +139,10 @@ export default defineComponent({
     const { type } = useOptions()
 
     return {
+      add,
       table,
-      dialog,
       importDialog,
+      relatedDialog,
       productionSetDialog,
       options,
       type,

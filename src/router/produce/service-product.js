@@ -18,6 +18,22 @@ export default [
             },
             props: true,
             component: () => import(/* webpackChunkName: "service-product" */ '@/views/produce/service-product/detail'),
+        },
+        {
+            path: 'add',
+            meta: {
+                title: '新增服务产品'
+            },
+            props: true,
+            component: () => import(/* webpackChunkName: "service-product" */ '@/views/produce/service-product/add'),
+        },
+        {
+            path: 'edit/:data',
+            meta: {
+                title: '编辑服务产品'
+            },
+            props: true,
+            component: () => import(/* webpackChunkName: "service-product" */ '@/views/produce/service-product/add'),
         }]
     },
 ]

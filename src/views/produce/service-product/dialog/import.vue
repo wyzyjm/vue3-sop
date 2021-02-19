@@ -20,7 +20,7 @@
         </s-form-item>
         <s-form-item class="tc mt20">
           <s-button type="primary" @click="uploadSubmit">开始导入</s-button>
-          <s-button>取消</s-button>
+          <s-button @click="$emit('close')">取消</s-button>
         </s-form-item>
       </s-form>
     </div>
