@@ -2,58 +2,57 @@
   <div>
     <s-simple-table v-model="table.checked" :data="table.data" :cols="table.cols">
       <s-form slot="form" inline>
-        <s-form-item label="产品名称" prop="name" />
+        <s-form-item label="服务产品名称" prop="name" />
+        <s-form-item label="服务产品类型" prop="name" component="s-group" :data="type" />
+        <s-form-item label="服务产品编码" prop="name" />
         <s-form-item label="状态" prop="status" component="s-group" :data="options" tag="el-radio-group" />
-        <s-form-item label="售卖渠道" prop="status" component="s-group" :data="options" />
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
           <s-button run="form.reset">重置</s-button>
         </s-form-item>
       </s-form>
       <div slot="top" class="mb20">
-        <el-button type="primary" @click="dialog.open">新增</el-button>
-        <el-button type="primary" @click="importDialog.open">导入</el-button>
-        <el-button type="primary" @click="productionSetDialog.open">生产设置</el-button>
+        <el-button type="primary" @click="add">新增</el-button>
+        <el-button type="primary" @click="importDialog.open">导入映射</el-button>
+        <el-button type="primary" @click="productionSetDialog.open">生产流程</el-button>
       </div>
     </s-simple-table>
-    <s-dialog v-bind="dialog" @close="dialog.close" />
     <s-dialog v-bind="productionSetDialog" @close="productionSetDialog.close" />
     <s-dialog v-bind="importDialog" @close="importDialog.close" />
+    <s-dialog v-bind="relatedDialog" @close="relatedDialog.close" />
   </div>
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import getTableData from '@/api/1416-get-product-line-search'
+import getTableData from '@/api/1494-get-service-product-search'
 import useDialog from '@/hooks/use-dialog'
-import useState from '@/hooks/use-state/disable-state'
-import _setState from '@/api/1414-put-product-line-status'
+import useState from '@/hooks/use-state/shelves-state'
+import _setState from '@/api/1492-put-service-product'
 import useSafeParams from '@/hooks/use-router-util/sale-params'
+import useOptions from './hooks/use-options'
+
 export default defineComponent({
   setup(props, { root }) {
-    const { setState, getStateText, options } = useState(
-      {
-        message: '停用后将不能正常分单，请确认是否停用？',
-      },
-      (row) => {
-        row.status = 1 ^ row.status
-        return _setState(row).then(() => {
-          root.$store.commit('table/update')
-        })
-      }
-    )
-
-    const dialog = useDialog({
-      uid: 'add',
-      dynamicTitle: (data) => (data.isEdit ? '编辑产品线' : '新增产品线'),
-      width: '500px',
-      component: require('./dialog/add'),
+    const { setState, getStateText, options } = useState(undefined, (row) => {
+      row.status = 1 ^ row.status
+      return _setState(row).then(() => {
+        root.$store.commit('table/update')
+      })
     })
+
 
     const productionSetDialog = useDialog({
       uid: 'productionSetDialog',
-      title: '生产设置',
+      title: '生产流程',
       width: '800px',
       component: require('./dialog/production-set'),
+    })
+
+    const relatedDialog = useDialog({
+      uid: 'relatedDialog',
+      title: '关联映射',
+      width: '800px',
+      component: require('./dialog/related'),
     })
 
     const importDialog = useDialog({
@@ -66,6 +65,12 @@ export default defineComponent({
     const view = (data) => {
       root.$router.push(`./detail/${useSafeParams(data)}`)
     }
+    const add = () => {
+      root.$router.push(`./add`)
+    }
+    const edit = (data) => {
+      root.$router.push(`./edit/${useSafeParams(data)}`)
+    }
 
     const table = reactive({
       checked: [],
@@ -77,24 +82,24 @@ export default defineComponent({
           width: '40px',
         },
         {
-          label: '产品名称',
-          prop: 'name',
+          label: '服务产品名称',
+          prop: ({ row }) => (
+            <s-button type="text" onClick={view}>
+              {row.name}
+            </s-button>
+          ),
         },
         {
-          label: '产品编码',
+          label: '服务产品编码',
           prop: 'code',
         },
         {
-          label: '售卖渠道',
-          prop: 'salesChannelName',
-        },
-        {
-          label: '业务类型',
-          prop: 'businessTypeName',
+          label: '服务产品类型',
+          prop: 'serviceContent',
         },
         {
           label: '状态',
-          prop: (row) => getStateText(row.status),
+          prop: (row) => `已${getStateText(row.status)}`,
         },
         {
           label: '创建时间',
@@ -107,15 +112,23 @@ export default defineComponent({
             return [
               <s-button
                 type="text"
-                onClick={() => productionSetDialog.open({ data: row, isEdit: true })}
+                onClick={() =>
+                  productionSetDialog.open({ data: row, isEdit: true })
+                }
               >
-                生产设置
+                生产流程
+              </s-button>,
+              <s-button
+                type="text"
+                onClick={() => relatedDialog.open({ data: row, isEdit: true })}
+              >
+                关联映射
               </s-button>,
               <s-button type="text" onClick={() => setState(row)}>
                 {getStateText(1 ^ row.status)}
               </s-button>,
-              <s-button type="text" onClick={() => view(row)}>
-                查看
+              <s-button type="text" onClick={() => edit(row)}>
+                编辑
               </s-button>,
             ]
           },
@@ -123,12 +136,16 @@ export default defineComponent({
       ],
     })
 
+    const { type } = useOptions()
+
     return {
+      add,
       table,
-      dialog,
       importDialog,
+      relatedDialog,
       productionSetDialog,
       options,
+      type,
     }
   },
 })

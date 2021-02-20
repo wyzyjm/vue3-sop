@@ -4,6 +4,7 @@ import ServiceType from './service-type' //服务单状态管理
 import ServiceOnePhaseInformation from './service-one-phase-information' //服务单状态管理
 import SalesChannels from './sales-channels'  //售卖渠道管理
 import ProductLine from './product-line'  //产品线管理
+import ServiceProduct from './service-product'  //服务产品管理
 export default [
     {
         path: '/produce',
@@ -17,7 +18,8 @@ export default [
             ...ServiceType,
             ...ServiceOnePhaseInformation,
             ...SalesChannels,
-            ...ProductLine
+            ...ProductLine,
+            ...ServiceProduct
         ]
     }
 ]
