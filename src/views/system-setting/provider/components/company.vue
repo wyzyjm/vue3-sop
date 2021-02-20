@@ -174,6 +174,8 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import { registeredCapitalVaild, contactPhoneVaild, contactEmailVaild } from "../utils/form-vaild";
 import Upload from "./upload";
+import addProvider from '@/api/1296-post-frontapi-service-provider-add'
+// import roleGroupSave from '@/api/1368-post-role-group-save'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {
@@ -259,6 +261,9 @@ watch: {},
 //方法集合
 methods: {
     handleSave () {
+        // addProvider(this.form).then((res) => {
+        //     console.log(321)
+        // })
         let flag = true
         this.formArr.map(v => {
             this.$refs['form' + v].validate((valid) => {
@@ -268,7 +273,9 @@ methods: {
             });
         })
         if (flag) {
-            console.log('success')
+            addProvider(this.form).then((res) => {
+                console.log(res)
+            })
         } else {
             console.log('error')
         }
