@@ -3,10 +3,10 @@
     <!--身份证上传-->
     <div class="file-box" v-if="type == 'idcard'">
         <div class="item-upload">
-            <div v-if="!form.businessLicenceUrl">
+            <div v-if="!form[param]">
             <input
-                @change="uploadImg($event,'businessLicenceUrl')"
-                id="businessLicenceUrl"
+                @change="uploadImg($event, param)"
+                :id="param"
                 type="file"
                 accept="image/*"
                 class="hide_input"
@@ -15,18 +15,18 @@
             <span>上传</span>
             </div>
             <div v-else>
-            <img :src="form.businessLicenceUrl" class="upload_img">
+            <img :src="form[param]" class="upload_img">
             <i
                 class="el-icon-error close"
-                @click.stop.prevent="deletePic('businessLicenceUrl')"
+                @click.stop.prevent="deletePic(param)"
             ></i>
             </div>
         </div>
         <div class="item-upload">
             <div v-if="!form.businessLicenceUrl">
             <input
-                @change="uploadImg($event,'businessLicenceUrl')"
-                id="businessLicenceUrl"
+                @change="uploadImg($event,param)"
+                :id="param"
                 type="file"
                 accept="image/*"
                 class="hide_input"
@@ -35,10 +35,10 @@
             <span>上传</span>
             </div>
             <div v-else>
-            <img :src="form.businessLicenceUrl" class="upload_img">
+            <img :src="form[param]" class="upload_img">
             <i
                 class="el-icon-error close"
-                @click.stop.prevent="deletePic('businessLicenceUrl')"
+                @click.stop.prevent="deletePic(param)"
             ></i>
             </div>
         </div>
@@ -56,10 +56,10 @@
     <!--单张-->
     <div class="file-box" v-else>
         <div class="item-upload">
-            <div v-if="!form.businessLicenceUrl">
+            <div v-if="!form[param]">
             <input
-                @change="uploadImg($event,'businessLicenceUrl')"
-                id="businessLicenceUrl"
+                @change="uploadImg($event,param)"
+                :id="param"
                 type="file"
                 accept="image/*"
                 class="hide_input"
@@ -68,13 +68,14 @@
             <span>上传</span>
             </div>
             <div v-else>
-            <img :src="form.businessLicenceUrl" class="upload_img">
+            <img :src="form[param]" class="upload_img">
             <i
                 class="el-icon-error close"
-                @click.stop.prevent="deletePic('businessLicenceUrl')"
+                @click.stop.prevent="deletePic(param)"
             ></i>
             </div>
         </div>
+        
         <div class="item-exp">
             <i class="iconfont iconcredentials_icon icon1"></i>
             <span>示例图</span>
@@ -88,17 +89,14 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import upload from '@/api/1308-post-frontapi-common-upload-upload'
 export default {
 //import引入的组件需要注入到对象中才能使用
-props: ['type'],
+props: ['type', 'param', 'form'],
 components: {},
 data() {
 //这里存放数据
 return {
-    form: {
-        businessLicenceUrl: ''
-    }
 };
 },
 //监听属性 类似于data概念
@@ -107,7 +105,32 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-
+    // 图片上传
+    uploadImg(data, type) {
+      console.log(type, '图片参数')
+      let file = data.target.files[0];
+      let maxSize = 5000 * 1024;
+      let typeReg = /(jpg|jpeg|png)/i;
+      if (!typeReg.test(file.type)) {
+        this.$message.error("只支持jpeg,jpg,png格式");
+        return;
+      }
+      if (file.size > maxSize) {
+        this.$message.error("上传图片最大为5MB");
+        return;
+      }
+      let formData = new FormData();
+      formData.append("file", file);
+      upload(formData).then(res => {
+          this.$set(this.form, this.param, res.data.fileUrl)
+          console.log(this.form[this.param], 999)
+      })
+    },
+    // 删除图片
+    deletePic(type) {
+      this.$set(this.form, type, "");
+      document.querySelector("#" + type).value = "";
+    },
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
@@ -205,5 +228,17 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
                 }
             }
         }
-    
+.upload_img {
+  width: 90px;
+  height: 90px !important;
+}
+.close {
+  position: absolute;
+  color: #f56c6c;
+  font-size: 20px;
+  top: -10px;
+  right: -10px;
+  background: #fff;
+  border-radius: 50%;
+}
 </style>

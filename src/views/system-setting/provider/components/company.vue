@@ -42,8 +42,10 @@
             </el-form-item>
             <el-form-item label="公司地址：" class="is-required" prop="address">
             <el-cascader
-                :options="[]"
+                :options="citys.map"
                 :props="{ expandTrigger: 'hover' }"
+                v-model="citys.val"
+                @change="handleCascader"
                 clearable
                 class="w340"
                 ref="cascader"
@@ -51,7 +53,6 @@
             <el-input
                 v-model="form.address"
                 class="w340 ml20"
-                @change="valited('address')"
                 placeholder="请填写企业的详细通讯地址"
             ></el-input>
             </el-form-item>
@@ -99,7 +100,7 @@
           ></el-input>
         </el-form-item>      
         <el-form-item label="营业执照上传：" prop="businessLicenceUrl" class="is-required">
-            <upload></upload>
+            <upload type="businessLicenceUrl" param="businessLicenceUrl" :form="form"></upload>
         </el-form-item>  
         <el-form-item label="营业执照注册号：" prop="businessLicenceNumber" class="is-required">
           <el-input
@@ -111,7 +112,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item label="税务登记证上传：" prop="registrationUrl" class="is-required">
-            <upload></upload>
+            <upload type="businessLicenceUrl" param="businessLicenceUrl" :form="form"></upload>
         </el-form-item>  
         <el-form-item label="税务登记证号：">
           <el-input
@@ -134,7 +135,7 @@
                 minlength="2"></el-input>
             </el-form-item>
             <el-form-item label="法人身份证上传：" prop="legalCredentialsNumber" class="is-required">
-                <upload type="idcard"></upload>
+                <upload type="idcard" param="idcard" :form="form"></upload>
             </el-form-item>  
         </el-form>
     </div>   
@@ -175,6 +176,7 @@
 import { registeredCapitalVaild, contactPhoneVaild, contactEmailVaild } from "../utils/form-vaild";
 import Upload from "./upload";
 import addProvider from '@/api/1296-post-frontapi-service-provider-add'
+import city from "@/util/citys";
 // import roleGroupSave from '@/api/1368-post-role-group-save'
 export default {
 //import引入的组件需要注入到对象中才能使用
@@ -184,6 +186,11 @@ components: {
 data() {
 //这里存放数据
 return {
+    // 省市区集合
+    citys: {
+        map: [],
+        val: ""
+    },
     form: {
         basicName: '', // 公司名称
         simpleName: '', // 公司简称
@@ -260,30 +267,40 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
+    // 级联选择省市区
+    handleCascader(code) {
+      let checked = this.$refs["cascader"].getCheckedNodes();
+      this.form.provinceName = checked[0].pathLabels[0];
+      this.form.cityName = checked[0].pathLabels[1];
+      this.form.distinctName = checked[0].pathLabels[2];
+      this.form.provinceId = code[0];
+      this.form.cityId = code[1];
+      this.form.distinctId = code[2];
+    },
     handleSave () {
-        // addProvider(this.form).then((res) => {
-        //     console.log(321)
-        // })
-        let flag = true
-        this.formArr.map(v => {
-            this.$refs['form' + v].validate((valid) => {
-                if (!valid) {
-                    flag = valid
-                }
-            });
+        addProvider(this.form).then((res) => {
+            console.log(res, 321)
         })
-        if (flag) {
-            addProvider(this.form).then((res) => {
-                console.log(res)
-            })
-        } else {
-            console.log('error')
-        }
+        // let flag = true
+        // this.formArr.map(v => {
+        //     this.$refs['form' + v].validate((valid) => {
+        //         if (!valid) {
+        //             flag = valid
+        //         }
+        //     });
+        // })
+        // if (flag) {
+        //     addProvider(this.form).then((res) => {
+        //         console.log(res)
+        //     })
+        // } else {
+        //     console.log('error')
+        // }
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-
+    this.citys.map = city.regions;
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {

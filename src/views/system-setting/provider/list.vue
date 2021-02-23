@@ -50,7 +50,7 @@
 </template>
 <script>
 import { defineComponent, reactive } from "@vue/composition-api";
-import { getProviderList } from "./service";
+import getProviderList from '@/api/1306-get-frontapi-service-provider-pagelist'
 import { category, status, basictype } from "./utils/form-query";
 
 export default defineComponent({
@@ -58,6 +58,8 @@ export default defineComponent({
     const view = () => {
       return getProviderList().then(response => {
         console.log(111, response);
+      }).catch(err => {
+          console.log(err)
       });
     };
     const table = reactive({
