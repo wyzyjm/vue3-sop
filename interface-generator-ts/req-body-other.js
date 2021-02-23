@@ -24,7 +24,7 @@ const createInterfaceItem = (key, val, required) => {
 const createInterfaceItemDescription = (str) => str ? `/**${str}*/` : ''
 
 const createInterface = (obj, key) => {
-    let { properties, required } = obj
+    let { properties, required } = obj.type === 'array' ? obj.items : obj
     required = required || []
     const items = Object.keys(properties).map(v => {
         return [createInterfaceItem(v, properties[v], required.includes(v)), createInterfaceItemDescription(properties[v].description)]
@@ -47,7 +47,13 @@ module.exports = (() => {
         const { req_body_other } = data
         if (!req_body_other) return null
         interfaceList = []
-        interfaceList.push(createInterface(JSON.parse(req_body_other), 'ReqBody'))
+        const t = JSON.parse(req_body_other)
+        debugger
+        if (t.type === 'array') {
+            data.reqBodyIsArray = true
+        }
+        interfaceList.push(createInterface(t, 'ReqBody'))
+
         return interfaceList.join('\n\n') + '\n\n'
     }
 

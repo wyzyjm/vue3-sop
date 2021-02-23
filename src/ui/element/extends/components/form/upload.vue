@@ -20,6 +20,7 @@
  * files:[{ name:'',url:''}]
  *
  */
+import request from '@/plugins/axios/index.js'
 
 export default {
   props: {
@@ -39,7 +40,6 @@ export default {
       default: 'common.uploadCommon',
     },
     accept: {
-      require: true,
       default: 'gif,png,jpg,jpeg',
     },
     size: {
@@ -75,12 +75,14 @@ export default {
           .join()
       )
       params.append('allowFileSizeStr', this.size)
-      this.$api(action, params, {
+      request({
+        url: action,
         onUploadProgress: (progressEvent) => {
           const percent =
             ((progressEvent.loaded / progressEvent.total) * 100) | 0
           onProgress({ percent: percent })
         },
+        ...params,
       })
         .then((response) => onSuccess(response))
         .catch((error) => onError(error))
@@ -89,7 +91,9 @@ export default {
       const fileData = this.getEmitData(fileList)
       this.$emit('update:files', fileData)
       this.$emit('input', fileData.map((v) => v.id).join())
-      this.elFormItem.$emit('el.form.blur')
+      if (this.elFormItem) {
+        this.elFormItem.$emit('el.form.blur')
+      }
     },
     errorMessage(message) {
       if (Object.prototype.hasOwnProperty.call(this.$listeners, 'error')) {
@@ -119,7 +123,7 @@ export default {
         file = file.response.ftpFileVo || file.response.data.ftpFileVo
         file.url = file.fileURL
         file.name = file.fileName
-      // eslint-disable-next-line no-empty
+        // eslint-disable-next-line no-empty
       } catch (error) {}
 
       // 容错
@@ -145,6 +149,7 @@ export default {
       this.syncFileList(fileList)
     },
     beforeUpload(file) {
+      this.$emit('before',file)
       const fileNamePathSplitArr = file.name.split('.')
       const fileSuffix = fileNamePathSplitArr[fileNamePathSplitArr.length - 1]
       if (

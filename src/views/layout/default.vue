@@ -128,6 +128,18 @@ export default defineComponent({
               index: '/produce/service-one-phase-information/list',
               title: '客户呈现信息配置',
             },
+            {
+              index: '/produce/sales-channels/list',
+              title: '售卖渠道管理',
+            },
+            {
+              index: '/produce/product-line/list',
+              title: '产品线管理',
+            },
+            {
+              index: '/produce/service-product/list',
+              title: '服务产品管理',
+            },
           ]
         },
         {
