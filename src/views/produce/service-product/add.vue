@@ -17,6 +17,10 @@
       <s-form-item label="业务类型" prop="type" component="s-group" :data="options.type" />
       <s-form-item label="服务内容" prop="name" type="textarea" />
       <h2>属性信息</h2>
+      <div>
+        <s-button type="text" >选择其他属性</s-button>
+        <s-button type="text" >新增其他属性</s-button>
+      </div>
 
       <s-form-item label="风格" prop="type" :rules="['required']" component="s-group" :data="options.type" />
       <s-form-item label="语言" prop="type" :rules="['required']" component="s-group" :data="options.type" />
