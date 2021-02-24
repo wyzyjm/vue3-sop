@@ -11,6 +11,13 @@ export default [
         meta:{
             title:' 新增流程'
         },
-        component: () => import(/* webpackChunkName: "add-flow" */ '@/views/produce/service-flow/add-flow')
+        component: () => import(/* webpackChunkName: "add-flow-1" */ '@/views/produce/service-flow/add-flow-1')
+    },
+    {
+        path: 'add-service-flow',
+        meta:{
+            title:' 新增服务流程'
+        },
+        component: () => import(/* webpackChunkName: "add-flow-2" */ '@/views/produce/service-flow/add-flow-2')
     }
 ]
