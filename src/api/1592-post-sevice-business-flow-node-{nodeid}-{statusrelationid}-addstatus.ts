@@ -17,7 +17,7 @@ export interface ResBody {
 }
 
 export interface ReqParams {
-  nodeId:string              /**业务节点id*/
+  nodeId:number              /**业务节点id*/
   statusRelationId:string    /**关联关系id*/
 }
 

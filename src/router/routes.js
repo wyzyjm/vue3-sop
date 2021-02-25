@@ -5,6 +5,10 @@ import test from "./test"
 import systemSetting from "./system-setting/index"
 import produce from "./produce"
 import Tool from "./my-tool"
+import custQuery from "./cust-query/index"
+import orderMonitor from "./order-monitor/index"
+import caseCenter from "./case-center/index"
+import userService from "./user-service/index"
 export default [
     {
         path: "/",
@@ -16,7 +20,11 @@ export default [
             ...test,
             ...systemSetting,
             ...produce,
-            ...Tool
+            ...Tool,
+            ...custQuery,
+            ...orderMonitor,
+            ...caseCenter,
+            ...userService
         ]
     },
     {

@@ -156,7 +156,46 @@ export default defineComponent({
               title: '复评',
             },
           ]
-        }        
+        },
+        {
+          icon: 'el-icon-s-custom',
+          index: '/cust-query',
+          title: '客户查询',
+          top: true
+        },
+        {
+          icon: 'el-icon-s-finance',
+          index: '5',
+          title: '案例中心',
+          menuItem: [
+            {
+              index: '/case/recommend',
+              title: '网站推荐',
+            }
+          ]
+        },
+        {
+          icon: 'el-icon-video-camera-solid',
+          index: '6',
+          title: '订单监控',
+          menuItem: [
+            {
+              index: '/order/works',
+              title: '我的工作台',
+            }
+          ]
+        },
+        {
+          icon: 'el-icon-menu',
+          index: '7',
+          title: '会员中心服务透明化',
+          menuItem: [
+            {
+              index: '/center/service',
+              title: '翻译服务',
+            }
+          ]
+        },
       ],
     })
 
