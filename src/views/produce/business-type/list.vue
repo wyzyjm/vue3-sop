@@ -11,7 +11,7 @@
           <s-button run="form.reset">重置</s-button>
         </s-form-item>
       </s-form>
-      <div slot="top">
+      <div class="mb20" slot="top">
         <s-button type="primary" @click="dialog.open">新增</s-button>
       </div>
     </s-simple-table>

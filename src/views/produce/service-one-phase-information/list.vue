@@ -9,7 +9,7 @@
           <s-button run="form.reset">重置</s-button>
         </s-form-item>
       </s-form>
-      <div slot="top">
+      <div class="mb20" slot="top">
         <router-link to="./add">
           <s-button type="primary">新增</s-button>
         </router-link>
