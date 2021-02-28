@@ -13,7 +13,7 @@
               <i class="iconfont iconxuanzhongjiaobiao check" v-show="curId == item.value"></i>
           </div>
       </div>
-      <el-button type="primary" class="btn">确定</el-button>
+      <el-button type="primary" class="btn" @click="save">确定</el-button>
   </div>
 </template>
 <script>
@@ -30,6 +30,9 @@
         methods: {
             handleType (type) {
                 this.curId = type
+            },
+            save () {
+                this.$emit('changeStatus', this.curId)
             }
         }
     }

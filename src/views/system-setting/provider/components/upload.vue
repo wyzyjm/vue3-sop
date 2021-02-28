@@ -2,11 +2,11 @@
 <template>
     <!--身份证上传-->
     <div class="file-box" v-if="type == 'idcard'">
-        <div class="item-upload">
-            <div v-if="!form[param]">
+        <div class="item-upload" v-loading="idCardLoading.idcardFrontUrl">
+            <div v-if="!form[param[0]]">
             <input
-                @change="uploadImg($event, param)"
-                :id="param"
+                @change="uploadImg($event, param[0])"
+                :id="param[0]"
                 type="file"
                 accept="image/*"
                 class="hide_input"
@@ -15,18 +15,18 @@
             <span>上传</span>
             </div>
             <div v-else>
-            <img :src="form[param]" class="upload_img">
+            <img :src="form[param[0]]" class="upload_img">
             <i
                 class="el-icon-error close"
-                @click.stop.prevent="deletePic(param)"
+                @click.stop.prevent="deletePic(param[0])"
             ></i>
             </div>
         </div>
-        <div class="item-upload">
-            <div v-if="!form.businessLicenceUrl">
+        <div class="item-upload" v-loading="idCardLoading.idcardBackUrl">
+            <div v-if="!form[param[1]]">
             <input
-                @change="uploadImg($event,param)"
-                :id="param"
+                @change="uploadImg($event,param[1])"
+                :id="param[1]"
                 type="file"
                 accept="image/*"
                 class="hide_input"
@@ -35,10 +35,10 @@
             <span>上传</span>
             </div>
             <div v-else>
-            <img :src="form[param]" class="upload_img">
+            <img :src="form[param[1]]" class="upload_img">
             <i
                 class="el-icon-error close"
-                @click.stop.prevent="deletePic(param)"
+                @click.stop.prevent="deletePic(param[1])"
             ></i>
             </div>
         </div>
@@ -55,7 +55,7 @@
     </div>
     <!--单张-->
     <div class="file-box" v-else>
-        <div class="item-upload">
+        <div class="item-upload" v-loading="loading">
             <div v-if="!form[param]">
             <input
                 @change="uploadImg($event,param)"
@@ -97,6 +97,11 @@ components: {},
 data() {
 //这里存放数据
 return {
+    loading: false,
+    idCardLoading: {
+        idcardFrontUrl: false,
+        idcardBackUrl: false
+    }
 };
 },
 //监听属性 类似于data概念
@@ -119,17 +124,29 @@ methods: {
         this.$message.error("上传图片最大为5MB");
         return;
       }
+      this.loading = true
+      this.idCardLoading[type] = true
       let formData = new FormData();
       formData.append("file", file);
       upload(formData).then(res => {
-          this.$set(this.form, this.param, res.data.fileUrl)
-          console.log(this.form[this.param], 999)
+          this.loading = false
+          this.idCardLoading[type] = false
+          this.$set(this.form, type, res.data.fileUrl)
+        //   this.$emit('changeUpload', {
+        //       key: this.param,
+        //       val: res.data.fileUrl
+        //   })
+      }).catch(err => {
+          this.loading = false
+          this.idCardLoading[type] = false
+          console.log(err, '上传失败')
+          this.$message.error('图片上传失败')
       })
     },
     // 删除图片
     deletePic(type) {
       this.$set(this.form, type, "");
-      document.querySelector("#" + type).value = "";
+    //   document.querySelector("#" + type).value = "";
     },
 },
 //生命周期 - 创建完成（可以访问当前this实例）

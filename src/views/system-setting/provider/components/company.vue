@@ -40,21 +40,32 @@
                 <el-input class="w700" v-model="form.businessDescribe" placeholder="请输入业务介绍"
                 type="textarea" rows="4"></el-input>
             </el-form-item>
-            <el-form-item label="公司地址：" class="is-required" prop="address">
-            <el-cascader
-                :options="citys.map"
-                :props="{ expandTrigger: 'hover' }"
-                v-model="citys.val"
-                @change="handleCascader"
-                clearable
-                class="w340"
-                ref="cascader"
-            ></el-cascader>
-            <el-input
-                v-model="form.address"
-                class="w340 ml20"
-                placeholder="请填写企业的详细通讯地址"
-            ></el-input>
+            <el-form-item label="公司地址：" class="is-required">
+                <el-col :span="11">
+                    <el-form-item prop="map">
+                        <el-cascader
+                            :options="citys.map"
+                            :props="{ expandTrigger: 'hover' }"
+                            v-model="citys.val"
+                            @change="handleCascader"
+                            clearable
+                            class="w340"
+                            ref="cascader"
+                        ></el-cascader>
+                    </el-form-item>
+                </el-col>
+                <el-col :span=".5">
+                    <p style="width:20px;margin-left:20px;"></p>
+                </el-col>
+                <el-col :span="11">
+                    <el-form-item prop="address">
+                        <el-input
+                            v-model="form.address"
+                            class="w340"
+                            placeholder="请填写企业的详细通讯地址"
+                        ></el-input>
+                    </el-form-item>
+                </el-col>
             </el-form-item>
             <el-form-item label="公司规模：" prop="companySize" class="is-required">
                 <el-radio-group v-model="form.companySize">
@@ -99,8 +110,8 @@
             placeholder="请输入纳税人识别号"
           ></el-input>
         </el-form-item>      
-        <el-form-item label="营业执照上传：" prop="businessLicenceUrl" class="is-required">
-            <upload type="businessLicenceUrl" param="businessLicenceUrl" :form="form"></upload>
+        <el-form-item label="营业执照上传：" prop="businessLicenseUrl" class="is-required">
+            <upload type="businessLicenseUrl" param="businessLicenseUrl" :form="form"></upload>
         </el-form-item>  
         <el-form-item label="营业执照注册号：" prop="businessLicenceNumber" class="is-required">
           <el-input
@@ -111,8 +122,8 @@
             placeholder="请输入营业执照注册号"
           ></el-input>
         </el-form-item>
-        <el-form-item label="税务登记证上传：" prop="registrationUrl" class="is-required">
-            <upload type="businessLicenceUrl" param="businessLicenceUrl" :form="form"></upload>
+        <el-form-item label="税务登记证上传：" prop="registrationUrl">
+            <upload type="registrationUrl" param="registrationUrl" :form="form"></upload>
         </el-form-item>  
         <el-form-item label="税务登记证号：">
           <el-input
@@ -135,7 +146,7 @@
                 minlength="2"></el-input>
             </el-form-item>
             <el-form-item label="法人身份证上传：" prop="legalCredentialsNumber" class="is-required">
-                <upload type="idcard" param="idcard" :form="form"></upload>
+                <upload type="idcard" :param="['idcardFrontUrl', 'idcardBackUrl']" :form="form"></upload>
             </el-form-item>  
         </el-form>
     </div>   
@@ -176,14 +187,39 @@
 import { registeredCapitalVaild, contactPhoneVaild, contactEmailVaild } from "../utils/form-vaild";
 import Upload from "./upload";
 import addProvider from '@/api/1296-post-frontapi-service-provider-add'
+import editProvider from '@/api/1304-post-frontapi-service-provider-update'
+import getProviderDetail from '@/api/1298-get-frontapi-service-provider-{id}'
+import checkProviderName from '@/api/1300-get-frontapi-service-provider-check-name-useful'
 import city from "@/util/citys";
-// import roleGroupSave from '@/api/1368-post-role-group-save'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {
     Upload
 },
 data() {
+const basicNameVaild = (rule, value, callback) => {
+    if (!value) {
+        callback(new Error('请输入公司全称'))
+        return false 
+    }
+    if (value.length < 2 || value.length > 100) {
+        callback(new Error('长度在 2 到 100 个字符'))
+        return false
+    }
+    checkProviderName({
+        name: value,
+        id: this.$route.params.pid || '',
+    }).then(res => {
+        console.log(res.data)
+        // 已存在服务商名称 不可用
+        if (!res.data) {
+            callback(new Error('公司名称已存在'))
+            return false
+        }
+    }).catch(err => {
+        console.log(err, '检查公司名称是否可用error')
+    })
+};    
 //这里存放数据
 return {
     // 省市区集合
@@ -192,6 +228,8 @@ return {
         val: ""
     },
     form: {
+        map: '',
+        category: 2, // '公司'
         basicName: '', // 公司名称
         simpleName: '', // 公司简称
         basicDescribe: '', // 公司简介
@@ -220,9 +258,8 @@ return {
         contactPhone: '', // 联系人手机号
         contactEmail: '', // 联系人邮箱
         legalPerson: '', // 法人
-        legalCredentialsType: '', // 法人证件类型 1:身份证,2:临时身份证,3:护照,4:港澳台身份证/5:外国护照6:户口卡7:军人身份证8:警察身份证
+        legalCredentialsType: 1, // 法人证件类型 1:身份证,2:临时身份证,3:护照,4:港澳台身份证/5:外国护照6:户口卡7:军人身份证8:警察身份证
         legalCredentialsNumber: '', // 法人证件编码
-        category: '', // 1:个人，2：企业
         basicType: 1, // 1、自营，2、非自营
         contactTel: '', // 联系人电话
         serviceStoptimeStr: '', // 服务到期时间
@@ -230,18 +267,22 @@ return {
     // 表单校验规则
     formRules: {
         basicName: [
-            { required: true, message: '请输入公司全称', trigger: 'blur' },
-            { min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' }
+            { validator: basicNameVaild, trigger: 'blur' }
+            // { required: true, message: '请输入公司全称', trigger: 'blur' },
+            // { min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' }
         ],
         registeredCapital: [
             // { required: true, message: '请输入公司全称', trigger: 'blur' },
             { validator: registeredCapitalVaild, trigger: 'blur' }
         ],
         foundTime: [
-            { type: 'date', required: true, message: '请选择成立时间', trigger: 'change' }
+            { required: true, message: '请选择成立时间', trigger: 'change' }
         ],
         businessLicenceNumber: [
             { required: true, message: '请输入营业执照注册号', trigger: 'blur' },
+        ],
+        businessLicenseUrl: [
+            { required: true, message: '请上传营业执照', trigger: 'upload' },
         ],
         legalPerson: [
             { required: true, message: '请输入法人姓名', trigger: 'blur' },
@@ -256,7 +297,13 @@ return {
         ],
         contactEmail: [
             { validator: contactEmailVaild, trigger: 'blur' }
-        ]
+        ],
+        address: [
+            { required: true, message: '请填写企业的详细通讯地址', trigger: 'blur' },
+        ],
+        map: [
+            { required: true, message: '请选择省市区', trigger: 'change' }
+        ],        
     },
     formArr: [1,2,3,4]
 }
@@ -267,9 +314,11 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
+
     // 级联选择省市区
     handleCascader(code) {
       let checked = this.$refs["cascader"].getCheckedNodes();
+      this.form.map = 'map val'
       this.form.provinceName = checked[0].pathLabels[0];
       this.form.cityName = checked[0].pathLabels[1];
       this.form.distinctName = checked[0].pathLabels[2];
@@ -278,29 +327,55 @@ methods: {
       this.form.distinctId = code[2];
     },
     handleSave () {
-        addProvider(this.form).then((res) => {
-            console.log(res, 321)
+        console.log(this.form)
+        let flag = true
+        this.formArr.map(v => {
+            this.$refs['form' + v].validate((valid) => {
+                if (!valid) {
+                    flag = valid
+                }
+            });
         })
-        // let flag = true
-        // this.formArr.map(v => {
-        //     this.$refs['form' + v].validate((valid) => {
-        //         if (!valid) {
-        //             flag = valid
-        //         }
-        //     });
-        // })
-        // if (flag) {
-        //     addProvider(this.form).then((res) => {
-        //         console.log(res)
-        //     })
-        // } else {
-        //     console.log('error')
-        // }
+        if (flag) {
+            if (this.$route.params.pid) { 
+                editProvider(this.form).then((res) => {
+                    console.log(res)
+                    if (res.status == 200) {
+                        this.$message.success(res.msg)
+                    } else {
+                        this.$message.error(res.msg)
+                    }
+                })
+            } else {
+                addProvider(this.form).then((res) => {
+                    console.log(res)
+                    if (res.status == 200) {
+                        this.$message.success(res.msg)
+                    } else {
+                        this.$message.error(res.msg)
+                    }
+                })
+            }
+        } else {
+            console.log('error')
+        }
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
     this.citys.map = city.regions;
+    // 编辑
+    if (this.$route.params.pid) {
+        getProviderDetail({id: this.$route.params.pid}).then(res => {
+            this.form = res.data
+            this.form.map = 'map val'
+            this.citys.val = [
+                this.form.provinceId.toString(),
+                this.form.cityId.toString(),
+                this.form.distinctId.toString()
+            ];
+        })
+    }
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {

@@ -14,6 +14,7 @@ export default [
         component: () => import(/* webpackChunkName: "provider-add" */ '@/views/system-setting/provider/add')
     },
     {
+        name: 'provider-edit',
         path: 'provider/edit/:category/:pid',
         meta:{
             title:'编辑服务商'

@@ -40,7 +40,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="个人证件上传：" prop="legalCredentialsNumber" class="is-required">
-                <upload type="idcard"></upload>
+                <upload type="idcard" :param="['idcardFrontUrl', 'idcardBackUrl']" :form="form"></upload>
             </el-form-item>  
             <el-form-item label="个人证件号码：" prop="legalCredentialsNumber" class="is-required">
                 <el-input class="w340" v-model="form.legalCredentialsNumber" placeholder="请输入个人证件号码"></el-input>
@@ -48,7 +48,7 @@
         </el-form>
     </div>   
     <div class="footer-box">
-        <el-button type="primary" @click="handleSave()">保存</el-button>
+        <el-button type="primary" @click="handleSave">保存</el-button>
         <el-button class="ml20">取消</el-button>
     </div> 
 </div>
@@ -59,6 +59,9 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import { contactPhoneVaild, contactEmailVaild } from "../utils/form-vaild";
 import Upload from "./upload";
+// import addProvider from '@/api/1296-post-frontapi-service-provider-add'
+// import editProvider from '@/api/1304-post-frontapi-service-provider-update'
+// import getProviderDetail from '@/api/1298-get-frontapi-service-provider-{id}'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {
@@ -68,12 +71,12 @@ data() {
 //这里存放数据
 return {
     form: {
-        basicName: '', // 公司名称
-        simpleName: '', // 公司简称
-        basicDescribe: '', // 公司简介
-        majorBusiness: '', // 主营业务
-        businessDescribe: '', // 业务介绍
-        address: '', // 详细地址
+        // basicName: '', // 公司名称
+        // simpleName: '', // 公司简称
+        // basicDescribe: '', // 公司简介
+        // majorBusiness: '', // 主营业务
+        // businessDescribe: '', // 业务介绍
+        // address: '', // 详细地址
         companySize: '5人 ~ 50人', // 公司规模
         companyUrl: '', // 官网地址
         provinceId: '', // 省份id
@@ -98,7 +101,7 @@ return {
         legalPerson: '', // 法人
         legalCredentialsType: '', // 法人证件类型 1:身份证,2:临时身份证,3:护照,4:港澳台身份证/5:外国护照6:户口卡7:军人身份证8:警察身份证
         legalCredentialsNumber: '', // 法人证件编码
-        category: '', // 1:个人，2：企业
+        category: 1, // 1:个人，2：企业
         basicType: 1, // 1、自营，2、非自营
         contactTel: '', // 联系人电话
         serviceStoptimeStr: '', // 服务到期时间
@@ -121,7 +124,11 @@ return {
         ],
         legalCredentialsType: [
             { required: true, message: '请选择证件类型', trigger: 'change' }
-        ],        
+        ], 
+        legalCredentialsNumber: [
+            { required: true, message: '请输入证件号码', trigger: 'blur' },
+            { min: 18, max: 18, message: '请输入正确的证件号码', trigger: 'blur' }
+        ]       
     },    
 }
 },
@@ -132,13 +139,41 @@ watch: {},
 //方法集合
 methods: {
     handleSave () {
-        this.$refs['form'].validate((valid) => {
-            if (valid) {
-                console.log('success')
-            } else {
-                console.log('error')
-            }
-        });
+        console.log(this.form)
+            // if (valid) {
+            //     console.log(this.form, 32818)
+            //     addProvider(this.form).then((res) => {
+            //         console.log(res)
+            //         if (res.status == 200) {
+            //             this.$message.success(res.msg)
+            //         } else {
+            //             this.$message.error(res.msg)
+            //         }
+            //     })
+            // if (this.$route.params.pid) { 
+            //     editProvider(this.form).then((res) => {
+            //         console.log(res)
+            //         if (res.status == 200) {
+            //             this.$message.success(res.msg)
+            //         } else {
+            //             this.$message.error(res.msg)
+            //         }
+            //     })
+            // } else {
+            //     console.log(321321)
+            //     addProvider(this.form).then((res) => {
+            //         console.log(res)
+            //         if (res.status == 200) {
+            //             this.$message.success(res.msg)
+            //         } else {
+            //             this.$message.error(res.msg)
+            //         }
+            //     })
+            // }
+            // } else {
+            //     console.log('error')
+            // }
+        // })
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
