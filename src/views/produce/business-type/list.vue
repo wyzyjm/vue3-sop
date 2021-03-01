@@ -5,7 +5,7 @@
     <s-simple-table :data="table.data" :cols="table.cols">
       <s-form slot="form" inline>
         <s-form-item label="业务类型" prop="name" />
-        <s-form-item label="状态" prop="status" component="s-group" :data="options" tag="el-radio-group" />
+        <s-form-item label="状态" prop="status" component="s-group" :data="options" />
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
           <s-button run="form.reset">重置</s-button>

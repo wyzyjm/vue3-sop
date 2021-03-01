@@ -14,17 +14,17 @@
       <s-form-item label="服务产品类型" prop="type" :rules="['required']" component="s-group" :data="options.type" />
       <s-form-item label="单位" prop="unit" :rules="['required']" component="s-group" :data="options.unit" />
       <s-form-item label="优先级" prop="name" :rules="['required']" />
-      <s-form-item label="业务类型" prop="type" component="s-group" :data="options.type" />
+      <s-form-item label="业务类型" prop="type" component="s-group" :data="options.businessType" />
       <s-form-item label="服务内容" prop="name" type="textarea" />
       <h2>属性信息</h2>
       <div>
-        <s-button type="text" >选择其他属性</s-button>
-        <s-button type="text" >新增其他属性</s-button>
+        <s-button type="text" @click="addOtherProp">新增其他属性</s-button>
+        <s-button type="text" @click="selectOtherProp">选择其他属性</s-button>
       </div>
 
-      <s-form-item label="风格" prop="type" :rules="['required']" component="s-group" :data="options.type" />
-      <s-form-item label="语言" prop="type" :rules="['required']" component="s-group" :data="options.type" />
-
+      <div v-for="item in form.propertyList" :key="item.id">
+        <s-form-item :label="item.name" v-model="item.value" component="s-group" :data="item.options" />
+      </div>
 
       <s-form-item>
         <s-button @click="$emit('close')">取消</s-button>
@@ -37,16 +37,15 @@
 import { defineComponent, reactive } from '@vue/composition-api'
 import useOptions from './hooks/use-options'
 import _save from '@/api/1412-post-product-line'
+import _update from '@/api/1492-put-service-product'
+import request from '@/api/1496-get-service-product'
 export default defineComponent({
   props: {
-    isEdit: {
-      default: false,
-    },
-    data: {
-      type: Object,
+    id: {
+      default: '',
     },
   },
-  setup({ isEdit, data }) {
+  setup({ id }) {
     let form = reactive({
       description: '',
       id: undefined,
@@ -54,15 +53,51 @@ export default defineComponent({
       name: '',
       status: 1,
       parentId: '',
+      propertyList: [],
     })
 
-    if (isEdit) {
-      form = { ...form, ...data }
+    const save = (form) => {
+      return (id ? _update(form) : _save(form)).then(({ msg }) => {
+        console.log(msg)
+      })
     }
 
-    const save = (form) => {
-      return _save(form).then(({ msg }) => {
-        console.log(msg)
+    const addOtherProp = () => {}
+    const selectOtherProp = () => {
+
+    }
+
+    if (id) {
+      request({ id }).then((response) => {
+        Object.keys(form).forEach((v) => {
+          if (v === 'propertyList') {
+            let arr = []
+            response.propertyList.forEach((v) => {
+              const current = arr.find((c) => c.name === v.name)
+              if (current) {
+                current.value.push(v.value)
+                current.options.push({
+                  label: v.name,
+                  value: v.value,
+                })
+              } else {
+                arr.push({
+                  label: v.name,
+                  value: [v.value],
+                  options: [
+                    {
+                      label: v.name,
+                      value: v.value,
+                    },
+                  ],
+                })
+              }
+            })
+            form[v] = arr
+          } else {
+            form[v] = response[v]
+          }
+        })
       })
     }
 
@@ -72,6 +107,8 @@ export default defineComponent({
       save,
       form,
       options,
+      addOtherProp,
+      selectOtherProp,
     }
   },
 })
