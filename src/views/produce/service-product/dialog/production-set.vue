@@ -33,7 +33,7 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import useState from '@/hooks/use-state/disable-state'
-import _save from '@/api/1504-post-service-product-production-process-batch'
+import _save from '@/api/1504-post-production-config-service-product-production-process-batch'
 export default defineComponent({
   props: {
     isEdit: {

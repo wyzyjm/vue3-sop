@@ -24,10 +24,10 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import getTableData from '@/api/1494-get-service-product-search'
+import getTableData from '@/api/1494-get-production-config-service-product-search'
 import useDialog from '@/hooks/use-dialog'
 import useState from '@/hooks/use-state/shelves-state'
-import _setState from '@/api/1492-put-service-product'
+import _setState from '@/api/1492-put-production-config-service-product'
 import useSafeParams from '@/hooks/use-router-util/sale-params'
 import useOptions from './hooks/use-options'
 
@@ -99,7 +99,7 @@ export default defineComponent({
         },
         {
           label: '状态',
-          prop: (row) => `已${getStateText(row.status)}`,
+          prop: ({row}) => `已${getStateText(row.status)}`,
         },
         {
           label: '创建时间',

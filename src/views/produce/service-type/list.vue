@@ -4,7 +4,7 @@
     <s-simple-table :data="table.data" :cols="table.cols">
       <s-form slot="form" inline>
         <s-form-item label="状态名称" prop="name" />
-        <s-form-item label="状态" prop="status" component="s-group" :data="options"  />
+        <s-form-item label="状态" prop="status" component="s-group" :data="options" />
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
           <s-button run="form.reset">重置</s-button>
@@ -19,9 +19,10 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import setServiceTypeStatus from '@/api/1520-put-service-order-status'
-import getTableData from '@/api/1522-get-service-order-status-search'
+import getTableData from '@/api/1522-get-production-config-service-order-status-search'
 import useDialog from '@/hooks/use-dialog'
 import useState from '@/hooks/use-state/disable-state'
+import { Message } from 'element-ui'
 
 export default defineComponent({
   setup(props, { root }) {
@@ -33,6 +34,10 @@ export default defineComponent({
       (row) => {
         row.status = 1 ^ row.status
         return setServiceTypeStatus(row).then(() => {
+          Message({
+            type: 'success',
+            message: '操作成功！',
+          })
           root.$store.commit('table/update')
         })
       }
@@ -59,7 +64,7 @@ export default defineComponent({
         },
         {
           label: '状态',
-          prop: (row) => getStateText(row.status),
+          prop: ({ row }) => getStateText(row.status),
         },
         {
           label: '描述',

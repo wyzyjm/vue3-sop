@@ -36,9 +36,9 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import useOptions from './hooks/use-options'
-import _save from '@/api/1412-post-product-line'
-import _update from '@/api/1492-put-service-product'
-import request from '@/api/1496-get-service-product'
+import _save from '@/api/1412-post-production-config-product-line'
+import _update from '@/api/1492-put-production-config-service-product'
+import request from '@/api/1496-get-production-config-service-product'
 export default defineComponent({
   props: {
     id: {

@@ -1,12 +1,18 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/123/interface/api/1304
- * 生成日期：Mon Feb 08 2021 10:23:32 GMT+0800 (GMT+08:00)
- * 生成工具版本：ts-v0.1
+ * 生成日期：Mon Mar 01 2021 12:29:49 GMT+0800 (GMT+08:00)
+ * 生成工具版本：ts-v0.0.2
  * 接口名称：编辑服务商
  * 创建人：付兵浩
  */
 export interface ResBody {
+  status:number    /**200表示业务无异常*/
+  code:string      /**SYS000表示业务无异常，其他表示异常*/
+  data:boolean     /**true表示成功，false表示失败*/
+}
+
+export interface ReqBody {
   id:number                        /**服务商id*/
   basicName:string                 /**公司名称*/
   simpleName:string                /**公司简称*/
@@ -42,9 +48,6 @@ export interface ResBody {
   basicType:number                 /**1、自营，2、非自营*/
   contactTel:string                /**联系人电话*/
   serviceStoptimeStr:string        /**服务到期时间*/
-}
-
-export interface ReqBody {
 }
 
 interface _Params extends ReqBody {}

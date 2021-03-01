@@ -1,6 +1,7 @@
 "use strict";
 exports.__esModule = true;
 var axios_1 = require("axios");
+var element_ui_1 = require("element-ui");
 function isEnable(config) {
     var WHITE_LIST = ['ceboss.cn', '300.cn'];
     var BLACK_LIST = [];
@@ -35,8 +36,15 @@ instance.interceptors.response.use(function (response) {
     }
     return response;
 });
-// filter
+// error
 instance.interceptors.response.use(function (response) {
+    if (response.data.code !== 'SYS0000') {
+        element_ui_1.Message({
+            type: 'error',
+            message: response.data.msg
+        });
+        throw new Error(response.data);
+    }
     return response.data;
 });
 exports["default"] = instance;

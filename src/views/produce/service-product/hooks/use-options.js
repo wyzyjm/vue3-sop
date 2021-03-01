@@ -1,7 +1,7 @@
 import { reactive } from '@vue/composition-api'
-import getType from '@/api/1500-get-service-product-type-list'
-import getUnit from '@/api/1502-get-service-product-unit-list'
-import getBusinessType from '@/api/1408-get-business-type-search'
+import getType from '@/api/1500-get-production-config-service-product-type-list'
+import getUnit from '@/api/1502-get-production-config-service-product-unit-list'
+import getBusinessType from '@/api/1408-get-production-config-business-type-search'
 
 export default () => {
     if (getType.options) {
