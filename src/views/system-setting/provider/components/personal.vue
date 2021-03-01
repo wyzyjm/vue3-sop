@@ -4,7 +4,7 @@
     <!--个人信息-->
     <div class='module-box'>
         <div class="title-box">个人信息</div>
-        <el-form :model="form" ref="form" :rules="formRules" label-width="140px" class="form-box">
+        <el-form :model="form" ref="form1" :rules="formRules" label-width="140px" class="form-box">
             <el-form-item label="联系人姓名：" prop="contactUsername" class="is-required">
                 <el-input class="w340" v-model="form.contactUsername" placeholder="请输入联系人姓名"></el-input>
             </el-form-item>
@@ -39,7 +39,7 @@
                     <el-option label="警察身份证" :value="8"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="个人证件上传：" prop="legalCredentialsNumber" class="is-required">
+            <el-form-item label="个人证件上传：" class="is-required">
                 <upload type="idcard" :param="['idcardFrontUrl', 'idcardBackUrl']" :form="form"></upload>
             </el-form-item>  
             <el-form-item label="个人证件号码：" prop="legalCredentialsNumber" class="is-required">
@@ -48,8 +48,8 @@
         </el-form>
     </div>   
     <div class="footer-box">
-        <el-button type="primary" @click="handleSave">保存</el-button>
-        <el-button class="ml20">取消</el-button>
+        <el-button type="primary" @click="handleSave()">保存</el-button>
+        <el-button class="ml20" @click="cancel">取消</el-button>
     </div> 
 </div>
 </template>
@@ -57,11 +57,11 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import { contactPhoneVaild, contactEmailVaild } from "../utils/form-vaild";
+// import { contactPhoneVaild, contactEmailVaild } from "../utils/form-vaild";
 import Upload from "./upload";
-// import addProvider from '@/api/1296-post-frontapi-service-provider-add'
-// import editProvider from '@/api/1304-post-frontapi-service-provider-update'
-// import getProviderDetail from '@/api/1298-get-frontapi-service-provider-{id}'
+import addProvider from '@/api/1296-post-frontapi-service-provider-add'
+import editProvider from '@/api/1304-post-frontapi-service-provider-update'
+import getProviderDetail from '@/api/1298-get-frontapi-service-provider-{id}'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {
@@ -116,12 +116,12 @@ return {
             { required: true, message: '请输入联系人姓名', trigger: 'blur' },
             { min: 2, max: 100, message: '长度在 2 到 50 个字符', trigger: 'blur' }
         ],
-        contactPhone: [
-            { validator: contactPhoneVaild, trigger: 'blur' }
-        ],
-        contactEmail: [
-            { validator: contactEmailVaild, trigger: 'blur' }
-        ],
+        // contactPhone: [
+        //     { validator: contactPhoneVaild, trigger: 'blur' }
+        // ],
+        // contactEmail: [
+        //     { validator: contactEmailVaild, trigger: 'blur' }
+        // ],
         legalCredentialsType: [
             { required: true, message: '请选择证件类型', trigger: 'change' }
         ], 
@@ -138,47 +138,55 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
+    cancel () {
+        this.$router.push({
+            path: '/system-setting/provider/list'
+        })
+    },
     handleSave () {
-        console.log(this.form)
-            // if (valid) {
-            //     console.log(this.form, 32818)
-            //     addProvider(this.form).then((res) => {
-            //         console.log(res)
-            //         if (res.status == 200) {
-            //             this.$message.success(res.msg)
-            //         } else {
-            //             this.$message.error(res.msg)
-            //         }
-            //     })
-            // if (this.$route.params.pid) { 
-            //     editProvider(this.form).then((res) => {
-            //         console.log(res)
-            //         if (res.status == 200) {
-            //             this.$message.success(res.msg)
-            //         } else {
-            //             this.$message.error(res.msg)
-            //         }
-            //     })
-            // } else {
-            //     console.log(321321)
-            //     addProvider(this.form).then((res) => {
-            //         console.log(res)
-            //         if (res.status == 200) {
-            //             this.$message.success(res.msg)
-            //         } else {
-            //             this.$message.error(res.msg)
-            //         }
-            //     })
-            // }
-            // } else {
-            //     console.log('error')
-            // }
-        // })
+        // console.log(this.$refs['form'].validate())
+        this.$refs['form1'].validate((valid) => {
+          if (valid) {
+            if (this.$route.params.pid) { 
+                editProvider(this.form).then((res) => {
+                    console.log(res)
+                    if (res.status == 200) {
+                        this.$message.success(res.msg)
+                        this.$router.push({
+                            path: '/system-setting/provider/list'
+                        })
+                    } else {
+                        this.$message.error(res.msg)
+                    }
+                })
+            } else {
+                addProvider(this.form).then((res) => {
+                    console.log(res)
+                    if (res.status == 200) {
+                        this.$message.success(res.msg)
+                        this.$router.push({
+                            path: '/system-setting/provider/list'
+                        })
+                    } else {
+                        this.$message.error(res.msg)
+                    }
+                })
+            }
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-
+    getProviderDetail({id: this.$route.params.pid}).then(res => {
+        this.form = res.data
+        this.form.contactSex = res.data ? 1 : 0 
+    }).catch(err => {
+        console.log(err, '获取详情失败')
+    })
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
