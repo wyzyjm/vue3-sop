@@ -40,6 +40,8 @@
 import { defineComponent, reactive } from '@vue/composition-api'
 import useState from '@/hooks/use-state/disable-state'
 import _save from '@/api/1486-post-production-config-product-line-production-setting-batch'
+import { Message } from 'element-ui'
+
 export default defineComponent({
   props: {
     isEdit: {
@@ -49,9 +51,8 @@ export default defineComponent({
       type: Object,
     },
   },
-  setup({ isEdit, data }) {
+  setup({ isEdit, data }, { emit, root }) {
     const item = {
-      productLineId: '',
       serviceProviderId: '',
       serviceProvider: '',
       productionOrganizationId: '',
@@ -60,12 +61,18 @@ export default defineComponent({
     }
 
     let form = reactive({
+      productLineId: '',
       list: [],
     })
 
     const save = (form) => {
-      return _save(form).then(({ msg }) => {
-        console.log(msg)
+      return _save(form).then(() => {
+        Message({
+          message: '保存成功！',
+          type: 'success',
+        })
+        emit('close')
+        root.$store.commit('table/update')
       })
     }
 
@@ -74,7 +81,7 @@ export default defineComponent({
     }
 
     if (isEdit) {
-      form = { ...form, ...data }
+      form.productLineId = data.id
     } else {
       add() //默认值
     }

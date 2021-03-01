@@ -13,7 +13,7 @@
       <p>2、请选择需要导入的文件</p>
       <s-form :model="form">
         <s-form-item prop="upload">
-          <s-upload v-model="form.upload" :files.sync="fileList" @success="uploadSuccess" @error="uploadError" :auto-upload="false" ref="uploadRef" accept="xls,xlsx" class="ml20">
+          <s-upload :action="url" v-model="form.upload" :files.sync="fileList" @success="uploadSuccess" @error="uploadError" :auto-upload="false" ref="uploadRef" accept="xls,xlsx" class="ml20">
             <el-button size="mini" type="primary">选择附件</el-button>
             支持xls、xlsx文件，单个文件不得大于2M
           </s-upload>
@@ -57,6 +57,8 @@ export default defineComponent({
       upload: '',
     })
 
+    const url = ref(`${process.env.VUE_APP_API_BASE_URL}/product-line/import`)
+
     const uploadRef = ref(null)
     const fileList = ref([])
     const uploadSubmit = () => {
@@ -91,6 +93,7 @@ export default defineComponent({
       uploadError,
       uploadSubmit,
       active,
+      url
     }
   },
 })

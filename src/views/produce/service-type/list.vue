@@ -18,7 +18,7 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import setServiceTypeStatus from '@/api/1520-put-service-order-status'
+import setServiceTypeStatus from '@/api/1520-put-production-config-service-order-status'
 import getTableData from '@/api/1522-get-production-config-service-order-status-search'
 import useDialog from '@/hooks/use-dialog'
 import useState from '@/hooks/use-state/disable-state'

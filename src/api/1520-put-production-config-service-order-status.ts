@@ -1,9 +1,9 @@
 
 /**
- * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1410
- * 生成日期：Mon Mar 01 2021 11:01:22 GMT+0800 (GMT+08:00)
+ * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1520
+ * 生成日期：Mon Mar 01 2021 14:58:08 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.0.2
- * 接口名称：根据id查询
+ * 接口名称：更新
  * 创建人：杨一点
  */
 export interface Data {
@@ -13,8 +13,8 @@ export interface Data {
   deleteStatus:boolean    
   name:string             
   code:string             
-  description:string      
   status:number           
+  description:string      
   createBy:string         
   updateBy:string         
 }
@@ -26,17 +26,18 @@ export interface ResBody {
   data:Data        
 }
 
-export interface ReqQuery {
-  id:string    
+export interface ReqBody {
+  id?:number      
+  name?:string    
 }
 
-interface _Params extends ReqQuery {}
+interface _Params extends ReqBody {}
 
 import request from '../plugins/axios/index.js'
 export default (params: _Params)=> { 
     return request({
-        url:'/production-config/business-type',
-        method:'GET',
-        params:params
+        url:'/production-config/service-order-status',
+        method:'PUT',
+        data:params
     })
 }

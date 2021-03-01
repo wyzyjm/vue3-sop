@@ -11,7 +11,7 @@ addRule(COMPONENT_NAME, {
   parse(params) {
     params = params.split('.')
     return {
-      currentPage: +params[0],
+      pageNum: +params[0],
       pageSize: +params[1]
     }
   },
