@@ -6,10 +6,10 @@
       </div>
         <s-form slot="form" :model="form" inline>
             <s-form-item label="服务商名称" prop="providerName">
-            <s-input v-model="form.providerName"></s-input>
+            <s-input v-model="form.providerName" clearable></s-input>
             </s-form-item>
             <s-form-item label="服务商类型" prop="category">
-            <el-select v-model="form.category" placeholder="请选择">
+            <el-select v-model="form.category" placeholder="请选择" clearable>
                 <el-option
                 v-for="item in table.category"
                 :key="item.value"
@@ -19,7 +19,7 @@
             </el-select>
             </s-form-item>
             <s-form-item label="状态" prop="status">
-            <el-select v-model="form.status" placeholder="请选择">
+            <el-select v-model="form.status" placeholder="请选择" clearable>
                 <el-option
                 v-for="item in table.status"
                 :key="item.value"
@@ -54,7 +54,6 @@ import getProviderList from '@/api/1306-get-frontapi-service-provider-pagelist'
 import setStatus from '@/api/1302-post-frontapi-service-provider-change-status'
 import { category, status, basictype } from "./utils/form-query";
 import { MessageBox } from 'element-ui'
-const that = this
 export default defineComponent({
   methods: {
       toPath () {
@@ -63,16 +62,7 @@ export default defineComponent({
           })
       },
   },
-  setup() {
-    const view = () => {
-    //     console.log(32789372817978)
-    //   return getProviderList().then(response => {
-    //       console.log(response)
-    //     // console.log(111, response.data.records);
-    //   }).catch(err => {
-    //       console.log(err)
-    //   });
-    };
+  setup(props, {root} ) {
     const setState = (id, status) => {
         console.log(id, status)
         let msg = ''
@@ -95,19 +85,26 @@ export default defineComponent({
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-            return setStatus({id, status}).then(({ msg }) => {
-                console.log(msg)
-                // root.$store.commit('table/update')
+            return setStatus({id, status}).then(({ msg, status }) => {
+                if (status == 200) {
+                    root.$message.success(msg)
+                } else {
+                    root.$message.error(msg)
+                }
+                root.$store.commit('table/update')
             })
         }).catch(() => {
         
         });
     }
-    const toPath = () => {
-        console.log(3213213)
-        
-          that.$router.push({
-              path: '/system-setting/provider/add'
+    const toPath = (row) => {
+          root.$router.push({
+              path: `/system-setting/provider/edit/${row.category ? row.category : 1}/${row.id}`
+          })
+    }
+    const toDetail = (row) => {
+          root.$router.push({
+              path: `/system-setting/provider/detail/${row.category}/${row.id}`
           })
     }
     const table = reactive({
@@ -153,42 +150,104 @@ export default defineComponent({
         },
         {
           label: "状态",
-          prop: "basicStatus"
+          prop: ( { row } ) => {
+              if (row.basicStatus == 0) {
+                  return '服务中'
+              } else if (row.basicStatus == 1) {
+                  return '暂停'
+              } else if (row.basicStatus == 2) {
+                  return '清退'
+              } else if (row.basicStatus == 3) {
+                  return '关闭'
+              }
+          }
         },
         {
           label: "操作",
-          width: '260px',
+          width: '190px',
           prop: ( { row } ) => {
+            let status = [
+                    <el-dropdown>
+                    <span class="el-dropdown-link el-button--text" style="margin-left:10px;cursor:pointer">
+                        更多<i class="el-icon-arrow-down el-icon--right"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown" data-pid="user">
+                        <el-dropdown-item data-pid="user">
+                            <div onClick={() => setState(row.id, 1)}>暂停</div>
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+                            <div onClick={() => setState(row.id, 2)}>清退</div>
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+                            <div onClick={() => setState(row.id, 3)}>关闭</div>
+                        </el-dropdown-item>
+                        <el-dropdown-item>服务范围</el-dropdown-item>
+                        <el-dropdown-item>合作组织</el-dropdown-item>
+                    </el-dropdown-menu>
+                    </el-dropdown>
+                ,
+                
+                    <el-dropdown>
+                    <span class="el-dropdown-link el-button--text" style="margin-left:10px;cursor:pointer">
+                        更多<i class="el-icon-arrow-down el-icon--right"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown" data-pid="user">
+                        <el-dropdown-item data-pid="user">
+                            <div onClick={() => setState(row.id, 0)}>启用</div>
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+                            <div onClick={() => setState(row.id, 2)}>清退</div>
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+                            <div onClick={() => setState(row.id, 3)}>关闭</div>
+                        </el-dropdown-item>
+                        <el-dropdown-item>服务范围</el-dropdown-item>
+                        <el-dropdown-item>合作组织</el-dropdown-item>
+                    </el-dropdown-menu>
+                    </el-dropdown>
+                ,
+                
+                    <el-dropdown>
+                    <span class="el-dropdown-link el-button--text" style="margin-left:10px;cursor:pointer">
+                        更多<i class="el-icon-arrow-down el-icon--right"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown" data-pid="user">
+                        <el-dropdown-item data-pid="user">
+                            <div onClick={() => setState(row.id, 0)}>启用</div>
+                        </el-dropdown-item>
+                        <el-dropdown-item>
+                            <div onClick={() => setState(row.id, 3)}>关闭</div>
+                        </el-dropdown-item>
+                        <el-dropdown-item>服务范围</el-dropdown-item>
+                        <el-dropdown-item>合作组织</el-dropdown-item>
+                    </el-dropdown-menu>
+                    </el-dropdown>
+                ,
+                
+                    <el-dropdown>
+                    <span class="el-dropdown-link el-button--text" style="margin-left:10px;cursor:pointer">
+                        更多<i class="el-icon-arrow-down el-icon--right"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown" data-pid="user">
+                        <el-dropdown-item data-pid="user">
+                            <div onClick={() => setState(row.id, 0)}>启用</div>
+                        </el-dropdown-item>
+                        <el-dropdown-item>服务范围</el-dropdown-item>
+                        <el-dropdown-item>合作组织</el-dropdown-item>
+                    </el-dropdown-menu>
+                    </el-dropdown>
+                
+            ]
+            console.log(row.basicStatus)
             return [
-              <s-button data-pid="user" type="text" onClick={view}>
-                添加组织
-              </s-button>,
-              <s-button data-pid="user" type="text" onClick={view}>
-                添加人员
+              <s-button data-pid="user" type="text" onClick={() => toDetail(row)}>
+                查看详情
               </s-button>,
               <s-button data-pid="user" type="text" onClick={() => toPath(row)}>
                 编辑
               </s-button>,
-            <el-dropdown>
-            <span class="el-dropdown-link el-button--text" style="margin-left:10px;cursor:pointer">
-                更多<i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown" data-pid="user">
-                <el-dropdown-item data-pid="user">
-                    <div onClick={() => setState(row.id, 1)}>暂停</div>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                    <div onClick={() => setState(row.id, 2)}>清退</div>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                    <div onClick={() => setState(row.id, 3)}>关闭</div>
-                </el-dropdown-item>
-                <el-dropdown-item>服务范围</el-dropdown-item>
-                <el-dropdown-item>服务周期</el-dropdown-item>
-                <el-dropdown-item>合作组织</el-dropdown-item>
-            </el-dropdown-menu>
-            </el-dropdown>
-            ];
+              status[row.basicStatus]
+            ]          
           }
         }
       ],

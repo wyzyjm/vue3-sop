@@ -22,6 +22,13 @@ export default {
             showType: 0, // 默认需要选择
         }
     },
+    created () {
+        if (this.$route.params.category) {
+            this.showType = this.$route.params.category
+        } else {
+            this.showType = 0
+        }
+    },
     methods: {
         changeStatus (type) {
             this.showType = type

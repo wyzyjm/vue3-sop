@@ -56,7 +56,7 @@
         </div>
     </div>
     <div class="footer-box">
-        <el-button>关闭</el-button>
+        <el-button @click="cancel">关闭</el-button>
     </div> 
     <div style="width:0;height:0;z-index:9; position:fixed;left:10000px;top:10000px;">
         <el-image ref="showImg" :src="curPic" :preview-src-list="curPicArr"></el-image>
@@ -123,6 +123,11 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
+    cancel () {
+        this.$router.push({
+            path: '/system-setting/provider/list'
+        })
+    },
     showView (arr) {
         this.curPic = arr[0]
         this.curPicArr = arr

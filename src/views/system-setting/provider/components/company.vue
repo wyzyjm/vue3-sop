@@ -176,7 +176,7 @@
     </div>   
     <div class="footer-box">
         <el-button type="primary" @click="handleSave()">保存</el-button>
-        <el-button class="ml20">取消</el-button>
+        <el-button class="ml20" @click="cancel">取消</el-button>
     </div> 
 </div>
 </template>
@@ -326,6 +326,11 @@ methods: {
       this.form.cityId = code[1];
       this.form.distinctId = code[2];
     },
+    cancel () {
+        this.$router.push({
+            path: '/system-setting/provider/list'
+        })
+    },
     handleSave () {
         console.log(this.form)
         let flag = true
@@ -342,6 +347,9 @@ methods: {
                     console.log(res)
                     if (res.status == 200) {
                         this.$message.success(res.msg)
+                        this.$router.push({
+                            path: '/system-setting/provider/list'
+                        })
                     } else {
                         this.$message.error(res.msg)
                     }
@@ -351,6 +359,9 @@ methods: {
                     console.log(res)
                     if (res.status == 200) {
                         this.$message.success(res.msg)
+                        this.$router.push({
+                            path: '/system-setting/provider/list'
+                        })
                     } else {
                         this.$message.error(res.msg)
                     }
@@ -369,6 +380,7 @@ created() {
         getProviderDetail({id: this.$route.params.pid}).then(res => {
             this.form = res.data
             this.form.map = 'map val'
+            this.form.contactSex = res.data.contactSex ? 1 : 0
             this.citys.val = [
                 this.form.provinceId.toString(),
                 this.form.cityId.toString(),
