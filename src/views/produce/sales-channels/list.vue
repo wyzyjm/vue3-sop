@@ -10,10 +10,11 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import getTableData from '@/api/1424-get-sales-channel-treelist'
+import getTableData from '@/api/1424-get-production-config-sales-channel-treelist'
 import useDialog from '@/hooks/use-dialog'
 import useState from '@/hooks/use-state/disable-state'
-import _update from '@/api/1436-put-sales-channel'
+import _update from '@/api/1436-put-production-config-sales-channel'
+import { Message } from 'element-ui'
 
 export default defineComponent({
   setup(props, { root }) {
@@ -24,6 +25,10 @@ export default defineComponent({
       (row) => {
         row.status = 1 ^ row.status
         return _update(row).then(() => {
+          Message({
+            type: 'success',
+            message: '操作成功！',
+          })
           root.$store.commit('table/update')
         })
       }
@@ -61,7 +66,9 @@ export default defineComponent({
         },
         {
           label: '状态',
-          prop: (row) => getStateText(row.status),
+          prop: ({ row }) => {
+            return getStateText(row.status)
+          },
         },
         {
           label: '创建时间',
@@ -70,7 +77,6 @@ export default defineComponent({
         {
           label: '操作',
           prop: ({ row }) => {
-            row.status = 1
             return [
               <s-button
                 type="text"

@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
+import { Message } from 'element-ui'
 
 
 function isEnable(config: AxiosRequestConfig) {
@@ -44,8 +45,16 @@ instance.interceptors.response.use(
     }
 )
 
-// filter
+
+// error
 instance.interceptors.response.use(response => {
+    if (response.data.code !== 'SYS0000') {
+        Message({
+            type: 'error',
+            message: response.data.msg
+        })
+        throw new Error(response.data)
+    }
     return response.data
 })
 

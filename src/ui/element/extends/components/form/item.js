@@ -22,8 +22,9 @@ export default {
         const blurArr = ['el-input']
         const event = blurArr.includes(this.component) ? 'blur' : 'change'
         const rules = Array.isArray(this.rules) ? this.rules.map(rule => {
-            if (typeof rule === 'string' && rule === 'required') {
-                return { required: true, message: `请${event === 'blur' ? '输入' : '选择'}${this.label}`, tirgger: event }
+            if (typeof rule === 'string' && rule.includes('required')) {
+                const type = rule.split(':')[1] ? rule.split(':')[1] : 'string'
+                return { required: true, type, message: `请${event === 'blur' ? '输入' : '选择'}${this.label}`, tirgger: event }
             }
 
             if (typeof rule === 'string' && rule === 'email') {
@@ -38,7 +39,7 @@ export default {
         }) : []
 
 
-        const label=this.label?this.label+'：':this.label
+        const label = this.label ? this.label + '：' : this.label
 
         if (this.$slots.default) {
             return h('el-form-item', {

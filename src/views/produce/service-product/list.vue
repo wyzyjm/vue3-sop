@@ -5,7 +5,7 @@
         <s-form-item label="服务产品名称" prop="name" />
         <s-form-item label="服务产品类型" prop="name" component="s-group" :data="type" />
         <s-form-item label="服务产品编码" prop="name" />
-        <s-form-item label="状态" prop="status" component="s-group" :data="options" tag="el-radio-group" />
+        <s-form-item label="状态" prop="status" component="s-group" :data="options" />
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
           <s-button run="form.reset">重置</s-button>
@@ -24,10 +24,10 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import getTableData from '@/api/1494-get-service-product-search'
+import getTableData from '@/api/1494-get-production-config-service-product-search'
 import useDialog from '@/hooks/use-dialog'
 import useState from '@/hooks/use-state/shelves-state'
-import _setState from '@/api/1492-put-service-product'
+import _setState from '@/api/1492-put-production-config-service-product'
 import useSafeParams from '@/hooks/use-router-util/sale-params'
 import useOptions from './hooks/use-options'
 
@@ -69,7 +69,7 @@ export default defineComponent({
       root.$router.push(`./add`)
     }
     const edit = (data) => {
-      root.$router.push(`./edit/${useSafeParams(data)}`)
+      root.$router.push(`./edit/${data.id}`)
     }
 
     const table = reactive({
@@ -99,7 +99,7 @@ export default defineComponent({
         },
         {
           label: '状态',
-          prop: (row) => `已${getStateText(row.status)}`,
+          prop: ({row}) => `已${getStateText(row.status)}`,
         },
         {
           label: '创建时间',

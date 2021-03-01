@@ -1,7 +1,7 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1562
- * 生成日期：Wed Feb 24 2021 10:44:30 GMT+0800 (GMT+08:00)
+ * 生成日期：Mon Mar 01 2021 12:29:29 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.0.2
  * 接口名称：初始化业务阶段
  * 创建人：wuzongle@300.cn
@@ -18,7 +18,7 @@ export interface ReqParams {
 }
 
 export interface ReqBody {
-  type:string    /**节点类型*/
+  businessFlowNodeType:string    /**节点类型*/
 }
 
 interface _Params extends ReqParams,ReqBody {}

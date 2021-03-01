@@ -2,10 +2,10 @@
   <div>
     <s-form :model="form" label-width="110px" @submit="save">
       <s-form-item label="渠道名称" :rules="['required']" prop="name" />
-      <s-form-item label="渠道编码" v-if="isEdit" component="s-text" :content="form.code" prop="code" />
-      <s-form-item label="渠道编码" v-else prop="code" />
+      <s-form-item label="渠道编码" :rules="['required']" v-if="isEdit" component="s-text" :content="form.code" prop="code" />
+      <s-form-item label="渠道编码" :rules="['required']" v-else prop="code" />
       <s-form-item label="选择上级渠道" prop="status" component="s-group" :data="options" />
-      <s-form-item label="状态" prop="status" component="s-group" :data="options" tag="el-radio-group" />
+      <s-form-item label="状态" :rules="['required:number']" prop="status" component="s-group" :data="options" tag="el-radio-group" />
       <s-form-item label="描述" type="textarea" prop="description" />
       <s-form-item>
         <s-button @click="$emit('close')">取消</s-button>
@@ -17,8 +17,10 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import useState from '@/hooks/use-state/disable-state'
-import _save from '@/api/1430-post-sales-channel'
-import _update from '@/api/1436-put-sales-channel'
+import _save from '@/api/1430-post-production-config-sales-channel'
+import _update from '@/api/1436-put-production-config-sales-channel'
+import { Message } from 'element-ui'
+
 export default defineComponent({
   props: {
     isEdit: {
@@ -28,7 +30,7 @@ export default defineComponent({
       type: Object,
     },
   },
-  setup({ isEdit, data }) {
+  setup({ isEdit, data }, { emit, root }) {
     let form = reactive({
       description: '',
       id: undefined,
@@ -43,8 +45,13 @@ export default defineComponent({
     }
 
     const save = (form) => {
-      return (isEdit ? _update(form) : _save(form)).then(({ msg }) => {
-        console.log(msg)
+      return (isEdit ? _update(form) : _save(form)).then(() => {
+        Message({
+          message: '保存成功！',
+          type: 'success',
+        })
+        emit('close')
+        root.$store.commit('table/update')
       })
     }
 

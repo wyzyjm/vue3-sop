@@ -1,14 +1,21 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1599
- * 生成日期：Wed Feb 24 2021 10:44:30 GMT+0800 (GMT+08:00)
+ * 生成日期：Mon Mar 01 2021 12:29:29 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.0.2
  * 接口名称：按钮列表
  * 创建人：wuzongle@300.cn
  */
+export interface ResBody {
+  code:string      
+  status:string    
+  msg:string       
+  data:any[]       
+}
+
 export interface ReqParams {
-  nodeId:string                
-  serviceOrderStatus:string    
+  nodeId:string                /**业务节点id*/
+  serviceOrderStatus:string    /**服务单状态*/
 }
 
 interface _Params extends ReqParams {}

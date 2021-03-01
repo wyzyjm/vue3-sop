@@ -13,6 +13,7 @@ export default (opt = {}, callback) => {
   }]
 
   const getStateText = (status) => {
+    
     const c = options.find((v) => v.value === status)
     return c && c.label
   }

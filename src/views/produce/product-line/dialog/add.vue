@@ -2,11 +2,11 @@
   <div>
     <s-form :model="form" label-width="110px" @submit="save">
       <s-form-item label="产品名称" :rules="['required']" prop="name" />
-      <s-form-item label="产品编码" v-if="isEdit" component="s-text" :content="form.code" prop="code" />
-      <s-form-item label="产品编码" v-else prop="code" />
-      <s-form-item label="业务类型" prop="status" component="s-group" :data="options" />
-      <s-form-item label="售卖渠道" prop="status" component="s-group" :data="options" />
-      <s-form-item label="状态" prop="status" component="s-group" :data="options" tag="el-radio-group" />
+      <s-form-item label="产品编码" :rules="['required']"  v-if="isEdit" component="s-text" :content="form.code" prop="code" />
+      <s-form-item label="产品编码" :rules="['required']"  v-else prop="code" />
+      <s-form-item label="业务类型" :rules="['required']"  prop="status" component="s-group" :data="options" />
+      <s-form-item label="售卖渠道" :rules="['required']"  prop="status" component="s-group" :data="options" />
+      <s-form-item label="状态" :rules="['required:number']"  prop="status" component="s-group" :data="options" tag="el-radio-group" />
       <s-form-item>
         <s-button @click="$emit('close')">取消</s-button>
         <s-button type="primary" run="form.submit">确定</s-button>
@@ -17,7 +17,7 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import useState from '@/hooks/use-state/disable-state'
-import _save from '@/api/1412-post-product-line'
+import _save from '@/api/1412-post-production-config-product-line'
 export default defineComponent({
   props: {
     isEdit: {

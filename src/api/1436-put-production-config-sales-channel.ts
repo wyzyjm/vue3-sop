@@ -1,9 +1,9 @@
 
 /**
- * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1434
- * 生成日期：Fri Feb 19 2021 10:32:13 GMT+0800 (GMT+08:00)
- * 生成工具版本：ts-v0.1
- * 接口名称：根据id查询
+ * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1436
+ * 生成日期：Mon Mar 01 2021 12:29:29 GMT+0800 (GMT+08:00)
+ * 生成工具版本：ts-v0.0.2
+ * 接口名称：更新
  * 创建人：杨一点
  */
 export interface Data {
@@ -28,17 +28,19 @@ export interface ResBody {
   data:Data        
 }
 
-export interface ReqQuery {
-  id:string    
+export interface ReqBody {
+  id?:number      
+  code?:string    
+  name?:string    
 }
 
-interface _Params extends ReqQuery {}
+interface _Params extends ReqBody {}
 
 import request from '../plugins/axios/index.js'
 export default (params: _Params)=> { 
     return request({
-        url:'/sales-channel',
-        method:'GET',
-        params:params
+        url:'/production-config/sales-channel',
+        method:'PUT',
+        data:params
     })
 }

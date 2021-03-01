@@ -3,7 +3,7 @@
     <s-simple-table v-model="table.checked" :data="table.data" :cols="table.cols">
       <s-form slot="form" inline>
         <s-form-item label="产品名称" prop="name" />
-        <s-form-item label="状态" prop="status" component="s-group" :data="options" tag="el-radio-group" />
+        <s-form-item label="状态" prop="status" component="s-group" :data="options" />
         <s-form-item label="售卖渠道" prop="status" component="s-group" :data="options" />
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
@@ -23,11 +23,13 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import getTableData from '@/api/1416-get-product-line-search'
+import getTableData from '@/api/1416-get-production-config-product-line-search'
 import useDialog from '@/hooks/use-dialog'
 import useState from '@/hooks/use-state/disable-state'
-import _setState from '@/api/1414-put-product-line-status'
+import _setState from '@/api/1414-put-production-config-product-line-status'
 import useSafeParams from '@/hooks/use-router-util/sale-params'
+import { Message } from 'element-ui'
+
 export default defineComponent({
   setup(props, { root }) {
     const { setState, getStateText, options } = useState(
@@ -37,6 +39,10 @@ export default defineComponent({
       (row) => {
         row.status = 1 ^ row.status
         return _setState(row).then(() => {
+          Message({
+            type: 'success',
+            message: '操作成功！',
+          })
           root.$store.commit('table/update')
         })
       }
@@ -94,7 +100,7 @@ export default defineComponent({
         },
         {
           label: '状态',
-          prop: (row) => getStateText(row.status),
+          prop: ({ row }) => getStateText(row.status),
         },
         {
           label: '创建时间',
@@ -103,11 +109,12 @@ export default defineComponent({
         {
           label: '操作',
           prop: ({ row }) => {
-            row.status = 1
             return [
               <s-button
                 type="text"
-                onClick={() => productionSetDialog.open({ data: row, isEdit: true })}
+                onClick={() =>
+                  productionSetDialog.open({ data: row, isEdit: true })
+                }
               >
                 生产设置
               </s-button>,

@@ -1,8 +1,8 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1528
- * 生成日期：Fri Feb 19 2021 10:31:51 GMT+0800 (GMT+08:00)
- * 生成工具版本：ts-v0.1
+ * 生成日期：Mon Mar 01 2021 12:29:29 GMT+0800 (GMT+08:00)
+ * 生成工具版本：ts-v0.0.2
  * 接口名称：批量更新
  * 创建人：杨一点
  */
@@ -30,7 +30,7 @@ interface _Params extends ReqBody {}
 import request from '../plugins/axios/index.js'
 export default (params: _Params[])=> { 
     return request({
-        url:'/service-product/production-cycle/batch',
+        url:'/production-config/service-product/production-cycle/batch',
         method:'PUT',
         data:params
     })

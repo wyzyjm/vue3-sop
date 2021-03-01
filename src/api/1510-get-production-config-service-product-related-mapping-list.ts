@@ -1,9 +1,9 @@
 
 /**
- * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1432
- * 生成日期：Mon Feb 08 2021 10:23:11 GMT+0800 (GMT+08:00)
- * 生成工具版本：ts-v0.1
- * 接口名称：获取父渠道下的子渠道
+ * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1510
+ * 生成日期：Mon Mar 01 2021 12:29:29 GMT+0800 (GMT+08:00)
+ * 生成工具版本：ts-v0.0.2
+ * 接口名称：列表
  * 创建人：杨一点
  */
 export interface ResBody {
@@ -14,7 +14,7 @@ export interface ResBody {
 }
 
 export interface ReqQuery {
-  parentId:string    
+  serviceProductId:string    
 }
 
 interface _Params extends ReqQuery {}
@@ -22,7 +22,7 @@ interface _Params extends ReqQuery {}
 import request from '../plugins/axios/index.js'
 export default (params: _Params)=> { 
     return request({
-        url:'/sales-channel/children',
+        url:'/production-config/service-product/related-mapping/list',
         method:'GET',
         params:params
     })
