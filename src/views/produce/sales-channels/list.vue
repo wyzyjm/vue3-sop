@@ -15,7 +15,7 @@ import useDialog from '@/hooks/use-dialog'
 import useState from '@/hooks/use-state/disable-state'
 import _update from '@/api/1436-put-production-config-sales-channel'
 import { Message } from 'element-ui'
-
+import getProductionConfig from '@/api/1434-get-production-config-sales-channel'
 export default defineComponent({
   setup(props, { root }) {
     const { setState, getStateText } = useState(
@@ -80,7 +80,13 @@ export default defineComponent({
             return [
               <s-button
                 type="text"
-                onClick={() => dialog.open({ data: row, isEdit: true })}
+                onClick={() => {
+                  return getProductionConfig({ id: row.id }).then(
+                    (response) => {
+                      dialog.open({ data: response.data, isEdit: true })
+                    }
+                  )
+                }}
               >
                 编辑
               </s-button>,

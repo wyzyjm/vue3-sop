@@ -19,7 +19,7 @@
       <div slot="top" class="mb20">
         <el-button type="primary" @click="dialog.open">新增</el-button>
         <el-button type="primary" @click="importDialog.open">导入</el-button>
-        <el-button type="primary" @click="productionSetDialog.open">生产设置</el-button>
+        <el-button :disabled="table.checked.length===0" type="primary" @click="productionSetDialog.open">生产设置</el-button>
       </div>
     </s-simple-table>
     <s-dialog v-bind="dialog" @close="dialog.close" />

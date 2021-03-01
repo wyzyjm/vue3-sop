@@ -14,12 +14,16 @@
             <s-group class="pct90" :props="{
             label:'basicName',
             value:'id'
-          }" :data="options.serviceProvider" v-model="item.serviceProviderId"></s-group>
+          }" :data="options.serviceProvider" v-model="item.serviceProviderId" @change="serviceProviderChange(item,$event)"></s-group>
           </s-form-item>
         </el-col>
         <el-col :span="8">
           <s-form-item>
-            <s-group class="pct90" :data="options" v-model="item.productionOrganizationId"></s-group>
+            <el-cascader :props="{
+            label:'orgName',
+            value:'orgId',
+            emitPath:false
+          }" v-model="form.productionOrganizationId" :show-all-levels="false" :options="item.org"></el-cascader>
           </s-form-item>
         </el-col>
         <el-col :span="8">
@@ -42,6 +46,7 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import _save from '@/api/1486-post-production-config-product-line-production-setting-batch'
+import getOrg from '@/api/1320-get-frontapi-service-provider-org-get-by-providerid'
 import useOptions from '../hooks/use-options'
 import { Message } from 'element-ui'
 
@@ -61,12 +66,20 @@ export default defineComponent({
       productionOrganizationId: '',
       productionOrganization: '',
       shareRatio: '',
+      org: [],
     }
 
     let form = reactive({
       productLineId: '',
       list: [],
     })
+
+    const serviceProviderChange = (item, providerId) => {
+      item.productionOrganizationId = ''
+      getOrg({ providerId }).then((response) => {
+        item.org = response
+      })
+    }
 
     const save = (form) => {
       return _save(form).then(() => {
@@ -89,14 +102,14 @@ export default defineComponent({
       add() //默认值
     }
 
-
-    const options=useOptions()
+    const options = useOptions()
 
     return {
       add,
       save,
       form,
-      options
+      options,
+      serviceProviderChange,
     }
   },
 })
