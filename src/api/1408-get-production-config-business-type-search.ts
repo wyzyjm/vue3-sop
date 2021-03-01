@@ -1,7 +1,7 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1408
- * 生成日期：Mon Mar 01 2021 14:58:08 GMT+0800 (GMT+08:00)
+ * 生成日期：Mon Mar 01 2021 15:39:57 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.0.2
  * 接口名称：搜索
  * 创建人：杨一点
@@ -29,7 +29,13 @@ export interface ReqQuery {
   pageSize?:string    
 }
 
-interface _Params extends ReqQuery {}
+export interface ReqBody {
+  name?:string        
+  status?:number      
+  pageSize?:number    
+}
+
+interface _Params extends ReqQuery,ReqBody {}
 
 import request from '../plugins/axios/index.js'
 export default (params: _Params)=> { 

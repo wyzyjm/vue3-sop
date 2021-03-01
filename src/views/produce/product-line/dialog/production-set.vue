@@ -11,7 +11,7 @@
       <el-row v-for="(item,i) in form.list" :key="i">
         <el-col :span="8">
           <s-form-item>
-            <s-group class="pct90" :data="options" v-model="item.serviceProviderId"></s-group>
+            <s-group class="pct90" :data="options.serviceProvider" v-model="item.serviceProviderId"></s-group>
           </s-form-item>
         </el-col>
         <el-col :span="8">
@@ -38,8 +38,8 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import useState from '@/hooks/use-state/disable-state'
 import _save from '@/api/1486-post-production-config-product-line-production-setting-batch'
+import useOptions from '../hooks/use-options'
 import { Message } from 'element-ui'
 
 export default defineComponent({
@@ -86,13 +86,14 @@ export default defineComponent({
       add() //默认值
     }
 
-    const { options } = useState()
+
+    const options=useOptions()
 
     return {
       add,
       save,
       form,
-      options,
+      options
     }
   },
 })

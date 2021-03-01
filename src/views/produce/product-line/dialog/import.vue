@@ -57,7 +57,7 @@ export default defineComponent({
       upload: '',
     })
 
-    const url = ref(`${process.env.VUE_APP_API_BASE_URL}/product-line/import`)
+    const url = ref(`${process.env.VUE_APP_API_BASE_URL}/production-config/product-line/import`)
 
     const uploadRef = ref(null)
     const fileList = ref([])

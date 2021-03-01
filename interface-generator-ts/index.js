@@ -7,16 +7,17 @@ const getReqBodyOther = require('./req-body-other')
 const getRequestFunction = require('./request-function')
 const writeFile = require('./file')
 
-const { baseURL, token } = config
+const { baseURL, project } = config
 const fetch = require('axios')
 
 
-const getApiDetail = (id) => fetch(`${baseURL}/api/interface/get?token=${token}&id=${id}`)
-const getAllApi = (id) => fetch(`${baseURL}/api/interface/list?token=${token}&project_id=${id}&limit=1000`)
+const getProjectInfo = (token) => fetch(`${baseURL}/api/project/get?token=${token}`)
+const getApiDetail = (token, id) => fetch(`${baseURL}/api/interface/get?token=${token}&id=${id}`)
+const getAllApi = (token, id) => fetch(`${baseURL}/api/interface/list?token=${token}&project_id=${id}&limit=1000`)
 
 
-const createInterface = (id) => {
-    getApiDetail(id).then(response => {
+const createInterface = (token, id, projectInfo) => {
+    getApiDetail(token, id).then(response => {
         const { data, errcode } = response.data
         if (errcode) return
         const baseInfo = getBaseInfo(data)
@@ -29,7 +30,7 @@ const createInterface = (id) => {
             ReqQuery: reqQuery,
             ReqParams: reqParams,
             ReqBody: reqBodyOther
-        })
+        }, projectInfo)
 
         let fileData = ''
 
@@ -44,29 +45,20 @@ const createInterface = (id) => {
         console.log(`文档${id}遇到问题，无法自动生成`)
         console.log(err)
     })
-
 }
 
-const createInterfaceByProject = (id) => {
-    getAllApi(id).then(response => {
-        const { data, errcode } = response.data
+const createInterfaceByProject = (token, id) => {
+    Promise.all([getProjectInfo(token), getAllApi(token, id)]).then(response => {
+        const { data, errcode } = response[1].data
         if (errcode) return
         data.list.forEach(v => {
-            createInterface(v._id)
+            createInterface(token, v._id, response[0].data.data)
         })
     })
 }
 
 
+Object.keys(project).forEach(v => {
+    createInterfaceByProject(project[v], v)
+})
 
-
-const { argv } = process
-
-
-if (argv.includes('project')) {
-    createInterfaceByProject(argv[argv.length - 1])
-} else {
-    createInterface(argv[argv.length - 1])
-}
-
-// node index.js 460  or node index.js project 59
