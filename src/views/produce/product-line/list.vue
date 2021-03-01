@@ -1,10 +1,15 @@
 <template>
   <div>
     <s-simple-table v-model="table.checked" :data="table.data" :cols="table.cols">
-      <s-form slot="form" inline>
+      <s-form :model="form" slot="form" inline>
         <s-form-item label="产品名称" prop="name" />
         <s-form-item label="状态" prop="status" component="s-group" :data="options" />
-        <s-form-item label="售卖渠道" prop="status" component="s-group" :data="options" />
+        <s-form-item label="售卖渠道">
+          <el-cascader :props="{
+            label:'name',
+            value:'id'
+          }" v-model="form.salesChannelIdList" :options="moreOptions.salesChannels"></el-cascader>
+        </s-form-item>
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
           <s-button run="form.reset">重置</s-button>
@@ -28,6 +33,7 @@ import useDialog from '@/hooks/use-dialog'
 import useState from '@/hooks/use-state/disable-state'
 import _setState from '@/api/1414-put-production-config-product-line-status'
 import useSafeParams from '@/hooks/use-router-util/sale-params'
+import useOptions from './hooks/use-options'
 import { Message } from 'element-ui'
 
 export default defineComponent({
@@ -47,6 +53,14 @@ export default defineComponent({
         })
       }
     )
+
+    const form = reactive({
+      name: '',
+      code: '',
+      status: '',
+      businessTypeIdList: [],
+      salesChannelIdList: [],
+    })
 
     const dialog = useDialog({
       uid: 'add',
@@ -130,12 +144,15 @@ export default defineComponent({
       ],
     })
 
+    const moreOptions = useOptions()
     return {
       table,
       dialog,
       importDialog,
       productionSetDialog,
       options,
+      moreOptions,
+      form,
     }
   },
 })
