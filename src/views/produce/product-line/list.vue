@@ -7,8 +7,9 @@
         <s-form-item label="售卖渠道">
           <el-cascader :props="{
             label:'name',
-            value:'id'
-          }" v-model="form.salesChannelIdList" :options="moreOptions.salesChannels"></el-cascader>
+            value:'id',
+            emitPath:false
+          }" v-model="form.salesChannelId" :show-all-levels="false" :options="moreOptions.salesChannels"></el-cascader>
         </s-form-item>
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
@@ -58,8 +59,7 @@ export default defineComponent({
       name: '',
       code: '',
       status: '',
-      businessTypeIdList: [],
-      salesChannelIdList: [],
+      salesChannelId: '',
     })
 
     const dialog = useDialog({

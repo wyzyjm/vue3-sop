@@ -21,14 +21,15 @@ export default () => {
     const options = reactive({
         salesChannels: [],
         businessType: [],
-        serviceProvider: []
+        serviceProvider: [],
+        org: []
     })
 
     Promise.all([getSalesChannels(), getBusinessType({ status: 1, pageSize: 9999 }), getServiceProvider({ pageSize: 9999 })]).then((response) => {
         filterEmptyArray(response[0].data)
         options.salesChannels = response[0].data
         options.businessType = response[1].data.records
-        options.serviceProvider = response[1].data.records
+        options.serviceProvider = response[2].data.records
         getBusinessType.options = options
     })
 

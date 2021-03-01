@@ -11,7 +11,10 @@
       <el-row v-for="(item,i) in form.list" :key="i">
         <el-col :span="8">
           <s-form-item>
-            <s-group class="pct90" :data="options.serviceProvider" v-model="item.serviceProviderId"></s-group>
+            <s-group class="pct90" :props="{
+            label:'basicName',
+            value:'id'
+          }" :data="options.serviceProvider" v-model="item.serviceProviderId"></s-group>
           </s-form-item>
         </el-col>
         <el-col :span="8">
