@@ -5,9 +5,9 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import getTableData from '@/api/1460-get-cust-service-show-config-nodelist-{stageid}'
-import _delete from '@/api/1478-delete-cust-service-show-config-node-{nodeid}'
-import _update from '@/api/1480-post-cust-service-show-config-node-{nodeid}'
+import getTableData from '@/api/1460-get-service-order-cust-service-show-config-nodelist-{stageid}'
+import _delete from '@/api/1478-delete-service-order-cust-service-show-config-node-{nodeid}'
+import _update from '@/api/1480-post-service-order-cust-service-show-config-node-{nodeid}'
 import {
   isEdit,
   createEditRow,

@@ -16,7 +16,7 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import _save from '@/api/1456-post-cust-service-show-config-addnode'
+import _save from '@/api/1456-post-service-order-cust-service-show-config-addnode'
 export default defineComponent({
   props: {
     isEdit: {

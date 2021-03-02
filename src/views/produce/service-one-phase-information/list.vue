@@ -19,11 +19,11 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import setStatus from '@/api/1470-get-cust-service-show-config-{id}-{status}'
+import setStatus from '@/api/1470-get-service-order-cust-service-show-config-{id}-{status}'
 import PhaseList from './components/phase-list'
 import useDialog from '@/hooks/use-dialog'
-import getTableData from '@/api/1440-get-cust-service-show-config'
-import update from '@/api/1466-post-cust-service-show-config-{id}'
+import getTableData from '@/api/1440-get-service-order-cust-service-show-config'
+import update from '@/api/1466-post-service-order-cust-service-show-config-{id}'
 import {
   isEdit,
   createEditRow,
