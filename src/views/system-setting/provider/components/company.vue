@@ -140,7 +140,7 @@
     <!--法人信息-->
     <div class='module-box'>
         <div class="title-box">法人信息</div>
-        <el-form :model="form" ref="form3" :rules="formRules" label-width="140px" class="form-box">
+        <el-form :model="form" ref="form3" :rules="formRules" label-width="140px" class="form-box" @submit.native.prevent>
             <el-form-item label="法人姓名：" prop="legalPerson" class="is-required">
                 <el-input class="w340" v-model="form.legalPerson" placeholder="请输入法人姓名"
                 maxlength="50"
@@ -356,7 +356,9 @@ methods: {
             });
         })
         if (this.form.majorBusiness) {
+            
             this.form.majorBusiness = this.form.majorBusiness.join(',')
+            console.log(this.form.majorBusiness)
         }
         if (flag) {
             if (this.$route.params.pid) { 
@@ -370,6 +372,10 @@ methods: {
                     } else {
                         this.$message.error(res.msg)
                     }
+                }).catch(err => {
+                        console.log(err, '编辑失败')
+                        this.form.majorBusiness = this.form.majorBusiness.split(',')
+                        console.log(this.form.majorBusiness, 999)
                 })
             } else {
                 addProvider(this.form).then((res) => {
@@ -382,6 +388,10 @@ methods: {
                     } else {
                         this.$message.error(res.msg)
                     }
+                }).catch(err => {
+                        console.log(err, '编辑失败')
+                        this.form.majorBusiness = this.form.majorBusiness.split(',')
+                        console.log(this.form.majorBusiness, 999)
                 })
             }
         } else {
@@ -399,7 +409,9 @@ created() {
             this.form.map = 'map val'
             this.form.contactSex = res.data.contactSex ? 1 : 0
             if (res.data.majorBusiness) {
+                
                 this.form.majorBusiness = res.data.majorBusiness.split(',')
+                console.log(this.form.majorBusiness)
             }
             this.citys.val = [
                 this.form.provinceId.toString(),

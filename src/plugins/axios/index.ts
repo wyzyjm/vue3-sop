@@ -48,7 +48,7 @@ instance.interceptors.response.use(
 
 // error
 instance.interceptors.response.use(response => {
-    if (response.data.code !== 'SYS0000') {
+    if (response.data.code !== 'SYS0000' && response.data.code !== '10001') {
         Message({
             type: 'error',
             message: response.data.msg

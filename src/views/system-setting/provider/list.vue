@@ -1,5 +1,6 @@
 <template>
   <div class="box">
+      <!-- <s-dialog  /> -->
     <s-simple-table :data="table.data" :cols="table.cols">
       <div slot="top" class="mt40 mb20">
         <el-button type="primary" @click="toPath()">新增</el-button>
@@ -52,6 +53,7 @@
 import { defineComponent, reactive } from "@vue/composition-api";
 import getProviderList from '@/api/1306-get-frontapi-service-provider-pagelist'
 import setStatus from '@/api/1302-post-frontapi-service-provider-change-status'
+import getProviderScope from '@/api/1416-get-production-config-product-line-search'
 import { category, status, basictype } from "./utils/form-query";
 import { MessageBox } from 'element-ui'
 export default defineComponent({
@@ -97,6 +99,12 @@ export default defineComponent({
         
         });
     }
+    const openDialog = () => {
+        console.log(321)
+        getProviderScope().then(res => {
+            console.log(res)
+        })
+    }
     const toPath = (row) => {
           root.$router.push({
               path: `/system-setting/provider/edit/${row.category ? row.category : 1}/${row.id}`
@@ -123,6 +131,7 @@ export default defineComponent({
         },
         {
           label: "服务商类型",
+          showOverflowTooltip: true,
         //   prop: "category",
           width: "160px",
           prop: ( { row } ) => {
@@ -131,6 +140,7 @@ export default defineComponent({
         },
         {
           label: "合作类型",
+          showOverflowTooltip: true,
         //   prop: "basicType",
           prop: ( { row } ) => {
               return row.basicType == 2 ? '非自营' : '自营'
@@ -138,15 +148,18 @@ export default defineComponent({
         },
         {
           label: "联系人姓名",
-          prop: "contactUsername"
+          prop: "contactUsername",
+          showOverflowTooltip: true,
         },
         {
           label: "联系人手机",
-          prop: "contactPhone"
+          prop: "contactPhone",
+          showOverflowTooltip: true,
         },
         {
           label: "联系人邮箱",
-          prop: "contactEmail"
+          prop: "contactEmail",
+          showOverflowTooltip: true,
         },
         {
           label: "状态",
@@ -181,7 +194,9 @@ export default defineComponent({
                         <el-dropdown-item>
                             <div onClick={() => setState(row.id, 3)}>关闭</div>
                         </el-dropdown-item>
-                        <el-dropdown-item>服务范围</el-dropdown-item>
+                        <el-dropdown-item>
+                            <div onClick={() => openDialog()}>服务范围1</div>
+                        </el-dropdown-item>
                         <el-dropdown-item>合作组织</el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown>
@@ -201,7 +216,9 @@ export default defineComponent({
                         <el-dropdown-item>
                             <div onClick={() => setState(row.id, 3)}>关闭</div>
                         </el-dropdown-item>
-                        <el-dropdown-item>服务范围</el-dropdown-item>
+                        <el-dropdown-item>
+                            <div onClick={() => openDialog()}>服务范围1</div>
+                        </el-dropdown-item>
                         <el-dropdown-item>合作组织</el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown>
@@ -218,7 +235,9 @@ export default defineComponent({
                         <el-dropdown-item>
                             <div onClick={() => setState(row.id, 3)}>关闭</div>
                         </el-dropdown-item>
-                        <el-dropdown-item>服务范围</el-dropdown-item>
+                        <el-dropdown-item>
+                            <div onClick={() => openDialog()}>服务范围1</div>
+                        </el-dropdown-item>
                         <el-dropdown-item>合作组织</el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown>
@@ -232,13 +251,14 @@ export default defineComponent({
                         <el-dropdown-item data-pid="user">
                             <div onClick={() => setState(row.id, 0)}>启用</div>
                         </el-dropdown-item>
-                        <el-dropdown-item>服务范围</el-dropdown-item>
+                        <el-dropdown-item>
+                            <div onClick={() => openDialog()}>服务范围1</div>
+                        </el-dropdown-item>
                         <el-dropdown-item>合作组织</el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown>
                 
             ]
-            console.log(row.basicStatus)
             return [
               <s-button data-pid="user" type="text" onClick={() => toDetail(row)}>
                 查看详情

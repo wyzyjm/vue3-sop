@@ -2,7 +2,7 @@
 <template>
 <div class='staff-box'>
     <div class='module-box'>
-        <div class="title-box">新增员工信息</div>
+        <div class="title-box">{{sid ? '编辑': '新增'}}员工信息</div>
         <el-form :model="form" ref="form" :rules="formRules" label-width="140px" class="form-box">
             <el-form-item label="所属服务商：" prop="sourceId" class="is-required">
                 <el-select
@@ -31,7 +31,7 @@
                 ></el-input>
             </el-form-item>
             <el-form-item label="手机：" prop="mobile" class="is-required">
-                <el-input class="w340" v-model="form.officePhone" placeholder="请输入员工手机"
+                <el-input class="w340" v-model="form.mobile" placeholder="请输入员工手机"
                 ></el-input>
             </el-form-item>
             <el-form-item label="邮箱：" prop="workMail" class="is-required">
@@ -44,24 +44,27 @@
                     placeholder="请选择所属岗位"
                     class="w340"
                 >
-                    <el-option label="测试" value="测试"></el-option>
+                    <el-option 
+                    v-for="(item, idx) in positionArr" :key="idx"
+                    :label="item" :value="item"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="初始化密码：" prop="password">
                 <el-input class="w340" v-model="form.password" placeholder="请输入初始化密码"
                 ></el-input>
             </el-form-item>
-            <el-form-item label="授权角色：" prop="position">
+            <el-form-item label="授权角色：" prop="roleMap">
                 <el-select
-                    v-model="form.position"
+                    v-model="form.roleMap"
                     filterable
                     multiple
                     placeholder="请选择授权角色"
                     class="w340"
+                    @change="changeVal"
                 >
-                    <el-option label="测试" value="测试"></el-option>
-                    <el-option label="测试1" value="测试2"></el-option>
-                    <el-option label="测试2" value="测试1"></el-option>
+                    <el-option
+                    v-for="(item, idx) in roleList" :key="idx"
+                    :label="item.roleGroupName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
         </el-form>
@@ -77,6 +80,10 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import { contactPhoneVaild, contactEmailVaild } from "../provider/utils/form-vaild";
+import addStaff from '@/api/1332-post-frontapi-service-provider-employee-add'
+import editStaff from '@/api/1334-post-frontapi-service-provider-employee-update'
+import getStaff from '@/api/1376-get-frontapi-service-provider-employee-{id}'
+import getRoleList from '@/api/1366-get-common-service-role-group-list'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {},
@@ -85,15 +92,19 @@ data() {
 return {
     form: {
         employeeName: '', // 员工姓名
-        orgId: '', // 机构id
+        orgId: 11, // 机构id
         workMail: '', // 邮箱
         officePhone: '', // 办公电话
         mobile: '', // 手机
         position: '', // 岗位
-        sourceId: '', // 服务商id
+        sourceId: 83, // 服务商id
         password: '', // 密码
         roleMap: {}, // key为角色id，value为角色名称
     },
+    checkRoleObj: {}, // 选中的角色组
+    checkRoleArr: [],
+    roleList: [],
+    positionArr: ['服务商设计师', '服务商制作员', '服务商设计助理'],
     formRules: {
         employeeName: [
             { required: true, message: '请输入员工姓名', trigger: 'blur' },
@@ -111,7 +122,7 @@ return {
         workMail: [
             { validator: contactEmailVaild, trigger: 'blur' }
         ]
-    }
+    },
 };
 },
 //监听属性 类似于data概念
@@ -120,19 +131,80 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
+    changeVal (e) {
+        this.checkRoleArr = e
+        this.roleList.map(v => {
+            e.map(c => {
+                this.checkRoleObj[c] = v.roleGroupName
+            })
+        })
+        console.log(this.checkRoleObj,)
+    },
     handleSave () {
+        console.log(this.form)
+        this.form.roleMap = this.checkRoleObj
+
         this.$refs['form'].validate((valid) => {
             if (valid) {
-                console.log('success')
+                if (this.$route.params.id) {
+                    editStaff(this.form).then(res => {
+                        console.log(res, 999)
+                        if (res.status == 200) {
+                            this.$message.error('编辑员工成功')
+                            this.$router.push({
+                                path: '/system-setting/staff/list'
+                            })
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    }).catch(err => {
+                        console.log(err, '编辑员工失败')
+                        this.form.roleMap = this.checkRoleArr
+                    })
+                } else {
+                    addStaff(this.form).then(res => {
+                        if (res.status == 200) {
+                            this.$message.success('新增员工成功')
+                            this.$router.push({
+                                path: '/system-setting/staff/list'
+                            })
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    }).catch(err => {
+                        console.log(err, '添加员工失败')
+                        this.form.roleMap = this.checkRoleArr
+                    })
+                }
             } else {
                 console.log('error')
             }
         });
+    },
+    getDetail () {
+        getStaff({id: this.sid}).then(res => {
+            this.form = res.data
+            this.checkRoleObj = res.data.roleMap
+            let arr =[] 
+            Object.keys(res.data.roleMap).forEach(key => {
+                arr.push(Number(key))
+            });
+            this.form.roleMap = arr
+        })
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-
+    this.sid = this.$route.params.id
+    if (this.sid) {
+        this.getDetail()
+    }
+    // 获取角色列表
+    getRoleList().then(res => {
+        this.roleList = res.data.records || []
+    }).catch(err => {
+        console.log(err, '获取角色列表失败')
+    })
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
