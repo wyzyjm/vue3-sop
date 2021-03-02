@@ -31,7 +31,7 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import saveConfig from '@/api/1444-post-cust-service-show-config-addconfig'
+import saveConfig from '@/api/1444-post-service-order-cust-service-show-config-addconfig'
 export default defineComponent({
   props: {
     isEdit: {

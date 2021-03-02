@@ -1,7 +1,7 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/123/interface/api/1316
- * 生成日期：Mon Mar 01 2021 15:39:57 GMT+0800 (GMT+08:00)
+ * 生成日期：Tue Mar 02 2021 10:40:41 GMT+0800 (中国标准时间)
  * 生成工具版本：ts-v0.0.2
  * 接口名称：添加组织
  * 创建人：付兵浩
@@ -19,6 +19,7 @@ export interface ReqBody {
   remark:string      /**描述*/
   status:string      /**1启用0禁用*/
   parentId:string    /**一级节点的parentId为0*/
+  sourceId:number    /**服务商id*/
 }
 
 interface _Params extends ReqBody {}

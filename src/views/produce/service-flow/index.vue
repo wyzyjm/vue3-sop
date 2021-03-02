@@ -34,8 +34,7 @@
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import { getTableData } from './service'
-
+import getTableData from '@/api/1482-get-service-order-sevice-business-flow'
 export default defineComponent({
   setup(props, { root }) {
     const table = reactive({

@@ -46,17 +46,20 @@ export default defineComponent({
       status: 1,
       allParentSalesChannelIdList: [],
       parentId: computed(() => {
+        console.log(3);
         return form.allParentSalesChannelIdList[
           form.allParentSalesChannelIdList.length - 1
         ]
       }),
     })
 
-
-
     if (isEdit) {
-      form = { ...form, ...data }
-      form.allParentSalesChannelIdList=JSON.parse(data.allParentIds)
+      form.description=data.description
+      form.code=data.code
+      form.name=data.name
+      form.status=data.status
+      form.id=data.id
+      form.allParentSalesChannelIdList = JSON.parse(data.allParentIds)
     }
 
     const save = (form) => {

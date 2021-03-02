@@ -8,9 +8,9 @@
 import { defineComponent, reactive } from '@vue/composition-api'
 import LinkList from './link-list'
 import useDialog from '@/hooks/use-dialog'
-import getTableData from '@/api/1458-get-cust-service-show-config-stagelist-{custshowconfigid}'
-import _update from '@/api/1472-post-cust-service-show-config-stage-{stageid}'
-import _delete from '@/api/1478-delete-cust-service-show-config-node-{nodeid}'
+import getTableData from '@/api/1458-get-service-order-cust-service-show-config-stagelist-{custshowconfigid}'
+import _update from '@/api/1472-post-service-order-cust-service-show-config-stage-{stageid}'
+import _delete from '@/api/1478-delete-service-order-cust-service-show-config-node-{nodeid}'
 import {
   isEdit,
   createEditRow,
