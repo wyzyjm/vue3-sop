@@ -28,6 +28,7 @@ import getTableData from '@/api/1440-get-service-order-cust-service-show-config'
 import update from '@/api/1466-post-service-order-cust-service-show-config-{id}'
 import useState from '@/hooks/use-state/disable-state'
 import { Message } from 'element-ui'
+import useOptions from './hooks/use-options'
 
 import {
   isEdit,
@@ -83,14 +84,14 @@ export default defineComponent({
         {
           label: '状态',
           prop: ({ row }) => {
-            isEdit(row) ? (
+            return isEdit(row) ? (
               <s-group
                 value={row.status}
                 onInput={(val) => {
                   row.status = val
                 }}
                 data={options}
-              ></s-group>
+              />
             ) : (
               getStateText(row.status)
             )
@@ -99,14 +100,29 @@ export default defineComponent({
         {
           label: '对应服务流程',
           prop: ({ row }) => {
-            return createEditRow(row, 'businessFlowDefName')
+            return isEdit(row) ? (
+              <s-group
+                props={{
+                  props: {
+                    label: 'businessFlowName',
+                    value: 'id',
+                  },
+                }}
+                value={row.businessFlowDefId}
+                onInput={(val) => {
+                  row.businessFlowDefId = val
+                  row.businessFlowDefVersion = moreOptions.businessFlowList.find(v=>v.id===val).version
+                }}
+                data={moreOptions.businessFlowList}
+              />
+            ) : (
+              row.businessFlowDefName
+            )
           },
         },
         {
           label: '流程版本',
-          prop: ({ row }) => {
-            return createEditRow(row, 'businessFlowDefVersion')
-          },
+          prop: 'businessFlowDefVersion',
         },
         {
           label: '操作项',
@@ -138,10 +154,13 @@ export default defineComponent({
       ],
     })
 
+    const moreOptions = useOptions()
+
     return {
       dialog,
       table,
       options,
+      moreOptions,
     }
   },
 })

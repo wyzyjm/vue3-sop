@@ -45,12 +45,7 @@ export default defineComponent({
     const table = reactive({
       data(params) {
         resetEdit()
-        getTableData({ custShowConfigId: props.uid, ...params })
-        return new Promise((r) =>
-          r({
-            list: [{ stageName: new Date().getTime(),id:'9491984894' }],
-          })
-        )
+        return getTableData({ custShowConfigId: props.uid, ...params })
       },
       cols: [
         {
@@ -81,7 +76,7 @@ export default defineComponent({
         {
           label: '未开始显示话术',
           prop: ({ row }) => {
-            return createEditRow(row, 'noStartRetm')
+            return createEditRow(row, 'noStartTerm')
           },
         },
         {
@@ -124,10 +119,7 @@ export default defineComponent({
               >
                 删除
               </s-button>,
-              <s-button
-                type="text"
-                onClick={() => dialog.open({ data: row})}
-              >
+              <s-button type="text" onClick={() => dialog.open({ data: row })}>
                 新增环节
               </s-button>,
             ]

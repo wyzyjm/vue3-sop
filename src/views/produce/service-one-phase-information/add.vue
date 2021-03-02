@@ -5,7 +5,7 @@
         <h2>服务单信息</h2>
         <s-form-item label="服务单呈现名称" :rules="['required']" prop="flowShowName" />
         <s-form-item label="服务单名称编码" :rules="['required']" prop="flowShowCode" />
-        <s-form-item label="流程名称"  class="pct100"  :props="{
+        <s-form-item label="流程名称" class="pct100" :props="{
         label:'businessFlowName',
         value:'id'
       }" component="s-group" :data="options.businessFlowList" :rules="['required:number']" prop="businessFlowDefId" />
@@ -13,10 +13,13 @@
 
       <div class="box mt20">
         <h2>阶段信息</h2>
+        <s-form-item v-if="form.stageGroupDTOList.length===0">
+          <s-button icon="el-icon-circle-plus" type="text" @click="add(0)">添加阶段</s-button>
+        </s-form-item>
         <div v-for="(item,index) in form.stageGroupDTOList" :key="index">
           <s-form-item>
-            <s-button type="primary" @click="add(i)">添加</s-button>
-            <s-button type="primary" @click="del(i)">删除</s-button>
+            <s-button icon="el-icon-circle-plus" type="text" @click="add(index)">继续添加阶段</s-button>
+            <s-button icon="el-icon-remove" type="text" @click="del(index)">删除以下阶段</s-button>
           </s-form-item>
           <s-form-item :prop="'stageGroupDTOList.' + index + '.stageName'" label="阶段名称" :rules="[{ required: true, message: '请输入阶段名称', trigger: 'blur' }]">
             <el-input v-model="item.stageName"></el-input>
@@ -114,20 +117,20 @@ export default defineComponent({
 .service-one-phase-information {
   .box {
     background: #fff;
-    border:1px solid #eee;
+    border: 1px solid #eee;
   }
-  .el-form-item{
-    width:600px;
-    margin-left:auto;
-    margin-right:auto;
+  .el-form-item {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
   }
-  .el-select{
-    width:100%;
+  .el-select {
+    width: 100%;
   }
   h2 {
     font-size: 14px;
-    padding:15px 20px;
-    margin:0 0 20px 0;
+    padding: 15px 20px;
+    margin: 0 0 20px 0;
     border-bottom: 1px solid #eee;
   }
 }

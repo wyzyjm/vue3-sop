@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "api": "node interface-generator-ts/index.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

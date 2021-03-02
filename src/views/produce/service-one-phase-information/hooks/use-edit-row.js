@@ -19,6 +19,7 @@ export const createEditRow = (row, key) => {
 }
 export const saveEdit = (fn) => {
     fn()
+    editId.value=''
 }
 
 export const resetEdit = () => {
