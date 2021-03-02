@@ -26,6 +26,7 @@
                 <el-select
                     v-model="form.majorBusiness"
                     placeholder="请选择主营业务"
+                    multiple
                     class="w340"
                 >
                     <el-option label="工商财税" value="工商财税"></el-option>
@@ -145,7 +146,7 @@
                 maxlength="50"
                 minlength="2"></el-input>
             </el-form-item>
-            <el-form-item label="法人身份证上传：" prop="legalCredentialsNumber" class="is-required">
+            <el-form-item label="法人身份证上传：" prop="legalCredentialsNumber">
                 <upload type="idcard" :param="['idcardFrontUrl', 'idcardBackUrl']" :form="form"></upload>
             </el-form-item>  
         </el-form>
@@ -210,11 +211,12 @@ const basicNameVaild = (rule, value, callback) => {
         name: value,
         id: this.$route.params.pid || '',
     }).then(res => {
-        console.log(res.data)
         // 已存在服务商名称 不可用
         if (!res.data) {
             callback(new Error('公司名称已存在'))
             return false
+        } else {
+            callback()
         }
     }).catch(err => {
         console.log(err, '检查公司名称是否可用error')
@@ -327,11 +329,23 @@ methods: {
       this.form.distinctId = code[2];
     },
     cancel () {
-        this.$router.push({
-            path: '/system-setting/provider/list'
+        this.$confirm('点击取消，信息将不做保存, 是否确定取消?', '取消', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            this.$router.push({
+                path: '/system-setting/provider/list'
+            })
+        }).catch(() => {
+
         })
     },
     handleSave () {
+        if (!this.form.businessLicenseUrl) {
+            this.$message.error('请上传营业执照')
+            return false
+        }
         console.log(this.form)
         let flag = true
         this.formArr.map(v => {
@@ -341,12 +355,15 @@ methods: {
                 }
             });
         })
+        if (this.form.majorBusiness) {
+            this.form.majorBusiness = this.form.majorBusiness.join(',')
+        }
         if (flag) {
             if (this.$route.params.pid) { 
                 editProvider(this.form).then((res) => {
                     console.log(res)
                     if (res.status == 200) {
-                        this.$message.success(res.msg)
+                        this.$message.success('服务商信息修改成功！')
                         this.$router.push({
                             path: '/system-setting/provider/list'
                         })
@@ -358,7 +375,7 @@ methods: {
                 addProvider(this.form).then((res) => {
                     console.log(res)
                     if (res.status == 200) {
-                        this.$message.success(res.msg)
+                        this.$message.success('服务商信息保存成功！')
                         this.$router.push({
                             path: '/system-setting/provider/list'
                         })
@@ -381,6 +398,9 @@ created() {
             this.form = res.data
             this.form.map = 'map val'
             this.form.contactSex = res.data.contactSex ? 1 : 0
+            if (res.data.majorBusiness) {
+                this.form.majorBusiness = res.data.majorBusiness.split(',')
+            }
             this.citys.val = [
                 this.form.provinceId.toString(),
                 this.form.cityId.toString(),

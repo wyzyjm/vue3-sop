@@ -87,7 +87,7 @@ export default defineComponent({
         }).then(() => {
             return setStatus({id, status}).then(({ msg, status }) => {
                 if (status == 200) {
-                    root.$message.success(msg)
+                    root.$message.success(title + '成功')
                 } else {
                     root.$message.error(msg)
                 }
@@ -156,7 +156,7 @@ export default defineComponent({
               } else if (row.basicStatus == 1) {
                   return '暂停'
               } else if (row.basicStatus == 2) {
-                  return '清退'
+                  return '清退中'
               } else if (row.basicStatus == 3) {
                   return '关闭'
               }
