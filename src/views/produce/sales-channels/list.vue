@@ -36,7 +36,7 @@ export default defineComponent({
 
     const dialog = useDialog({
       uid: 'add-service-type',
-      dynamicTitle: (data) => (data.isEdit ? '编辑业务类型' : '新增业务类型'),
+      dynamicTitle: (data) => (data.isEdit ? '编辑售卖渠道' : '新增售卖渠道'),
       width: '500px',
       component: require('./dialog/add-sales-channels'),
     })

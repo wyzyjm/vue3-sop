@@ -20,7 +20,7 @@
  * files:[{ name:'',url:''}]
  *
  */
-import request from '@/plugins/axios/index.js'
+import request from 'axios'
 
 export default {
   props: {
@@ -76,6 +76,8 @@ export default {
       )
       params.append('allowFileSizeStr', this.size)
       request({
+        headers:{'Content-Type':'multipart/form-data'},
+        method:'post',
         url: action,
         onUploadProgress: (progressEvent) => {
           const percent =
