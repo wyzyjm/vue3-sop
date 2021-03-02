@@ -24,6 +24,6 @@ export default (params: _Params)=> {
     return request({
         url:'/common-service/frontApi/service-provider/change-status',
         method:'POST',
-        data:params
+        params:params
     })
 }

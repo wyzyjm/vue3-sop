@@ -4,7 +4,7 @@
     <!--个人信息-->
     <div class='module-box'>
         <div class="title-box">个人信息</div>
-        <el-form :model="form" ref="form1" :rules="formRules" label-width="140px" class="form-box">
+        <el-form :model="form" ref="form" :rules="formRules" label-width="140px" class="form-box">
             <el-form-item label="联系人姓名：" prop="contactUsername" class="is-required">
                 <el-input class="w340" v-model="form.contactUsername" placeholder="请输入联系人姓名"></el-input>
             </el-form-item>
@@ -57,7 +57,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-// import { contactPhoneVaild, contactEmailVaild } from "../utils/form-vaild";
+import { contactPhoneVaild, contactEmailVaild } from "../utils/form-vaild";
 import Upload from "./upload";
 import addProvider from '@/api/1296-post-frontapi-service-provider-add'
 import editProvider from '@/api/1304-post-frontapi-service-provider-update'
@@ -116,12 +116,12 @@ return {
             { required: true, message: '请输入联系人姓名', trigger: 'blur' },
             { min: 2, max: 100, message: '长度在 2 到 50 个字符', trigger: 'blur' }
         ],
-        // contactPhone: [
-        //     { validator: contactPhoneVaild, trigger: 'blur' }
-        // ],
-        // contactEmail: [
-        //     { validator: contactEmailVaild, trigger: 'blur' }
-        // ],
+        contactPhone: [
+            { validator: contactPhoneVaild, trigger: 'blur' }
+        ],
+        contactEmail: [
+            { validator: contactEmailVaild, trigger: 'blur' }
+        ],
         legalCredentialsType: [
             { required: true, message: '请选择证件类型', trigger: 'change' }
         ], 
@@ -139,54 +139,66 @@ watch: {},
 //方法集合
 methods: {
     cancel () {
-        this.$router.push({
-            path: '/system-setting/provider/list'
+        this.$confirm('点击取消，信息将不做保存, 是否确定取消?', '取消', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            this.$router.push({
+                path: '/system-setting/provider/list'
+            })
+        }).catch(() => {
+
         })
     },
     handleSave () {
-        // console.log(this.$refs['form'].validate())
-        this.$refs['form1'].validate((valid) => {
-          if (valid) {
-            if (this.$route.params.pid) { 
-                editProvider(this.form).then((res) => {
-                    console.log(res)
-                    if (res.status == 200) {
-                        this.$message.success(res.msg)
-                        this.$router.push({
-                            path: '/system-setting/provider/list'
-                        })
-                    } else {
-                        this.$message.error(res.msg)
-                    }
-                })
+        if (!this.form.idcardFrontUrl || !this.form.idcardBackUrl) {
+            this.$message.error('请上传个人证件')
+            return false
+        }
+        this.$refs['form'].validate((valid) => {
+            if (valid) {
+                if (this.$route.params.pid) { 
+                    editProvider(this.form).then((res) => {
+                        console.log(res)
+                        if (res.status == 200) {
+                            this.$message.success('服务商信息修改成功！')
+                            this.$router.push({
+                                path: '/system-setting/provider/list'
+                            })
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    })
+                } else {
+                    addProvider(this.form).then((res) => {
+                        console.log(res)
+                        if (res.status == 200) {
+                            this.$message.success('服务商信息保存成功！')
+                            this.$router.push({
+                                path: '/system-setting/provider/list'
+                            })
+                        } else {
+                            this.$message.error(res.msg)
+                        }
+                    })
+                }
             } else {
-                addProvider(this.form).then((res) => {
-                    console.log(res)
-                    if (res.status == 200) {
-                        this.$message.success(res.msg)
-                        this.$router.push({
-                            path: '/system-setting/provider/list'
-                        })
-                    } else {
-                        this.$message.error(res.msg)
-                    }
-                })
+                console.log('error form submit')
             }
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
         });
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-    getProviderDetail({id: this.$route.params.pid}).then(res => {
-        this.form = res.data
-        this.form.contactSex = res.data ? 1 : 0 
-    }).catch(err => {
-        console.log(err, '获取详情失败')
-    })
+    if (this.$route.params.pid) {
+        getProviderDetail({id: this.$route.params.pid}).then(res => {
+            this.form = res.data
+            this.form.contactSex = res.data ? 1 : 0 
+        }).catch(err => {
+            console.log(err, '获取详情失败')
+        })
+    }
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {

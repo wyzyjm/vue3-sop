@@ -1,5 +1,6 @@
 <!-- 上传 -->
 <template>
+    <div>
     <!--身份证上传-->
     <div class="file-box" v-if="type == 'idcard'">
         <div class="item-upload" v-loading="idCardLoading.idcardFrontUrl">
@@ -45,7 +46,7 @@
         <div class="item-exp">
             <i class="iconfont iconcredentials_icon icon1"></i>
             <span>示例图</span>
-            <i class="iconfont iconfangdajing icon2"></i>
+            <i class="iconfont iconfangdajing icon2" @click="showView()"></i>
         </div>
         <p style="width:100%;height:1px;clear:both;"></p>
         <p class="item-tips">
@@ -79,11 +80,15 @@
         <div class="item-exp">
             <i class="iconfont iconcredentials_icon icon1"></i>
             <span>示例图</span>
-            <i class="iconfont iconfangdajing icon2"></i>
+            <i class="iconfont iconfangdajing icon2" @click="showView()"></i>
         </div>
         <p style="width:100%;height:1px;clear:both;"></p>
         <p class="item-tips">只支持jpeg，jpg，png格式，最大为5MB</p>
-    </div>    
+    </div>  
+    <div style="width:0;height:0;z-index:9; position:fixed;left:10000px;top:10000px;">
+        <el-image ref="showImg" :preview-src-list="pic[type]"></el-image>
+    </div>  
+    </div>
 </template>
 
 <script>
@@ -101,7 +106,13 @@ return {
     idCardLoading: {
         idcardFrontUrl: false,
         idcardBackUrl: false
-    }
+    },
+    pic: {
+        businessLicenseUrl: [require('@/assets/yyzz.png')],
+        registrationUrl: [require('@/assets/swdj.png')],
+        idcard: [require('@/assets/sfzz.png'), require('@/assets/sfzf.png')],
+    },
+    curPic: '',
 };
 },
 //监听属性 类似于data概念
@@ -110,6 +121,11 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
+    showView () {
+        // this.curPic = arr[0]
+        // this.curPicArr = arr
+        this.$refs['showImg'].showViewer = true
+    },
     // 图片上传
     uploadImg(data, type) {
       console.log(type, '图片参数')
@@ -151,7 +167,6 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
