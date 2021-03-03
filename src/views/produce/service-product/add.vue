@@ -20,7 +20,7 @@
       </div>
       <div class="box mt20">
         <h2>属性信息</h2>
-        <div>
+        <div class="tc">
           <s-button type="text" @click="addOtherProp">新增其他属性</s-button>
           <s-button type="text" @click="selectOtherProp">选择其他属性</s-button>
         </div>

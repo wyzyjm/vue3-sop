@@ -129,7 +129,7 @@ export default defineComponent({
         },
         {
           label: '操作项',
-          width:'160px',
+          width:'180px',
           prop: ({ row }) => {
             return [
               <s-button type="text" onClick={() => setState(row)}>
