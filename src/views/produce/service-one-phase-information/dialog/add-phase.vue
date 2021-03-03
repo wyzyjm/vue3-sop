@@ -1,10 +1,9 @@
 <template>
   <div>
-    {{form}}
     <s-form :model="form" label-width="110px" @submit="save">
       <s-form-item label="阶段名称" :rules="['required']" prop="stageName" />
       <s-form-item label="阶段编码" :rules="['required']" prop="stageCode" />
-      <s-form-item label="展示顺序" :rules="['required']" prop="orderSort" />
+      <s-form-item label="展示顺序" :min="0" component="el-input-number" :rules="['required:number']" prop="orderSort" />
       <s-form-item label="未开始术语" :rules="['required']" prop="noStartTerm" />
       <s-form-item label="进行中术语" :rules="['required']" prop="progressTerm" />
       <s-form-item label="已完成术语" :rules="['required']" prop="finishedTerm" />
@@ -17,7 +16,7 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import _save from '@/api/1448-post-service-order-cust-service-show-config-addstage'
+import _save from '@/api/1448-post-service-order-cust-service-show-config-{showconfigid}-addstage'
 export default defineComponent({
   props: {
     isEdit: {
@@ -27,7 +26,7 @@ export default defineComponent({
       type: Object,
     },
   },
-  setup({ isEdit, data }, { root, emit }) {
+  setup({ data }, { root, emit }) {
     let form = reactive({
       stageName: '',
       stageCode: '',
@@ -36,11 +35,9 @@ export default defineComponent({
       progressTerm: '',
       finishedTerm: '',
     })
-    if (isEdit) {
-      form = { ...form, ...data }
-    }
 
     const save = (form) => {
+      form.showConfigId=data.id
       return _save(form).then(() => {
         console.log(data)
         root.$store.commit('table/update', {

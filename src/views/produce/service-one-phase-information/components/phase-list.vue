@@ -10,7 +10,7 @@ import LinkList from './link-list'
 import useDialog from '@/hooks/use-dialog'
 import getTableData from '@/api/1458-get-service-order-cust-service-show-config-stagelist-{custshowconfigid}'
 import _update from '@/api/1472-post-service-order-cust-service-show-config-stage-{stageid}'
-import _delete from '@/api/1478-delete-service-order-cust-service-show-config-node-{nodeid}'
+import _delete from '@/api/1474-delete-service-order-cust-service-show-config-stage-{stageid}'
 import {
   isEdit,
   createEditRow,
@@ -22,6 +22,9 @@ import {
 export default defineComponent({
   props: {
     uid: {
+      required: true,
+    },
+    businessFlowDefId: {
       required: true,
     },
   },
@@ -42,6 +45,7 @@ export default defineComponent({
       })
     }
 
+
     const table = reactive({
       data(params) {
         resetEdit()
@@ -51,7 +55,12 @@ export default defineComponent({
         {
           type: 'expand',
           prop: ({ row }) => {
-            return <LinkList uid={row.id} />
+            return (
+              <LinkList
+                uid={row.id}
+                businessFlowDefId={props.businessFlowDefId}
+              />
+            )
           },
         },
         {
@@ -70,7 +79,18 @@ export default defineComponent({
         {
           label: '显示顺序',
           prop: ({ row }) => {
-            return createEditRow(row, 'orderSort')
+            return isEdit(row) ? (
+              <el-input-number
+                class="w160"
+                min={0}
+                value={row.orderSort}
+                onInput={(val) => {
+                  row.orderSort = val
+                }}
+              />
+            ) : (
+              row.orderSort
+            )
           },
         },
         {
@@ -100,6 +120,7 @@ export default defineComponent({
                 onClick={() =>
                   isEdit(row)
                     ? saveEdit(() => {
+                        row.stageId = row.id
                         return _update(row).then(() => {
                           root.$store.commit('table/update', {
                             _uid: props.uid,
@@ -114,12 +135,20 @@ export default defineComponent({
               <s-button
                 type="text"
                 onClick={() => {
-                  deleteNode({ nodeId: row.id })
+                  deleteNode({ stageId: row.id })
                 }}
               >
                 删除
               </s-button>,
-              <s-button type="text" onClick={() => dialog.open({ data: row })}>
+              <s-button
+                type="text"
+                onClick={() =>
+                  dialog.open({
+                    data: row,
+                    businessFlowDefId: props.businessFlowDefId,
+                  })
+                }
+              >
                 新增环节
               </s-button>,
             ]

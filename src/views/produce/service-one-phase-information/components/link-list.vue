@@ -8,6 +8,8 @@ import { defineComponent, reactive } from '@vue/composition-api'
 import getTableData from '@/api/1460-get-service-order-cust-service-show-config-nodelist-{stageid}'
 import _delete from '@/api/1478-delete-service-order-cust-service-show-config-node-{nodeid}'
 import _update from '@/api/1480-post-service-order-cust-service-show-config-node-{nodeid}'
+import getBusinessflownodelist from '@/api/1512-get-service-order-cust-service-show-config-getbusinessflownodelist-{businessflowdefid}'
+
 import {
   isEdit,
   createEditRow,
@@ -20,6 +22,9 @@ export default defineComponent({
     uid: {
       default: 0,
     },
+    businessFlowDefId: {
+      required: true,
+    },
   },
   setup(props, { root }) {
     const deleteNode = (params) => {
@@ -29,16 +34,19 @@ export default defineComponent({
         })
       })
     }
+    const options = reactive({
+      businessFlowDefList: [],
+    })
 
+    getBusinessflownodelist({
+      businessFlowDefId: props.businessFlowDefId,
+    }).then((response) => {
+      options.businessFlowDefList = response.data
+    })
     const table = reactive({
       data(params) {
         resetEdit()
-        getTableData({ custShowConfigId: props.uid, ...params })
-        return new Promise((r) =>
-          r({
-            list: [{ nodeName: new Date().getTime(), id: 'r2r32r23' }],
-          })
-        )
+        return getTableData({ stageId: props.uid, ...params })
       },
       cols: [
         {
@@ -76,6 +84,28 @@ export default defineComponent({
           label: '显示文档',
           prop: ({ row }) => {
             return createEditRow(row, 'showDocumentFileName')
+          },
+        },
+        {
+          label: '关联服务环节',
+          prop: ({ row }) => {
+            return isEdit(row) ? (
+              <s-group
+                value={row.showContentCode}
+                onInput={(val) => {
+                  row.showContentCode = val
+                }}
+                data={options.businessFlowDefList}
+                props={{
+                  props: {
+                    label: 'businessFlowNodeName',
+                    value: 'businessFlowNodeCode',
+                  },
+                }}
+              />
+            ) : (
+              row.showContentCode
+            )
           },
         },
         {

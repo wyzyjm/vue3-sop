@@ -21,14 +21,14 @@
           <s-form-item>
             <el-cascader :props="{
             label:'orgName',
-            value:'orgId',
+            value:'id',
             emitPath:false
-          }" v-model="form.productionOrganizationId" :show-all-levels="false" :options="item.org"></el-cascader>
+          }" v-model="item.productionOrganizationId" @change="productionOrganizationChange(item,$event)" :show-all-levels="false" :options="item.org"></el-cascader>
           </s-form-item>
         </el-col>
         <el-col :span="8">
           <s-form-item>
-            <s-input class="pct90" v-model="item.shareRatio"></s-input>
+            <el-input-number :precision="0" :min="1" class="pct90" v-model="item.shareRatio"></el-input-number>
           </s-form-item>
         </el-col>
       </el-row>
@@ -49,17 +49,25 @@ import _save from '@/api/1486-post-production-config-product-line-production-set
 import getOrg from '@/api/1320-get-frontapi-service-provider-org-get-by-providerid'
 import useOptions from '../hooks/use-options'
 import { Message } from 'element-ui'
-
+function filterEmptyArray(arr) {
+  if (!Array.isArray(arr)) return
+  arr.forEach(function (v) {
+    if (v.children.length === 0) {
+      v.children = null
+    } else {
+      filterEmptyArray(v.children)
+    }
+  })
+}
 export default defineComponent({
   props: {
-    isEdit: {
-      default: false,
-    },
     data: {
-      type: Object,
+      type: Array,
     },
   },
-  setup({ isEdit, data }, { emit, root }) {
+  setup({ data }, { emit, root }) {
+    const options = useOptions()
+
     const item = {
       serviceProviderId: '',
       serviceProvider: '',
@@ -70,18 +78,48 @@ export default defineComponent({
     }
 
     let form = reactive({
-      productLineId: '',
+      productLineIdList: [],
       list: [],
     })
 
     const serviceProviderChange = (item, providerId) => {
+      // 清空生产组织
       item.productionOrganizationId = ''
+      //赋值服务商名称
+      item.serviceProvider = options.serviceProvider.find(
+        (v) => v.id === providerId
+      ).basicName
       getOrg({ providerId }).then((response) => {
-        item.org = response
+        filterEmptyArray(response.data.children)
+        item.org = [response.data]
       })
     }
 
+    const findProductionOrganizationName = (arr, id, name) => {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].id === id) {
+          return arr[i].orgName
+        }
+
+        if (arr[i].children && arr[i].children.length) {
+         return findProductionOrganizationName(arr[i].children, id)
+        }
+      }
+    }
+
+    const productionOrganizationChange = (item, id) => {
+      item.productionOrganization = findProductionOrganizationName(item.org, id)
+      console.log(1, item, id)
+    }
+
     const save = (form) => {
+      // console.log(222,form)
+      // const params = JSON.stringify(JSON.parse(form))
+
+      // params.list.forEach((v) => {
+      //   delete v.org
+      // })
+
       return _save(form).then(() => {
         Message({
           message: '保存成功！',
@@ -95,14 +133,9 @@ export default defineComponent({
     const add = () => {
       form.list.push({ ...item })
     }
-
-    if (isEdit) {
-      form.productLineId = data.id
-    } else {
-      add() //默认值
-    }
-
-    const options = useOptions()
+    console.log(data)
+    add()
+    form.productLineIdList = data.map((v) => v.id)
 
     return {
       add,
@@ -110,6 +143,7 @@ export default defineComponent({
       form,
       options,
       serviceProviderChange,
+      productionOrganizationChange,
     }
   },
 })

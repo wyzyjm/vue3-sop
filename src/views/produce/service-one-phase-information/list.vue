@@ -66,7 +66,7 @@ export default defineComponent({
       cols: [
         {
           type: 'expand',
-          prop: ({ row }) => <PhaseList uid={row.id} />,
+          prop: ({ row }) => <PhaseList uid={row.id} businessFlowDefId={row.businessFlowDefId} />,
         },
         {
           showOverflowTooltip: true,
@@ -111,7 +111,9 @@ export default defineComponent({
                 value={row.businessFlowDefId}
                 onInput={(val) => {
                   row.businessFlowDefId = val
-                  row.businessFlowDefVersion = moreOptions.businessFlowList.find(v=>v.id===val).version
+                  row.businessFlowDefVersion = moreOptions.businessFlowList.find(
+                    (v) => v.id === val
+                  ).version
                 }}
                 data={moreOptions.businessFlowList}
               />

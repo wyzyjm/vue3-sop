@@ -19,7 +19,7 @@
       <div slot="top" class="mb20">
         <el-button type="primary" @click="dialog.open">新增</el-button>
         <el-button type="primary" @click="importDialog.open">导入</el-button>
-        <el-button :disabled="table.checked.length===0" type="primary" @click="productionSetDialog.open">生产设置</el-button>
+        <el-button :disabled="table.checked.length===0" type="primary" @click="productionSetDialog.open({data:table.checked})">生产设置</el-button>
       </div>
     </s-simple-table>
     <s-dialog v-bind="dialog" @close="dialog.close" />
@@ -106,7 +106,7 @@ export default defineComponent({
         },
         {
           label: '售卖渠道',
-          prop: 'salesChannelName',
+          prop: 'completeSalesChannelName',
         },
         {
           label: '业务类型',
@@ -126,9 +126,7 @@ export default defineComponent({
             return [
               <s-button
                 type="text"
-                onClick={() =>
-                  productionSetDialog.open({ data: row, isEdit: true })
-                }
+                onClick={() => productionSetDialog.open({ data: [row] })}
               >
                 生产设置
               </s-button>,
