@@ -1,7 +1,7 @@
 <template>
   <div>
     <s-simple-table v-model="table.checked" :data="table.data" :cols="table.cols">
-      <s-form :model="form" slot="form" inline>
+      <s-form :model="form" slot="form" inline @reset="()=>{form.salesChannelId=''}" >
         <s-form-item label="产品名称" prop="name" />
         <s-form-item label="状态" prop="status" component="s-group" :data="options" />
         <s-form-item label="售卖渠道">

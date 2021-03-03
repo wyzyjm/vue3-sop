@@ -24,7 +24,7 @@ export default defineComponent({
       },
       (row) => {
         row.status = 1 ^ row.status
-        return _update(row).then(() => {
+        return _update({ id: row.id, status: row.status }).then(() => {
           Message({
             type: 'success',
             message: '操作成功！',
@@ -46,14 +46,18 @@ export default defineComponent({
       cols: [
         {
           type: 'expand',
-          prop: ({ row }) => (
-            <s-simple-table
-              page={false}
-              uid={row.id}
-              data={row.children}
-              cols={table.cols}
-            />
-          ),
+          prop: ({ row }) => {
+            return row.children && row.children.length ? (
+              <s-simple-table
+                page={false}
+                uid={row.id}
+                data={row.children}
+                cols={table.cols}
+              />
+            ) : (
+              ''
+            )
+          },
         },
         {
           showOverflowTooltip: true,

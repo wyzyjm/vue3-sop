@@ -107,6 +107,9 @@ export default {
 			// 如果挂载到table下面，触发table下面相应的处理事件
 			if (this.TABLE_PROVIDE) {
 				this.TABLE_PROVIDE.formInit(query)
+				Object.keys(query).forEach(v=>{
+					this.setModel(v,query[v])
+				})
 			}
 		}
 	},

@@ -38,6 +38,7 @@ export default {
     const props = { ...this.$attrs }
     const on = { ...this.$listeners }
     props['destroy-on-close'] = true
+    props['close-on-click-modal'] = false
     props['visible'] = this.visible
 
 

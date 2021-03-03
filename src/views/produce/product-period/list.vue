@@ -3,7 +3,10 @@
     <s-dialog v-bind="dialog" @close="dialog.close" />
     <s-simple-table v-model="table.checked" :data="table.data" :cols="table.cols">
       <s-form slot="form" inline>
-        <s-form-item label="状态名称" prop="name" />
+        <s-form-item label="服务产品名称" prop="serviceProductName" />
+        <!-- <s-form-item label="产品线" prop="name" /> -->
+        <s-form-item label="创建时间" prop="date" value-format="yyyy-MM-dd hh:mm:ss"	 component="el-date-picker" type="datetimerange" />
+        <s-form-item label="服务产品编码" prop="serviceProductCode" />
         <!-- <s-form-item label="状态" prop="status" component="s-group" :data="options" /> -->
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
@@ -32,12 +35,21 @@ export default defineComponent({
     })
 
     const table = reactive({
-      checked:[],
-      data: getTableData,
+      checked: [],
+      data: (params) => {
+        try {
+          params.serviceProductCreateTimeFrom = params.date[0]
+          params.serviceProductCreateTimeTo = params.date[1]
+          delete params.date
+        } catch (err){
+          console.log(err);
+        }
+        return getTableData(params)
+      },
       cols: [
         {
-          type:'checkbox',
-          width:'44px'
+          type: 'checkbox',
+          width: '44px',
         },
         {
           showOverflowTooltip: true,
@@ -50,7 +62,7 @@ export default defineComponent({
         },
         {
           label: '服务产品分类',
-          prop:'serviceProductType',
+          prop: 'serviceProductType',
         },
         {
           label: '创建时间',

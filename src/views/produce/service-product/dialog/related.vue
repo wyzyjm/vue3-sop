@@ -10,12 +10,12 @@
       <el-row v-for="(item,i) in form.relatedMappingList" :key="i">
         <el-col :span="12">
           <s-form-item>
-            <s-group class="pct90" :data="options" v-model="item.serviceProviderId"></s-group>
+            <s-input class="pct90" v-model="item.relatedGoodsName"></s-input>
           </s-form-item>
         </el-col>
         <el-col :span="12">
           <s-form-item>
-            <s-group class="pct90" :data="options" v-model="item.productionOrganizationId"></s-group>
+            <s-input class="pct90" v-model="item.relatedGoodsCode"></s-input>
           </s-form-item>
         </el-col>
       </el-row>
@@ -32,33 +32,34 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import useState from '@/hooks/use-state/disable-state'
 import _save from '@/api/1508-post-production-config-service-product-related-mapping--batch'
+import { Message } from 'element-ui'
+
 export default defineComponent({
   props: {
-    isEdit: {
-      default: false,
-    },
     data: {
       type: Object,
     },
   },
-  setup({ isEdit, data },{emit}) {
+  setup({ data }, { emit, root }) {
     const item = {
       relatedGoodsName: '',
       relatedGoodsCode: '',
     }
 
     let form = reactive({
-      serviceProductId: isEdit ? data.id : undefined,
+      serviceProductId: data.id,
       relatedMappingList: [],
     })
 
     const save = (form) => {
-      return _save(form).then(({ msg }) => {
-        console.log(msg)
+      return _save(form).then(() => {
+        Message({
+          message: '保存成功！',
+          type: 'success',
+        })
         emit('close')
-        
+        root.$store.commit('table/update')
       })
     }
 
@@ -66,19 +67,12 @@ export default defineComponent({
       form.relatedMappingList.push({ ...item })
     }
 
-    if (isEdit) {
-      form = { ...form, ...data }
-    } else {
-      add() //默认值
-    }
-
-    const { options } = useState()
+    add()
 
     return {
       add,
       save,
       form,
-      options,
     }
   },
 })

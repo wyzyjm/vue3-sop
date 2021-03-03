@@ -7,7 +7,7 @@
       <s-form-item label="进行中显示状态" :rules="['required']" prop="progressStatusName" />
       <s-form-item label="进行中显示话述" :rules="['required']" prop="progressTerm" />
       <s-form-item label="显示编辑内容" :rules="['required']" prop="showContentCode" />
-      <s-form-item label="关联服务环节" :rules="['required:array']" component="s-group" :props="{label:'businessFlowNodeName',value:'businessFlowNodeCode'}" :data="options.businessFlowDefList" prop="businessNodeIds" multiple />
+      <s-form-item label="关联服务环节" :rules="['required:array']" component="s-group" :props="{label:'businessFlowNodeName',value:'businessFlowNodeCode'}" :data="options.businessFlowDefList" prop="businessNodeIdsArray" multiple />
       <!-- <s-form-item label="显示文档" :rules="['required']" prop="showDocumentFileId" /> -->
       <s-form-item>
         <s-button @click="$emit('close')">取消</s-button>
@@ -41,7 +41,7 @@ export default defineComponent({
       progressTerm: '',
       showContentCode: '',
       showDocumentFileId: '',
-      businessNodeIds:[]
+      businessNodeIdsArray:[]
     })
 
     const options = reactive({

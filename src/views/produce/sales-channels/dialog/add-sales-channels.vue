@@ -4,7 +4,7 @@
       <s-form-item label="渠道名称" :rules="['required']" prop="name" />
       <s-form-item label="渠道编码" :rules="['required']" v-if="isEdit" component="s-text" :content="form.code" prop="code" />
       <s-form-item label="渠道编码" :rules="['required']" v-else prop="code" />
-      <s-form-item label="选择上级渠道">
+      <s-form-item :rules="allParentSalesChannelIdListRule" label="选择上级渠道" prop="allParentSalesChannelIdList">
         <el-cascader :props="{
             label:'name',
             value:'id',
@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive, computed } from '@vue/composition-api'
+import { defineComponent, reactive, computed, ref } from '@vue/composition-api'
 import useState from '@/hooks/use-state/disable-state'
 import _save from '@/api/1430-post-production-config-sales-channel'
 import _update from '@/api/1436-put-production-config-sales-channel'
@@ -46,7 +46,6 @@ export default defineComponent({
       status: 1,
       allParentSalesChannelIdList: [],
       parentId: computed(() => {
-        console.log(3);
         return form.allParentSalesChannelIdList[
           form.allParentSalesChannelIdList.length - 1
         ]
@@ -54,13 +53,22 @@ export default defineComponent({
     })
 
     if (isEdit) {
-      form.description=data.description
-      form.code=data.code
-      form.name=data.name
-      form.status=data.status
-      form.id=data.id
+      form.description = data.description
+      form.code = data.code
+      form.name = data.name
+      form.status = data.status
+      form.id = data.id
       form.allParentSalesChannelIdList = JSON.parse(data.allParentIds)
     }
+
+    const validate = (rule, value, callback) => {
+      if (isEdit && Array.isArray(value) && value.includes(form.id)) {
+        callback(new Error('上级渠道中已包含当前渠道，请重新选择！'))
+      } else {
+        callback()
+      }
+    }
+    const allParentSalesChannelIdListRule = ref([{ validator: validate }])
 
     const save = (form) => {
       return (isEdit ? _update(form) : _save(form)).then(() => {
@@ -81,6 +89,7 @@ export default defineComponent({
       form,
       options,
       moreOptions,
+      allParentSalesChannelIdListRule,
     }
   },
 })

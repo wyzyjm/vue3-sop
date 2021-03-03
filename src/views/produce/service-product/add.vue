@@ -1,29 +1,33 @@
 <template>
-  <div>
+  <div class="service-one-phase-information">
     <s-form :model="form" label-width="130px" @submit="save">
-      <h2>基本信息</h2>
-      <s-form-item label="服务产品名称" prop="name" :rules="['required']" />
-      <s-form-item label="服务产品编号" prop="code" :rules="['required']">
-        <el-radio-group v-model="form.code">
-          <el-radio label="0">随机生成</el-radio>
-          <el-radio label="1">自定义编号
-            <el-input v-model="form.code"></el-input>
-          </el-radio>
-        </el-radio-group>
-      </s-form-item>
-      <s-form-item label="服务产品类型" prop="type" :rules="['required']" component="s-group" :data="options.type" />
-      <s-form-item label="单位" prop="unit" :rules="['required']" component="s-group" :data="options.unit" />
-      <s-form-item label="优先级" prop="name" :rules="['required']" />
-      <s-form-item label="业务类型" prop="type" component="s-group" :data="options.businessType" />
-      <s-form-item label="服务内容" prop="name" type="textarea" />
-      <h2>属性信息</h2>
-      <div>
-        <s-button type="text" @click="addOtherProp">新增其他属性</s-button>
-        <s-button type="text" @click="selectOtherProp">选择其他属性</s-button>
+      <div class="box">
+        <h2>基本信息</h2>
+        <s-form-item label="服务产品名称" prop="name" :rules="['required']" />
+        <s-form-item label="服务产品编号" prop="code" :rules="['required']">
+          <el-radio-group v-model="form.code">
+            <el-radio label="0">随机生成</el-radio>
+            <el-radio label="1">自定义编号
+              <el-input v-model="form.code"></el-input>
+            </el-radio>
+          </el-radio-group>
+        </s-form-item>
+        <s-form-item label="服务产品类型" prop="type" :rules="['required']" component="s-group" :data="options.type" />
+        <s-form-item label="单位" prop="unit" :rules="['required']" component="s-group" :data="options.unit" />
+        <s-form-item label="优先级" prop="name" :rules="['required']" />
+        <s-form-item label="业务类型" prop="type" component="s-group" :data="options.businessType" />
+        <s-form-item label="服务内容" prop="name" type="textarea" />
       </div>
+      <div class="box mt20">
+        <h2>属性信息</h2>
+        <div class="tc">
+          <s-button type="text" @click="addOtherProp">新增其他属性</s-button>
+          <s-button type="text" @click="selectOtherProp">选择其他属性</s-button>
+        </div>
 
-      <div v-for="item in form.propertyList" :key="item.id">
-        <s-form-item :label="item.name" v-model="item.value" component="s-group" :data="item.options" />
+        <div v-for="item in form.propertyList" :key="item.id">
+          <s-form-item :label="item.name" v-model="item.value" component="s-group" :data="item.options" />
+        </div>
       </div>
 
       <s-form-item>
@@ -63,9 +67,7 @@ export default defineComponent({
     }
 
     const addOtherProp = () => {}
-    const selectOtherProp = () => {
-
-    }
+    const selectOtherProp = () => {}
 
     if (id) {
       request({ id }).then((response) => {
@@ -113,3 +115,27 @@ export default defineComponent({
   },
 })
 </script>
+
+
+<style lang="scss">
+.service-one-phase-information {
+  .box {
+    background: #fff;
+    border: 1px solid #eee;
+  }
+  .el-form-item {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .el-select {
+    width: 100%;
+  }
+  h2 {
+    font-size: 14px;
+    padding: 15px 20px;
+    margin: 0 0 20px 0;
+    border-bottom: 1px solid #eee;
+  }
+}
+</style>

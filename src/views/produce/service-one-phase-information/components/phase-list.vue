@@ -135,7 +135,7 @@ export default defineComponent({
               <s-button
                 type="text"
                 onClick={() => {
-                  deleteNode({ stageId: row.id })
+                  return deleteNode({ stageId: row.id })
                 }}
               >
                 删除

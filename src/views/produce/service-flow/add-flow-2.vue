@@ -5,7 +5,7 @@
         <flow-path :data="data" @selectFlow="flowSelect"/>
       </div>
       <div class="save-flow">
-        <el-button type="primary">保存</el-button>
+        <el-button type="primary" @click="saveFlow">保存</el-button>
       </div>
     </div>
     <div class="name-flow mb20 flow-k">
@@ -13,13 +13,13 @@
         <el-col :span="10">
           <div class="row-name">
             <span>环节名称：</span>
-            <p><el-input v-model="data[index].name" placeholder="请输入环节名称"></el-input></p>
+            <p><el-input v-model="data[index].businessFlowNodeName" placeholder="请输入环节名称"></el-input></p>
           </div>
         </el-col>
         <el-col :span="10">
           <div class="row-name">
             <span>关联工作流节点：</span>
-            <p><el-input v-model="data[index].relation" placeholder="请选择节点"></el-input></p>
+            <p><el-input v-model="data[index].workFlowNodeIds" placeholder="请选择节点"></el-input></p>
           </div>
         </el-col>
       </el-row>
@@ -33,7 +33,7 @@
         <el-col :span="10">
           <div class="row-name">
             <span>预警周期（天）：</span>
-            <p><el-input v-model="data[index].earlyCycle" placeholder="请输入预警周期"></el-input></p>
+            <p><el-input v-model="data[index].warningCycle" placeholder="请输入预警周期"></el-input></p>
           </div>
         </el-col>
       </el-row>
@@ -52,36 +52,17 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import flowpath from "../components/flow-path";
 import useDialog from '@/hooks/use-dialog';
+import flowNodeInit from '@/api/1562-get-service-order-sevice-business-flow-node-init-{businessflowid}'
+import flowSaveall from '@/api/1607-post-service-order-sevice-business-flow-node-saveall-{businessflowid}'
 export default defineComponent({
   components: { 
     'flow-path':flowpath
   },
   setup(props, { root }) {
+    const flowId = root.$route.query.id;
     const flowData = reactive({
       index: 0,
-      data: [
-        {
-          name: '开始事件',
-          type: 'start',
-          relation: '',
-          produceCycle: 1,
-          earlyCycle: 2
-        },
-        {
-          name: '用户任务',
-          type: 'flow',
-          relation: '',
-          produceCycle: 2,
-          earlyCycle: 4
-        },
-        {
-          name: '结束事件',
-          type: 'end',
-          relation: '',
-          produceCycle: 1,
-          earlyCycle: 3
-        }
-      ],
+      data: [],
       options: [
         {
           value: 1,
@@ -132,9 +113,14 @@ export default defineComponent({
     })
 
     const form = reactive({
-      orderCode: '',
+      businessflowid: '',
       state: 1,
       relation: ''
+    })
+
+    flowId&&flowNodeInit({businessFlowId: flowId, businessFlowNodeType: '1,2,4'})
+    .then((res) => {
+      flowData.data = res.data || [];
     })
 
     const dialog = useDialog({
@@ -157,12 +143,20 @@ export default defineComponent({
       // console.log("flowSelect", flowData.data[index])
     }
 
+    function saveFlow () {
+      flowSaveall({businessFlowId: flowId})
+      .then((res) => {
+        console.log("save", res)
+      })
+    }
+
     return {
       ...toRefs(flowData),
       form,
       dialog,
       addFlow,
-      flowSelect
+      flowSelect,
+      saveFlow
     }
   },
 })

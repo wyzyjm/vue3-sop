@@ -4,7 +4,7 @@
     <s-simple-table :data="table.data" :cols="table.cols">
       <s-form slot="form" inline>
         <s-form-item label="状态名称" prop="name" />
-        <s-form-item label="状态" prop="status" component="s-group" :data="options" />
+        <s-form-item label="状态" clearable prop="status" component="s-group" :data="options" />
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
           <s-button run="form.reset">重置</s-button>
@@ -54,28 +54,34 @@ export default defineComponent({
       data: getTableData,
       cols: [
         {
-          showOverflowTooltip: true,
           label: '状态名称',
           prop: 'name',
         },
         {
           label: '状态编码',
+          showOverflowTooltip: true,
+
           prop: 'code',
         },
         {
           label: '状态',
+          width: '80px',
           prop: ({ row }) => getStateText(row.status),
         },
         {
           label: '描述',
+          showOverflowTooltip: true,
+
           prop: 'description',
         },
         {
           label: '创建时间',
+          width: '180px',
           prop: 'createTime',
         },
         {
           label: '操作项',
+          width: '120px',
           prop: ({ row }) => {
             return [
               <s-button type="text" onClick={() => setState(row)}>
