@@ -12,8 +12,8 @@ import userService from "./user-service/index"
 export default [
     {
         path: "/",
-        meta:{
-            title:'首页'
+        meta: {
+            title: '首页'
         },
         component: Layout,
         children: [
@@ -24,7 +24,7 @@ export default [
             ...custQuery,
             ...orderMonitor,
             ...caseCenter,
-            ...userService
+            ...userService,
         ]
     },
     {
