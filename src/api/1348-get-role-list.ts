@@ -7,7 +7,7 @@
  * 创建人：肖晓华
  */
 export interface Data {
-  currentPage:number    
+  pageNum:number    
   list:any[]            
   pageSize:number       
   total:number          

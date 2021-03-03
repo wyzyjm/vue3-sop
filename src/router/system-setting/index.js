@@ -6,6 +6,7 @@ import Resource from "./resource" // 资源
 export default [
     {
         path: '/system-setting',
+        redirect: '/system-setting/provider/list',
         meta:{
             title:'系统设置'
         },
