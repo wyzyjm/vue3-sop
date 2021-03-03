@@ -24,7 +24,7 @@ export default defineComponent({
       },
       (row) => {
         row.status = 1 ^ row.status
-        return _update(row).then(() => {
+        return _update({ id: row.id, status: row.status }).then(() => {
           Message({
             type: 'success',
             message: '操作成功！',

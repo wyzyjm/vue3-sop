@@ -83,6 +83,7 @@ export default defineComponent({
         },
         {
           label: '状态',
+          width: '80px',
           prop: ({ row }) => {
             return isEdit(row) ? (
               <s-group
@@ -128,6 +129,7 @@ export default defineComponent({
         },
         {
           label: '操作项',
+          width:'160px',
           prop: ({ row }) => {
             return [
               <s-button type="text" onClick={() => setState(row)}>

@@ -64,14 +64,17 @@ export default defineComponent({
         },
         {
           label: '状态',
+          width: '80px',
           prop: ({ row }) => getStateText(row.status),
         },
         {
           label: '创建时间',
+          width:'180px',
           prop: 'createTime',
         },
         {
           label: '操作项',
+          width:'100px',
           prop: ({ row }) => {
             return [
               <s-button type="text" onClick={() => setState(row)}>

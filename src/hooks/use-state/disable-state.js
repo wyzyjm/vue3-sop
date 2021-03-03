@@ -20,6 +20,10 @@ export default (opt = {}, callback) => {
 
 
   const setState = async (row) => {
+    if(row.status===0){
+      return callback(row)
+    }
+
     try {
       const isContinue = await MessageBox.confirm(
         message,

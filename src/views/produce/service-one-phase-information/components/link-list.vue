@@ -116,7 +116,7 @@ export default defineComponent({
                 }}
               />
             ) : (
-              row.businessNodeIdsArray
+              row.businessNodeNames
             )
           },
         },
