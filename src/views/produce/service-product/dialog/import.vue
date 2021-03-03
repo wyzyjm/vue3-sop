@@ -9,11 +9,11 @@
     <div v-show="active===0">
       <el-alert class="mt20" title="导入的数据将增量补充到现有的数据中" type="info" show-icon :closable="false" />
       <p>1、请按照模板格式准备需要导入的数据</p>
-      <el-link class="ml20" type="primary">下载账号数据导入模版</el-link>
+      <el-link class="ml20" :href="downloadURL" type="primary">下载账号数据导入模版</el-link>
       <p>2、请选择需要导入的文件</p>
       <s-form :model="form">
         <s-form-item prop="upload">
-          <s-upload v-model="form.upload" :files.sync="fileList" @success="uploadSuccess" @error="uploadError" :auto-upload="false" ref="uploadRef" accept="xls,xlsx" class="ml20">
+          <s-upload fileName="excel" :action="url" v-model="form.upload" :files.sync="fileList" @success="uploadSuccess" @error="uploadError" :auto-upload="false" ref="uploadRef" accept="xls,xlsx" class="ml20">
             <el-button size="mini" type="primary">选择附件</el-button>
             支持xls、xlsx文件，单个文件不得大于2M
           </s-upload>
@@ -57,6 +57,14 @@ export default defineComponent({
       upload: '',
     })
 
+    const url = ref(
+      `${process.env.VUE_APP_API_BASE_URL}/production-config/service-product/related-mapping/import`
+    )
+
+    const downloadURL = ref(
+      `${process.env.VUE_APP_API_BASE_URL}/production-config/download/service-product/excel`
+    )
+
     const uploadRef = ref(null)
     const fileList = ref([])
     const uploadSubmit = () => {
@@ -91,6 +99,8 @@ export default defineComponent({
       uploadError,
       uploadSubmit,
       active,
+      url,
+      downloadURL,
     }
   },
 })

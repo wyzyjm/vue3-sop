@@ -34,7 +34,7 @@ export default {
     const on = { ...this.$listeners }
     on['current-change'] = (val) => {
       const query = {
-        currentPage: val,
+        pageNum: val,
         pageSize: props.pageSize || props['page-size']
       }
       this.params.set(query).then(() => {
@@ -44,7 +44,7 @@ export default {
 
     on['size-change'] = (val) => {
       const query = {
-        currentPage: props.currentPage || props['current-page'],
+        pageNum: props.pageNum || props['current-page'],
         pageSize: val
       }
       this.params.set(query).then(() => {

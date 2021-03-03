@@ -140,6 +140,10 @@ export default defineComponent({
               index: '/produce/service-product/list',
               title: '服务产品管理',
             },
+            {
+              index: '/produce/product-period/list',
+              title: '生产周期管理',
+            },
           ]
         },
         {

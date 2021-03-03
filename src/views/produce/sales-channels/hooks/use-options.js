@@ -24,7 +24,7 @@ export default () => {
     Promise.all([getSalesChannels()]).then((response) => {
         filterEmptyArray(response[0].data)
         options.salesChannels = response[0].data
-        getSalesChannels.options = options
+        // getSalesChannels.options = options
     })
 
 

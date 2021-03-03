@@ -146,9 +146,28 @@
                 maxlength="50"
                 minlength="2"></el-input>
             </el-form-item>
-            <el-form-item label="法人身份证上传：" prop="legalCredentialsNumber">
+            <el-form-item label="个人证件类型：" prop="legalCredentialsType">
+                <el-select
+                    v-model="form.legalCredentialsType"
+                    placeholder="请选择个人证件类型"
+                    class="w340"
+                >
+                    <el-option label="身份证" :value="1"></el-option>
+                    <el-option label="临时身份证" :value="2"></el-option>
+                    <el-option label="护照" :value="3"></el-option>
+                    <el-option label="港澳台身份证" :value="4"></el-option>
+                    <el-option label="外国护照" :value="5"></el-option>
+                    <el-option label="户口卡" :value="6"></el-option>
+                    <el-option label="军人身份证" :value="7"></el-option>
+                    <el-option label="警察身份证" :value="8"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="法人证件上传：" prop="legalCredentialsNumber">
                 <upload type="idcard" :param="['idcardFrontUrl', 'idcardBackUrl']" :form="form"></upload>
             </el-form-item>  
+            <el-form-item label="法人证件号码：" prop="legalCredentialsNumber" class="is-required">
+                <el-input class="w340" v-model="form.legalCredentialsNumber" placeholder="请输入个人证件号码"></el-input>
+            </el-form-item>
         </el-form>
     </div>   
 
@@ -260,7 +279,7 @@ return {
         contactPhone: '', // 联系人手机号
         contactEmail: '', // 联系人邮箱
         legalPerson: '', // 法人
-        legalCredentialsType: 1, // 法人证件类型 1:身份证,2:临时身份证,3:护照,4:港澳台身份证/5:外国护照6:户口卡7:军人身份证8:警察身份证
+        legalCredentialsType: '', // 法人证件类型 1:身份证,2:临时身份证,3:护照,4:港澳台身份证/5:外国护照6:户口卡7:军人身份证8:警察身份证
         legalCredentialsNumber: '', // 法人证件编码
         basicType: 1, // 1、自营，2、非自营
         contactTel: '', // 联系人电话

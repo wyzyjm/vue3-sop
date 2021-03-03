@@ -1,15 +1,18 @@
 <template>
   <div>
     <s-form :model="form" label-width="110px" @submit="save">
-      <s-form-item label="产品名称" :rules="['required']" prop="name" />
-      <s-form-item label="产品编码" :rules="['required']" v-if="isEdit" component="s-text" :content="form.code" prop="code" />
-      <s-form-item label="产品编码" :rules="['required']" v-else prop="code" />
+      <s-form-item label="产品名称" :props="{
+            label:'name',
+            value:'id'
+          }" component="s-group" :data="moreOptions.productList" @change="nameChange" :rules="['required:number']" prop="name" />
+      <s-form-item label="产品编码" component="s-text" :content="form.code" prop="code" />
       <s-form-item label="业务类型" :rules="['required:array']" prop="businessTypeIdList" multiple component="s-group" :props="{
             label:'name',
             value:'id'
           }" :data="moreOptions.businessType" />
       <s-form-item label="售卖渠道" :rules="['required']">
         <el-cascader :props="{
+          multiple:true,
             label:'name',
             value:'id'
           }" v-model="form.salesChannelIdList" :options="moreOptions.salesChannels"></el-cascader>
@@ -38,9 +41,9 @@ export default defineComponent({
       type: Object,
     },
   },
-  setup({ isEdit, data },{emit,root}) {
+  setup({ isEdit, data }, { emit, root }) {
     let form = reactive({
-      status: '',
+      status: 1,
       id: undefined,
       code: '',
       name: '',
@@ -52,8 +55,16 @@ export default defineComponent({
       form = { ...form, ...data }
     }
 
+    const nameChange = (id) => {
+      form.code = moreOptions.productList.find((v) => v.id === id).code
+    }
+
     const save = (form) => {
-      return _save(form).then(() => {
+      const params = JSON.parse(JSON.stringify(form))
+      params.salesChannelIdList = [
+        ...new Set([].concat(...params.salesChannelIdList)),
+      ]
+      return _save(params).then(() => {
         Message({
           message: '保存成功！',
           type: 'success',
@@ -71,6 +82,7 @@ export default defineComponent({
       form,
       options,
       moreOptions,
+      nameChange,
     }
   },
 })

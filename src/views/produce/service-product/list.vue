@@ -108,7 +108,6 @@ export default defineComponent({
         {
           label: '操作',
           prop: ({ row }) => {
-            row.status = 1
             return [
               <s-button
                 type="text"

@@ -8,7 +8,7 @@
     <slot name="bottom"></slot>
     <div v-if="page !== false" class="ce-pagination">
       <slot name="page"></slot>
-      <Page :page-size="params.pagination.pageSize" layout="total,sizes,prev, pager, next, jumper" :current-page="params.pagination.currentPage" @current-change="currentChange" @size-change="sizeChange" @pageInit="pageInit" :page-sizes="[10, 20, 50, 100]" :uid="uid" :total="total" v-bind="page===true?{}:page" v-if="page !== false" ref="page"></Page>
+      <Page :page-size="params.pagination.pageSize" layout="total,sizes,prev, pager, next, jumper" :current-page="params.pagination.pageNum" @current-change="currentChange" @size-change="sizeChange" @pageInit="pageInit" :page-sizes="[10, 20, 50, 100]" :uid="uid" :total="total" v-bind="page===true?{}:page" v-if="page !== false" ref="page"></Page>
     </div>
   </div>
 </template>
@@ -75,7 +75,7 @@ export default {
         form: {},
         pagination: {
           pageSize: 10,
-          currentPage: 1,
+          pageNum: 1,
         },
       },
       tableData: [],
@@ -151,8 +151,8 @@ export default {
       this.params.pagination.pageSize = pageSize
       this.change()
     },
-    currentChange(currentPage) {
-      this.params.pagination.currentPage = currentPage
+    currentChange(pageNum) {
+      this.params.pagination.pageNum = pageNum
       this.change()
     },
   },

@@ -56,10 +56,21 @@ export default defineComponent({
             return createEditRow(row, 'nodeName')
           },
         },
-        {
-          label: '展示顺序',
+{
+          label: '显示顺序',
           prop: ({ row }) => {
-            return createEditRow(row, 'orderSort')
+            return isEdit(row) ? (
+              <el-input-number
+                class="w140"
+                min={0}
+                value={row.orderSort}
+                onInput={(val) => {
+                  row.orderSort = val
+                }}
+              />
+            ) : (
+              row.orderSort
+            )
           },
         },
         {
@@ -80,20 +91,21 @@ export default defineComponent({
             return createEditRow(row, 'showContentCode')
           },
         },
-        {
-          label: '显示文档',
-          prop: ({ row }) => {
-            return createEditRow(row, 'showDocumentFileName')
-          },
-        },
+        // {
+        //   label: '显示文档',
+        //   prop: ({ row }) => {
+        //     return createEditRow(row, 'showDocumentFileName')
+        //   },
+        // },
         {
           label: '关联服务环节',
           prop: ({ row }) => {
             return isEdit(row) ? (
               <s-group
-                value={row.showContentCode}
+              multiple
+                value={row.businessNodeIdsArray}
                 onInput={(val) => {
-                  row.showContentCode = val
+                  row.businessNodeIdsArray = val
                 }}
                 data={options.businessFlowDefList}
                 props={{
@@ -104,7 +116,7 @@ export default defineComponent({
                 }}
               />
             ) : (
-              row.showContentCode
+              row.businessNodeNames
             )
           },
         },
@@ -117,6 +129,8 @@ export default defineComponent({
                 onClick={() =>
                   isEdit(row)
                     ? saveEdit(() => {
+                        row.nodeId = row.id
+
                         return _update(row).then(() => {
                           root.$store.commit('table/update', {
                             _uid: props.uid,
@@ -131,7 +145,7 @@ export default defineComponent({
               <s-button
                 type="text"
                 onClick={() => {
-                  deleteNode({ nodeId: row.id })
+                  return deleteNode({ nodeId: row.id })
                 }}
               >
                 删除
