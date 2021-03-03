@@ -1,0 +1,61 @@
+<template>
+  <div>
+    <s-form :model="form" label-width="140px" @submit="save">
+      <template v-if="isEdit">
+        <s-form-item label="业务流程名称" :rules="['required']" prop="businessFlowName" />
+        <s-form-item label="业务流程code" :disabled="true" prop="businessFlowCode" />
+        <s-form-item label="版本" :disabled="true" :rules="['required']" prop="version" />
+        <s-form-item label="描述" :rules="['required']" prop="describe" />
+        <s-form-item>
+          <s-button @click="$emit('close')">取消</s-button>
+          <s-button type="primary" run="form.submit">确定</s-button>
+        </s-form-item>
+      </template>
+      <template v-else>
+        <s-form-item label="业务流程名称" component="s-text" :content="form.businessFlowName" prop="businessFlowName" />
+        <s-form-item label="业务流程code" component="s-text" :content="form.businessFlowCode" prop="businessFlowCode" />
+        <s-form-item label="版本" component="s-text" :content="form.version" prop="version" />
+        <s-form-item label="工作流程定义名称" component="s-text" :content="form.flowWorkDefName" prop="flowWorkDefName" />
+        <s-form-item label="状态" component="s-text" :content="form.statusName" prop="statusName" />
+        <s-form-item label="创建人" component="s-text" :content="form.creater" prop="creater" />
+        <s-form-item label="描述" component="s-text" :content="form.describe" prop="describe" />
+        <s-form-item label="创建时间" component="s-text" :content="form.creatreTime" prop="creatreTime" />
+        <s-form-item label="更新时间" component="s-text" :content="form.updateTime" prop="updateTime" />
+      </template>
+    </s-form>
+  </div>
+</template>
+<script>
+import { defineComponent, reactive } from '@vue/composition-api'
+import updateBusinessFlow from '@/api/1547-post-service-order-sevice-business-flow-{id}'
+export default defineComponent({
+  props: {
+    isEdit: {
+      default: false,
+    },
+    data: {
+      type: Object,
+    },
+  },
+  setup({ data }, { emit }) {
+    let form = reactive({})
+    form = { ...form, ...data }
+
+    const save = () => {
+      updateBusinessFlow(form).then(
+        (res) => {
+          if (res.data) {
+            emit('close')
+            root.$store.commit('table/update')
+          }
+        }
+      )
+    }
+
+    return {
+      save,
+      form
+    }
+  },
+})
+</script>

@@ -22,15 +22,15 @@
             v-for="(item,index) of flowData" 
             :id="'sop-'+uuid.v4()"
             :key="index" 
-            :title="item.name"
+            :title="item.businessFlowNodeName||''"
             @click="selectPath(item, index)">
-              <template v-if="item.type == 'end'">
+              <template v-if="item.businessFlowNodeType == 4">
                 <g pointer-events="fill" :transform="`translate(${start.w*2 + flow.w*(index-1) + flow.stroke + end.stroke + baseArrow*index + baseX}, ${baseY-end.w})`">
                   <circle :cx="end.w" :cy="end.w" :r="end.w" stroke="#585858" fill="#ffffff" :stroke-width="end.stroke"></circle>
                 </g>
               </template>
               <template v-else>
-                <g v-if="item.type == 'start'" pointer-events="fill" :transform="`translate(${baseX}, ${baseY-start.w})`">
+                <g v-if="item.businessFlowNodeType == 1" pointer-events="fill" :transform="`translate(${baseX}, ${baseY-start.w})`">
                   <circle :cx="start.w" :cy="start.w" :r="start.w" stroke="#585858" fill="#ffffff" :stroke-width="start.stroke"></circle>
                 </g>
                 <g 
@@ -39,7 +39,7 @@
                   :transform="`translate(${start.w*2 + flow.w*(index-1) + flow.stroke + baseArrow*index + start.stroke + baseX}, ${baseY-flow.h/2})`">
                     <rect x="0" y="0" :width="flow.w" :height="flow.h" rx="10" ry="10" stroke="#bbbbbb" :stroke-width="flow.stroke" fill="#f9f9f9"></rect>
                     <text x="10" y="20">
-                      <tspan x="25" y="45">{{ item.name }}</tspan>
+                      <tspan x="25" y="45">{{ item.businessFlowNodeName || '' }}</tspan>
                     </text>
                 </g>
                 <g>
@@ -58,7 +58,7 @@
           </g>
       </g>
       <g class="svgcontainer">
-        <g :display="`${position.type?'':'none'}`">
+        <g :display="`${position.businessFlowNodeType?'':'none'}`">
           <rect 
             :x="position.x" 
             :y="position.y" 
@@ -73,10 +73,10 @@
         </g>
       </g>
     </svg>
-    <div :style="{display: position.type?'':'none' }">
+    <div :style="{display: position.businessFlowNodeType?'':'none' }">
       <div class="flow-handle" :style="{left: position.x+'px', top: position.y+position.h+5+'px' }">
         <svg 
-          v-if="position.type == 'flow'" 
+          v-if="position.businessFlowNodeType == 2" 
           viewBox="0 0 1024 1024" 
           version="1.1" 
           xmlns="http://www.w3.org/2000/svg" 
@@ -94,8 +94,8 @@
           xmlns="http://www.w3.org/2000/svg" 
           width="16" 
           height="16" 
-          v-if="position.type != 'end'"
-          :x="`${position.type == 'flow'?20:0}`" 
+          v-if="position.businessFlowNodeType != 4"
+          :x="`${position.businessFlowNodeType == 2?20:0}`" 
           y="5"
           @click="addFlow">
             <path d="M896 448H576V128c0-35.2-28.8-64-64-64s-64 28.8-64 64v320H128c-35.2 0-64 28.8-64 64s28.8 64 64 64h320v320c0 35.2 28.8 64 64 64s64-28.8 64-64V576h320c35.2 0 64-28.8 64-64s-28.8-64-64-64z" fill=""></path>
@@ -160,21 +160,21 @@ export default defineComponent({
     })
     
     function selectPath(item, index) {
-      switch(item.type) {
-        case "start":
+      switch(item.businessFlowNodeType) {
+        case 1:
           flowPath.position = {
             index,
-            type: item.type,
+            businessFlowNodeType: item.businessFlowNodeType,
             x: flowPath.baseX,
             y: flowPath.baseY - start.w,
             w: start.w*2,
             h: start.w*2
           }
         break;
-        case "end":
+        case 4:
           flowPath.position = {
             index,
-            type: item.type,
+            businessFlowNodeType: item.businessFlowNodeType,
             x: flowPath.baseX + start.w*2 + flowPath.baseArrow*(flowPath.flowData.length-1) + ((flowPath.flowData.length-2)?flow.stroke*2:flow.stroke) + flow.w*(flowPath.flowData.length-2),
             y: flowPath.baseY - end.w - end.stroke/2,
             w: end.w*2 + end.stroke,
@@ -184,7 +184,7 @@ export default defineComponent({
         default:
           flowPath.position = {
             index,
-            type: item.type,
+            businessFlowNodeType: item.businessFlowNodeType,
             x: flowPath.baseX + start.w*2 + flowPath.baseArrow*index + flow.stroke*2 + flow.w*(index-1),
             y: flowPath.baseY - flow.h/2,
             w: flow.w + flow.stroke,
@@ -199,8 +199,8 @@ export default defineComponent({
     function addFlow() {
       let currIndex = (flowPath.position.index || 0 ) + 1;
       let addItem = {
-        name: '流程' + currIndex,
-        type: 'flow',
+        name: '用户任务' + currIndex,
+        businessFlowNodeType: 2,
         relation: '',
         produceCycle: 2,
         earlyCycle: 4

@@ -1,15 +1,24 @@
 <template>
   <div>
     <div class="ce-flow mb20 flow-k">
-      <s-form :model="form" label-width="130px" @submit="save">
-        <s-form-item label="服务流程名称" prop="name" :rules="['required']" />
-        <s-form-item label="服务产品编号" prop="code" :rules="['required']" />
-        <s-form-item label="版本" prop="a" :rules="['required']" />
-        <s-form-item label="关联工作流" prop="b" :rules="['required']" />
-        <s-form-item label="描述" prop="c" type="textarea" />
+      <s-form :model="form" label-width="130px" @submit="save" class="flow-form">
+        <s-form-item label="服务流程名称" prop="businessFlowName" :rules="['required']" />
+        <s-form-item label="服务产品编号" prop="businessFlowCode" :rules="['required']" />
+        <!-- <s-form-item label="版本" prop="version" :rules="['required']" /> -->
+        <s-form-item label="关联工作流" prop="flowWorkDefId" :rules="['required']">
+          <el-select v-model="form.flowWorkDefId" placeholder="请选择关联工作流" class="flow-select">
+            <el-option
+              v-for="item in flowList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </s-form-item>
+        <s-form-item label="描述" prop="describe" type="textarea" />
 
         <s-form-item>
-          <s-button @click="$emit('close')">取消</s-button>
+          <s-button @click="$router.push('/produce/service-flow')">取消</s-button>
           <s-button type="primary" run="form.submit">确定</s-button>
         </s-form-item>
       </s-form>
@@ -17,7 +26,9 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive } from '@vue/composition-api'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import getworkflowlist from '@/api/1518-get-service-order-sevice-business-flow-getworkflowlist'
+import addBusinessFlow from '@/api/1506-post-service-order-sevice-business-flow-add'
 export default defineComponent({
   props: {
     isEdit: {
@@ -29,10 +40,19 @@ export default defineComponent({
   },
   setup({ isEdit, data }, { root }) {
 
+    const flowData = reactive({      
+      flowList: []
+    });
+
+    getworkflowlist().then((res) => {
+      flowData.flowList = res.data || [];
+    })
+
     let form = reactive({
-      name: '',
-      code: 1,
-      a: ''
+      businessFlowName: '', // 业务流程名称	
+      businessFlowCode: '', // 	业务流程code	
+      flowWorkDefId: '', // 	工作流程定义id	
+      describe: '', // 	描述
     })
 
     if (isEdit) {
@@ -40,18 +60,20 @@ export default defineComponent({
     }
 
     const save = (form) => {
-      console.log("form")
-      addFlow();
+      addBusinessFlow(form).then((res) => {
+        res.data&&addFlowPath(res.data)
+      })
     }
 
-    function addFlow() {
+    function addFlowPath(id) {
       root.$router.push({
         path: "/produce/add-service-flow",
-        query: {}
+        query: { id }
       });
     }
 
     return {
+      ...toRefs(flowData),
       form,
       save
     }
@@ -66,6 +88,17 @@ export default defineComponent({
   }
   .ce-flow {
     text-align: center;
-    padding: 20px;
+    padding: 40px 20px;
+    .flow-select {
+      width: 100%;
+    }
+    .flow-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .el-form-item {
+        width: 600px;
+      }
+    }
   }
 </style>
