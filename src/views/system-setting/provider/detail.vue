@@ -10,6 +10,7 @@
                 <div class="item-col">
                     <div class="col-title">{{value}}：</div>
                     <div class="col-txt" v-if="key == 'category'">企业</div>
+                    <div class="col-txt" v-if="key == 'basicStatus'">{{result[key] | filterStatus}}</div>
                     <div class="col-txt" v-else-if="key == 'basicType'">{{result[key] == 1 ? '自营' : '非自营'}}</div>
                     <div class="col-txt" v-else-if="key == 'registeredCapital'">{{result[key]}}万</div>
                     <!-- <div class="col-txt" v-else-if="key == 'foundTime'">{{result[key].replace('T', ' ').replace('0Z', '')}}</div> -->
@@ -43,15 +44,35 @@
             <div class="title-box">{{item.title}}</div>
             <p class="clear"></p>
             <el-row :gutter="20" class="row-box">
-                <el-col :span="8" v-for="(value, key, index) in item.keys" :key="index">
-                    <div class="item-col">
-                        <div class="col-title">{{value}}：</div>
-                        <div class="col-txt" v-if="key == 'category'">企业</div>
-                        <div class="col-txt" v-else-if="key == 'basicType'">{{result[key] == 1 ? '自营' : '非自营'}}</div>
-                        <div class="col-txt">{{result[key]}}</div>
-                        <!-- <div class="col-txt">{{result[key]}}</div> -->
+            <el-col :span="8" v-for="(value, key, index) in item.keys" :key="index">
+                <div class="item-col">
+                    <div class="col-title">{{value}}：</div>
+                    <div class="col-txt" v-if="key == 'category'">个人</div>
+                    <div class="col-txt" v-if="key == 'basicStatus'">{{result[key] | filterStatus}}</div>
+                    <div class="col-txt" v-else-if="key == 'basicType'">{{result[key] == 1 ? '自营' : '非自营'}}</div>
+                    <div class="col-txt" v-else-if="key == 'registeredCapital'">{{result[key]}}万</div>
+                    <!-- <div class="col-txt" v-else-if="key == 'foundTime'">{{result[key].replace('T', ' ').replace('0Z', '')}}</div> -->
+                    <div class="col-txt" v-else-if="key == 'businessLicenseUrl' || key == 'registrationUrl'">
+                        <div v-if="result[key]">
+                            <i class="iconfont iconcredentials_icon" style="font-size:40px;color:#666"></i>
+                            <i class="iconfont iconfangdajing" style="font-size:15px;color:#18B398;cursor:pointer" @click="showView([result[key]])"></i>
+                        </div>
+                        <div v-else>
+                            ------
+                        </div>
                     </div>
-                </el-col>        
+                    <div class="col-txt" v-else-if="key == 'idCard'">
+                        <div v-if="result['idcardFrontUrl'] && result['idcardBackUrl']">
+                            <i class="iconfont iconcredentials_icon" style="font-size:40px;color:#666"></i>
+                            <i class="iconfont iconfangdajing" style="font-size:15px;color:#18B398;cursor:pointer" @click="showView([result['idcardFrontUrl'], result['idcardBackUrl']])"></i>
+                        </div>
+                        <div v-else>
+                            ------
+                        </div>
+                    </div>
+                    <div class="col-txt" v-else>{{result[key] || '------'}}</div>
+                </div>
+            </el-col>           
             </el-row>
         </div>
     </div>
@@ -83,7 +104,7 @@ return {
             title: '创建信息', keys: {creatorName: '创建人', createTimeStr: '创建时间'}
         },  
         {
-            title: '基本信息', keys: {category: '服务商类型', basicType: '合作类型', status: '服务商状态', basicName: '公司全称',
+            title: '基本信息', keys: {category: '服务商类型', basicType: '合作类型', basicStatus: '服务商状态', basicName: '公司全称',
             simpleName: '公司简称', basicDescribe: '公司简介', majorBusiness: '主营业务', businessDescribe: '业务介绍',
             address: '公司地址', companySize: '公司规模', companyUrl: '公司网站'},
             showPower: 2
@@ -107,7 +128,7 @@ return {
             title: '创建信息', keys: {creatorName: '创建人', createTimeStr: '创建时间'}
         }, 
         {
-            title: '基本信息', keys: {category: '服务商类型', basicType: '合作类型', status: '服务商状态', 
+            title: '基本信息', keys: {category: '服务商类型', basicType: '合作类型', basicStatus: '服务商状态', 
             contactUsername: '联系人姓名', contactEmail: '联系人邮箱',
             contactPhone: '手机号', legalCredentialsType: '证件类型',
             legalCredentialsNumber: '证件号码', idCard: '证件附件'},
@@ -116,6 +137,19 @@ return {
     ],
     result: {}
 };
+},
+filters: {
+    filterStatus (val) {
+        if (val == 0) {
+            return '启用'
+        } else if (val == 1) {
+            return '暂停'
+        } else if (val == 2) {
+            return '清退'
+        } else if (val == 1) {
+            return '关闭'
+        }
+    }
 },
 //监听属性 类似于data概念
 computed: {},
