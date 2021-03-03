@@ -20,7 +20,11 @@
  * files:[{ name:'',url:''}]
  *
  */
-import request from 'axios'
+import axios from 'axios'
+
+const request = axios.create({
+  headers: { 'Content-Type': 'multipart/form-data' },
+})
 
 export default {
   props: {
@@ -46,6 +50,9 @@ export default {
       type: Number,
       default: 10,
     },
+    fileName:{
+      defalut:'file'
+    },
     files: {
       default: () => [],
     },
@@ -66,7 +73,7 @@ export default {
   methods: {
     httpRequest({ file, action, onSuccess, onError, onProgress }) {
       const params = new FormData()
-      params.append('file', file)
+      params.append(this.fileName, file)
       params.append(
         'filterFileExtNames',
         this.accept
@@ -75,17 +82,14 @@ export default {
           .join()
       )
       params.append('allowFileSizeStr', this.size)
-      request({
-        headers:{'Content-Type':'multipart/form-data'},
-        method:'post',
-        url: action,
-        onUploadProgress: (progressEvent) => {
-          const percent =
-            ((progressEvent.loaded / progressEvent.total) * 100) | 0
-          onProgress({ percent: percent })
-        },
-        ...params,
-      })
+      request
+        .post(action, params, {
+          onUploadProgress: (progressEvent) => {
+            const percent =
+              ((progressEvent.loaded / progressEvent.total) * 100) | 0
+            onProgress({ percent: percent })
+          },
+        })
         .then((response) => onSuccess(response))
         .catch((error) => onError(error))
     },
@@ -151,7 +155,7 @@ export default {
       this.syncFileList(fileList)
     },
     beforeUpload(file) {
-      this.$emit('before',file)
+      this.$emit('before', file)
       const fileNamePathSplitArr = file.name.split('.')
       const fileSuffix = fileNamePathSplitArr[fileNamePathSplitArr.length - 1]
       if (

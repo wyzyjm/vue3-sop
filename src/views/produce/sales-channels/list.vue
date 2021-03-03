@@ -46,14 +46,18 @@ export default defineComponent({
       cols: [
         {
           type: 'expand',
-          prop: ({ row }) => (
-            <s-simple-table
-              page={false}
-              uid={row.id}
-              data={row.children}
-              cols={table.cols}
-            />
-          ),
+          prop: ({ row }) => {
+            return row.children && row.children.length ? (
+              <s-simple-table
+                page={false}
+                uid={row.id}
+                data={row.children}
+                cols={table.cols}
+              />
+            ) : (
+              ''
+            )
+          },
         },
         {
           showOverflowTooltip: true,
