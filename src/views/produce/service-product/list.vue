@@ -28,7 +28,6 @@ import getTableData from '@/api/1494-get-production-config-service-product-searc
 import useDialog from '@/hooks/use-dialog'
 import useState from '@/hooks/use-state/shelves-state'
 import _setState from '@/api/1492-put-production-config-service-product'
-import useSafeParams from '@/hooks/use-router-util/sale-params'
 import useOptions from './hooks/use-options'
 
 export default defineComponent({
@@ -39,7 +38,6 @@ export default defineComponent({
         root.$store.commit('table/update')
       })
     })
-
 
     const productionSetDialog = useDialog({
       uid: 'productionSetDialog',
@@ -63,7 +61,7 @@ export default defineComponent({
     })
 
     const view = (data) => {
-      root.$router.push(`./detail/${useSafeParams(data)}`)
+      root.$router.push(`./detail/${data.id}`)
     }
     const add = () => {
       root.$router.push(`./add`)
@@ -84,7 +82,7 @@ export default defineComponent({
         {
           label: '服务产品名称',
           prop: ({ row }) => (
-            <s-button type="text" onClick={view}>
+            <s-button type="text" onClick={() => view(row)}>
               {row.name}
             </s-button>
           ),
@@ -99,7 +97,7 @@ export default defineComponent({
         },
         {
           label: '状态',
-          prop: ({row}) => `已${getStateText(row.status)}`,
+          prop: ({ row }) => `已${getStateText(row.status)}`,
         },
         {
           label: '创建时间',
