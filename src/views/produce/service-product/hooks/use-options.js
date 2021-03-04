@@ -11,10 +11,10 @@ export default () => {
         type: [],
     })
 
-    Promise.all([getUnit(),getType(),getBusinessType()]).then((response) => {
+    Promise.all([getUnit(),getType(),getBusinessType({status:1})]).then((response) => {
         options.unit = response[0].data
         options.type = response[1].data
-        options.businessType=response[2].data
+        options.businessType=response[2].data.records
         getType.options = options
     })
 
