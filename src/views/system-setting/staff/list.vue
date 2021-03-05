@@ -33,7 +33,8 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import getList from '@/api/1342-get-frontapi-service-provider-employee-list'
-
+import changeSuper from '@/api/1338-get-frontapi-service-provider-employee-change-superman'
+import changeStatus from '@/api/1340-get-frontapi-service-provider-employee-change-status'
 export default defineComponent({
   methods: {
       toPath (path) {
@@ -42,7 +43,50 @@ export default defineComponent({
           })
       },
   },
-  setup() {
+  setup(props, {root} ) {
+    const toPath = (row) => {
+          root.$router.push({
+              path: `/system-setting/staff/edit/${row.id}`
+          })
+    }
+    const setState = (row) => {
+        let status = 0
+        if (row.state != 1) {
+            status = 1
+        } else {
+            root.$confirm('停用后该账号将无法正常登陆系统，请确认是否继续停用？', '停用', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+                    return changeStatus({
+                        id: row.id,
+                        status,
+                    }).then(({ msg, status }) => {
+                        if (status == 200) {
+                            root.$message.success('已停用')
+                        } else {
+                            root.$message.error(msg)
+                        }
+                        root.$store.commit('table/update')
+                    })
+                }).catch(() => {
+                
+                });
+                return false
+        }
+      return changeStatus({
+          id: row.id,
+          status,
+      }).then(({ msg, status }) => {
+        if (status == 200) {
+            root.$message.success('已启用')
+        } else {
+            root.$message.error(msg)
+        }
+        root.$store.commit('table/update')
+      })
+    }
     const table = reactive({
       data: getList,
       cols: [
@@ -65,25 +109,67 @@ export default defineComponent({
         {
           label: '所属组织',
           prop: 'orgName',
+          showOverflowTooltip: true,
         },
         {
           label: '角色',
-          prop: 'position',
+        //   prop: 'position',
+        showOverflowTooltip: true,
+          prop: ({ row }) => {
+              let roleArr = []
+              if (!row.roleMap) {
+                  return ''
+              }
+              Object.values(row.roleMap).map(val => {
+                  roleArr.push(val)
+              })
+              return roleArr.join(',')
+          }
         },
         {
           label: '状态',
           prop: 'stateName',
+          showOverflowTooltip: true,
         },
-        // {
-        //   label: '操作',
-        //   prop: () => {
-        //     return [
-        //       <s-button data-pid="user" type="text">
-        //         查看
-        //       </s-button>,
-        //     ]
-        //   },
-        // },
+        {
+          label: '超级管理员',
+        //   prop: 'isSuper',
+        align:'center',
+          prop: ({row}) => {
+              return [
+                <el-switch
+                value={row.isSuper}
+                onChange={(val) => {
+                    console.log(val, 999)
+                    changeSuper({id: row.id, superman: val ? 1 : 0}).then(res => {
+                        if (res.status == 200) {
+                            root.$message.success('开通成功')
+                            row.isSuper = val
+                        } else {
+                            root.$message.success('开通失败')
+                        }
+                    }).catch(err => {
+                        console.log(err, '超级管理员接口失败')
+                    })
+                }}>
+                </el-switch>
+              ]              
+          }
+        },
+        {
+          label: '操作',
+          width: 110,
+          prop: ({row}) => {
+            return [
+              <s-button data-pid="user" type="text" onClick={() => toPath(row)}>
+                编辑
+              </s-button>,
+              <s-button type="text" onClick={() => setState(row)}>
+                {row.state != 1 ? '启用' : '停用'}
+              </s-button>,
+            ]
+          },
+        },
       ],
     })
 
