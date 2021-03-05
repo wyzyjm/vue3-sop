@@ -61,9 +61,12 @@ export default defineComponent({
 
     const save = (form) => {
       const params = JSON.parse(JSON.stringify(form))
-      params.salesChannelIdList = [
-        ...new Set([].concat(...params.salesChannelIdList)),
-      ]
+      const arr=[]
+      form.salesChannelIdList.forEach((v) =>{
+        arr.push(v[v.length-1])
+      })
+
+      params.salesChannelIdList=arr
       return _save(params).then(() => {
         Message({
           message: '保存成功！',
