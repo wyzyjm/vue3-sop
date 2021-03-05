@@ -97,14 +97,14 @@ export default defineComponent({
               index: '/system-setting/staff/list',
               title: '员工管理',
             },
-            {
-              index: '/system-setting/document/list',
-              title: '文档管理',
-            },
-            {
-              index: '/system-setting/resource/list',
-              title: '资源管理',
-            },
+            // {
+            //   index: '/system-setting/document/list',
+            //   title: '文档管理',
+            // },
+            // {
+            //   index: '/system-setting/resource/list',
+            //   title: '资源管理',
+            // },
           ],
         },
         {
@@ -165,6 +165,12 @@ export default defineComponent({
           icon: 'el-icon-s-custom',
           index: '/cust-query',
           title: '客户查询',
+          top: true
+        },
+        {
+          icon: 'el-icon-s-custom',
+          index: '/my-services',
+          title: '我的服务',
           top: true
         },
         {

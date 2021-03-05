@@ -6,6 +6,7 @@ import systemSetting from "./system-setting/index"
 import produce from "./produce"
 import Tool from "./my-tool"
 import custQuery from "./cust-query/index"
+import myServices from "./my-services/index"
 import orderMonitor from "./order-monitor/index"
 import caseCenter from "./case-center/index"
 import userService from "./user-service/index"
@@ -25,6 +26,7 @@ export default [
             ...orderMonitor,
             ...caseCenter,
             ...userService,
+            ...myServices
         ]
     },
     {
