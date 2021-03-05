@@ -9,7 +9,7 @@
     <div v-show="active===0">
       <el-alert class="mt20" title="导入的数据将增量补充到现有的数据中" type="info" show-icon :closable="false" />
       <p>1、请按照模板格式准备需要导入的数据</p>
-      <el-link class="ml20" :href="downloadURL" type="primary">下载账号数据导入模版</el-link>
+      <el-link class="ml20" :href="downloadURL" type="primary">下载导入模版</el-link>
       <p>2、请选择需要导入的文件</p>
       <s-form :model="form">
         <s-form-item prop="upload">
