@@ -112,7 +112,7 @@ return {
             showPower: 2
         },    
         {
-            title: '注册信息', keys: {foundTime: '成立时间', registeredCapital: '注册资本', ratepayingNumber: '纳税人识别号', businessLicenceUrl: '营业执照上传',
+            title: '注册信息', keys: {foundTime: '成立时间', registeredCapital: '注册资本', ratepayingNumber: '纳税人识别号', businessLicenseUrl: '营业执照上传',
             businessLicenceNumber: '营业执照注册号', registrationUrl: '税务登记证上传', registrationNumber: '税务登记证号'}
         },   
         {

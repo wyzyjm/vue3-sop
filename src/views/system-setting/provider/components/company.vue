@@ -146,7 +146,7 @@
                 maxlength="50"
                 minlength="2"></el-input>
             </el-form-item>
-            <el-form-item label="个人证件类型：" prop="legalCredentialsType">
+            <el-form-item label="证件类型：" prop="legalCredentialsType">
                 <el-select
                     v-model="form.legalCredentialsType"
                     placeholder="请选择个人证件类型"
