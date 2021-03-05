@@ -43,7 +43,17 @@ export default defineComponent({
 
     const save = (form) => {
       const params = { ...form }
-      Object.keys(params).forEach((v) => {
+      const numberList = [
+        'sameStyleTimeLimit',
+        'baseCycle',
+        'differentStyleTimeLimit',
+        'blueWarningCycle',
+        'yellowWarningCycle',
+        'orangeWarningCycle',
+        'redWarningCycle',
+      ]
+
+      numberList.forEach((v) => {
         if (params[v] === '' || params[v] === 0) {
           params[v] = undefined
         }
@@ -64,10 +74,9 @@ export default defineComponent({
       })
     }
 
-
-    if(data.length === 1){
-      Object.keys(form).forEach(v=>{
-        form[v]=data[0][v]
+    if (data.length === 1) {
+      Object.keys(form).forEach((v) => {
+        form[v] = data[0][v]
       })
     }
 
