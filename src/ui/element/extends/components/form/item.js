@@ -69,6 +69,11 @@ export default {
             on
         }
 
+        // 全局增加clearable
+        if (this.TABLE_PROVIDE && !Object.hasOwnProperty.call(renderConfig.props, 'clearable')) {
+            renderConfig.props.clearable = true
+        }
+
         if (this.component.indexOf('el') !== 0) {
             renderConfig.attrs = props
         }
@@ -83,6 +88,9 @@ export default {
     },
     inject: {
         FORM_PROVIDE: {
+            default: null
+        },
+        TABLE_PROVIDE: {
             default: null
         }
     },

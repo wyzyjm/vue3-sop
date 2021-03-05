@@ -5,13 +5,15 @@ import getProductList from '@/api/1665-get-production-config-product-group-by-co
 
 import { reactive } from '@vue/composition-api'
 
-function filterEmptyArray(arr) {
+
+function filterEmptyArrayAndSetDisabled(arr) {
     if (!Array.isArray(arr)) return
     arr.forEach(function (v) {
+        v.disabled=v.status===0
         if (v.children.length === 0) {
             v.children = null
         } else {
-            filterEmptyArray(v.children)
+            filterEmptyArrayAndSetDisabled(v.children)
         }
     })
 }
@@ -28,8 +30,8 @@ export default () => {
         org: []
     })
 
-    Promise.all([getSalesChannels(), getBusinessType({ status: 1, pageSize: 9999 }), getServiceProvider({ status: 0, pageSize: 9999 }),getProductList()]).then((response) => {
-        filterEmptyArray(response[0].data)
+    Promise.all([getSalesChannels({status:1}), getBusinessType({ status: 1, pageSize: 9999 }), getServiceProvider({ status: 0, pageSize: 9999 }),getProductList()]).then((response) => {
+        filterEmptyArrayAndSetDisabled(response[0].data)
         options.salesChannels = response[0].data
         options.businessType = response[1].data.records
         options.serviceProvider = response[2].data.records

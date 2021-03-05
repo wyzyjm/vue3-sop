@@ -6,16 +6,20 @@
         <el-col :span="12">售卖渠道</el-col>
         <el-col :span="12">生产流程</el-col>
       </el-row>
-
       <el-row v-for="(item,i) in form.productionProcessList" :key="i">
         <el-col :span="12">
-          <s-form-item>
-            <s-group class="pct90" :data="options" v-model="item.serviceProviderId"></s-group>
+          <s-form-item :prop="`productionProcessList.${i}.salesChannelId`" :rules="[{required:true,type:'array',message:'请选择售卖渠道',trigger: 'change'}]" >
+            <el-cascader class="pct90" :props="{
+              checkStrictly : true,
+            label:'name',
+            value:'id',
+            multiple:true
+          }" v-model="item.salesChannelId" :collapse-tags="true" :options="options.salesChannelList"></el-cascader>
           </s-form-item>
         </el-col>
         <el-col :span="12">
-          <s-form-item>
-            <s-group class="pct90" :data="options" v-model="item.productionOrganizationId"></s-group>
+          <s-form-item :prop="`productionProcessList.${i}.productionProcessId`" :rules="[{required:true,message:'请选择生产流程',trigger: 'change'}]"  >
+            <s-group class="pct90" @change="businessFlowChange($event,item)" :data="options.businessFlow" :props="{label:'businessFlowName',value:'id'}" v-model="item.productionProcessId"></s-group>
           </s-form-item>
         </el-col>
       </el-row>
@@ -32,52 +36,72 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import useState from '@/hooks/use-state/disable-state'
+import useOptions from '../hooks/use-production-set-options'
 import _save from '@/api/1504-post-production-config-service-product-production-process-batch'
+import { Message } from 'element-ui'
+
 export default defineComponent({
   props: {
-    isEdit: {
-      default: false,
-    },
     data: {
-      type: Object,
+      type: Array,
     },
   },
-  setup({ isEdit, data }) {
+  setup({ data }, { emit }) {
     const item = {
-      salesChannelId: '',
+      salesChannelId: [],
       productionProcessId: '',
       productionProcessName: '',
     }
 
     let form = reactive({
-      serviceProductId:isEdit? data.id:undefined,
+      serviceProductIdList: data.map((v) => v.id),
       productionProcessList: [],
     })
 
     const save = (form) => {
-      return _save(form).then(({ msg }) => {
-        console.log(msg)
+      const params = JSON.parse(JSON.stringify(form))
+
+      const arr = []
+
+      params.productionProcessList.forEach((v) => {
+        v.salesChannelId.forEach((c) => {
+          arr.push({
+            productionProcessId: v.productionProcessId,
+            productionProcessName: v.productionProcessName,
+            salesChannelId: c[c.length - 1],
+          })
+        })
+      })
+      params.productionProcessList = arr
+      console.log(params)
+
+      return _save(params).then(() => {
+        Message({
+          message: '保存成功！',
+          type: 'success',
+        })
+        emit('close')
       })
     }
+    const options = useOptions()
 
     const add = () => {
       form.productionProcessList.push({ ...item })
     }
-
-    if (isEdit) {
-      form = { ...form, ...data }
-    } else {
-      add() //默认值
+    const businessFlowChange = (val, item) => {
+      item.productionProcessName = options.businessFlow.find(
+        (v) => v.id === val
+      ).businessFlowName
     }
 
-    const { options } = useState()
+    add()
 
     return {
       add,
       save,
       form,
       options,
+      businessFlowChange,
     }
   },
 })

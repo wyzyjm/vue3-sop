@@ -1,11 +1,28 @@
 <template>
   <div>
-    <s-form :model="form" label-width="110px" @submit="save">
-      <s-form-item label="状态名称" :rules="['required']" prop="name" />
-      <s-form-item label="状态code" v-if="isEdit" component="s-text" :content="form.code" prop="code" />
-      <s-form-item label="状态code" v-else prop="code" />
-      <s-form-item label="顺序" prop="description" />
-      <s-form-item label="关联业务状态" prop="status" component="s-group" :data="options.status" tag="el-radio-group" />
+    <s-form :model="form" label-width="140px" @submit="save">
+      <s-form-item label="状态名称" prop="serviceOrderStatus" :rules="['required:number']">
+        <el-select v-model="form.serviceOrderStatus" placeholder="请选择状态">
+          <el-option
+            v-for="item in serviceState"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </s-form-item>
+      <s-form-item label="状态code" component="s-text" :content="form.serviceOrderStatus" prop="serviceOrderStatus" />
+      <s-form-item label="顺序" prop="sortOrder" :rules="['required']" />
+      <s-form-item label="关联业务状态" prop="businessNodeStatusArray" :rules="['required:array']">
+        <el-select v-model="form.businessNodeStatusArray" multiple placeholder="请选择关联业务状态">
+          <el-option
+            v-for="item in relevanceData"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          ></el-option>
+        </el-select>
+      </s-form-item>
       <s-form-item>
         <s-button @click="$emit('close')">取消</s-button>
         <s-button type="primary" run="form.submit">确定</s-button>
@@ -14,47 +31,71 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive } from '@vue/composition-api'
-import updateServiceType from '@/api/1520-put-production-config-service-order-status'
-import saveServiceType from '@/api/1516-post-production-config-service-order-status'
-import useState from '@/hooks/use-state/disable-state'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { Message } from 'element-ui'
+import statusList from '@/api/1685-get-production-config-service-order-status-list'
+import addStatus from '@/api/1572-post-service-order-sevice-business-flow-node-{nodeid}-addstatus'
+import updaetStatus from '@/api/1592-post-service-order-sevice-business-flow-node-{nodeid}-{statusrelationid}-addstatus'
+import getStatus from '@/api/1587-get-service-order-sevice-business-flow-node-{nodeid}-{statusrelationid}-statusrelation'
 
 export default defineComponent({
   props: {
+    nodeId: {
+      type: Number
+    },
     isEdit: {
       default: false,
     },
     data: {
-      type: Object,
-    },
+      type: Object
+    }
   },
-  setup({ isEdit, data }) {
+  setup({ nodeId, data, isEdit }, {root, emit}) {
+    const flowData = reactive({
+      serviceState: [],
+      relevanceData: [
+        { id: 0, name: '未开始'},
+        { id: 1, name: '进行中'},
+        { id: 2, name: '异步等待'},
+        { id: 4, name: '执行失败'},
+        { id: 8, name: '执行成功'}
+      ]
+    })
+
     let form = reactive({
-      description: '',
-      id: undefined,
-      code: '',
-      name: '',
-      status: 1,
+      sortOrder: '',
+      serviceOrderStatus: '',
+      businessNodeStatusArray: '',
     })
 
     if (isEdit) {
-      form = { ...form, ...data }
+      getStatus({ nodeId, statusRelationId: data.id })
+      .then(({data}) => {
+        form.sortOrder = data.sortOrder+'';
+        form.serviceOrderStatus = data.serviceOrderStatus;
+        form.businessNodeStatusArray = data.businessNodeStatusArray;
+        // console.log("form-2", form, data)
+      })
     }
 
-    const save = (form) => {
-      return (isEdit ? updateServiceType(form) : saveServiceType(form)).then(
-        ({ msg }) => {
-          console.log(msg)
-        }
-      )
+    const save = () => {
+      return (isEdit ? updaetStatus({ nodeId, statusRelationId: data.id, ...form}) : addStatus({ nodeId, ...form }))
+      .then(({ msg }) => {
+        emit('close')
+        root.$store.commit('table/update')
+        Message({
+          type: 'success',
+          message: msg,
+        })
+      })
     }
 
-    const { options } = useState()
+    statusList().then(({data}) => { flowData.serviceState = data||[] })
 
     return {
+      ...toRefs(flowData),
       save,
-      form,
-      options,
+      form
     }
   },
 })
