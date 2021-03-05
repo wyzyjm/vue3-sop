@@ -6,7 +6,7 @@
           <s-input v-model="form.businessFlowName"></s-input>
         </s-form-item>
         <s-form-item label="状态">
-          <el-select v-model="form.status" placeholder="请选择">
+          <el-select v-model="form.status" clearable placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
