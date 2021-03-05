@@ -69,6 +69,21 @@ components: {
 },
 data() {
 //这里存放数据
+const idcardVaild = (rule, value, callback) => {
+    console.log(this.form.legalCredentialsType)
+    if (!value) {
+        callback(new Error('请输入证件号码'))
+        return false 
+    }
+
+    if (this.form.legalCredentialsType == 1) {
+        if (value.length != 18) {
+            callback(new Error('请输入正确的身份证号'))
+            return false  
+        }
+    }
+    callback()
+}
 return {
     form: {
         // basicName: '', // 公司名称
@@ -126,9 +141,10 @@ return {
             { required: true, message: '请选择证件类型', trigger: 'change' }
         ], 
         legalCredentialsNumber: [
-            { required: true, message: '请输入证件号码', trigger: 'blur' },
-            { min: 18, max: 18, message: '请输入正确的证件号码', trigger: 'blur' }
-        ]       
+            { validator: idcardVaild, trigger: 'blur' }
+            // { required: true, message: '请输入证件号码', trigger: 'blur' },
+            // { min: 18, max: 18, message: '请输入正确的证件号码', trigger: 'blur' }
+        ]   
     },    
 }
 },

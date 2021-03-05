@@ -10,7 +10,8 @@
                 <div class="item-col">
                     <div class="col-title">{{value}}：</div>
                     <div class="col-txt" v-if="key == 'category'">企业</div>
-                    <div class="col-txt" v-if="key == 'basicStatus'">{{result[key] | filterStatus}}</div>
+                    <div class="col-txt" v-else-if="key == 'basicStatus'">{{result[key] | filterStatus}}</div>
+                    <div class="col-txt" v-else-if="key == 'legalCredentialsType'">{{result[key] | filterType}}</div>
                     <div class="col-txt" v-else-if="key == 'basicType'">{{result[key] == 1 ? '自营' : '非自营'}}</div>
                     <div class="col-txt" v-else-if="key == 'registeredCapital'">{{result[key]}}万</div>
                     <!-- <div class="col-txt" v-else-if="key == 'foundTime'">{{result[key].replace('T', ' ').replace('0Z', '')}}</div> -->
@@ -48,7 +49,8 @@
                 <div class="item-col">
                     <div class="col-title">{{value}}：</div>
                     <div class="col-txt" v-if="key == 'category'">个人</div>
-                    <div class="col-txt" v-if="key == 'basicStatus'">{{result[key] | filterStatus}}</div>
+                    <div class="col-txt" v-else-if="key == 'basicStatus'">{{result[key] | filterStatus}}</div>
+                    <div class="col-txt" v-else-if="key == 'legalCredentialsType'">{{result[key] | filterType}}</div>
                     <div class="col-txt" v-else-if="key == 'basicType'">{{result[key] == 1 ? '自营' : '非自营'}}</div>
                     <div class="col-txt" v-else-if="key == 'registeredCapital'">{{result[key]}}万</div>
                     <!-- <div class="col-txt" v-else-if="key == 'foundTime'">{{result[key].replace('T', ' ').replace('0Z', '')}}</div> -->
@@ -110,7 +112,7 @@ return {
             showPower: 2
         },    
         {
-            title: '注册信息', keys: {foundTime: '成立时间', registeredCapital: '注册资本', ratepayingNumber: '纳税人识别号', businessLicenceUrl: '营业执照上传',
+            title: '注册信息', keys: {foundTime: '成立时间', registeredCapital: '注册资本', ratepayingNumber: '纳税人识别号', businessLicenseUrl: '营业执照上传',
             businessLicenceNumber: '营业执照注册号', registrationUrl: '税务登记证上传', registrationNumber: '税务登记证号'}
         },   
         {
@@ -132,7 +134,6 @@ return {
             contactUsername: '联系人姓名', contactEmail: '联系人邮箱',
             contactPhone: '手机号', legalCredentialsType: '证件类型',
             legalCredentialsNumber: '证件号码', idCard: '证件附件'},
-            showPower: 1
         }        
     ],
     result: {}
@@ -146,8 +147,27 @@ filters: {
             return '暂停'
         } else if (val == 2) {
             return '清退'
-        } else if (val == 1) {
+        } else if (val == 3) {
             return '关闭'
+        }
+    },
+    filterType (val) {
+        if (val == 1) {
+            return '身份证'
+        } else if (val == 2) {
+            return '临时身份证'
+        } else if (val == 3) {
+            return '护照'
+        } else if (val == 4) {
+            return '港澳台身份证'
+        } else if (val == 5) {
+            return '外国护照'
+        } else if (val == 6) {
+            return '户口卡'
+        } else if (val == 7) {
+            return '军人身份证'
+        } else if (val == 8) {
+            return '警察身份证'
         }
     }
 },

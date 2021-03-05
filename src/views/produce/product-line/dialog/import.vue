@@ -9,7 +9,7 @@
     <div v-show="active===0">
       <el-alert class="mt20" title="导入的数据将增量补充到现有的数据中" type="info" show-icon :closable="false" />
       <p>1、请按照模板格式准备需要导入的数据</p>
-      <el-link class="ml20" :href="downloadURL" type="primary">下载账号数据导入模版</el-link>
+      <el-link class="ml20" :href="downloadURL" type="primary">下载导入模版</el-link>
       <p>2、请选择需要导入的文件</p>
       <s-form :model="form">
         <s-form-item prop="upload">
@@ -79,15 +79,32 @@ export default defineComponent({
       active.value = 1
     }
 
+    function downFile(blob, fileName) {
+      if (window.navigator.msSaveOrOpenBlob) {
+        navigator.msSaveBlob(blob, fileName)
+      } else {
+        var link = document.createElement('a')
+        link.href = window.URL.createObjectURL(blob)
+        link.download = fileName
+        link.click()
+        window.URL.revokeObjectURL(link.href)
+      }
+    }
+
     const uploadSuccess = (fileList) => {
       active.value = 2
       fileState.success = fileList.length
+      var blob = new Blob([fileList[0].response.data], { type: 'application/vnd.ms-excel' })
+      downFile(blob, fileList[0].raw.name)
+      console.log(fileList)
     }
 
     const uploadError = (msg) => {
       active.value = 2
       fileState.error = fileList.value.length
       fileState.errorMessage = msg
+
+      console.log(msg)
     }
 
     return {

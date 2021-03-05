@@ -24,6 +24,7 @@ import axios from 'axios'
 
 const request = axios.create({
   headers: { 'Content-Type': 'multipart/form-data' },
+  responseType: 'blob',
 })
 
 export default {
@@ -50,8 +51,8 @@ export default {
       type: Number,
       default: 10,
     },
-    fileName:{
-      defalut:'file'
+    fileName: {
+      defalut: 'file',
     },
     files: {
       default: () => [],

@@ -8,15 +8,18 @@
       </el-row>
 
       <el-row v-for="(item,i) in form.relatedMappingList" :key="i">
-        <el-col :span="12">
-          <s-form-item>
+        <el-col :span="10">
+          <s-form-item :rules="[{required:true,message:'请填写关联商品名称',trigger: 'blur'}]" :prop="`relatedMappingList.${i}.relatedGoodsName`">
             <s-input class="pct90" v-model="item.relatedGoodsName"></s-input>
           </s-form-item>
         </el-col>
-        <el-col :span="12">
-          <s-form-item>
+        <el-col :span="10">
+          <s-form-item :rules="[{required:true,message:'请填写关联商品名称',trigger: 'blur'}]" :prop="`relatedMappingList.${i}.relatedGoodsCode`">
             <s-input class="pct90" v-model="item.relatedGoodsCode"></s-input>
           </s-form-item>
+        </el-col>
+        <el-col :span="4">
+          <s-button v-if="i!==0" type="text" @click="del(i)" icon="el-icon-delete" />
         </el-col>
       </el-row>
 
@@ -66,11 +69,15 @@ export default defineComponent({
     const add = () => {
       form.relatedMappingList.push({ ...item })
     }
+    const del = (i) => {
+      form.relatedMappingList.splice(i, 1)
+    }
 
     add()
 
     return {
       add,
+      del,
       save,
       form,
     }

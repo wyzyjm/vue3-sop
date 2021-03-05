@@ -56,6 +56,7 @@ export default defineComponent({
         {
           label: '状态名称',
           prop: 'name',
+          showOverflowTooltip: true,
         },
         {
           label: '状态编码',

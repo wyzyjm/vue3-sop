@@ -69,12 +69,12 @@ export default defineComponent({
         },
         {
           label: '创建时间',
-          width:'180px',
+          width: '180px',
           prop: 'createTime',
         },
         {
           label: '操作项',
-          width:'120px',
+          width: '120px',
           prop: ({ row }) => {
             return [
               <s-button type="text" onClick={() => setState(row)}>

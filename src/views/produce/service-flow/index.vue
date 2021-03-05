@@ -35,6 +35,7 @@
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { Message } from 'element-ui'
 import useDialog from '@/hooks/use-dialog'
 import getTableData from '@/api/1482-get-service-order-sevice-business-flow'
 import setFlowStatus from '@/api/1552-post-service-order-sevice-business-flow-{id}-{status}'
@@ -63,11 +64,11 @@ export default defineComponent({
         },
         {
           label: '描述',
-          prop: 'describe',
+          prop: 'describeInfo',
         },
         {
           label: '创建时间',
-          prop: 'creatreTime',
+          prop: 'createTime',
         },
         {
           label: '操作',
@@ -98,10 +99,13 @@ export default defineComponent({
       options: [
         {
           value: 0,
-          label: '停用'
+          label: '未启用'
         }, {
           value: 1,
           label: '启用'
+        }, {
+          value: 2,
+          label: '停用'
         }
       ]
     })
@@ -122,7 +126,7 @@ export default defineComponent({
 
     const form = reactive({
       businessFlowName: '',
-      status: 1,
+      status: '',
       flowWorkDefName: ''
     })
 
@@ -136,7 +140,7 @@ export default defineComponent({
       setFlowStatus({id: row.id, status: row.status?'2':'1'}).then(() => {
         Message({
           type: 'success',
-          message: '操作成功！',
+          message: row.status?'已停用':'已启用',
         })
         root.$store.commit('table/update')
       })

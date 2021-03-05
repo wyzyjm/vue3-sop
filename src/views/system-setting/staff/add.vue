@@ -9,18 +9,30 @@
                     v-model="form.sourceId"
                     placeholder="请选择所属服务商"
                     class="w340"
+                    @change="changeOrg"
                 >
-                    <el-option label="测试" value="测试"></el-option>
+                    <el-option :label="item.basicName" :value="item.id"
+                    v-for="(item, idx) in providerList" :key="idx"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="所属组织：" prop="orgId" class="is-required">
-                <el-select
+                <!-- <el-select
+                    :disabled="form.sourceId ? false : true"
                     v-model="form.orgId"
                     placeholder="请选择所属组织"
                     class="w340"
                 >
-                    <el-option label="测试" value="测试"></el-option>
-                </el-select>
+                    <el-option :label="item.basicName" :value="item.id"
+                    v-for="(item, idx) in orgList" :key="idx"></el-option>
+                </el-select> -->
+                <el-cascader
+                    :disabled="form.sourceId ? false : true"
+                    v-model="form.orgId"
+                    placeholder="请选择所属组织"
+                    class="w340"
+                    :options="orgList"
+                    :props="{ expandTrigger: 'hover' , value:'orgId', label:'orgName'}"
+                    @change="handleChange"></el-cascader>
             </el-form-item>
             <el-form-item label="员工姓名：" prop="employeeName" class="is-required">
                 <el-input class="w340" v-model="form.employeeName" placeholder="请输入员工姓名"
@@ -84,6 +96,8 @@ import addStaff from '@/api/1332-post-frontapi-service-provider-employee-add'
 import editStaff from '@/api/1334-post-frontapi-service-provider-employee-update'
 import getStaff from '@/api/1376-get-frontapi-service-provider-employee-{id}'
 import getRoleList from '@/api/1366-get-common-service-role-group-list'
+import getProviderList from '@/api/1660-get-frontapi-service-provider-list-by-name'
+import getOrgList from '@/api/1320-get-frontapi-service-provider-org-get-by-providerid'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {},
@@ -92,7 +106,7 @@ data() {
 return {
     form: {
         employeeName: '', // 员工姓名
-        orgId: 11, // 机构id
+        orgId: '', // 机构id
         workMail: '', // 邮箱
         officePhone: '', // 办公电话
         mobile: '', // 手机
@@ -104,6 +118,8 @@ return {
     checkRoleObj: {}, // 选中的角色组
     checkRoleArr: [],
     roleList: [],
+    providerList: [],
+    orgList: [],
     positionArr: ['服务商设计师', '服务商制作员', '服务商设计助理'],
     formRules: {
         employeeName: [
@@ -131,6 +147,16 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
+    // 选择组织
+    changeOrg () {
+        getOrgList({providerId: this.form.sourceId}).then(res => {
+            res.data.children = this.getTreeData(res.data.children)
+            this.orgList = [res.data]
+        }).catch(err => {
+            console.log(err, '组织获取失败')
+        })
+    },
+    handleChange () {},
     changeVal (e) {
         this.checkRoleArr = e
         this.roleList.map(v => {
@@ -139,6 +165,21 @@ methods: {
             })
         })
         console.log(this.checkRoleObj,)
+    },
+    // 树形
+    getTreeData(data){
+        // 循环遍历json数据
+        for(var i=0;i<data.length;i++){
+            if(data[i].children.length<1){
+                // children若为空数组，则将children设为undefined
+                data[i].children=undefined;
+            }else {
+                // children若不为空数组，则继续 递归调用 本方法
+                this.getTreeData(data[i].children);
+            }
+        }
+        
+        return data;
     },
     handleSave () {
         console.log(this.form)
@@ -191,6 +232,19 @@ methods: {
             });
             this.form.roleMap = arr
         })
+    },
+    getProviderList () {
+        getProviderList().then(res => {
+            this.providerList = res.data
+        })
+    },
+    getRoleList () {
+        // 获取角色列表
+        getRoleList().then(res => {
+            this.roleList = res.data.records || []
+        }).catch(err => {
+            console.log(err, '获取角色列表失败')
+        }) 
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
@@ -199,12 +253,8 @@ created() {
     if (this.sid) {
         this.getDetail()
     }
-    // 获取角色列表
-    getRoleList().then(res => {
-        this.roleList = res.data.records || []
-    }).catch(err => {
-        console.log(err, '获取角色列表失败')
-    })
+    this.getProviderList()
+    this.getRoleList()
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {

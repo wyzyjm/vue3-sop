@@ -146,7 +146,7 @@
                 maxlength="50"
                 minlength="2"></el-input>
             </el-form-item>
-            <el-form-item label="个人证件类型：" prop="legalCredentialsType">
+            <el-form-item label="证件类型：" prop="legalCredentialsType">
                 <el-select
                     v-model="form.legalCredentialsType"
                     placeholder="请选择个人证件类型"
@@ -162,7 +162,7 @@
                     <el-option label="警察身份证" :value="8"></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="法人证件上传：" prop="legalCredentialsNumber">
+            <el-form-item label="法人证件上传：">
                 <upload type="idcard" :param="['idcardFrontUrl', 'idcardBackUrl']" :form="form"></upload>
             </el-form-item>  
             <el-form-item label="法人证件号码：" prop="legalCredentialsNumber" class="is-required">
@@ -241,6 +241,21 @@ const basicNameVaild = (rule, value, callback) => {
         console.log(err, '检查公司名称是否可用error')
     })
 };    
+const idcardVaild = (rule, value, callback) => {
+    console.log(this.form.legalCredentialsType)
+    if (!value) {
+        callback(new Error('请输入证件号码'))
+        return false 
+    }
+
+    if (this.form.legalCredentialsType == 1) {
+        if (value.length != 18) {
+            callback(new Error('请输入正确的身份证号'))
+            return false  
+        }
+    }
+    callback()
+}
 //这里存放数据
 return {
     // 省市区集合
@@ -324,7 +339,15 @@ return {
         ],
         map: [
             { required: true, message: '请选择省市区', trigger: 'change' }
-        ],        
+        ],    
+        legalCredentialsType: [
+            { required: true, message: '请选择证件类型', trigger: 'change' }
+        ], 
+        legalCredentialsNumber: [
+            { validator: idcardVaild, trigger: 'blur' }
+            // { required: true, message: '请输入证件号码', trigger: 'blur' },
+            // { min: 18, max: 18, message: '请输入正确的证件号码', trigger: 'blur' }
+        ]       
     },
     formArr: [1,2,3,4]
 }

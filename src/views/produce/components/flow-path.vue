@@ -39,7 +39,7 @@
                   :transform="`translate(${start.w*2 + flow.w*(index-1) + flow.stroke + baseArrow*index + start.stroke + baseX}, ${baseY-flow.h/2})`">
                     <rect x="0" y="0" :width="flow.w" :height="flow.h" rx="10" ry="10" stroke="#bbbbbb" :stroke-width="flow.stroke" fill="#f9f9f9"></rect>
                     <text x="10" y="20">
-                      <tspan x="25" y="45">{{ item.businessFlowNodeName || '' }}</tspan>
+                      <tspan x="15" y="45">{{ item.businessFlowNodeName || '' }}</tspan>
                     </text>
                 </g>
                 <g>
@@ -164,7 +164,7 @@ export default defineComponent({
         case 1:
           flowPath.position = {
             index,
-            businessFlowNodeType: item.businessFlowNodeType,
+            ...item,
             x: flowPath.baseX,
             y: flowPath.baseY - start.w,
             w: start.w*2,
@@ -174,7 +174,7 @@ export default defineComponent({
         case 4:
           flowPath.position = {
             index,
-            businessFlowNodeType: item.businessFlowNodeType,
+            ...item,
             x: flowPath.baseX + start.w*2 + flowPath.baseArrow*(flowPath.flowData.length-1) + ((flowPath.flowData.length-2)?flow.stroke*2:flow.stroke) + flow.w*(flowPath.flowData.length-2),
             y: flowPath.baseY - end.w - end.stroke/2,
             w: end.w*2 + end.stroke,
@@ -184,7 +184,7 @@ export default defineComponent({
         default:
           flowPath.position = {
             index,
-            businessFlowNodeType: item.businessFlowNodeType,
+            ...item,
             x: flowPath.baseX + start.w*2 + flowPath.baseArrow*index + flow.stroke*2 + flow.w*(index-1),
             y: flowPath.baseY - flow.h/2,
             w: flow.w + flow.stroke,
@@ -197,16 +197,12 @@ export default defineComponent({
     }
 
     function addFlow() {
-      let currIndex = (flowPath.position.index || 0 ) + 1;
-      let addItem = {
-        name: '用户任务' + currIndex,
-        businessFlowNodeType: 2,
-        relation: '',
-        produceCycle: 2,
-        earlyCycle: 4
-      };
-      flowPath.flowData.splice(currIndex, 0, addItem)
-      selectPath(addItem, currIndex);
+      context.emit('addFlow', flowPath.position, __addFlow)
+    }
+
+    function __addFlow(currIndex, item) {
+      flowPath.flowData.splice(currIndex+1, 0, item);
+      selectPath(item, currIndex+1);
     }
 
     function delFlow() {

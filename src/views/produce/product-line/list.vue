@@ -9,7 +9,7 @@
             label:'name',
             value:'id',
             emitPath:false
-          }" v-model="form.salesChannelId" :show-all-levels="false" :options="moreOptions.salesChannels"></el-cascader>
+          }" v-model="form.salesChannelId" clearable :show-all-levels="false" :options="moreOptions.salesChannels"></el-cascader>
         </s-form-item>
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
