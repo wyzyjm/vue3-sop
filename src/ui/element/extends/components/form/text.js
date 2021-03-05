@@ -8,6 +8,14 @@ export default {
     tag: {
       default: 'span'
     },
+    props:{
+      default(){
+        return {
+          label:'label',
+          value:'value'
+        }
+      }
+    },
     options: Array,
     tip: String | Boolean,
     emptyText: {
@@ -24,7 +32,7 @@ export default {
     // 选项
     if (this.options) {
       try {
-        content = this.options.filter(v => v.value === content)[0].label
+        content = this.options.filter(v => v[this.props.value] === content)[0][this.props.label]
       } catch (error) {
         console.log(error)
       }

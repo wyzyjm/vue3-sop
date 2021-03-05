@@ -12,7 +12,7 @@ export default [
             component: () => import(/* webpackChunkName: "service-product" */ '@/views/produce/service-product/list'),
         },
         {
-            path: 'detail/:data',
+            path: 'detail/:id',
             meta: {
                 title: '查看'
             },
