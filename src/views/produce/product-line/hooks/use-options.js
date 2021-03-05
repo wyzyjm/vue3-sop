@@ -28,7 +28,7 @@ export default () => {
         org: []
     })
 
-    Promise.all([getSalesChannels(), getBusinessType({ status: 1, pageSize: 9999 }), getServiceProvider({ status: 0, pageSize: 9999 }),getProductList()]).then((response) => {
+    Promise.all([getSalesChannels({status:1}), getBusinessType({ status: 1, pageSize: 9999 }), getServiceProvider({ status: 0, pageSize: 9999 }),getProductList()]).then((response) => {
         filterEmptyArray(response[0].data)
         options.salesChannels = response[0].data
         options.businessType = response[1].data.records

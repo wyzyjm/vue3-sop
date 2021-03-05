@@ -42,9 +42,15 @@ export default defineComponent({
     })
 
     const save = (form) => {
+      const params = { ...form }
+      Object.keys(params).forEach((v) => {
+        if (params[v] === '' || params[v] === 0) {
+          params[v] = undefined
+        }
+      })
       const arr = data.map((v) => {
         return {
-          ...form,
+          ...params,
           id: v.id,
         }
       })
@@ -55,6 +61,13 @@ export default defineComponent({
         })
         emit('close')
         root.$store.commit('table/update')
+      })
+    }
+
+
+    if(data.length === 1){
+      Object.keys(form).forEach(v=>{
+        form[v]=data[0][v]
       })
     }
 

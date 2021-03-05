@@ -14,7 +14,7 @@
       <div slot="top" class="mb20">
         <el-button type="primary" @click="add">新增</el-button>
         <el-button type="primary" @click="importDialog.open">导入映射</el-button>
-        <el-button type="primary" @click="productionSetDialog.open">生产流程</el-button>
+        <el-button type="primary" :disabled="table.checked.length===0" @click="productionSetDialog.open({data:table.checked})">生产流程</el-button>
       </div>
     </s-simple-table>
     <s-dialog v-bind="productionSetDialog" @close="productionSetDialog.close" />
@@ -110,7 +110,7 @@ export default defineComponent({
               <s-button
                 type="text"
                 onClick={() =>
-                  productionSetDialog.open({ data: row, isEdit: true })
+                  productionSetDialog.open({ data: [row] })
                 }
               >
                 生产流程
