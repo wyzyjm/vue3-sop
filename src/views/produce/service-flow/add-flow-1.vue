@@ -15,7 +15,7 @@
             </el-option>
           </el-select>
         </s-form-item>
-        <s-form-item label="描述" prop="describe" type="textarea" />
+        <s-form-item label="描述" prop="describeInfo" type="textarea" />
 
         <s-form-item>
           <s-button @click="$router.push('/produce/service-flow')">取消</s-button>
@@ -52,7 +52,7 @@ export default defineComponent({
       businessFlowName: '', // 业务流程名称	
       businessFlowCode: '', // 	业务流程code	
       flowWorkDefId: '', // 	工作流程定义id	
-      describe: '', // 	描述
+      describeInfo: '', // 	描述
     })
 
     if (isEdit) {
@@ -61,14 +61,15 @@ export default defineComponent({
 
     const save = (form) => {
       addBusinessFlow(form).then((res) => {
-        res.data&&addFlowPath(res.data)
+        let currF = res.data || {};
+        addFlowPath(currF.id, currF.flowWorkDefId)
       })
     }
 
-    function addFlowPath(id) {
+    function addFlowPath(id, workId) {
       root.$router.push({
         path: "/produce/add-service-flow",
-        query: { id }
+        query: { id, workId }
       });
     }
 

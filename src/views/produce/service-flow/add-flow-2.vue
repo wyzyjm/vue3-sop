@@ -2,7 +2,7 @@
   <div>
     <div class="ce-flow mb20 flow-k">
       <div class="path-flow">
-        <flow-path :data="data" @selectFlow="flowSelect"/>
+        <flow-path :data="data" @selectFlow="flowSelect" @addFlow="flowAdd" />
       </div>
       <div class="save-flow">
         <el-button type="primary" @click="saveFlow">保存</el-button>
@@ -19,7 +19,16 @@
         <el-col :span="10">
           <div class="row-name">
             <span>关联工作流节点：</span>
-            <p><el-input v-model="data[index].workFlowNodeIds" placeholder="请选择节点"></el-input></p>
+            <p>
+              <el-select v-model="data[index].workFlowNodeIdsArray" multiple>
+                <el-option 
+                  v-for="item in nodeLists" 
+                  :key="item.id" 
+                  :label="item.name" 
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </p>
           </div>
         </el-col>
       </el-row>
@@ -39,30 +48,40 @@
       </el-row>
     </div>
     <div class="add-table">
-      <s-simple-table :data="tabData" :cols="tabCols">
-        <div slot="top" class="mb20">
-          <el-button type="primary" @click="dialog.open">新增</el-button>
-        </div>
-      </s-simple-table>
+      <div class="mb15">
+        <el-button type="primary" @click="dialog.open({ nodeId: currFLow.id})">添加服务单状态</el-button>
+      </div>
+      <s-table :data="statuList" :cols="tabCols"></s-table>
     </div>
     <s-dialog v-bind="dialog" @close="dialog.close" />
+    <s-dialog v-bind="editButton" @close="editButton.close" />
+    <s-dialog v-bind="addButton" @close="addButton.close" />
   </div>
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { Message } from 'element-ui'
 import flowpath from "../components/flow-path";
 import useDialog from '@/hooks/use-dialog';
 import flowNodeInit from '@/api/1562-get-service-order-sevice-business-flow-node-init-{businessflowid}'
 import flowSaveall from '@/api/1607-post-service-order-sevice-business-flow-node-saveall-{businessflowid}'
+import flowNodeAdd from '@/api/1567-post-service-order-sevice-business-flow-node-add-{businessflowid}'
+import nodelist from '@/api/1640-get-service-order-sevice-business-flow-{processdefinitionid}-nodelist'
+import statusList from '@/api/1582-get-service-order-sevice-business-flow-node-statusrelation-{nodeid}'
+import deleteStatus from '@/api/1577-delete-service-order-sevice-business-flow-node-{nodeid}-{statusrelationid}-statusrelation'
 export default defineComponent({
   components: { 
     'flow-path':flowpath
   },
   setup(props, { root }) {
     const flowId = root.$route.query.id;
+    const workId = root.$route.query.workId;
     const flowData = reactive({
       index: 0,
       data: [],
+      currFLow: {},
+      nodeLists: [],
+      statuList: [],
       options: [
         {
           value: 1,
@@ -72,24 +91,23 @@ export default defineComponent({
           label: '启用'
         }
       ],
-      tabData: [{name:'test', code:'业务code'}],
       tabCols: [
         {
           showOverflowTooltip: true,
           label: '状态名称',
-          prop: 'name',
+          prop: 'serviceOrderStatusName',
         },
         {
-          label: '业务code',
-          prop: 'code',
+          label: '状态code',
+          prop: 'businessNodeCode',
         },
         {
           label: '顺序',
-          prop: 'sx',
+          prop: 'sortOrder',
         },
         {
           label: '关联业务状态',
-          prop: 'a',
+          prop: 'businessNodeStatusName',
         },
         {
           label: '添加时间',
@@ -102,10 +120,28 @@ export default defineComponent({
             return [
               <s-button
                 type="text"
-                onClick={() => dialog.open({ data: row, isEdit: true })}
+                onClick={() => dialog.open({ nodeId: flowData.currFLow.id, data: row, isEdit: true })}
               >
                 编辑
               </s-button>,
+              <s-button
+                type="text"
+                onClick={() => deleteState(row)}
+              >
+                删除
+              </s-button>,
+              <s-button
+                type="text"
+                onClick={() => editButton.open({ nodeId: flowData.currFLow.id, data: row })}
+              >
+                编辑按钮
+              </s-button>,
+              <s-button
+                type="text"
+                onClick={() => addButton.open({ nodeId: flowData.currFLow.id, data: row })}
+              >
+                新增按钮
+              </s-button>
             ]
           },
         }
@@ -123,6 +159,12 @@ export default defineComponent({
       flowData.data = res.data || [];
     })
 
+    // 获取工作流节点
+    nodelist({ 'processDefinitionId': workId}).then((res) => { 
+      // console.log("res.data", res.data)
+      flowData.nodeLists = res.data || []; 
+    })
+
     const dialog = useDialog({
       uid: 'add-flow-state',
       dynamicTitle: (data) =>
@@ -131,32 +173,79 @@ export default defineComponent({
       component: require('./dialog/dialog-add-flow'),
     })
 
-    function addFlow() {
-      root.$router.push({
-        path: "/",
-        query: {}
-      });
-    }
+    const editButton = useDialog({
+      uid: 'edit-flow-btn',
+      dynamicTitle: () => '编辑按钮',
+      width: '800px',
+      component: require('./dialog/dialog-edit-btn'),
+    })
+
+    const addButton = useDialog({
+      uid: 'add-flow-btn',
+      dynamicTitle: () => '新增按钮',
+      width: '600px',
+      component: require('./dialog/dialog-add-btn'),
+    })
 
     function flowSelect(index) {
-      flowData.index = index;
-      // console.log("flowSelect", flowData.data[index])
+      flowData.index    = index;
+      flowData.currFLow = flowData.data[index] || {};
+      __getStatuLists();
+    }
+
+    function __getStatuLists() {
+      statusList({ "nodeId": flowData.currFLow.id })
+      .then(({ data }) => {
+        console.log("data", data, flowData)
+        flowData.statuList = data || [];
+      })
+    }
+
+    function flowAdd(item, callback) {
+      // console.log("flowAdd=", item)
+      flowNodeAdd({ 
+        businessFlowNodeType: 2, 
+        businessFlowId: item.businessFlowDefId,
+        lastNodeId: item.id, 
+        orderNum: item.orderNum
+      })
+      .then(({ data }) => {
+        callback&&callback(item.index||0, data);
+      })
+    }
+
+    function deleteState(row) {
+      // console.log("delete", row.id)
+      deleteStatus({ nodeId: flowData.currFLow.id, statusRelationId: row.id})
+      .then(() => {
+        root.$store.commit('table/update')
+        Message({
+          type: 'success',
+          message: '删除成功！',
+        })
+      })
     }
 
     function saveFlow () {
-      flowSaveall({businessFlowId: flowId})
-      .then((res) => {
-        console.log("save", res)
+      flowSaveall({businessFlowId: flowId, serviceBusinessFlowNodeJsonStr: JSON.stringify(flowData.data)})
+      .then(() => {
+        Message({
+          type: 'success',
+          message: '保存成功！',
+        })
       })
     }
 
     return {
       ...toRefs(flowData),
       form,
-      dialog,
-      addFlow,
       flowSelect,
-      saveFlow
+      saveFlow,
+      flowAdd,
+      deleteState,
+      dialog,
+      editButton,
+      addButton
     }
   },
 })
