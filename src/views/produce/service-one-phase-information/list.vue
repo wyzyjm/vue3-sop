@@ -46,7 +46,7 @@ export default defineComponent({
       (row) => {
         row.status = 1 ^ row.status
 
-        console.log(123,row);
+        console.log(123, row)
         return setStatus(row).then(() => {
           Message({
             type: 'success',
@@ -68,7 +68,9 @@ export default defineComponent({
       cols: [
         {
           type: 'expand',
-          prop: ({ row }) => <PhaseList uid={row.id} businessFlowDefId={row.businessFlowDefId} />,
+          prop: ({ row }) => (
+            <PhaseList uid={row.id} businessFlowDefId={row.businessFlowDefId} />
+          ),
         },
         {
           showOverflowTooltip: true,
@@ -79,26 +81,29 @@ export default defineComponent({
         },
         {
           label: '名称编码',
-          prop: ({ row }) => {
-            return createEditRow(row, 'flowShowCode')
-          },
+          prop: 'flowShowCode',
         },
+        // {
+        //   label: '状态',
+        //   width: '80px',
+        //   prop: ({ row }) => {
+        //     return isEdit(row) ? (
+        //       <s-group
+        //         value={row.status}
+        //         onInput={(val) => {
+        //           row.status = val
+        //         }}
+        //         data={options}
+        //       />
+        //     ) : (
+        //       getStateText(row.status)
+        //     )
+        //   },
+        // },
         {
           label: '状态',
           width: '80px',
-          prop: ({ row }) => {
-            return isEdit(row) ? (
-              <s-group
-                value={row.status}
-                onInput={(val) => {
-                  row.status = val
-                }}
-                data={options}
-              />
-            ) : (
-              getStateText(row.status)
-            )
-          },
+          prop: ({ row }) => getStateText(row.status),
         },
         {
           label: '对应服务流程',
@@ -131,7 +136,7 @@ export default defineComponent({
         },
         {
           label: '操作项',
-          width:'180px',
+          width: '180px',
           prop: ({ row }) => {
             return [
               <s-button type="text" onClick={() => setState(row)}>

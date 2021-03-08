@@ -56,6 +56,12 @@ instance.interceptors.response.use(response => {
         throw new Error(response.data)
     }
     return response.data
+}, error => {
+    Message({
+        type: 'error',
+        message: error
+    })
+    return error
 })
 
 
