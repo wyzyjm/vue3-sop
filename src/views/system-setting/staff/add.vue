@@ -31,7 +31,7 @@
                     placeholder="请选择所属组织"
                     class="w340"
                     :options="orgList"
-                    :props="{ expandTrigger: 'hover' , value:'orgId', label:'orgName'}"
+                    :props="{ expandTrigger: 'hover' , value:'orgId', label:'orgName', emitPath:false}"
                     @change="handleChange"></el-cascader>
             </el-form-item>
             <el-form-item label="员工姓名：" prop="employeeName" class="is-required">
@@ -111,7 +111,7 @@ return {
         officePhone: '', // 办公电话
         mobile: '', // 手机
         position: '', // 岗位
-        sourceId: 83, // 服务商id
+        sourceId: '', // 服务商id
         password: '', // 密码
         roleMap: {}, // key为角色id，value为角色名称
     },
@@ -149,6 +149,7 @@ watch: {},
 methods: {
     // 选择组织
     changeOrg () {
+        this.orgList = []
         getOrgList({providerId: this.form.sourceId}).then(res => {
             res.data.children = this.getTreeData(res.data.children)
             this.orgList = [res.data]
@@ -191,7 +192,7 @@ methods: {
                     editStaff(this.form).then(res => {
                         console.log(res, 999)
                         if (res.status == 200) {
-                            this.$message.error('编辑员工成功')
+                            this.$message.success('编辑员工成功')
                             this.$router.push({
                                 path: '/system-setting/staff/list'
                             })
@@ -230,6 +231,7 @@ methods: {
             Object.keys(res.data.roleMap).forEach(key => {
                 arr.push(Number(key))
             });
+            this.changeOrg()
             this.form.roleMap = arr
         })
     },

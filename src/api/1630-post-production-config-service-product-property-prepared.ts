@@ -1,7 +1,7 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1630
- * 生成日期：Wed Mar 03 2021 16:54:45 GMT+0800 (GMT+08:00)
+ * 生成日期：Mon Mar 08 2021 10:22:14 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.0.2
  * 接口名称：添加预制属性
  * 创建人：杨一点
@@ -14,8 +14,8 @@ export interface ResBody {
 }
 
 export interface ReqBody {
-  name:string        
-  valueList:any[]    
+  name?:string        
+  valueList?:any[]    
 }
 
 interface _Params extends ReqBody {}

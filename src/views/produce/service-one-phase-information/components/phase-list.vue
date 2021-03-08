@@ -45,7 +45,6 @@ export default defineComponent({
       })
     }
 
-
     const table = reactive({
       data(params) {
         resetEdit()
@@ -72,9 +71,7 @@ export default defineComponent({
         },
         {
           label: '阶段编码',
-          prop: ({ row }) => {
-            return createEditRow(row, 'stageCode')
-          },
+          prop: 'stageCode',
         },
         {
           label: '显示顺序',

@@ -1,7 +1,7 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1572
- * 生成日期：Tue Mar 02 2021 10:40:40 GMT+0800 (中国标准时间)
+ * 生成日期：Mon Mar 08 2021 10:22:14 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.0.2
  * 接口名称：添加服务单状态
  * 创建人：wuzongle@300.cn
@@ -21,9 +21,9 @@ export interface ReqParams {
 }
 
 export interface ReqBody {
-  serviceOrderStatus:number    /**服务单状态*/
-  sortNum:number               /**序号*/
-  businessNodeStatus:string    /**业务节点状态，可以是多个，用,逗号隔开*/
+  serviceOrderStatus:number         /**服务单状态*/
+  sortOrder:number                  /**序号*/
+  BusinessNodeStatusArray:string    /**业务节点状态，可以是多个，用,逗号隔开*/
 }
 
 interface _Params extends ReqParams,ReqBody {}
@@ -32,8 +32,8 @@ import request from '../plugins/axios/index.js'
 export default (params: _Params)=> { 
     return request({
         url:'/service-order/sevice-business-flow/node/{nodeId}/addStatus'.replace(/{([^}]+)}/g, (r: string, $1: string) => {
-        const tmp=params[$1] || ''    
-        delete params[$1]
+        const tmp = typeof params[$1] === 'undefined' ? '' : params[$1]
+        // delete params[$1]
         return tmp
     }),
         method:'POST',

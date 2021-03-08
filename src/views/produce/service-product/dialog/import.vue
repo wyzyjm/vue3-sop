@@ -32,7 +32,7 @@
     </div>
 
     <div v-show="active===2">
-      <p>导入完成，共导入 {{fileState.success+fileState.error}} 条 <span v-if="fileState.error">，失败 <span class="red">{{fileState.error}}</span> 条</span> </p>
+      <p>导入完成<span v-if="fileState.error">，请查看错误报告</span> </p>
       <p>{{fileState.errorMessage}}</p>
       <s-button class="mt20" @click="$emit('close')">关闭</s-button>
     </div>
@@ -79,15 +79,46 @@ export default defineComponent({
       active.value = 1
     }
 
+    function downFile(blob, fileName) {
+      if (window.navigator.msSaveOrOpenBlob) {
+        navigator.msSaveBlob(blob, fileName)
+      } else {
+        var link = document.createElement('a')
+        link.href = window.URL.createObjectURL(blob)
+        link.download = fileName
+        link.click()
+        window.URL.revokeObjectURL(link.href)
+      }
+    }
+
     const uploadSuccess = (fileList) => {
       active.value = 2
       fileState.success = fileList.length
+      let blob = new Blob([fileList[0].response.data])
+
+      if (fileList[0].response.data.type === 'application/json') {
+        let reader = new FileReader()
+        reader.addEventListener('loadend', function () {
+          let res = JSON.parse(reader.result)
+          if (res.code === 'PC0002') {
+            console.log(34, res)
+          } else {
+            fileState.errorMessage = res.msg
+          }
+        })
+        reader.readAsText(blob, 'utf-8')
+      } else {
+        fileState.error = true
+        downFile(blob, fileList[0].raw.name)
+      }
     }
 
     const uploadError = (msg) => {
-      active.value = 2
       fileState.error = fileList.value.length
       fileState.errorMessage = msg
+      setTimeout(() => {
+        active.value = 2
+      })
     }
 
     return {

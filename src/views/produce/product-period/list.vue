@@ -66,51 +66,62 @@ export default defineComponent({
         },
         {
           label: '服务产品编码',
+          showOverflowTooltip: true,
           prop: 'serviceProductCode',
         },
         {
           label: '服务产品分类',
+          width: '110px',
           prop: ({ row }) =>
             options.type.find((v) => v.code === row.serviceProductType).name,
         },
         {
           label: '创建时间',
+          width: '180px',
           prop: 'createTime',
         },
         {
           label: '基准生产周期（天）',
+          width: '100px',
           prop: 'baseCycle',
         },
         {
           label: '同风格时限（天）',
+          width: '100px',
           prop: 'sameStyleTimeLimit',
         },
         {
           label: '不同风格时限（天）',
+          width: '100px',
           prop: 'differentStyleTimeLimit',
         },
         {
           label: '蓝色预警周期（天）',
+          width: '100px',
           prop: 'blueWarningCycle',
         },
         {
           label: '黄色预警周期（天）',
+          width: '100px',
           prop: 'yellowWarningCycle',
         },
         {
           label: '橙色预警周期（天）',
+          width: '100px',
           prop: 'orangeWarningCycle	',
         },
         {
           label: '红色预警周期（天）',
+          width: '100px',
           prop: 'redWarningCycle',
         },
         {
-          label:'',
-          prop:({row})=>{
-            const l=options1.find(v=>v.value===row.dateType)
-            return l&&l.label
-          }
+          label: '',
+          width: '80px',
+          prop: ({ row }) => {
+            const l = options1.find((v) => v.value === row.dateType)
+            return l && l.label
+          },
         },
         {
           label: '操作',
