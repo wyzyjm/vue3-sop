@@ -3,6 +3,7 @@ import Role from "./role" // 角色
 import Documents from "./document" // 文档
 import Staff from "./staff" // 员工
 import Resource from "./resource" // 资源
+import Organizational from "./organizational" // 组织架构管理
 export default [
     {
         path: '/system-setting',
@@ -16,7 +17,8 @@ export default [
             ...Role,
             ...Documents,
             ...Staff,
-            ...Resource
+            ...Resource,
+            ...Organizational
         ]
     }
 ]
