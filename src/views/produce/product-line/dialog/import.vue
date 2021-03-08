@@ -96,7 +96,6 @@ export default defineComponent({
       fileState.success = fileList.length
       var blob = new Blob([fileList[0].response.data], { type: 'application/vnd.ms-excel' })
       downFile(blob, fileList[0].raw.name)
-      console.log(fileList)
     }
 
     const uploadError = (msg) => {

@@ -79,9 +79,25 @@ export default defineComponent({
       active.value = 1
     }
 
+    function downFile(blob, fileName) {
+      if (window.navigator.msSaveOrOpenBlob) {
+        navigator.msSaveBlob(blob, fileName)
+      } else {
+        var link = document.createElement('a')
+        link.href = window.URL.createObjectURL(blob)
+        link.download = fileName
+        link.click()
+        window.URL.revokeObjectURL(link.href)
+      }
+    }
+
     const uploadSuccess = (fileList) => {
       active.value = 2
       fileState.success = fileList.length
+      var blob = new Blob([fileList[0].response.data], {
+        type: 'application/vnd.ms-excel',
+      })
+      downFile(blob, fileList[0].raw.name)
     }
 
     const uploadError = (msg) => {
