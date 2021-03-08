@@ -1,8 +1,8 @@
 <template>
   <div>
-    <s-form :model="form" label-width="140px" @submit="save">
+    <s-form :model="form" label-width="140px" @submit="save" class="flow-form">
       <s-form-item label="状态名称" prop="serviceOrderStatus" :rules="['required:number']">
-        <el-select v-model="form.serviceOrderStatus" placeholder="请选择状态">
+        <el-select v-model="form.serviceOrderStatus" placeholder="请选择状态" class="flow-select">
           <el-option
             v-for="item in serviceState"
             :key="item.id"
@@ -14,7 +14,7 @@
       <s-form-item label="状态code" component="s-text" :content="form.serviceOrderStatus" prop="serviceOrderStatus" />
       <s-form-item label="顺序" prop="sortOrder" :rules="['required']" />
       <s-form-item label="关联业务状态" prop="businessNodeStatusArray" :rules="['required:array']">
-        <el-select v-model="form.businessNodeStatusArray" multiple placeholder="请选择关联业务状态">
+        <el-select v-model="form.businessNodeStatusArray" multiple placeholder="请选择关联业务状态" class="flow-select">
           <el-option
             v-for="item in relevanceData"
             :key="item.id"
@@ -82,7 +82,7 @@ export default defineComponent({
       return (isEdit ? updaetStatus({ nodeId, statusRelationId: data.id, ...form}) : addStatus({ nodeId, ...form }))
       .then(({ msg }) => {
         emit('close')
-        root.$store.commit('table/update')
+        emit('update')
         Message({
           type: 'success',
           message: msg,
@@ -100,3 +100,9 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="scss" scoped>
+ .flow-form {
+      display: flex;
+      flex-direction: column;
+  }
+</style>

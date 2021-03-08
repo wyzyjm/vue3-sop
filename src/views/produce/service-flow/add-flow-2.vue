@@ -53,7 +53,7 @@
       </div>
       <s-table :data="statuList" :cols="tabCols"></s-table>
     </div>
-    <s-dialog v-bind="dialog" @close="dialog.close" />
+    <s-dialog v-bind="dialog" @close="dialog.close" @update="updateStatus"/>
     <s-dialog v-bind="editButton" @close="editButton.close" />
     <s-dialog v-bind="addButton" @close="addButton.close" />
   </div>
@@ -148,12 +148,6 @@ export default defineComponent({
       ]
     })
 
-    const form = reactive({
-      businessflowid: '',
-      state: 1,
-      relation: ''
-    })
-
     flowId&&flowNodeInit({businessFlowId: flowId, businessFlowNodeType: '1,2,4'})
     .then((res) => {
       flowData.data = res.data || [];
@@ -161,7 +155,6 @@ export default defineComponent({
 
     // 获取工作流节点
     nodelist({ 'processDefinitionId': workId}).then((res) => { 
-      // console.log("res.data", res.data)
       flowData.nodeLists = res.data || []; 
     })
 
@@ -196,13 +189,12 @@ export default defineComponent({
     function __getStatuLists() {
       statusList({ "nodeId": flowData.currFLow.id })
       .then(({ data }) => {
-        console.log("data", data, flowData)
+        // console.log("data", data, flowData)
         flowData.statuList = data || [];
       })
     }
 
     function flowAdd(item, callback) {
-      // console.log("flowAdd=", item)
       flowNodeAdd({ 
         businessFlowNodeType: 2, 
         businessFlowId: item.businessFlowDefId,
@@ -215,15 +207,18 @@ export default defineComponent({
     }
 
     function deleteState(row) {
-      // console.log("delete", row.id)
       deleteStatus({ nodeId: flowData.currFLow.id, statusRelationId: row.id})
       .then(() => {
-        root.$store.commit('table/update')
+        __getStatuLists();
         Message({
           type: 'success',
           message: '删除成功！',
         })
       })
+    }
+
+    function updateStatus() {
+      __getStatuLists();
     }
 
     function saveFlow () {
@@ -238,11 +233,11 @@ export default defineComponent({
 
     return {
       ...toRefs(flowData),
-      form,
       flowSelect,
       saveFlow,
       flowAdd,
       deleteState,
+      updateStatus,
       dialog,
       editButton,
       addButton
