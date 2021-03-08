@@ -47,15 +47,15 @@
         </el-col>
       </el-row>
     </div>
-    <div class="add-table">
+    <div class="add-table cb-table-style">
       <div class="mb15">
         <el-button type="primary" @click="dialog.open({ nodeId: currFLow.id})">添加服务单状态</el-button>
       </div>
-      <s-table :data="statuList" :cols="tabCols"></s-table>
+      <s-table :data="statuList" :cols="tabCols" border v-loading="statuLoading"></s-table>
     </div>
     <s-dialog v-bind="dialog" @close="dialog.close" @update="updateStatus"/>
-    <s-dialog v-bind="editButton" @close="editButton.close" />
-    <s-dialog v-bind="addButton" @close="addButton.close" />
+    <s-dialog v-bind="editButton" @close="editButton.close" class="el-dialog-limit" />
+    <s-dialog v-bind="addButton" @close="addButton.close" class="el-dialog-limit" />
   </div>
 </template>
 <script>
@@ -82,6 +82,7 @@ export default defineComponent({
       currFLow: {},
       nodeLists: [],
       statuList: [],
+      statuLoading: false,
       options: [
         {
           value: 1,
@@ -187,9 +188,10 @@ export default defineComponent({
     }
 
     function __getStatuLists() {
+      flowData.statuLoading = true;
       statusList({ "nodeId": flowData.currFLow.id })
       .then(({ data }) => {
-        // console.log("data", data, flowData)
+        flowData.statuLoading = false;
         flowData.statuList = data || [];
       })
     }
@@ -260,6 +262,7 @@ export default defineComponent({
       width: 100%;
       height: 300px;
       overflow-x: auto;
+      margin-bottom: 15px;
     }
   }
   .name-flow {

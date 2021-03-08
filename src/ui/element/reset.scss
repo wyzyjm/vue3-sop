@@ -36,4 +36,18 @@
             padding: 0 0 0 15px !important;
         }
     }
+    .el-dialog-limit {
+        .el-dialog__body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    }
+    .cb-table-style {
+        .el-table {
+            th {
+                background: $sop-color-f2;
+                color: $sop-color-3;
+            }
+        }
+    }
 }

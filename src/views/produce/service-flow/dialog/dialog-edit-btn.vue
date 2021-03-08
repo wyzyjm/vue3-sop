@@ -1,5 +1,5 @@
 <template>
-  <div class="clear-number">
+  <div class="clear-number cb-table-style">
     <el-table
       :data="tableData"
       border
