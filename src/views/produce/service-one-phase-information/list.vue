@@ -21,7 +21,7 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import setStatus from '@/api/1470-get-service-order-cust-service-show-config-{id}-{status}'
+import setStatus from '@/api/1470-post-service-order-cust-service-show-config-{id}-{status}'
 import PhaseList from './components/phase-list'
 import useDialog from '@/hooks/use-dialog'
 import getTableData from '@/api/1440-get-service-order-cust-service-show-config'
@@ -45,6 +45,8 @@ export default defineComponent({
       },
       (row) => {
         row.status = 1 ^ row.status
+
+        console.log(123,row);
         return setStatus(row).then(() => {
           Message({
             type: 'success',

@@ -1,19 +1,19 @@
 
 /**
- * 文档地址：http://10.12.52.224:3000/project/123/interface/api/1342
+ * 文档地址：http://10.12.52.224:3000/project/123/interface/api/1690
  * 生成日期：Mon Mar 08 2021 10:15:06 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.0.2
- * 接口名称：员工列表
+ * 接口名称：合作组织列表
  * 创建人：付兵浩
  */
 export interface Data {
-  records:any[]          /**结果集*/
+  records:any[]          
   total:number           /**总条数*/
   size:number            /**每页大小*/
-  current:number         /**当前页*/
+  current:number         /**当前页码*/
   orders:any[]           
   searchCount:boolean    
-  pages:number           /**总页数*/
+  pages:number           
 }
 
 export interface ResBody {
@@ -24,14 +24,11 @@ export interface ResBody {
 }
 
 export interface ReqQuery {
-  workMail:string      /**邮箱*/
-  name:string          /**姓名*/
-  state:string         /**状态*/
   providerId:string    /**服务商id*/
-  orgId:string         /**组织id*/
-  roleId:string        /**角色id*/
-  pageNum:string       /**当前页码*/
-  pageSize:string      /**每页大小*/
+  name?:string         /**组织名称*/
+  合作组织状态?:string       /**1:启用，0：停用*/
+  pageNum:string       
+  pageSize:string      
 }
 
 interface _Params extends ReqQuery {}
@@ -39,7 +36,7 @@ interface _Params extends ReqQuery {}
 import request from '../plugins/axios/index.js'
 export default (params: _Params)=> { 
     return request({
-        url:'/common-service/frontApi/service-provider-employee/list',
+        url:'/common-service/frontApi/service-provider-org/org-partner-page',
         method:'GET',
         params:params
     })

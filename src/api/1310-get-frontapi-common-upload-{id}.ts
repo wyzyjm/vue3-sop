@@ -1,7 +1,7 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/123/interface/api/1310
- * 生成日期：Tue Mar 02 2021 10:40:41 GMT+0800 (中国标准时间)
+ * 生成日期：Mon Mar 08 2021 10:15:06 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.0.2
  * 接口名称：根据id获取上传文件的详细
  * 创建人：付兵浩
@@ -31,7 +31,7 @@ import request from '../plugins/axios/index.js'
 export default (params: _Params)=> { 
     return request({
         url:'/common-service/frontApi/common-upload/{id}'.replace(/{([^}]+)}/g, (r: string, $1: string) => {
-        const tmp=params[$1] || ''    
+        const tmp=params[$1]  
         delete params[$1]
         return tmp
     }),

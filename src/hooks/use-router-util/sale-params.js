@@ -8,13 +8,14 @@ export default (data) => {
 	let result = isDecode ? reactive({}) : ''
 	if (isDecode) {
 		try {
-			result = reactive(JSON.parse(Base64.decode(data)))
+			result = reactive(JSON.parse(Base64.decode(data.replace(/@/g, '/'))))
 		} catch (error) {
 			console.warn(error);
 		}
 	} else {
 		try {
 			result = Base64.encode(JSON.stringify(data))
+			result = result.replace(/\//g, '@')
 			if (result.length > 65536) {
 				throw '编码字符可能超过安全长度，请注意！'
 			}
