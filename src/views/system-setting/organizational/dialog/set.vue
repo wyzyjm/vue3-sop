@@ -4,8 +4,8 @@
     </el-tree>
 
     <div class="mt20">
-      <el-button @click="$emit('close')">取消</el-button>
-      <el-button type="primary" @click="save">确定</el-button>
+      <s-button @click="$emit('close')">取消</s-button>
+      <s-button type="primary" @click="save">确定</s-button>
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup({ data },{emit}) {
+  setup({ data }, { emit }) {
     const tree = reactive({
       data: [],
       defaultChecked: [],
@@ -39,11 +39,10 @@ export default defineComponent({
     })
 
     const save = () => {
-      _save({
-        sourceOrgId: data.id,
-        partnerOrgIds: treeRef.value.getCheckedKeys(),
-      }).then((response) => {
-        console.log(1, response)
+      return _save({
+        sourceId: data.id,
+        partnerIds: treeRef.value.getCheckedKeys(),
+      }).then(() => {
         Message({
           message: '保存成功！',
           type: 'success',
