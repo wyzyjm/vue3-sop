@@ -12,7 +12,7 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import roleGroupSave from '@/api/1368-post-role-group-save'
+import roleGroupSave from '@/api/1368-post-common-service-role-group-save'
 export default defineComponent({
   setup() {
     const save = (form) => {
