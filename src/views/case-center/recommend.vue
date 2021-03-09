@@ -10,7 +10,8 @@
               v-for="item in options"
               :key="item.value"
               :label="item.label"
-              :value="item.value">
+              :value="item.value"
+              clearable>
             </el-option>
           </el-select>
         </p>
@@ -18,7 +19,7 @@
         <p>
           <el-input v-model="form.code" placeholder="请输入客户名称"></el-input>
         </p>
-        <el-button type="primary">搜索</el-button>
+        <el-button type="primary" @click="search">搜索</el-button>
       </div>
       <div class="rec-con">
         <div class="rec-con-item item-1">
@@ -48,23 +49,32 @@
       </div>
     </div>
     <div class="rec-table">
-      <s-simple-table :data="data" :cols="cols" class="cb-table-style">
-        <div slot="top" class="mb15">
-          <el-button type="primary" @click="recommend">推荐网站</el-button>
-          <el-button type="primary" @click="recommend">取消推荐</el-button>
-        </div>
+      <s-simple-table 
+        :data="data" 
+        :cols="cols" 
+        class="cb-table-style" 
+        @selection-change="selectionRecommend">
+          <div slot="top" class="mb15">
+            <el-button type="primary" :disabled="isRecommend" @click="recommend(true)">推荐网站</el-button>
+            <el-button type="primary" :disabled="isRecommend" @click="recommend(false)">取消推荐</el-button>
+          </div>
       </s-simple-table>
     </div>
   </div>
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+// import { Message } from 'element-ui'
+// import aaaa from '@/api/1562'
+// import aaaa from '@/api/1562'
 export default defineComponent({
   setup(props, { root }) {
     let recommendData = reactive({
-        options: [],
-        data: [{code: 'OL20200910293'}],
-        cols: [
+      isRecommend: true,
+      options: [],
+      selection: [],
+      data: [{code: 'OL20200910293'},{code: 'OL20200910292'}],
+      cols: [
         {
           type: 'selection'
         },
@@ -96,10 +106,10 @@ export default defineComponent({
         {
           label: '操作',
           prop: ({ row }) => {
-            row.status = 1
             return [
               <s-button
                 type="text"
+                onClick={() => recommend(true, row)}
               >
                 取消推荐
               </s-button>,
@@ -114,19 +124,42 @@ export default defineComponent({
       code: ''
     })
 
-    const search = (form) => {
-      console.log("search")
+    const getRecommend = () => {
+      // 获取接口
+      // aaaaaaa({businessFlowId: flowId, businessFlowNodeType: '1,2,4'})
+      // .then((res) => {
+      //   recommendData.data = res.data || [];
+      // })
     }
 
-    const recommend = (row) => {
-      console.log("recommend", row)
+    const search = () => {
+      console.log("search",form)
     }
+
+    const recommend = (b, row) => {
+      let ids = '';
+      if (row) {
+        ids = row.code;
+      } else {
+        ids = recommendData.selection.map(item => {
+          return item.code || "";
+        }).join(",");
+      }
+      console.log("recommend", b, ids)
+    }
+
+    const selectionRecommend = (selection) => {
+      recommendData.selection   = selection;
+      recommendData.isRecommend = !selection.length
+    }
+    
 
     return {
       ...toRefs(recommendData),
       form,
       search,
-      recommend
+      recommend,
+      selectionRecommend
     }
   },
 })

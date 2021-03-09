@@ -9,6 +9,7 @@
         <s-form-item>
           <s-button @click="$emit('close')">取消</s-button>
           <s-button type="primary" run="form.submit">确定</s-button>
+          <s-button type="primary" @click="flowNext">下一步</s-button>
         </s-form-item>
       </template>
       <template v-else>
@@ -41,8 +42,15 @@ export default defineComponent({
     let form = reactive({})
     form = { ...form, ...data }
 
+    const flowNext = () => {
+      root.$router.push({
+        path: "/produce/add-service-flow",
+        query: { id: form.id, workId: form.flowWorkDefId }
+      });
+    }
+
     const save = () => {
-      updateBusinessFlow(form).then(
+      return updateBusinessFlow(form).then(
         (res) => {
           if (res.data) {
             emit('close')
@@ -54,7 +62,8 @@ export default defineComponent({
 
     return {
       save,
-      form
+      form,
+      flowNext
     }
   },
 })

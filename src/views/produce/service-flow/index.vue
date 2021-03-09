@@ -52,7 +52,8 @@ export default defineComponent({
         {
           label: '版本',
           prop: 'version',
-          width: '160px',
+          showOverflowTooltip: true,
+          width: '60px',
         },
         {
           label: '关联工作流',

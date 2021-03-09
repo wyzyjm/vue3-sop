@@ -58,12 +58,11 @@
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+// import aaaa from '@/api/1562'
+// import aaaa from '@/api/1562'
 export default defineComponent({
   setup(props, { root }) {
-    let workData = reactive({
-        activeWeb: 'first',
-        activePro: 'first'
-    })
+    let workData = reactive({})
 
     return {
       ...toRefs(workData)
