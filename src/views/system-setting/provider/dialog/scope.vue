@@ -1,47 +1,65 @@
-<!-- 服务范围 -->
 <template>
-<div class=''>3333</div>
+  <div class="box">
+    <s-simple-table :data="table.data" :cols="table.cols">
+        <s-form slot="form" :model="form" inline>
+            <!-- <s-form-item label="售卖渠道" prop="salesChannelId">
+                <s-input v-model="form.salesChannelId" clearable></s-input>
+            </s-form-item> -->
+            <s-form-item label="产品名称" prop="name">
+                <s-input v-model="form.name" clearable></s-input>
+            </s-form-item>
+            <s-form-item>
+                <div class="query-box">
+                    <s-button type="primary" run="form.search">查询</s-button>
+                    <s-button run="form.reset">重置</s-button>
+                </div>
+            </s-form-item>
+        </s-form>
+    </s-simple-table>
+  </div>
 </template>
-
 <script>
-//这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
-//例如：import 《组件名称》 from '《组件路径》';
+import { defineComponent, reactive } from "@vue/composition-api";
+import getProviderScope from '@/api/1416-get-production-config-product-line-search'
+export default defineComponent({
+  setup() {
+    const table = reactive({
+      data: getProviderScope,
+      cols: [
+        {
+          showOverflowTooltip: true,
+          label: "售卖渠道",
+          prop: "salesChannelName"
+        },
+        {
+          label: "产品名称",
+          showOverflowTooltip: true,
+          prop: "name",
+        },
+        {
+          label: "业务类型",
+          showOverflowTooltip: true,
+          prop: "businessTypeName",
+        },
+        {
+          label: "入驻时间",
+          prop: "createTime",
+          showOverflowTooltip: true,
+        },
 
-export default {
-//import引入的组件需要注入到对象中才能使用
-components: {},
-data() {
-//这里存放数据
-return {
-
-};
-},
-//监听属性 类似于data概念
-computed: {},
-//监控data中的数据变化
-watch: {},
-//方法集合
-methods: {
-
-},
-//生命周期 - 创建完成（可以访问当前this实例）
-created() {
-
-},
-//生命周期 - 挂载完成（可以访问DOM元素）
-mounted() {
-
-},
-beforeCreate() {}, //生命周期 - 创建之前
-beforeMount() {}, //生命周期 - 挂载之前
-beforeUpdate() {}, //生命周期 - 更新之前
-updated() {}, //生命周期 - 更新之后
-beforeDestroy() {}, //生命周期 - 销毁之前
-destroyed() {}, //生命周期 - 销毁完成
-activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
-}
+      ],
+    });
+    const form = reactive({
+        name: ''
+    });
+    return {
+      table,
+      form,
+    };
+  }
+});
 </script>
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
-
+@import url("../style.scss");
 </style>

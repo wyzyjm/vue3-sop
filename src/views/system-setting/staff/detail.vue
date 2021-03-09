@@ -8,13 +8,13 @@
             <el-col :span="8" v-for="(value, key, index) in item.keys" :key="index">
                 <div class="item-col">
                     <div class="col-title">{{value}}：</div>
-                    <div class="col-txt">{{key}}</div>
+                    <div class="col-txt">{{result[key] || '------'}}</div>
                 </div>
             </el-col>        
         </el-row>
     </div>
     <div class="footer-box">
-        <el-button>关闭</el-button>
+        <el-button @click="cancel">关闭</el-button>
     </div> 
 </div>
 </template>
@@ -22,7 +22,7 @@
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-
+import getStaff from '@/api/1376-get-frontapi-service-provider-employee-{id}'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {},
@@ -32,16 +32,17 @@ return {
     // 服务商类型 1个人 2企业
     form: [
         {
-            title: '创建信息', keys: {create: '创建人', createTime: '创建时间'}
+            title: '创建信息', keys: {createBy: '创建人', createTimeStr: '创建时间'}
         },
         {
-            title: '基本信息', keys: {sourceId: '所属服务商', orgId: '所属组织', employeeName: '姓名', 
+            title: '基本信息', keys: {sourceName: '所属服务商', orgName: '所属组织', employeeName: '姓名', 
             officePhone: '电话', mobile: '手机',
             workMail: '邮箱', position: '岗位',
-            roleMap: '授权角色', status: '状态'}
+            roleMap: '授权角色', stateName: '状态'}
         }
         
-    ]
+    ],
+    result: {}
 };
 },
 //监听属性 类似于data概念
@@ -50,11 +51,28 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-
+    cancel () {
+        this.$router.push({
+            path: '/system-setting/staff/list'
+        })
+    },
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-    console.log(this.$route.params.pid)
+    console.log(this.$route.params.id)
+    if (this.$route.params.id) {
+        getStaff({id: this.$route.params.id}).then(res => {
+            this.result = res.data
+            // this.form = res.data
+            // this.checkRoleObj = res.data.roleMap
+            // let arr =[] 
+            // Object.keys(res.data.roleMap).forEach(key => {
+            //     arr.push(Number(key))
+            // });
+            // // this.changeOrg()
+            // this.form.roleMap = arr
+        })        
+    }
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {

@@ -1,62 +1,76 @@
 <template>
   <div>
     <s-simple-table :data="table.data" :cols="table.cols">
-      <s-form slot="form" :model="form" inline>
-        <s-form-item label="生产单ID" prop="orderCode">
-          <s-input v-model="form.orderCode"></s-input>
-        </s-form-item>
-        <s-form-item>
-          <s-button type="primary" run="form.search">查询</s-button>
-          <s-button run="form.reset">重置</s-button>
-        </s-form-item>
-      </s-form>
     </s-simple-table>
   </div>
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import getTableData from '@/api/1348-get-role-list'
+import getList from '@/api/1700-get-service-order-sevice-order-info-list'
 
 export default defineComponent({
   setup() {
     const table = reactive({
-      data: getTableData,
+      checked: [],
+      data: getList,
       cols: [
         {
-          type: 'expand',
-          prop: ({ row }) => (
-            <s-simple-table uid={row.id} data={table.data} cols={table.cols} />
-          ),
-        },
+          type: 'checkbox',
+          key: 'id',
+          width: '40px',
+        }, 
+        // {
+        //   type: 'expand',
+        //   prop: ({ row }) => (
+        //     <s-simple-table uid={row.id} data={table.data} cols={table.cols} />
+        //   ),
+        // },
         {
           showOverflowTooltip: true,
-          label: '工单名称',
-          prop: 'groupName',
-        },
-        {
-          label: '生产单ID',
-          prop: 'orderCode',
-          width: '160px',
+          label: '服务单号',
+          prop: 'serviceCode',
         },
         {
           label: '客户名称',
           prop: 'custName',
+          showOverflowTooltip: true,
+          width: '160px',
         },
         {
-          label: '分公司',
-          prop: 'subCompanyName',
+          label: '产品类型',
+          showOverflowTooltip: true,
+          prop: 'productType',
         },
         {
-          label: '订单来源',
-          prop: 'orderSourceName',
+          label: '语言',
+          showOverflowTooltip: true,
+          prop: 'language',
         },
         {
-          label: '状态',
+          label: '业务类型',
+          showOverflowTooltip: true,
+          prop: 'businessType',
+        },
+        {
+          label: '服务人员',
+          showOverflowTooltip: true,
           prop: 'workStatus',
         },
         {
-          label: '创建日期',
-          prop: 'strCreateDate',
+          label: '状态',
+          showOverflowTooltip: true,
+          prop: 'status',
+        },
+        {
+          label: '服务单创建时间',
+          width: 160,
+          showOverflowTooltip: true,
+          prop: 'createTime',
+        },
+        {
+          label: '剩余周期',
+          showOverflowTooltip: true,
+          prop: 'wholeMakeSurplusCycle',
         },
       ],
     })

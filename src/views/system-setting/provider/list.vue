@@ -1,6 +1,7 @@
 <template>
   <div class="box">
-      <!-- <s-dialog  /> -->
+    <s-dialog v-bind="openDialog" @close="openDialog.close" />
+    <s-dialog v-bind="openOrgDialog" @close="openOrgDialog.close" />
     <s-simple-table :data="table.data" :cols="table.cols">
       <div slot="top" class="mt40 mb20">
         <el-button type="primary" @click="toPath()">新增</el-button>
@@ -53,9 +54,10 @@
 import { defineComponent, reactive } from "@vue/composition-api";
 import getProviderList from '@/api/1306-get-frontapi-service-provider-pagelist'
 import setStatus from '@/api/1302-post-frontapi-service-provider-change-status'
-import getProviderScope from '@/api/1416-get-production-config-product-line-search'
+// import getProviderScope from '@/api/1416-get-production-config-product-line-search'
 import { category, status, basictype } from "./utils/form-query";
 import { MessageBox } from 'element-ui'
+import useDialog from '@/hooks/use-dialog'
 export default defineComponent({
   methods: {
       toPath () {
@@ -99,12 +101,26 @@ export default defineComponent({
         
         });
     }
-    const openDialog = () => {
-        console.log(321)
-        getProviderScope().then(res => {
-            console.log(res)
-        })
-    }
+    const openDialog = useDialog({
+      uid: 'getProviderScope',
+      title: '服务范围',
+      width: '800px',
+      component: require('./dialog/scope'),
+    })
+
+    const openOrgDialog = useDialog({
+      uid: 'getOrgList',
+      title: '合作组织',
+      width: '800px',
+      component: require('./dialog/org'),
+    })
+    
+    // () => {
+    //     console.log(321)
+    //     getProviderScope().then(res => {
+    //         console.log(res)
+    //     })
+    // }
     const toPath = (row) => {
           root.$router.push({
               path: `/system-setting/provider/edit/${row.category ? row.category : 1}/${row.id}`
@@ -195,9 +211,11 @@ export default defineComponent({
                             <div onClick={() => setState(row.id, 3)}>关闭</div>
                         </el-dropdown-item>
                         <el-dropdown-item>
-                            <div onClick={() => openDialog()}>服务范围1</div>
+                            <div onClick={() => openDialog.open({data: [row]})}>服务范围</div>
                         </el-dropdown-item>
-                        <el-dropdown-item>合作组织</el-dropdown-item>
+                        <el-dropdown-item>
+                            <div onClick={() => openOrgDialog.open({data: [row]})}>合作组织</div>
+                        </el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown>
                 ,
@@ -217,9 +235,11 @@ export default defineComponent({
                             <div onClick={() => setState(row.id, 3)}>关闭</div>
                         </el-dropdown-item>
                         <el-dropdown-item>
-                            <div onClick={() => openDialog()}>服务范围1</div>
+                            <div onClick={() => openDialog.open({data: [row]})}>服务范围</div>
                         </el-dropdown-item>
-                        <el-dropdown-item>合作组织</el-dropdown-item>
+                        <el-dropdown-item>
+                            <div onClick={() => openOrgDialog.open({data: [row]})}>合作组织</div>
+                        </el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown>
                 ,
@@ -236,9 +256,11 @@ export default defineComponent({
                             <div onClick={() => setState(row.id, 3)}>关闭</div>
                         </el-dropdown-item>
                         <el-dropdown-item>
-                            <div onClick={() => openDialog()}>服务范围1</div>
+                            <div onClick={() => openDialog.open({data: [row]})}>服务范围</div>
                         </el-dropdown-item>
-                        <el-dropdown-item>合作组织</el-dropdown-item>
+                        <el-dropdown-item>
+                            <div onClick={() => openOrgDialog.open({data: [row]})}>合作组织</div>
+                        </el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown>
                 ,
@@ -252,9 +274,11 @@ export default defineComponent({
                             <div onClick={() => setState(row.id, 0)}>启用</div>
                         </el-dropdown-item>
                         <el-dropdown-item>
-                            <div onClick={() => openDialog()}>服务范围1</div>
+                            <div onClick={() => openDialog.open({data: [row]})}>服务范围</div>
                         </el-dropdown-item>
-                        <el-dropdown-item>合作组织</el-dropdown-item>
+                        <el-dropdown-item>
+                            <div onClick={() => openOrgDialog.open({data: [row]})}>合作组织</div>
+                        </el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown>
                 
@@ -283,7 +307,9 @@ export default defineComponent({
     });
     return {
       table,
-      form
+      form,
+      openDialog,
+      openOrgDialog
     };
   }
 });

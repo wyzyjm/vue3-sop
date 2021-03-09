@@ -21,7 +21,7 @@ export default [
         component: () => import(/* webpackChunkName: "staff-edit" */ '@/views/system-setting/staff/add')
     },       
     {
-        path: 'staff/detail/:pid',
+        path: 'staff/detail/:id',
         meta:{
             title:'员工信息详情'
         },
