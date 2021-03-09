@@ -1,5 +1,5 @@
 import { reactive } from '@vue/composition-api'
-import getRoleDropDownList from '@/api/1388-get-role-drop-down-list'
+import getRoleDropDownList from '@/api/1388-get-common-service-role-drop-down-list'
 
 export default () => {
     if (getRoleDropDownList.options) {

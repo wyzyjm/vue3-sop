@@ -51,6 +51,6 @@ instance.interceptors.response.use(function (response) {
         type: 'error',
         message: error
     });
-    return error;
+    return Promise.reject(new Error(error));
 });
 exports["default"] = instance;

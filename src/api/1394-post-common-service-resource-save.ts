@@ -1,9 +1,9 @@
 
 /**
- * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1396
- * 生成日期：Mon Mar 08 2021 10:22:14 GMT+0800 (GMT+08:00)
+ * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1394
+ * 生成日期：Tue Mar 09 2021 13:47:49 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.0.2
- * 接口名称：资源修改
+ * 接口名称：资源添加
  * 创建人：肖晓华
  */
 export interface ResBody {
@@ -23,7 +23,6 @@ export interface ReqBody {
   resourceIcon:string       
   resourceSort:string       
   state:string              
-  id:number                 
 }
 
 interface _Params extends ReqBody {}
@@ -31,7 +30,7 @@ interface _Params extends ReqBody {}
 import request from '../plugins/axios/index.js'
 export default (params: _Params)=> { 
     return request({
-        url:'/resource/update',
+        url:'/common-service/resource/save',
         method:'POST',
         data:params
     })

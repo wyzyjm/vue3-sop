@@ -15,7 +15,7 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import getTableData from '@/api/1348-get-role-list'
+import getTableData from '@/api/1348-get-common-service-role-list'
 
 export default defineComponent({
   setup() {

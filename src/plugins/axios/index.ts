@@ -61,7 +61,7 @@ instance.interceptors.response.use(response => {
         type: 'error',
         message: error
     })
-    return error
+    return Promise.reject(new Error(error))
 })
 
 
