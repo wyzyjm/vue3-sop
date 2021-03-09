@@ -24,23 +24,31 @@
         <div class="rec-con-item item-1">
           <b>200</b>
           <p>当月发布网站数</p>
+          <div class="con-circular-1"></div>
+          <div class="con-circular-2"></div>
         </div>
         <div class="rec-con-item item-2">
           <b>150</b>
           <p>当月达标网站数</p>
+          <div class="con-circular-1"></div>
+          <div class="con-circular-2"></div>
         </div>
         <div class="rec-con-item item-3">
           <b>65%</b>
           <p>当月质检达标率</p>
+          <div class="con-circular-1"></div>
+          <div class="con-circular-2"></div>
         </div>
         <div class="rec-con-item item-4">
-          <b>10</b>
+          <b>10<span>当月剩余可推荐 10</span></b>
           <p>当月推荐网站数量</p>
+          <div class="con-circular-1"></div>
+          <div class="con-circular-2"></div>
         </div>
       </div>
     </div>
     <div class="rec-table">
-      <s-simple-table :data="data" :cols="cols">
+      <s-simple-table :data="data" :cols="cols" class="cb-table-style">
         <div slot="top" class="mb15">
           <el-button type="primary" @click="recommend">推荐网站</el-button>
           <el-button type="primary" @click="recommend">取消推荐</el-button>
@@ -160,13 +168,40 @@ export default defineComponent({
         justify-content: center;
         flex-direction: column;
         padding: 0 30px;
+        position: relative;
+        overflow: hidden;
         b {
           font-size: 32px;
           margin-bottom: 8px;
+          span {
+            padding-left: 8px;
+            font-size: 14px;
+            font-weight: normal;
+          }
         }
         p {
           margin: 0;
           font-size: 14px;
+        }
+        .con-circular-1{
+          background: $sop-color-white;
+          width: 100px;
+          height: 100px;
+          position: absolute;
+          right: -50px;
+          top: 10px;
+          opacity: .2;
+          border-radius: 50%;
+        }
+        .con-circular-2{
+          background: $sop-color-white;
+          width: 100px;
+          height: 100px;
+          position: absolute;
+          right: -18px;
+          top: -40px;
+          opacity: .2;
+          border-radius: 50%;
         }
       }
       .item-1 {
