@@ -7,13 +7,13 @@
     <s-dialog v-bind="productionOrganizationAuthorizationDialog" @close="productionOrganizationAuthorizationDialog.close" />
     <s-dialog v-bind="salesChannelsAuthorizationDialog" @close="salesChannelsAuthorizationDialog.close" />
 
-    <s-simple-table :data="table.data" :cols="table.cols">
+    <s-simple-table v-model="table.checked" :data="table.data" :cols="table.cols">
       <div slot="top" class="mb20">
         <s-button type="primary" @click="roleGroupDialog.open">新增角色组</s-button>
         <s-button type="primary" @click="roleDialog.open">新增角色</s-button>
-        <s-button type="primary" @click="functionAuthorizationDialog.open">功能授权</s-button>
-        <s-button type="primary" @click="productionOrganizationAuthorizationDialog.open">生产组织授权</s-button>
-        <s-button type="primary" @click="salesChannelsAuthorizationDialog.open">售卖渠道授权</s-button>
+        <s-button type="primary" @click="functionAuthorizationDialog.open" :disabled="table.checked.length===0">功能授权</s-button>
+        <s-button type="primary" @click="productionOrganizationAuthorizationDialog.open({data:table.checked})" :disabled="table.checked.length===0">生产组织授权</s-button>
+        <s-button type="primary" @click="salesChannelsAuthorizationDialog.open" :disabled="table.checked.length===0">售卖渠道授权</s-button>
       </div>
       <s-form slot="form" inline>
         <s-form-item label="角色名称" prop="roleName" />
@@ -88,8 +88,13 @@ export default defineComponent({
     )
 
     const table = reactive({
+      checked: [],
       data: getTableData,
       cols: [
+        {
+          type: 'checkbox',
+          width: '44px',
+        },
         {
           showOverflowTooltip: true,
           label: '角色名称',

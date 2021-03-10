@@ -1,101 +1,108 @@
 <template>
   <div>
-    <el-tree :data="data" show-checkbox default-expand-all node-key="id" ref="tree" highlight-current :props="defaultProps" />
-    <div class="buttons">
-      <el-button @click="getCheckedNodes">通过 node 获取</el-button>
-      <el-button @click="getCheckedKeys">通过 key 获取</el-button>
-      <el-button @click="setCheckedNodes">通过 node 设置</el-button>
-      <el-button @click="setCheckedKeys">通过 key 设置</el-button>
-      <el-button @click="resetChecked">清空</el-button>
+    <el-row>
+      <el-col :span="6" v-for="(item,i) in list" :key="i">
+        <el-select ref="save" v-model="item.providerId" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="search.remoteMethod" :loading="search.loading">
+          <el-option v-for="item in search.options" :key="item.id" :label="item.basicName" :value="item.id">
+          </el-option>
+        </el-select>
+        <el-tree :data="item.data" show-checkbox node-key="id" :default-checked-keys="item.defaultChecked" :props="item.defaultProps">
+        </el-tree>
+      </el-col>
+      <el-col>
+        <s-button type="primary" icon="el-icon-circle-plus" @click="add">继续添加</s-button>
+      </el-col>
+    </el-row>
+
+    <div class="mt20">
+      <s-button @click="$emit('close')">取消</s-button>
+      <s-button type="primary" @click="save">确定</s-button>
     </div>
   </div>
 </template>
 <script>
-export default {
-  methods: {
-    getCheckedNodes() {
-      console.log(this.$refs.tree.getCheckedNodes())
-    },
-    getCheckedKeys() {
-      console.log(this.$refs.tree.getCheckedKeys())
-    },
-    setCheckedNodes() {
-      this.$refs.tree.setCheckedNodes([
-        {
-          id: 5,
-          label: '二级 2-1',
-        },
-        {
-          id: 9,
-          label: '三级 1-1-1',
-        },
-      ])
-    },
-    setCheckedKeys() {
-      this.$refs.tree.setCheckedKeys([3])
-    },
-    resetChecked() {
-      this.$refs.tree.setCheckedKeys([])
+import { defineComponent, reactive, ref } from '@vue/composition-api'
+// import getTree from '@/api/1326-get-frontapi-service-provider-org-get-org-partner'
+import _search from '@/api/1660-get-frontapi-service-provider-list-by-name'
+// import _save from '@/api/1328-post-frontapi-service-provider-org-add-org-partner'
+// import { Message } from 'element-ui'
+
+export default defineComponent({
+  props: {
+    data: {
+      required: true,
     },
   },
-
-  data() {
-    return {
-      data: [
-        {
-          id: 1,
-          label: '一级 1',
-          children: [
-            {
-              id: 4,
-              label: '二级 1-1',
-              children: [
-                {
-                  id: 9,
-                  label: '三级 1-1-1',
-                },
-                {
-                  id: 10,
-                  label: '三级 1-1-2',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          id: 2,
-          label: '一级 2',
-          children: [
-            {
-              id: 5,
-              label: '二级 2-1',
-            },
-            {
-              id: 6,
-              label: '二级 2-2',
-            },
-          ],
-        },
-        {
-          id: 3,
-          label: '一级 3',
-          children: [
-            {
-              id: 7,
-              label: '二级 3-1',
-            },
-            {
-              id: 8,
-              label: '二级 3-2',
-            },
-          ],
-        },
-      ],
+  setup() {
+    const item = reactive({
+      sourceId: '',
+      sourceType: '',
+      treeRef: ref(null),
+      data: [],
+      defaultChecked: [],
       defaultProps: {
         children: 'children',
-        label: 'label',
+        label: 'orgName',
       },
+    })
+
+
+
+    // getTree({ providerId: data.sourceId, id: data.id }).then((response) => {
+    //   tree.defaultChecked = response.data.partnerIdList
+    //   tree.data = response.data.providerOrgDTOList
+    // })
+
+    const search = reactive({
+      options: [],
+      value: '',
+      list: [],
+      remoteMethod(query) {
+        if (query !== '') {
+          search.loading = true
+          setTimeout(() => {
+            search.loading = false
+
+            _search({ name: query }).then((response) => {
+              search.options = response.data
+            })
+          }, 200)
+        } else {
+          search.options = []
+        }
+      },
+    })
+
+    const list = ref([])
+
+    const add = () => {
+      list.value.push(item)
+    }
+
+    add()
+
+    const save = () => {
+      console.log(11, list.value)
+
+      // return _save({
+      //   sourceId: data.id,
+      //   partnerIds: treeRef.value.getCheckedKeys(),
+      // }).then(() => {
+      //   Message({
+      //     message: '保存成功！',
+      //     type: 'success',
+      //   })
+      //   emit('close')
+      //   emit('updateTable')
+      // })
+    }
+
+    return {
+      save,
+      search,
+      list,
+      add,
     }
   },
-}
+})
 </script>
