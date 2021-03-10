@@ -5,7 +5,7 @@
       <div class="rec-query">
         <span>生产团队：</span>
         <p>
-          <el-select v-model="form.team" placeholder="请选择">
+          <el-select v-model="form.orgId" placeholder="请选择" multiple>
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -17,7 +17,7 @@
         </p>
         <span>服务单号：</span>
         <p>
-          <el-input v-model="form.code" placeholder="请输入客户名称"></el-input>
+          <el-input v-model="form.serviceCode" placeholder="请输入客户名称"></el-input>
         </p>
         <el-button type="primary" @click="search">搜索</el-button>
       </div>
@@ -57,6 +57,7 @@
           <div slot="top" class="mb15">
             <el-button type="primary" :disabled="isRecommend" @click="recommend(true)">推荐网站</el-button>
             <el-button type="primary" :disabled="isRecommend" @click="recommend(false)">取消推荐</el-button>
+            <el-button type="info" class="rec-export" @click="exportRecommend" plain>导出数据</el-button>
           </div>
       </s-simple-table>
     </div>
@@ -65,7 +66,7 @@
 <script>
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 // import { Message } from 'element-ui'
-// import aaaa from '@/api/1562'
+import webRecommend from '@/api/1739-post-service-order-web-case-statistics'
 // import aaaa from '@/api/1562'
 export default defineComponent({
   setup(props, { root }) {
@@ -120,16 +121,20 @@ export default defineComponent({
     })
 
     let form = reactive({
-      team: '',
-      code: ''
+      orgId: [1],
+      type: '',
+      serviceCode: '',
+      pageNum: 1,
+      pageSize: 10
     })
 
-    const getRecommend = () => {
+    const __getRecommend = () => {
       // 获取接口
-      // aaaaaaa({businessFlowId: flowId, businessFlowNodeType: '1,2,4'})
-      // .then((res) => {
-      //   recommendData.data = res.data || [];
-      // })
+      webRecommend(form)
+      .then((res) => {
+        console.log("res",res)
+        // recommendData.data = res.data || [];
+      })
     }
 
     const search = () => {
@@ -152,13 +157,19 @@ export default defineComponent({
       recommendData.selection   = selection;
       recommendData.isRecommend = !selection.length
     }
+
+    const exportRecommend = () => {
+      // 导出数据
+    }
     
+    __getRecommend();
 
     return {
       ...toRefs(recommendData),
       form,
       search,
       recommend,
+      exportRecommend,
       selectionRecommend
     }
   },
@@ -251,5 +262,8 @@ export default defineComponent({
         margin: 0;
       }
     }
+  }
+  .rec-export {
+    float: right;
   }
 </style>

@@ -5,7 +5,7 @@
         <s-form-item label="业务流程名称" :rules="['required']" prop="businessFlowName" />
         <s-form-item label="业务流程code" :disabled="true" prop="businessFlowCode" />
         <s-form-item label="版本" :disabled="true" :rules="['required']" prop="version" />
-        <s-form-item label="描述" :rules="['required']" prop="describeInfo" />
+        <s-form-item label="描述" prop="describeInfo" />
         <s-form-item>
           <s-button @click="$emit('close')">取消</s-button>
           <s-button type="primary" run="form.submit">确定</s-button>
