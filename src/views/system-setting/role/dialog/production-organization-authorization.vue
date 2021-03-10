@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tree ref="treeRef" :data="tree.data" show-checkbox node-key="id" :default-checked-keys="tree.defaultChecked" :props="tree.defaultProps">
+    <el-tree ref="treeRef" :data="tree.data" show-checkbox node-key="orgId" :default-checked-keys="tree.defaultChecked" :props="tree.defaultProps">
     </el-tree>
 
     <div class="mt20">
@@ -13,6 +13,7 @@
 import { defineComponent, reactive, ref } from '@vue/composition-api'
 import getTree from '@/api/1420-get-common-service-org-list-tree'
 import _save from '@/api/1446-post-common-service-role-org-save'
+import _getDefalut from '@/api/1442-get-common-service-role-org-list-{roleid}'
 import { Message } from 'element-ui'
 
 export default defineComponent({
@@ -36,6 +37,13 @@ export default defineComponent({
     getTree({ state: 1 }).then((response) => {
       tree.data = response.data
     })
+
+    if (data && data.length === 1) {
+      _getDefalut({ roleId: data[0].id,type:1 }).then((response) => {
+        tree.defaultChecked = response.data.map((v) => v.orgId)
+      })
+    }
+
 
     const save = () => {
       const arr = []
