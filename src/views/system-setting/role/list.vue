@@ -11,9 +11,9 @@
       <div slot="top" class="mb20">
         <s-button type="primary" @click="roleGroupDialog.open">新增角色组</s-button>
         <s-button type="primary" @click="roleDialog.open">新增角色</s-button>
-        <s-button type="primary" @click="functionAuthorizationDialog.open" :disabled="table.checked.length===0">功能授权</s-button>
+        <s-button type="primary" @click="functionAuthorizationDialog.open({data:table.checked})" :disabled="table.checked.length===0">功能授权</s-button>
         <s-button type="primary" @click="productionOrganizationAuthorizationDialog.open({data:table.checked})" :disabled="table.checked.length===0">生产组织授权</s-button>
-        <s-button type="primary" @click="salesChannelsAuthorizationDialog.open" :disabled="table.checked.length===0">售卖渠道授权</s-button>
+        <s-button type="primary" @click="salesChannelsAuthorizationDialog.open({data:table.checked})" :disabled="table.checked.length===0">售卖渠道授权</s-button>
       </div>
       <s-form slot="form" inline>
         <s-form-item label="角色名称" prop="roleName" />
