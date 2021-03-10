@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tree ref="treeRef" :data="tree.data" show-checkbox node-key="id" :default-checked-keys="tree.defaultChecked" :props="tree.defaultProps" />
+    <el-tree ref="treeRef" :data="tree.data" show-checkbox node-key="code" :default-checked-keys="tree.defaultChecked" :props="tree.defaultProps" />
 
     <div class="mt20">
       <s-button @click="$emit('close')">取消</s-button>
@@ -12,6 +12,7 @@
 import { defineComponent, reactive, ref } from '@vue/composition-api'
 import _save from '@/api/1446-post-common-service-role-org-save'
 import getTree from '@/api/1424-get-production-config-sales-channel-treelist'
+import _getDefalut from '@/api/1442-get-common-service-role-org-list-{roleid}'
 
 import useOptions from '../hooks/use-options'
 import { Message } from 'element-ui'
@@ -38,6 +39,12 @@ export default defineComponent({
       tree.data = response.data
     })
 
+    if (data && data.length === 1) {
+      _getDefalut({ roleId: data[0].id ,type:2}).then((response) => {
+        tree.defaultChecked = response.data.map((v) => v.orgId)
+      })
+    }
+
     const save = () => {
       const checkedKeys = treeRef.value.getCheckedNodes(true)
       const arr = []
@@ -54,7 +61,6 @@ export default defineComponent({
           })
         })
       })
-
 
       return _save(arr).then(() => {
         Message({

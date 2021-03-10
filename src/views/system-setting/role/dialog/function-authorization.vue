@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tree ref="treeRef" :data="tree.data" show-checkbox node-key="id" :default-checked-keys="tree.defaultChecked" :props="tree.defaultProps">
+    <el-tree ref="treeRef" :data="tree.data" show-checkbox node-key="resourceCode" :default-checked-keys="tree.defaultChecked" :props="tree.defaultProps">
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
         <s-group size="mini" v-model="data.permissionCode" v-if="node.isLeaf" :data="options.dropList"></s-group>
@@ -17,7 +17,7 @@
 import { defineComponent, reactive, ref } from '@vue/composition-api'
 import getTree from '@/api/1392-get-common-service-resource-list-tree'
 import _save from '@/api/1438-post-common-service-role-resource-save'
-
+import _getDefalut from '@/api/1426-get-common-service-role-resource-list-{roleid}'
 
 import useOptions from '../hooks/use-options'
 import { Message } from 'element-ui'
@@ -53,6 +53,15 @@ export default defineComponent({
       setCheckedFild(response.data)
       tree.data = response.data
     })
+
+
+
+    if(data&&data.length===1){
+      _getDefalut({roleId:data[0].id}).then(response=>{
+        console.log(response.data.map(v=>v.resourceCode))
+        tree.defaultChecked=response.data.map(v=>v.resourceCode)
+      })
+    }
 
     const save = () => {
       const checkedKeys = treeRef.value.getCheckedNodes()
