@@ -39,7 +39,6 @@ instance.interceptors.response.use(function (response) {
 // error
 instance.interceptors.response.use(function (response) {
     if (response.data.code !== 'SYS0000' && response.data.code !== '10001') {
-        
         element_ui_1.Message({
             type: 'error',
             message: response.data.msg
@@ -47,5 +46,11 @@ instance.interceptors.response.use(function (response) {
         throw new Error(response.data);
     }
     return response.data;
+}, function (error) {
+    element_ui_1.Message({
+        type: 'error',
+        message: error
+    });
+    return error;
 });
 exports["default"] = instance;

@@ -90,9 +90,6 @@ export default defineComponent({
   .ce-flow {
     text-align: center;
     padding: 40px 20px;
-    .flow-select {
-      width: 100%;
-    }
     .flow-form {
       display: flex;
       flex-direction: column;

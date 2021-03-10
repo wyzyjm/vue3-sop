@@ -14,7 +14,7 @@
         </el-col>
         <el-col :span="4"></el-col>
         <el-col :span="18">
-          <s-form-item label="顺序" prop="orderNum" :rules="['required']" />
+          <s-form-item label="顺序" prop="orderNum" type="number" min="0" :rules="['required']" />
         </el-col>
         <el-col :span="4"></el-col>
         <el-col :span="18">
@@ -112,6 +112,7 @@ export default defineComponent({
 
     const save = (form) => {
       addbutton({nodeId, ...form}).then((res) => {
+          console.log(res)
         emit('close')
         root.$store.commit('table/update')
         Message({

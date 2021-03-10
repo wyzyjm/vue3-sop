@@ -1,73 +1,153 @@
 <template>
-  <div>
+  <div class="clear-number cb-table-style">
     <el-table
       :data="tableData"
       border
       style="width: 100%">
       <el-table-column
-        prop="date"
-        label="日期"
-        width="180">
+        fixed
+        prop="buttonName"
+        label="按钮名称"
+        width="150">
+        <template slot-scope="{row}">
+          <template v-if="row.isEdit">
+            <s-input v-model="row.buttonName"></s-input>
+          </template>
+          <template v-else>{{row.buttonName}}</template>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="name"
-        label="姓名"
-        width="180">
+        prop="useScence"
+        label="仅对外展示">
+        <template slot-scope="scope">
+          {{scope.row.useScence?'是':'否'}}
+        </template>
       </el-table-column>
       <el-table-column
-        prop="address"
-        label="地址">
+        prop="buttonAuthority"
+        label="仅当前操作人可见">
+        <template slot-scope="scope">
+          {{scope.row.buttonAuthority?'是':'否'}}
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="orderNum"
+        label="顺序">
+        <template slot-scope="{row}">
+          <template v-if="row.isEdit">
+            <s-input v-model="row.orderNum" type="number" min="0"></s-input>
+          </template>
+          <template v-else>{{row.orderNum}}</template>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="bindForms"
+        label="表单">
+      </el-table-column>
+      <el-table-column
+        prop="eventAction"
+        label="动作事件">
+      </el-table-column>
+      <el-table-column
+        prop="actionResult"
+        label="动作结果">
+      </el-table-column>
+      <el-table-column
+        prop="executor"
+        label="执行人">
+      </el-table-column>
+      <el-table-column
+        prop="createTime"
+        label="添加时间">
+      </el-table-column>
+      <el-table-column
+        fixed="right"
+        label="操作"
+        align="center"
+        width="100">
+        <template slot-scope="{row}">
+          <template v-if="row.isEdit">
+            <el-button type="text" size="small" @click="btnUpdate(row)">保存</el-button>
+            <el-button type="text" size="small" @click="btnIsEdit(row, false)">取消</el-button>
+          </template>
+          <template v-else>
+            <el-button @click="btnIsEdit(row, true)" type="text" size="small">编辑</el-button>
+            <el-button @click="btnDelete(row)" type="text" size="small">删除</el-button>
+          </template>
+        </template>
       </el-table-column>
     </el-table>
   </div>
 </template>
 <script>
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, reactive, toRefs, set } from '@vue/composition-api'
+import { Message } from 'element-ui'
+import buttonList from '@/api/1599-get-service-order-sevice-business-flow-node-{nodeid}-{serviceorderstatus}-buttonlist'
+import buttonDelete from '@/api/1601-delete-service-order-sevice-business-flow-node-button-{buttonid}'
+import buttonUpdate from '@/api/1605-post-service-order-sevice-business-flow-node-button-{buttonid}-update'
 
 export default defineComponent({
   props: {
     nodeId: {
       type: Number
     },
-    isEdit: {
-      default: false,
-    },
     data: {
       type: Object,
-    },
+    }
   },
-  setup({ isEdit, data }) {
+  setup({ nodeId, data }) {
     let btnData = reactive({
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-      ]
+      tableData: []
     })
 
+    const form = reactive({})
+
+    function getList() {
+      buttonList({nodeId, serviceOrderStatus: data.serviceOrderStatus })
+      .then(({data}) => {
+        console.log("data", data)
+        btnData.tableData = data || [];
+      })
+    }
+
+    function btnIsEdit(row, is=false) {
+      set(row, 'isEdit', is);
+    }
+
+    function btnDelete(row) {
+      buttonDelete({buttonId: row.id}).then(() => {
+        getList();
+        Message({
+          type: 'success',
+          message: '删除成功！',
+        })
+      })
+    }
+
+    function btnUpdate(row) {
+      buttonUpdate({buttonId: row.id, ...row})
+      .then(() => {
+        btnIsEdit(row, false);
+        Message({
+          type: 'success',
+          message: '保存成功！',
+        })
+      })
+    }
+
+    getList();
+
     const save = (form) => {
-      
+      console.log(form)
     }
 
     return {
       ...toRefs(btnData),
       save,
       form,
-      options,
+      btnDelete,
+      btnIsEdit,
+      btnUpdate
     }
   },
 })

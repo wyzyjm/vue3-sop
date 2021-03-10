@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <s-simple-table :data="table.data" :cols="table.cols">
+    <s-table :data="table.data" :cols="table.cols" border>
         <s-form slot="form" :model="form" inline>
             <s-form-item label="当前服务商组织名称" prop="name">
                 <s-input v-model="form.name" clearable></s-input>
@@ -18,7 +18,7 @@
                 </div>
             </s-form-item>
         </s-form>
-    </s-simple-table>
+    </s-table>
   </div>
 </template>
 <script>
@@ -31,15 +31,9 @@ export default defineComponent({
       type: Array,
     },
   },
-  
-  mounted () {
-    //   getOrgList({providerId: this.data[0].id}).then(res => {
-    //       datas = res
-    //   })
-  },
-  setup( ) {
+  setup(props) {
     const table = reactive({
-      data: getOrgList,
+      data: [],
       cols: [
         {
           showOverflowTooltip: true,
@@ -69,6 +63,10 @@ export default defineComponent({
         name: '',
         status: '',
     });
+    getOrgList({providerId: props.data[0].id}).then(res => {
+        table.data = res.data.records || []
+        console.log(res)
+    })
     console.log(table, 99999)
     return {
       table,

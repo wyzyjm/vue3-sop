@@ -81,6 +81,7 @@ export default defineComponent({
         },
         {
           label: '服务产品名称',
+          showOverflowTooltip: true,
           prop: ({ row }) => (
             <s-button type="text" onClick={() => view(row)}>
               {row.name}
@@ -89,22 +90,27 @@ export default defineComponent({
         },
         {
           label: '服务产品编码',
+          showOverflowTooltip: true,
           prop: 'code',
         },
         {
           label: '服务产品类型',
+          showOverflowTooltip: true,
           prop: 'serviceContent',
         },
         {
           label: '状态',
+          width: '80px',
           prop: ({ row }) => `已${getStateText(row.status)}`,
         },
         {
           label: '创建时间',
+          width: '180px',
           prop: 'createTime',
         },
         {
           label: '操作',
+          width: '240px',
           prop: ({ row }) => {
             return [
               <s-button

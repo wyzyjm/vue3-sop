@@ -8,6 +8,8 @@ export const isEdit = (row) => {
 export const createEditRow = (row, key) => {
     return isEdit(row) ? (
         <s-input
+            type="textarea"
+            autosize
             value={row[key]}
             onInput={(val) => {
                 row[key] = val

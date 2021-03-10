@@ -1429,3 +1429,6 @@ a.tdl:hover {
 .block {
   display: block;
 }
+.flow-select {
+  width: 100%;
+}

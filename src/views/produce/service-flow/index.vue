@@ -1,6 +1,6 @@
 <template>
   <div>
-    <s-simple-table :data="data" :cols="cols">
+    <s-simple-table :data="data" :cols="cols" class="cb-table-style">
       <s-form slot="form" :model="form" inline>
         <s-form-item label="服务流程名称" prop="businessFlowName">
           <s-input v-model="form.businessFlowName"></s-input>

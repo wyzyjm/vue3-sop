@@ -1,7 +1,7 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/119/interface/api/1490
- * 生成日期：Tue Mar 02 2021 10:40:40 GMT+0800 (中国标准时间)
+ * 生成日期：Mon Mar 08 2021 10:22:14 GMT+0800 (GMT+08:00)
  * 生成工具版本：ts-v0.0.2
  * 接口名称：新增
  * 创建人：杨一点
@@ -14,16 +14,17 @@ export interface ResBody {
 }
 
 export interface ReqBody {
-  name?:string                
-  code?:string                
-  codeGenerateType?:number    
-  type?:string                
-  unit?:string                
-  priority?:number            
-  businessTypeId?:number      
-  serviceContent?:string      
-  status?:number              
-  propertyList?:any[]         
+  name?:string                   
+  code?:string                   
+  codeGenerateType?:number       
+  type?:string                   
+  unit?:string                   
+  priority?:number               
+  businessTypeId?:number         
+  serviceContent?:string         
+  status?:number                 
+  propertyList?:any[]            
+  belongsToProductLine?:any[]    
 }
 
 interface _Params extends ReqBody {}
