@@ -45,10 +45,10 @@ import useDialog from '@/hooks/use-dialog'
 import useState from '@/hooks/use-state/disable-state'
 import { Message } from 'element-ui'
 import _setState from '@/api/1318-get-frontapi-service-provider-org-change-status'
-import Sortable from 'sortablejs'
+// import Sortable from 'sortablejs'
 
 export default defineComponent({
-  setup(props, { root }) {
+  setup() {
     const form = reactive({
       providerId: '',
     })
@@ -109,19 +109,19 @@ export default defineComponent({
       _getTableData(form).then((response) => {
         // filterEmptyArray([response.data])
         table.data = [response.data]
-        root.$nextTick(() => {
-          const tableEl = document.querySelector(
-            '.el-table__body-wrapper tbody'
-          )
-          Sortable.create(tableEl, {
-            onEnd() {
-              console.log(arguments)
-              console.log(table.data)
-              // const targetRow = self.tableData.splice(oldIndex, 1)[0]
-              // self.tableData.splice(newIndex, 0, targetRow)
-            },
-          })
-        })
+        // root.$nextTick(() => {
+        //   const tableEl = document.querySelector(
+        //     '.el-table__body-wrapper tbody'
+        //   )
+        //   Sortable.create(tableEl, {
+        //     onEnd() {
+        //       console.log(arguments)
+        //       console.log(table.data)
+        //       // const targetRow = self.tableData.splice(oldIndex, 1)[0]
+        //       // self.tableData.splice(newIndex, 0, targetRow)
+        //     },
+        //   })
+        // })
       })
     }
 

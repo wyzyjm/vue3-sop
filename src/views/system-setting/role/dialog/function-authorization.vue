@@ -1,6 +1,19 @@
 <template>
   <div>
-    <el-tree :data="data" show-checkbox default-expand-all node-key="id" ref="tree" highlight-current :props="defaultProps" />
+    <el-tree :data="data" show-checkbox default-expand-all node-key="id" ref="tree" highlight-current :props="defaultProps">
+      <span class="custom-tree-node" slot-scope="{ node, data }">
+        <span>{{ node.label }}</span>
+        <span>
+          <el-button type="text" size="mini" @click="() => append(data)">
+            Append
+          </el-button>
+          <el-button type="text" size="mini" @click="() => remove(node, data)">
+            Delete
+          </el-button>
+        </span>
+      </span>
+    </el-tree>
+
     <div class="buttons">
       <el-button @click="getCheckedNodes">通过 node 获取</el-button>
       <el-button @click="getCheckedKeys">通过 key 获取</el-button>

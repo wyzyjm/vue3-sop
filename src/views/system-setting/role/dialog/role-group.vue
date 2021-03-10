@@ -13,11 +13,17 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import roleGroupSave from '@/api/1368-post-common-service-role-group-save'
+import { Message } from 'element-ui'
 export default defineComponent({
-  setup() {
+  setup(props, { emit, root }) {
     const save = (form) => {
-      return roleGroupSave(form).then(({ msg }) => {
-        console.log(msg)
+      return roleGroupSave(form).then(() => {
+        Message({
+          message: '保存成功！',
+          type: 'success',
+        })
+        emit('close')
+        root.$store.commit('table/update')
       })
     }
 
