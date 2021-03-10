@@ -45,8 +45,6 @@ export default defineComponent({
       })
     }
 
-    console.log(1,tree)
-
     const save = () => {
       const checkedKeys = treeRef.value.getCheckedNodes(true)
       const arr = []
