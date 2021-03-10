@@ -5,7 +5,17 @@
         <s-form-item label="业务流程名称" :rules="['required']" prop="businessFlowName" />
         <s-form-item label="业务流程code" :disabled="true" prop="businessFlowCode" />
         <s-form-item label="版本" :disabled="true" :rules="['required']" prop="version" />
-        <s-form-item label="描述" prop="describeInfo" />
+        <s-form-item label="关联工作流" prop="flowWorkDefId" :rules="['required']">
+          <el-select v-model="form.flowWorkDefId" placeholder="请选择关联工作流" class="flow-select">
+            <el-option
+              v-for="item in flowList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </s-form-item>
+        <s-form-item label="描述" prop="describeInfo" type="textarea"/>
         <s-form-item>
           <s-button @click="$emit('close')">取消</s-button>
           <s-button type="primary" run="form.submit">确定</s-button>
@@ -27,8 +37,9 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive } from '@vue/composition-api'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import updateBusinessFlow from '@/api/1547-post-service-order-sevice-business-flow-{id}'
+import getworkflowlist from '@/api/1518-get-service-order-sevice-business-flow-getworkflowlist'
 export default defineComponent({
   props: {
     isEdit: {
@@ -39,9 +50,17 @@ export default defineComponent({
     },
   },
   setup({ data }, { emit, root }) {
+    const flowData = reactive({      
+      flowList: []
+    });
+    
     let form = reactive({})
     form = { ...form, ...data }
 
+    getworkflowlist().then((res) => {
+      flowData.flowList = res.data || [];
+    })
+    
     const flowNext = () => {
       root.$router.push({
         path: "/produce/add-service-flow",
@@ -63,7 +82,8 @@ export default defineComponent({
     return {
       save,
       form,
-      flowNext
+      flowNext,
+      ...toRefs(flowData)
     }
   },
 })
