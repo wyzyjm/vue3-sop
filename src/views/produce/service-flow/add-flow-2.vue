@@ -98,10 +98,10 @@ export default defineComponent({
           label: '状态名称',
           prop: 'serviceOrderStatusName',
         },
-        {
-          label: '状态code',
-          prop: 'businessNodeCode',
-        },
+        // {
+        //   label: '状态code',
+        //   prop: 'businessNodeCode',
+        // },
         {
           label: '顺序',
           prop: 'sortOrder',
