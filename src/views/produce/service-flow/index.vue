@@ -52,7 +52,8 @@ export default defineComponent({
         {
           label: '版本',
           prop: 'version',
-          width: '160px',
+          showOverflowTooltip: true,
+          width: '60px',
         },
         {
           label: '关联工作流',
@@ -90,7 +91,7 @@ export default defineComponent({
                 type="text"
                 onClick={() => setStatus(row)}
               >
-                {row.status?'停用':'启用'}
+                {row.status==1?'停用':'启用'}
               </s-button>
             ]
           }
@@ -137,7 +138,7 @@ export default defineComponent({
     }
 
     function setStatus(row) {
-      setFlowStatus({id: row.id, status: row.status?'2':'1'}).then(() => {
+      setFlowStatus({id: row.id, status: row.status==1?'2':'1'}).then(() => {
         Message({
           type: 'success',
           message: row.status?'已停用':'已启用',

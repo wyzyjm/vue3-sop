@@ -15,6 +15,9 @@ import "../zxx.css"
 // Element 样式重置
 import "./reset.scss"
 
+// iconfont
+import "./icons/index.scss"
+
 
 Vue.use(Element,{
     size:'medium'

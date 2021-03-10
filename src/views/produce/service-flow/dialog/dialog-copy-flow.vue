@@ -40,7 +40,7 @@ export default defineComponent({
     })
 
     const save = () => {
-      copyBusinessFlow(form).then(
+      return copyBusinessFlow(form).then(
         () => {
           Message({
             type: 'success',

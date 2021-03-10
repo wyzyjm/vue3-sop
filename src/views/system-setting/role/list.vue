@@ -17,9 +17,9 @@
       </div>
       <s-form slot="form" inline>
         <s-form-item label="角色名称" prop="roleName" />
-        <s-form-item label="状态" :props="{label:'key'}" :data="options.state" prop="state" component="s-group" tag="el-radio-group" />
-        <s-form-item label="角色组" :data="options.roleGroup" prop="roleGroupId" component="s-group" />
-        <s-form-item label="服务商可见" :data="options.isSpVisible" prop="isSpVisible" component="s-group" tag="el-radio-group" />
+        <s-form-item label="状态" :data="options" prop="state" component="s-group" />
+        <s-form-item label="角色组" :data="moreOptions.roleGroup" prop="roleGroupId" component="s-group" />
+        <s-form-item label="服务商可见" :data="moreOptions.isSpVisible" prop="isSpVisible" component="s-group" />
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
           <s-button run="form.reset">重置</s-button>
@@ -30,10 +30,12 @@
 </template>
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
-import getTableData from '@/api/1348-get-role-list'
-import setRoleState from '@/api/1386-post-role-state'
+import getTableData from '@/api/1348-get-common-service-role-list'
+import setRoleState from '@/api/1386-post-common-service-role-state'
 import useOptions from './hooks/use-options'
 import useDialog from '@/hooks/use-dialog'
+import useState from '@/hooks/use-state/disable-state'
+import { Message } from 'element-ui'
 
 export default defineComponent({
   setup(props, { root }) {
@@ -67,12 +69,23 @@ export default defineComponent({
       component: require('./dialog/sales-channels-authorization'),
     })
 
-    const setState = (row) => {
-      return setRoleState(row).then(({ msg }) => {
-        console.log(msg)
-        root.$store.commit('table/update')
-      })
-    }
+    const { setState, getStateText, options } = useState(
+      {
+        message: '请确认是否继续停用？',
+      },
+      (row) => {
+        return setRoleState({
+          id: row.id,
+          state: 1 ^ row.state,
+        }).then(() => {
+          Message({
+            type: 'success',
+            message: '操作成功！',
+          })
+          root.$store.commit('table/update')
+        })
+      }
+    )
 
     const table = reactive({
       data: getTableData,
@@ -113,7 +126,7 @@ export default defineComponent({
                 编辑
               </s-button>,
               <s-button type="text" onClick={() => setState(row)}>
-                {row.state ? '启用' : '停用'}
+                {getStateText(1 ^ row.state)}
               </s-button>,
             ]
           },
@@ -121,7 +134,7 @@ export default defineComponent({
       ],
     })
 
-    const options = useOptions()
+    const moreOptions = useOptions()
 
     return {
       functionAuthorizationDialog,
@@ -129,6 +142,7 @@ export default defineComponent({
       roleDialog,
       table,
       options,
+      moreOptions,
       productionOrganizationAuthorizationDialog,
       salesChannelsAuthorizationDialog,
     }
