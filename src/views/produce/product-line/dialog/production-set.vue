@@ -85,6 +85,7 @@ export default defineComponent({
     const serviceProviderChange = (item, providerId) => {
       // 清空生产组织
       item.productionOrganizationId = ''
+      item.org=[]
       //赋值服务商名称
       item.serviceProvider = options.serviceProvider.find(
         (v) => v.id === providerId
