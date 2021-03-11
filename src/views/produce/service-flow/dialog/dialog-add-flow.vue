@@ -65,7 +65,7 @@ export default defineComponent({
     let form = reactive({
       sortOrder: '',
       serviceOrderStatus: '',
-      businessNodeStatusArray: '',
+      businessNodeStatusArray: [],
     })
 
     if (isEdit) {

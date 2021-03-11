@@ -66,6 +66,7 @@ export default defineComponent({
         {
           label: '描述',
           prop: 'describeInfo',
+          showOverflowTooltip: true
         },
         {
           label: '创建时间',
@@ -141,7 +142,7 @@ export default defineComponent({
       setFlowStatus({id: row.id, status: row.status==1?'2':'1'}).then(() => {
         Message({
           type: 'success',
-          message: row.status?'已停用':'已启用',
+          message: row.status!=2?'已停用':'已启用',
         })
         root.$store.commit('table/update')
       })

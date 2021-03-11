@@ -19,15 +19,23 @@
       <el-table-column
         prop="useScence"
         label="仅对外展示">
-        <template slot-scope="scope">
-          {{scope.row.useScence?'是':'否'}}
+        <template slot-scope="{row}">
+          <template v-if="row.isEdit">
+            <el-switch v-model="row.useScence">
+          </el-switch>
+          </template>
+          <template v-else>{{row.useScence?'是':'否'}}</template>
         </template>
       </el-table-column>
       <el-table-column
         prop="buttonAuthority"
         label="仅当前操作人可见">
-        <template slot-scope="scope">
-          {{scope.row.buttonAuthority?'是':'否'}}
+        <template slot-scope="{row}">
+          <template v-if="row.isEdit">
+            <el-switch v-model="row.buttonAuthority">
+          </el-switch>
+          </template>
+          <template v-else>{{row.buttonAuthority?'是':'否'}}</template>
         </template>
       </el-table-column>
       <el-table-column
@@ -43,18 +51,42 @@
       <el-table-column
         prop="bindForms"
         label="表单">
+        <template slot-scope="{row}">
+          <template v-if="row.isEdit">
+            <s-input v-model="row.bindForms"></s-input>
+          </template>
+          <template v-else>{{row.bindForms}}</template>
+        </template>
       </el-table-column>
       <el-table-column
         prop="eventAction"
         label="动作事件">
+        <template slot-scope="{row}">
+          <template v-if="row.isEdit">
+            <s-input v-model="row.eventAction"></s-input>
+          </template>
+          <template v-else>{{row.eventAction}}</template>
+        </template>
       </el-table-column>
       <el-table-column
         prop="actionResult"
         label="动作结果">
+        <template slot-scope="{row}">
+          <template v-if="row.isEdit">
+            <s-input v-model="row.actionResult"></s-input>
+          </template>
+          <template v-else>{{row.actionResult}}</template>
+        </template>
       </el-table-column>
       <el-table-column
         prop="executor"
         label="执行人">
+        <template slot-scope="{row}">
+          <template v-if="row.isEdit">
+            <s-input v-model="row.executor"></s-input>
+          </template>
+          <template v-else>{{row.executor}}</template>
+        </template>
       </el-table-column>
       <el-table-column
         prop="createTime"
