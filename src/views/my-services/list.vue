@@ -1,6 +1,7 @@
 <template>
   <div>
-    <s-dialog v-bind="openSearchDialog" @close="openSearchDialog.close" />
+    <s-dialog v-bind="openSearchDialog" @close="openSearchDialog.close" 
+    @changeSearch="changeSearch"/>
     <s-simple-table :data="table.data" :cols="table.cols">
       <s-form slot="form" :model="form" inline>
         <!-- <s-form-item label="客户名称" prop="custName">
@@ -35,11 +36,22 @@ import useOptions from './utils/query'
 import useDialog from '@/hooks/use-dialog'
 
 export default defineComponent({
-  setup() {
+  methods: {
+
+  },
+  setup(props, { root }) {
+    const changeSearch = function (data) {
+        // console.log(data, 9999)
+        // data.status = data.status.join(',')
+        // data.productType = data.productType.join(',')
+        // data.businessType = data.businessType.join(',')
+        root.$store.commit('table/update', data)
+        // console.log(data, 999, 8888)
+    }
     const openSearchDialog = useDialog({
       uid: 'search',
       title: '高级搜索',
-      width: '800px',
+      width: '1000px',
       component: require('./dialog/search'),
     })
     const table = reactive({
@@ -118,7 +130,8 @@ export default defineComponent({
       table,
       form,
       options,
-      openSearchDialog
+      openSearchDialog,
+      changeSearch
     }
   },
 })
