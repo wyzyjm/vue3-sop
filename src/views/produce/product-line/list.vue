@@ -1,7 +1,7 @@
 <template>
   <div>
     <s-simple-table v-model="table.checked" :data="table.data" :cols="table.cols">
-      <s-form :model="form" slot="form" inline @reset="()=>{form.salesChannelId=''}" >
+      <s-form :model="form" slot="form" inline @reset="()=>{form.salesChannelId=''}">
         <s-form-item label="产品名称" prop="name" />
         <s-form-item label="状态" prop="status" component="s-group" :data="options" />
         <s-form-item label="售卖渠道">
@@ -98,30 +98,39 @@ export default defineComponent({
         },
         {
           label: '产品名称',
+          showOverflowTooltip: true,
           prop: 'name',
         },
         {
           label: '产品编码',
+          width:'80px',
+          showOverflowTooltip: true,
           prop: 'code',
         },
         {
           label: '售卖渠道',
+          showOverflowTooltip: true,
           prop: 'completeSalesChannelName',
         },
         {
           label: '业务类型',
+          width: '180px',
+          showOverflowTooltip: true,
           prop: 'businessTypeName',
         },
         {
           label: '状态',
+          width: '80px',
           prop: ({ row }) => getStateText(row.status),
         },
         {
           label: '创建时间',
+          width: '180px',
           prop: 'createTime',
         },
         {
           label: '操作',
+          width: '180px',
           prop: ({ row }) => {
             return [
               <s-button

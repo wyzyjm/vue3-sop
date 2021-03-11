@@ -2,6 +2,7 @@
   <div>
     <s-dialog v-bind="dialog" @close="dialog.close" @updateTable="handleSearch(form)" />
     <s-dialog v-bind="dialog2" @close="dialog2.close" @updateTable="handleSearch(form)" />
+
     <s-form slot="form" :model="form" @search="handleSearch" inline>
       <s-form-item label="服务商名称" prop="providerId">
         <el-select v-model="form.providerId" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="search.remoteMethod" :loading="search.loading">
@@ -14,7 +15,11 @@
         <s-button run="form.reset">重置</s-button>
       </s-form-item>
     </s-form>
-    <el-table :data="table.data" row-key="id" border default-expand-all>
+
+    <div>
+      <s-button :disabled="table.data.length!==0||form.providerId===''" type="primary" @click="dialog.open({data:{sourceId:form.providerId,orgId:0}})">新增组织</s-button>
+    </div>
+    <el-table class="mt20" :data="table.data" v-loading="table.loading" row-key="id" border default-expand-all>
       <el-table-column prop="orgName" label="组织名称" sortable width="180">
       </el-table-column>
       <el-table-column prop="orgId" label="组织编码" sortable width="180">
@@ -45,10 +50,12 @@ import useDialog from '@/hooks/use-dialog'
 import useState from '@/hooks/use-state/disable-state'
 import { Message } from 'element-ui'
 import _setState from '@/api/1318-get-frontapi-service-provider-org-change-status'
-// import Sortable from 'sortablejs'
+import Sortable from 'sortablejs'
+
+import _move from '@/api/1324-get-frontapi-service-provider-org-move-org'
 
 export default defineComponent({
-  setup() {
+  setup(props, { root }) {
     const form = reactive({
       providerId: '',
     })
@@ -102,26 +109,50 @@ export default defineComponent({
 
     const table = reactive({
       data: [],
+      loading: false,
     })
 
+    let tableArr = []
+
+    const setTableArr = (arr) => {
+      arr.forEach((v) => {
+        tableArr.push(v)
+        if (v.children && v.children.length) {
+          setTableArr(v.children)
+        }
+      })
+    }
+
     const handleSearch = (form) => {
-      form.providerId = 83
+      table.loading = true
       _getTableData(form).then((response) => {
+        table.loading = false
         // filterEmptyArray([response.data])
-        table.data = [response.data]
-        // root.$nextTick(() => {
-        //   const tableEl = document.querySelector(
-        //     '.el-table__body-wrapper tbody'
-        //   )
-        //   Sortable.create(tableEl, {
-        //     onEnd() {
-        //       console.log(arguments)
-        //       console.log(table.data)
-        //       // const targetRow = self.tableData.splice(oldIndex, 1)[0]
-        //       // self.tableData.splice(newIndex, 0, targetRow)
-        //     },
-        //   })
-        // })
+        table.data = response.data ? [response.data] : []
+        tableArr = []
+        setTableArr(table.data)
+        root.$nextTick(() => {
+          const tableEl = document.querySelector(
+            '.el-table__body-wrapper tbody'
+          )
+          Sortable.create(tableEl, {
+            onEnd({ newIndex, oldIndex }) {
+              if (newIndex !== oldIndex) {
+                console.log(tableArr)
+                console.log(tableArr[newIndex])
+                console.log(tableArr[oldIndex])
+                table.loading = true
+                table.data = []
+                _move({
+                  id: tableArr[oldIndex].id,
+                  parentId: tableArr[newIndex].id,
+                }).then(() => {
+                  handleSearch(form)
+                })
+              }
+            },
+          })
+        })
       })
     }
 
