@@ -101,8 +101,11 @@ export default defineComponent({
           width:'120px',
           showOverflowTooltip: true,
           prop: ({ row }) => {
-            console.log(moreOptions.type);
-            return <s-text props={{props:{label:'name',value:'code'}}} options={moreOptions.type} content={row.type} />
+            try {
+              return moreOptions.type.find(v=>v.code===row.type).name
+            } catch (error) {
+              return ''
+            }
           },
         },
         {

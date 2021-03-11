@@ -8,7 +8,8 @@
           <el-cascader :props="{
             label:'name',
             value:'id',
-            emitPath:false
+            emitPath:false,
+            checkStrictly:true
           }" v-model="form.salesChannelId" clearable :show-all-levels="false" :options="moreOptions.salesChannels"></el-cascader>
         </s-form-item>
         <s-form-item>

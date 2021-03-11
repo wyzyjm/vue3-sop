@@ -14,8 +14,9 @@
               checkStrictly : true,
             label:'name',
             value:'id',
-            multiple:true
-          }" v-model="item.salesChannelId" :collapse-tags="true" :options="options.salesChannelList"></el-cascader>
+            multiple:true,
+            emitPath:false
+          }" v-model="item.salesChannelId" :collapse-tags="true" :show-all-levels="false" :options="options.salesChannelList"></el-cascader>
           </s-form-item>
         </el-col>
         <el-col :span="10">
@@ -72,7 +73,7 @@ export default defineComponent({
           arr.push({
             productionProcessId: v.productionProcessId,
             productionProcessName: v.productionProcessName,
-            salesChannelId: c[c.length - 1],
+            salesChannelId: Array.isArray(c) ? c[c.length - 1] : c,
           })
         })
       })
