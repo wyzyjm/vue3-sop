@@ -9,7 +9,7 @@ import { reactive } from '@vue/composition-api'
 function filterEmptyArrayAndSetDisabled(arr) {
     if (!Array.isArray(arr)) return
     arr.forEach(function (v) {
-        v.disabled=v.status===0
+        v.disabled = v.status === 0
         if (v.children.length === 0) {
             v.children = null
         } else {
@@ -26,11 +26,11 @@ export default () => {
         salesChannels: [],
         businessType: [],
         serviceProvider: [],
-        productList:[],
+        productList: [],
         org: []
     })
 
-    Promise.all([getSalesChannels({status:1}), getBusinessType({ status: 1, pageSize: 9999 }), getServiceProvider({ status: 0, pageSize: 9999 }),getProductList()]).then((response) => {
+    Promise.all([getSalesChannels({ status: 1 }), getBusinessType({ status: 1, pageSize: -1 }), getServiceProvider({ status: 0, pageSize: -1 }), getProductList()]).then((response) => {
         filterEmptyArrayAndSetDisabled(response[0].data)
         options.salesChannels = response[0].data
         options.businessType = response[1].data.records

@@ -6,7 +6,7 @@ import getSalesChannelList from '@/api/1424-get-production-config-sales-channel-
 function filterEmptyArrayAndSetDisabled(arr) {
     if (!Array.isArray(arr)) return
     arr.forEach(function (v) {
-        v.disabled=v.status===0
+        v.disabled = v.status === 0
         if (v.children.length === 0) {
             v.children = null
         } else {
@@ -26,7 +26,7 @@ export default () => {
         salesChannelList: []
     })
 
-    Promise.all([getBusinessFlow({ status: 1, pageSize: 9999 }), getSalesChannelList({ status: 1 })]).then((response) => {
+    Promise.all([getBusinessFlow({ status: 1, pageSize: -1 }), getSalesChannelList({ status: 1 })]).then((response) => {
         filterEmptyArrayAndSetDisabled(response[1].data)
         options.businessFlow = response[0].data.records
         options.salesChannelList = response[1].data
