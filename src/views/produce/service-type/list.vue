@@ -61,7 +61,7 @@ export default defineComponent({
         {
           label: '状态编码',
           showOverflowTooltip: true,
-
+          width:'100px',
           prop: 'code',
         },
         {

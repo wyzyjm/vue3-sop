@@ -66,20 +66,24 @@ export default defineComponent({
         },
         {
           label: '渠道编码',
+          showOverflowTooltip: true,
           prop: 'code',
         },
         {
           label: '状态',
+          width: '80px',
           prop: ({ row }) => {
             return getStateText(row.status)
           },
         },
         {
           label: '创建时间',
+          width: '180px',
           prop: 'createTime',
         },
         {
           label: '操作',
+          width: '120px',
           prop: ({ row }) => {
             return [
               <s-button
