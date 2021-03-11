@@ -1,7 +1,7 @@
 <template>
   <div>
     <s-simple-table v-model="table.checked" :data="table.data" :cols="table.cols">
-      
+
       <s-form slot="form" inline>
         <s-form-item label="服务产品名称" prop="name" />
         <s-form-item label="服务产品类型" prop="type" component="s-group" :data="moreOptions.type" :props="{label:'name',value:'code'}" />
@@ -39,6 +39,7 @@ export default defineComponent({
         root.$store.commit('table/update')
       })
     })
+    const moreOptions = useOptions()
 
     const productionSetDialog = useDialog({
       uid: 'productionSetDialog',
@@ -97,7 +98,10 @@ export default defineComponent({
         {
           label: '服务产品类型',
           showOverflowTooltip: true,
-          prop: 'serviceContent',
+          prop: ({ row }) => {
+            console.log(moreOptions.type);
+            return <s-text props={{props:{label:'name',value:'code'}}} options={moreOptions.type} content={row.type} />
+          },
         },
         {
           label: '状态',
@@ -137,8 +141,6 @@ export default defineComponent({
         },
       ],
     })
-
-    const moreOptions = useOptions()
 
     return {
       add,

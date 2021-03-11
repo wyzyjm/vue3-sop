@@ -10,16 +10,23 @@ export default () => {
     }
     const options = reactive({
         type: [],
-        unit:[],
-        businessType:[],
-        propertyList:[]
+        unit: [],
+        businessType: [],
+        propertyList: []
     })
 
-    Promise.all([getUnit(),getType(),getBusinessType({status:1}),getPropertyList()]).then((response) => {
+    Promise.all([getUnit(), getType(), getBusinessType({ status: 1,pageSize:-1 }), getPropertyList()]).then((response) => {
         options.unit = response[0].data
         options.type = response[1].data
-        options.businessType=response[2].data.records
-        options.propertyList=response[3].data
+
+        options.businessType = response[2].data.records
+
+        response[3].data.push({
+            name: '归属产品线',
+            valueList: [],
+            code: 'productLine'
+        })
+        options.propertyList = response[3].data
         getType.options = options
     })
 
