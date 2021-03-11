@@ -56,8 +56,10 @@ export default defineComponent({
             return createEditRow(row, 'nodeName')
           },
         },
-{
+        {
           label: '显示顺序',
+           showOverflowTooltip: true,
+           width:'100px',
           prop: ({ row }) => {
             return isEdit(row) ? (
               <el-input-number
@@ -75,18 +77,21 @@ export default defineComponent({
         },
         {
           label: '进行中显示状态',
+           showOverflowTooltip: true,
           prop: ({ row }) => {
             return createEditRow(row, 'progressStatusName')
           },
         },
         {
           label: '进行中显示话述',
+           showOverflowTooltip: true,
           prop: ({ row }) => {
             return createEditRow(row, 'progressTerm')
           },
         },
         {
           label: '显示编辑内容',
+           showOverflowTooltip: true,
           prop: ({ row }) => {
             return createEditRow(row, 'showContentCode')
           },
@@ -99,10 +104,11 @@ export default defineComponent({
         // },
         {
           label: '关联服务环节',
+           showOverflowTooltip: true,
           prop: ({ row }) => {
             return isEdit(row) ? (
               <s-group
-              multiple
+                multiple
                 value={row.businessNodeIdsArray}
                 onInput={(val) => {
                   row.businessNodeIdsArray = val
@@ -122,6 +128,7 @@ export default defineComponent({
         },
         {
           label: '操作项',
+          width:'120px',
           prop: ({ row }) => {
             return [
               <s-button

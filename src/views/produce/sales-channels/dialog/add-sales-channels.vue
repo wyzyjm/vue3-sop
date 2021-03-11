@@ -8,8 +8,7 @@
         <el-cascader :props="{
             label:'name',
             value:'id',
-            checkStrictly:true,
-          }" v-model="form.allParentSalesChannelIdList" :options="moreOptions.salesChannels"></el-cascader>
+            checkStrictly:true,          }" v-model="form.allParentSalesChannelIdList" :options="moreOptions.salesChannels" :show-all-levels="false" clearable></el-cascader>
       </s-form-item>
       <s-form-item label="状态" :rules="['required:number']" prop="status" component="s-group" :data="options" tag="el-radio-group" />
       <s-form-item label="描述" type="textarea" prop="description" />

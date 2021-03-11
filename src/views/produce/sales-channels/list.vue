@@ -1,6 +1,6 @@
 <template>
   <div>
-    <s-simple-table :page="false" :data="table.data" :cols="table.cols">
+    <s-simple-table :page="false"  row-key="id" :data="table.data" :cols="table.cols">
       <div slot="top" class="mb20">
         <el-button type="primary" @click="dialog.open">新增</el-button>
       </div>
@@ -44,21 +44,6 @@ export default defineComponent({
     const table = reactive({
       data: getTableData,
       cols: [
-        {
-          type: 'expand',
-          prop: ({ row }) => {
-            return row.children && row.children.length ? (
-              <s-simple-table
-                page={false}
-                uid={row.id}
-                data={row.children}
-                cols={table.cols}
-              />
-            ) : (
-              ''
-            )
-          },
-        },
         {
           showOverflowTooltip: true,
           label: '渠道名称',

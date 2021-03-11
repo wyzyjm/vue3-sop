@@ -1,10 +1,11 @@
 <template>
   <div>
     <s-simple-table v-model="table.checked" :data="table.data" :cols="table.cols">
+      
       <s-form slot="form" inline>
         <s-form-item label="服务产品名称" prop="name" />
-        <s-form-item label="服务产品类型" prop="name" component="s-group" :data="type" />
-        <s-form-item label="服务产品编码" prop="name" />
+        <s-form-item label="服务产品类型" prop="type" component="s-group" :data="moreOptions.type" :props="{label:'name',value:'code'}" />
+        <s-form-item label="服务产品编码" prop="code" />
         <s-form-item label="状态" prop="status" component="s-group" :data="options" />
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
@@ -115,9 +116,7 @@ export default defineComponent({
             return [
               <s-button
                 type="text"
-                onClick={() =>
-                  productionSetDialog.open({ data: [row] })
-                }
+                onClick={() => productionSetDialog.open({ data: [row] })}
               >
                 生产流程
               </s-button>,
@@ -139,7 +138,7 @@ export default defineComponent({
       ],
     })
 
-    const { type } = useOptions()
+    const moreOptions = useOptions()
 
     return {
       add,
@@ -148,7 +147,7 @@ export default defineComponent({
       relatedDialog,
       productionSetDialog,
       options,
-      type,
+      moreOptions,
     }
   },
 })

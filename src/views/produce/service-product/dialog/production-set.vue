@@ -6,10 +6,11 @@
         <el-col :span="12">售卖渠道</el-col>
         <el-col :span="12">生产流程</el-col>
       </el-row>
+
       <el-row v-for="(item,i) in form.productionProcessList" :key="i">
-        <el-col :span="12">
-          <s-form-item :prop="`productionProcessList.${i}.salesChannelId`" :rules="[{required:true,type:'array',message:'请选择售卖渠道',trigger: 'change'}]" >
-            <el-cascader class="pct90" :props="{
+        <el-col :span="10">
+          <s-form-item :prop="`productionProcessList.${i}.salesChannelId`" :rules="[{required:true,type:'array',message:'请选择售卖渠道',trigger: 'change'}]">
+            <el-cascader clearable class="pct90" :props="{
               checkStrictly : true,
             label:'name',
             value:'id',
@@ -17,10 +18,13 @@
           }" v-model="item.salesChannelId" :collapse-tags="true" :options="options.salesChannelList"></el-cascader>
           </s-form-item>
         </el-col>
-        <el-col :span="12">
-          <s-form-item :prop="`productionProcessList.${i}.productionProcessId`" :rules="[{required:true,message:'请选择生产流程',trigger: 'change'}]"  >
-            <s-group class="pct90" @change="businessFlowChange($event,item)" :data="options.businessFlow" :props="{label:'businessFlowName',value:'id'}" v-model="item.productionProcessId"></s-group>
+        <el-col :span="10">
+          <s-form-item :prop="`productionProcessList.${i}.productionProcessId`" :rules="[{required:true,message:'请选择生产流程',trigger: 'change'}]">
+            <s-group clearable class="pct90" @change="businessFlowChange($event,item)" :data="options.businessFlow" :props="{label:'businessFlowName',value:'id'}" v-model="item.productionProcessId"></s-group>
           </s-form-item>
+        </el-col>
+        <el-col :span="4">
+          <s-button v-if="i!==0" type="text" @click="del(i)" icon="el-icon-delete" />
         </el-col>
       </el-row>
 
@@ -39,7 +43,7 @@ import { defineComponent, reactive } from '@vue/composition-api'
 import useOptions from '../hooks/use-production-set-options'
 import _save from '@/api/1504-post-production-config-service-product-production-process-batch'
 import { Message } from 'element-ui'
-
+import _getDetail from '@/api/1705-get-production-config-service-product-details'
 export default defineComponent({
   props: {
     data: {
@@ -73,7 +77,6 @@ export default defineComponent({
         })
       })
       params.productionProcessList = arr
-      console.log(params)
 
       return _save(params).then(() => {
         Message({
@@ -88,15 +91,44 @@ export default defineComponent({
     const add = () => {
       form.productionProcessList.push({ ...item })
     }
+
+    const del = (i) => {
+      form.productionProcessList.splice(i, 1)
+    }
     const businessFlowChange = (val, item) => {
-      item.productionProcessName = options.businessFlow.find(
-        (v) => v.id === val
-      ).businessFlowName
+      try {
+        item.productionProcessName = options.businessFlow.find(
+          (v) => v.id === val
+        ).businessFlowName
+      } catch (error) {
+        item.productionProcessName = ''
+      }
     }
 
-    add()
+    if (data && data.length === 1) {
+      _getDetail({ id: data[0].id }).then((response) => {
+        // form.productionProcessList=
+        response.data.productionProcessList.forEach((v) => {
+          const current = form.productionProcessList.find(
+            (c) => c.productionProcessId === v.productionProcessId
+          )
+          if (current) {
+            current.salesChannelId.push([v.salesChannelId])
+          } else {
+            form.productionProcessList.push({
+              salesChannelId: [[v.salesChannelId]],
+              productionProcessId: v.productionProcessId,
+              productionProcessName: v.productionProcessName,
+            })
+          }
+        })
+      })
+    } else {
+      add()
+    }
 
     return {
+      del,
       add,
       save,
       form,
