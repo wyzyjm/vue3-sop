@@ -129,10 +129,12 @@ export default defineComponent({
     const isEdit = ref(!!id)
 
     const save = (form) => {
-      form.propertyList = otherProps.value.map((v) => {
-        v.valueList = v.valueList.filter((c) => v.checked.includes(c.code))
-        return v
-      })
+      form.propertyList = otherProps.value
+        .map((v) => {
+          v.valueList = v.valueList.filter((c) => v.checked.includes(c.code))
+          return v
+        })
+        .filter((v) => v.name !== '归属产品线')
       return (id ? _update(form) : _save(form)).then(() => {
         Message({
           type: 'success',
