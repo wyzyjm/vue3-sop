@@ -13,34 +13,38 @@ export default (opt = {}, callback) => {
   }]
 
   const getStateText = (status) => {
-    
+
     const c = options.find((v) => v.value === status)
     return c && c.label
   }
 
 
   const setState = async (row) => {
-    if(row.status===0){
-      return callback(row)
-    }
+    if (row.status === 1 || row.state === 1) {
+      try {
+        const isContinue = await MessageBox.confirm(
+          message,
+          title,
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+        )
 
-    try {
-      const isContinue = await MessageBox.confirm(
-        message,
-        title,
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
+        if (isContinue) {
+          return callback(row)
         }
-      )
-
-      if (isContinue) {
-        return callback(row)
+      } catch (error) {
+        console.log(error)
       }
-    } catch (error) {
-      console.log(error)
+    } else {
+      return callback(row)
+
     }
+
+
+
   }
   return {
     options: reactive(options),

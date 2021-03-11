@@ -74,7 +74,7 @@
       </g>
     </svg>
     <div :style="{display: position.businessFlowNodeType?'':'none' }">
-      <div class="flow-handle" :style="{left: position.x+'px', top: position.y+position.h+5+'px' }">
+      <div class="flow-handle" :style="{left: position.x+'px', top: position.y+position.h+5+'px', minWidth: baseArrow+'px' }">
         <svg 
           v-if="position.businessFlowNodeType == 2" 
           viewBox="0 0 1024 1024" 

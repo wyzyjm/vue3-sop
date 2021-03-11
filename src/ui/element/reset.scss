@@ -50,4 +50,35 @@
             }
         }
     }
+    .sop-tabs {
+        .el-tabs__header {
+            margin: 0;
+            border: none !important;
+            .el-tabs__nav {
+                border: none;
+            }
+        }
+        .el-tabs__nav-wrap {
+            margin: 0;
+        }
+        .el-tabs__item {
+            color: $sop-color-theme;
+            margin-right: 15px;
+            border: 1px solid #E4E7ED;
+            border-bottom: none !important;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            &.is-active {
+                color: $sop-color-white;
+                background: $sop-color-theme;
+            }
+        }
+        .el-tabs__content {
+            border: 1px solid #E4E7ED;
+            background: #FBFBFB;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            border-top-right-radius: 6px;
+        }
+    }
 }

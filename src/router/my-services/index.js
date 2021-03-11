@@ -1,10 +1,27 @@
 export default [
     {
-        path: 'my-services',
+        path: '/my-services',
+        redirect: '/my-services/list',
         meta: {
             title: '我的服务'
         },
-        component: () => import(/* webpackChunkName: "my-services" */ '@/views/my-services/list')
+        component: () => import(/* webpackChunkName: "my-services" */ '@/views/my-services'),
+        children: [
+            {
+                path: 'list',
+                meta:{
+                    title:'服务列表'
+                },
+                component: () => import(/* webpackChunkName: "list" */ '@/views/my-services/list')
+            }, 
+            {
+                path: 'detail/:id',
+                meta:{
+                    title:'服务详情5'
+                },
+                component: () => import(/* webpackChunkName: "detail" */ '@/views/my-services/detail')
+            }, 
+        ]
     }
 ]
 

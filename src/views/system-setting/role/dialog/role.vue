@@ -20,6 +20,8 @@ import { defineComponent, reactive } from '@vue/composition-api'
 import roleSave from '@/api/1382-post-common-service-role-save'
 import roleUpdate from '@/api/1384-post-common-service-role-update'
 import useOptions from '../hooks/use-options'
+import { Message } from 'element-ui'
+
 export default defineComponent({
   props: {
     isEdit: {
@@ -29,7 +31,7 @@ export default defineComponent({
       type: Object,
     },
   },
-  setup({ isEdit, data }) {
+  setup({ isEdit, data }, { emit, root }) {
     let form = reactive({
       roleName: '',
       roleGroupId: '',
@@ -44,8 +46,13 @@ export default defineComponent({
     }
 
     const save = (form) => {
-      return (isEdit ? roleUpdate(form) : roleSave(form)).then((response) => {
-        console.log(1, response)
+      return (isEdit ? roleUpdate(form) : roleSave(form)).then(() => {
+        Message({
+          message: '保存成功！',
+          type: 'success',
+        })
+        emit('close')
+        root.$store.commit('table/update')
       })
     }
 

@@ -11,7 +11,7 @@
           ></el-option>
         </el-select>
       </s-form-item>
-      <s-form-item label="状态code" component="s-text" :content="form.serviceOrderStatus" prop="serviceOrderStatus" />
+      <!-- <s-form-item label="状态code" component="s-text" :content="form.serviceOrderStatus" prop="serviceOrderStatus" /> -->
       <s-form-item label="顺序" prop="sortOrder" :rules="['required']" />
       <s-form-item label="关联业务状态" prop="businessNodeStatusArray" :rules="['required:array']">
         <el-select v-model="form.businessNodeStatusArray" multiple placeholder="请选择关联业务状态" class="flow-select">

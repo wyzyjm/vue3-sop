@@ -54,6 +54,11 @@ export default defineComponent({
       width: '1000px',
       component: require('./dialog/search'),
     })
+    const toDetail = (row) => {
+          root.$router.push({
+              path: `/my-services/detail/${row.id}`
+          })
+    }
     const table = reactive({
       checked: [],
       data: getList,
@@ -115,6 +120,16 @@ export default defineComponent({
           label: '剩余周期',
           showOverflowTooltip: true,
           prop: 'wholeMakeSurplusCycle',
+        },
+        {
+          label: '操作',
+          prop: ({row}) => {
+              return [
+                <s-button data-pid="provider" type="text" onClick={() => toDetail(row)}>
+                    查看详情
+                </s-button>
+              ]
+          },
         },
       ],
     })

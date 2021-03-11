@@ -1,101 +1,77 @@
 <template>
   <div>
-    <el-tree :data="data" show-checkbox default-expand-all node-key="id" ref="tree" highlight-current :props="defaultProps" />
-    <div class="buttons">
-      <el-button @click="getCheckedNodes">通过 node 获取</el-button>
-      <el-button @click="getCheckedKeys">通过 key 获取</el-button>
-      <el-button @click="setCheckedNodes">通过 node 设置</el-button>
-      <el-button @click="setCheckedKeys">通过 key 设置</el-button>
-      <el-button @click="resetChecked">清空</el-button>
+    <el-tree ref="treeRef" :data="tree.data" show-checkbox node-key="orgId" :default-checked-keys="tree.defaultChecked" :props="tree.defaultProps">
+    </el-tree>
+
+    <div class="mt20">
+      <s-button @click="$emit('close')">取消</s-button>
+      <s-button type="primary" @click="save">确定</s-button>
     </div>
   </div>
 </template>
 <script>
-export default {
-  methods: {
-    getCheckedNodes() {
-      console.log(this.$refs.tree.getCheckedNodes())
-    },
-    getCheckedKeys() {
-      console.log(this.$refs.tree.getCheckedKeys())
-    },
-    setCheckedNodes() {
-      this.$refs.tree.setCheckedNodes([
-        {
-          id: 5,
-          label: '二级 2-1',
-        },
-        {
-          id: 9,
-          label: '三级 1-1-1',
-        },
-      ])
-    },
-    setCheckedKeys() {
-      this.$refs.tree.setCheckedKeys([3])
-    },
-    resetChecked() {
-      this.$refs.tree.setCheckedKeys([])
+import { defineComponent, reactive, ref } from '@vue/composition-api'
+import getTree from '@/api/1420-get-common-service-org-list-tree'
+import _save from '@/api/1446-post-common-service-role-org-save'
+import _getDefalut from '@/api/1442-get-common-service-role-org-list-{roleid}'
+import { Message } from 'element-ui'
+
+export default defineComponent({
+  props: {
+    data: {
+      required: true,
     },
   },
-
-  data() {
-    return {
-      data: [
-        {
-          id: 1,
-          label: '一级 1',
-          children: [
-            {
-              id: 4,
-              label: '二级 1-1',
-              children: [
-                {
-                  id: 9,
-                  label: '三级 1-1-1',
-                },
-                {
-                  id: 10,
-                  label: '三级 1-1-2',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          id: 2,
-          label: '一级 2',
-          children: [
-            {
-              id: 5,
-              label: '二级 2-1',
-            },
-            {
-              id: 6,
-              label: '二级 2-2',
-            },
-          ],
-        },
-        {
-          id: 3,
-          label: '一级 3',
-          children: [
-            {
-              id: 7,
-              label: '二级 3-1',
-            },
-            {
-              id: 8,
-              label: '二级 3-2',
-            },
-          ],
-        },
-      ],
+  setup({ data }, { emit }) {
+    const tree = reactive({
+      data: [],
+      defaultChecked: [],
       defaultProps: {
         children: 'children',
-        label: 'label',
+        label: 'orgName',
       },
+    })
+
+    const treeRef = ref(null)
+
+    getTree({ state: 1 }).then((response) => {
+      tree.data = response.data
+    })
+
+    if (data && data.length === 1) {
+      _getDefalut({ roleId: data[0].id,type:1 }).then((response) => {
+        tree.defaultChecked = response.data.map((v) => v.orgId)
+      })
+    }
+
+
+    const save = () => {
+      const arr = []
+      const nodes = treeRef.value.getCheckedNodes(true)
+
+      data.forEach((v) => {
+        nodes.forEach((c) => {
+          c.type = 1
+          c.roleId = v.id
+          arr.push(c)
+        })
+      })
+
+      return _save(arr).then(() => {
+        Message({
+          message: '保存成功！',
+          type: 'success',
+        })
+        emit('close')
+        emit('updateTable')
+      })
+    }
+
+    return {
+      treeRef,
+      tree,
+      save,
     }
   },
-}
+})
 </script>
