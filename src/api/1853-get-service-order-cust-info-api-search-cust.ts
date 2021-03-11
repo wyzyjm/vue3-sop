@@ -7,7 +7,7 @@
  * 创建人：付兵浩
  */
 export interface Data {
-  :string    /**key为客户id，value为客户名称*/
+  custName:string    /**key为客户id，value为客户名称*/
 }
 
 export interface ResBody {
