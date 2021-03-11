@@ -92,11 +92,13 @@ export default defineComponent({
         },
         {
           label: '服务产品编码',
+          width: '240px',
           showOverflowTooltip: true,
           prop: 'code',
         },
         {
           label: '服务产品类型',
+          width:'120px',
           showOverflowTooltip: true,
           prop: ({ row }) => {
             console.log(moreOptions.type);
