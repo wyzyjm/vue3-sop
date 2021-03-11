@@ -225,8 +225,8 @@ export default defineComponent({
 
     function saveFlow () {
       flowSaveall({businessFlowId: flowId, serviceBusinessFlowNodeJsonStr: JSON.stringify(flowData.data)})
-      .then(() => {
-        Message({
+      .then(({ code }) => {
+        code=='SYS0000'&&Message({
           type: 'success',
           message: '保存成功！',
         })

@@ -25,10 +25,10 @@
           <s-button type="text" @click="addOtherPropDialog.open">新增其他属性</s-button>
           <s-button type="text" @click="selectOtherPropDialog.open">选择其他属性</s-button>
         </s-form-item>
-
         <div v-for="(item,i) in otherProps" :key="i">
           <s-form-item :label="item.name">
-            <s-group multiple v-model="item.checked" component="s-group" :props="{label:'value',value:'code'}" :data="item.valueList"></s-group>
+            <el-cascader v-model="proudctLineChecked" v-if="item.code==='productLine'" @change="change1" :props="{ multiple: true }" :options="options1" filterable></el-cascader>
+            <s-group v-else multiple v-model="item.checked" component="s-group" :props="{label:'value',value:'code'}" :data="item.valueList"></s-group>
           </s-form-item>
         </div>
       </div>
@@ -51,6 +51,7 @@ import _update from '@/api/1492-put-production-config-service-product'
 import request from '@/api/1496-get-production-config-service-product'
 import useDialog from '@/hooks/use-dialog'
 import { Message } from 'element-ui'
+import _getProductConfig from '@/api/1609-get-production-config-product-list'
 
 export default defineComponent({
   props: {
@@ -59,6 +60,54 @@ export default defineComponent({
     },
   },
   setup({ id }, { root }) {
+    // 归属产品线
+    const options1 = ref([])
+
+    const proudctLineChecked = ref([])
+
+    const change1 = (val) => {
+      form.belongsToProductLine = val.map((v) => {
+        const o1 = options1.value.find((c) => c.value === v[0])
+        const o2 = o1.children.find((c) => c.value === v[1])
+        return {
+          name: o1.label,
+          version: o2.label,
+          code: o1.code,
+        }
+      })
+    }
+
+    const initProductLine = () => {
+      return _getProductConfig().then((response) => {
+        const arr = []
+        response.data.forEach((v) => {
+          const current = arr.find((c) => c.code === v.code)
+          if (current) {
+            current.children.push({
+              label: v.version,
+              value: v.id,
+            })
+          } else {
+            const o = {
+              label: v.name,
+              value: v.id,
+              code: v.code,
+              children: [
+                {
+                  label: v.version,
+                  value: v.id,
+                },
+              ],
+            }
+            arr.push(o)
+          }
+        })
+
+        options1.value = arr
+      })
+    }
+
+    // 归属产品线结束
     let form = reactive({
       id,
       code: '',
@@ -80,10 +129,12 @@ export default defineComponent({
     const isEdit = ref(!!id)
 
     const save = (form) => {
-      form.propertyList = otherProps.value.map((v) => {
-        v.valueList = v.valueList.filter((c) => v.checked.includes(c.code))
-        return v
-      })
+      form.propertyList = otherProps.value
+        .map((v) => {
+          v.valueList = v.valueList.filter((c) => v.checked.includes(c.code))
+          return v
+        })
+        .filter((v) => v.name !== '归属产品线')
       return (id ? _update(form) : _save(form)).then(() => {
         Message({
           type: 'success',
@@ -95,6 +146,9 @@ export default defineComponent({
 
     const selectOtherPropChange = (arr) => {
       otherProps.value = arr.map((v) => {
+        if (v.code === 'productLine') {
+          initProductLine()
+        }
         const c = JSON.parse(JSON.stringify(v))
         c.checked = c.valueList.map((v) => v.code)
         return c
@@ -122,16 +176,35 @@ export default defineComponent({
             let arr = []
             response.data[v].forEach((v) => {
               const current = arr.find((c) => c.name === v.name)
+
               if (current) {
                 current.valueList.push(v)
               } else {
                 arr.push({
                   name: v.name,
+                  code: v.name === '归属产品线' ? 'productLine' : undefined,
                   valueList: [v],
                 })
               }
             })
+
             selectOtherPropChange(arr)
+
+            // 单独处理归属产品线
+            const productLine = arr.find((v) => v.name === '归属产品线')
+            if (productLine) {
+              initProductLine().then(() => {
+                productLine.valueList.forEach((v) => {
+                  const code = parseInt(v.code)
+                  const current = options1.value.find((c) => c.code === code)
+                  const id1 = current.value
+                  const id2 = current.children.find(
+                    (c) => c.label === v.value.split('/')[1]
+                  ).value
+                  proudctLineChecked.value.push([id1, id2])
+                })
+              })
+            }
           } else {
             form[v] = response.data[v]
           }
@@ -150,6 +223,9 @@ export default defineComponent({
       selectOtherPropDialog,
       selectOtherPropChange,
       otherProps,
+      options1,
+      change1,
+      proudctLineChecked,
     }
   },
 })

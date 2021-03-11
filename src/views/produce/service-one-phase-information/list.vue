@@ -81,6 +81,7 @@ export default defineComponent({
         },
         {
           label: '名称编码',
+           showOverflowTooltip: true,
           prop: 'flowShowCode',
         },
         // {
@@ -107,6 +108,7 @@ export default defineComponent({
         },
         {
           label: '对应服务流程',
+           showOverflowTooltip: true,
           prop: ({ row }) => {
             return isEdit(row) ? (
               <s-group
@@ -132,6 +134,7 @@ export default defineComponent({
         },
         {
           label: '流程版本',
+           showOverflowTooltip: true,
           prop: 'businessFlowDefVersion',
         },
         {

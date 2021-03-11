@@ -1,6 +1,6 @@
 <template>
   <div>
-    <s-simple-table :page="false" :data="table.data" :cols="table.cols">
+    <s-simple-table :page="false"  row-key="id" :data="table.data" :cols="table.cols">
       <div slot="top" class="mb20">
         <el-button type="primary" @click="dialog.open">新增</el-button>
       </div>
@@ -45,41 +45,30 @@ export default defineComponent({
       data: getTableData,
       cols: [
         {
-          type: 'expand',
-          prop: ({ row }) => {
-            return row.children && row.children.length ? (
-              <s-simple-table
-                page={false}
-                uid={row.id}
-                data={row.children}
-                cols={table.cols}
-              />
-            ) : (
-              ''
-            )
-          },
-        },
-        {
           showOverflowTooltip: true,
           label: '渠道名称',
           prop: 'name',
         },
         {
           label: '渠道编码',
+          showOverflowTooltip: true,
           prop: 'code',
         },
         {
           label: '状态',
+          width: '80px',
           prop: ({ row }) => {
             return getStateText(row.status)
           },
         },
         {
           label: '创建时间',
+          width: '180px',
           prop: 'createTime',
         },
         {
           label: '操作',
+          width: '120px',
           prop: ({ row }) => {
             return [
               <s-button

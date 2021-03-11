@@ -30,13 +30,13 @@
           <s-form-item :prop="'stageGroupDTOList.' + index + '.orderSort'" label="展示顺序" :rules="[{ required: true, message: '请输入展示顺序', trigger: 'blur' }]">
             <el-input-number class="pct100" :min="0" :precision="0" v-model="item.orderSort"></el-input-number>
           </s-form-item>
-          <s-form-item :prop="'stageGroupDTOList.' + index + '.noStartTerm'" label="未开始术语" :rules="[{ required: true, message: '请输入未开始术语', trigger: 'blur' }]">
+          <s-form-item :prop="'stageGroupDTOList.' + index + '.noStartTerm'" label="未开始术语" >
             <el-input v-model="item.noStartTerm"></el-input>
           </s-form-item>
-          <s-form-item :prop="'stageGroupDTOList.' + index + '.progressTerm'" label="进行中术语" :rules="[{ required: true, message: '请输入进行中术语', trigger: 'blur' }]">
+          <s-form-item :prop="'stageGroupDTOList.' + index + '.progressTerm'" label="进行中术语" >
             <el-input v-model="item.progressTerm"></el-input>
           </s-form-item>
-          <s-form-item :prop="'stageGroupDTOList.' + index + '.finishedTerm'" label="已完成术语" :rules="[{ required: true, message: '请输入已完成术语', trigger: 'blur' }]">
+          <s-form-item :prop="'stageGroupDTOList.' + index + '.finishedTerm'" label="已完成术语" >
             <el-input v-model="item.finishedTerm"></el-input>
           </s-form-item>
         </div>

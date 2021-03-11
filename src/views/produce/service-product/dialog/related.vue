@@ -10,12 +10,12 @@
       <el-row v-for="(item,i) in form.relatedMappingList" :key="i">
         <el-col :span="10">
           <s-form-item :rules="[{required:true,message:'请填写关联商品名称',trigger: 'blur'}]" :prop="`relatedMappingList.${i}.relatedGoodsName`">
-            <s-input class="pct90" v-model="item.relatedGoodsName"></s-input>
+            <s-input clearable class="pct90" v-model="item.relatedGoodsName"></s-input>
           </s-form-item>
         </el-col>
         <el-col :span="10">
           <s-form-item :rules="[{required:true,message:'请填写关联商品名称',trigger: 'blur'}]" :prop="`relatedMappingList.${i}.relatedGoodsCode`">
-            <s-input class="pct90" v-model="item.relatedGoodsCode"></s-input>
+            <s-input clearable class="pct90" v-model="item.relatedGoodsCode"></s-input>
           </s-form-item>
         </el-col>
         <el-col :span="4">
@@ -36,6 +36,7 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import _save from '@/api/1508-post-production-config-service-product-related-mapping--batch'
+import _getRelated from '@/api/1510-get-production-config-service-product-related-mapping-list'
 import { Message } from 'element-ui'
 
 export default defineComponent({
@@ -73,8 +74,21 @@ export default defineComponent({
       form.relatedMappingList.splice(i, 1)
     }
 
-    add()
+    
+    _getRelated({ serviceProductId: data.id }).then((response) => {
+      form.relatedMappingList = response.data.map((v) => {
+        return {
+          relatedGoodsName: v.relatedGoodsName,
+          relatedGoodsCode: v.relatedGoodsCode,
+        }
+      })
 
+      if(response.data.length===0){
+        add()
+      }
+
+
+    })
     return {
       add,
       del,

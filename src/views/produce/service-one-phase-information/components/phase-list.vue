@@ -71,10 +71,15 @@ export default defineComponent({
         },
         {
           label: '阶段编码',
+           showOverflowTooltip: true,
+           width:'100px',
           prop: 'stageCode',
         },
         {
           label: '显示顺序',
+          width:'100px',
+           showOverflowTooltip: true,
+
           prop: ({ row }) => {
             return isEdit(row) ? (
               <el-input-number
@@ -92,18 +97,21 @@ export default defineComponent({
         },
         {
           label: '未开始显示话术',
+           showOverflowTooltip: true,
           prop: ({ row }) => {
             return createEditRow(row, 'noStartTerm')
           },
         },
         {
           label: '生产中显示话术',
+           showOverflowTooltip: true,
           prop: ({ row }) => {
             return createEditRow(row, 'progressTerm')
           },
         },
         {
           label: '已完成显示话术',
+           showOverflowTooltip: true,
           prop: ({ row }) => {
             return createEditRow(row, 'finishedTerm')
           },
