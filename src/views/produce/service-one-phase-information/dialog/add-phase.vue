@@ -4,9 +4,9 @@
       <s-form-item label="阶段名称" :rules="['required']" prop="stageName" />
       <s-form-item label="阶段编码" :rules="['required']" prop="stageCode" />
       <s-form-item label="展示顺序" :min="0" component="el-input-number" :rules="['required:number']" prop="orderSort" />
-      <s-form-item label="未开始术语" :rules="['required']" prop="noStartTerm" />
-      <s-form-item label="进行中术语" :rules="['required']" prop="progressTerm" />
-      <s-form-item label="已完成术语" :rules="['required']" prop="finishedTerm" />
+      <s-form-item label="未开始术语"  prop="noStartTerm" />
+      <s-form-item label="进行中术语"  prop="progressTerm" />
+      <s-form-item label="已完成术语"  prop="finishedTerm" />
       <s-form-item>
         <s-button @click="$emit('close')">取消</s-button>
         <s-button type="primary" run="form.submit">确定</s-button>
