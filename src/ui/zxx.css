@@ -1432,3 +1432,8 @@ a.tdl:hover {
 .flow-select {
   width: 100%;
 }
+
+.dialog_box{
+    height:500px;
+    overflow-y:scroll
+}

@@ -1,8 +1,7 @@
 <!-- 详情 -->
 <template>
 <div class='box'>
-    <el-button v-for="(value, key, idx) in btns" :key="idx" type="primary" size="small" 
-    style="margin:0 10px 10px 0">{{value.label}}</el-button>
+    <btn :code="$route.params.code"></btn>
     <div class='module-box' v-for="(item, idx) in formCustInfo" :key="idx">
         <div class="title-box">{{item.title}}</div>
         <p class="clear"></p>
@@ -255,11 +254,12 @@
 import getServicesInfo from '@/api/1710-get-service-order-sevice-order-info-get-cust-info-{serviceorderid}'
 import getServicesContent from '@/api/1811-get-service-order-sevice-order-info-get-service-sontent-{serviceorderid}'
 import getServicesTeam from '@/api/1817-get-service-order-sevice-order-info-get-service-team-{serviceorderid}'
-// import getServicesBtn from '@/api/1835-post-service-order-sevice-button-operate'
-import { btns } from './utils/btn.js'
+import btn from './components/btns'
 export default {
 //import引入的组件需要注入到对象中才能使用
-components: {},
+components: {
+    btn
+},
 data() {
 //这里存放数据
 return {
@@ -291,6 +291,7 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
+    console.log(this.$route.params.code, 98890)
     // 客户信息
     getServicesInfo({serviceOrderId: this.$route.params.id}).then(res => {
         this.servicesInfo = res.data || {}
@@ -305,14 +306,9 @@ created() {
     getServicesTeam({serviceOrderId: this.$route.params.id}).then(res => {
         this.servicesTeam = res.data || {}
     })
-    // getServicesBtn({serviceCode: 'OL2020102800939', buttonType: 'upload'}).then(res => {
-    //     console.log(res , 999)
-    // })
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-    this.btns = btns
-    console.log(btns, 999)
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前
