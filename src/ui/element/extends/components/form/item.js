@@ -28,11 +28,11 @@ export default {
             }
 
             if (typeof rule === 'string' && rule === 'email') {
-                return { pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/, message: `请${event === 'blur' ? '输入' : '选择'}${this.label}`, tirgger: event }
+                return { pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/, message: `邮箱格式不正确`, tirgger: event }
             }
 
             if (typeof rule === 'string' && rule === 'mobile') {
-                return { pattern: /^1\d{10}$/, message: `请${event === 'blur' ? '输入' : '选择'}${this.label}`, tirgger: event }
+                return { pattern: /^1\d{10}$/, message: `手机号格式不正确`, tirgger: event }
             }
 
             return rule
