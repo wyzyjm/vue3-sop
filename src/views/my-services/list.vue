@@ -32,7 +32,7 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import getList from '@/api/1700-get-service-order-sevice-order-info-list'
-import useOptions from './utils/query'
+// import useOptions from './utils/query'
 import useDialog from '@/hooks/use-dialog'
 
 export default defineComponent({
@@ -56,7 +56,7 @@ export default defineComponent({
     })
     const toDetail = (row) => {
           root.$router.push({
-              path: `/my-services/detail/${row.id}`
+              path: `/my-services/detail/${row.id}/${row.serviceCode}`
           })
     }
     const table = reactive({
@@ -140,11 +140,11 @@ export default defineComponent({
       businessType: '',
       status: '',
     })
-    const options = useOptions()
+    // const options = useOptions()
     return {
       table,
       form,
-      options,
+    //   options,
       openSearchDialog,
       changeSearch
     }

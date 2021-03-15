@@ -15,9 +15,9 @@ export default [
                 component: () => import(/* webpackChunkName: "list" */ '@/views/my-services/list')
             }, 
             {
-                path: 'detail/:id',
+                path: 'detail/:id/:code',
                 meta:{
-                    title:'服务详情5'
+                    title:'服务详情'
                 },
                 component: () => import(/* webpackChunkName: "detail" */ '@/views/my-services/detail')
             }, 

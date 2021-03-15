@@ -5,7 +5,8 @@ export const btns = {
         },
         "operate_log": {
             value: 'operate_log',
-            label: '操作日志'
+            label: '操作日志',
+            fileName: 'log'
         },
         "make_tools": {
             value: 'make_tools',
@@ -25,43 +26,63 @@ export const btns = {
         },
         "assign_designers": {
             value: 'assign_designers',
-            label: '分派设计师'
+            label: '分派设计师',
+            fileName: 'tree',
+            width: '400'
         },
         "assign_make": {
             value: 'assign_make',
-            label: '分派制作员'
+            label: '分派制作员',
+            fileName: 'tree',
+            width: '400'
         },
         "assign_assistant": {
             value: 'assign_assistant',
-            label: '分派助理'
+            label: '分派助理',
+            fileName: 'tree',
+            width: '400'
         },
         "change_designers": {
             value: 'change_designers',
-            label: '更换设计师'
+            label: '更换设计师',
+            fileName: 'tree',
+            width: '400'
         },
         "change_make": {
             value: 'change_make',
-            label: '更换制作员'
+            label: '更换制作员',
+            fileName: 'tree',
+            width: '400'
         },
         "change_assistant": {
             value: 'change_assistant',
-            label: '更换助理'
+            label: '更换助理',
+            fileName: 'tree',
+            width: '400'
         },
         "change_liability": {
             value: 'change_liability',
-            label: '更换担责'
+            label: '更换担责',
+            fileName: 'tree',
+            width: '400'
         },
         "to_designers": {
             value: 'to_designers',
-            label: '转单设计'
+            label: '转单设计',
+            fileName: 'tree',
+            width: '400'
         },
         "to_make": {
             value: 'to_make',
-            label: '转单制作'
+            label: '转单制作',
+            fileName: 'tree',
+            width: '400'
         },
         "to_assistant": {
             value: 'to_assistant',
-            label: '转单助理'
+            label: '转单助理',
+            fileName: 'tree',
+            width: '400'
         },
         "demand_write": {
             value: 'demand_write',
