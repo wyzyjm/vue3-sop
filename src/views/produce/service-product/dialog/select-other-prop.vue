@@ -20,10 +20,10 @@ import useOptions from '../hooks/use-options'
 export default defineComponent({
   props: {
     data: {
-      type: Object,
+      type: Array,
     },
   },
-  setup(props, { emit }) {
+  setup({data}, { emit }) {
     let form = reactive({
       propertyList: [],
     })
@@ -31,6 +31,12 @@ export default defineComponent({
     const options = useOptions()
 
 
+    options.propertyList.forEach((v,i)=>{
+      if(data.some(c=>c.name===v.name)){
+        form.propertyList.push(i)
+      }
+
+    })
 
     const save = () => {
       emit(
