@@ -25,10 +25,22 @@
           <s-button type="text" @click="addOtherPropDialog.open">新增其他属性</s-button>
           <s-button type="text" @click="selectOtherPropDialog.open">选择其他属性</s-button>
         </s-form-item>
+
         <div v-for="(item,i) in otherProps" :key="i">
           <s-form-item :label="item.name">
+            <div v-if="item.code==='associatedAccountType'">
+              <el-row v-for="(child,i) in item.valueList" :key="i">
+                <el-col :span="11">
+                  <el-input v-model="child.value"></el-input>
+                </el-col>
+                <el-col :span="11" :offset="2">
+                  <el-input @blur="()=>item.checked=[child.code]" v-model="child.code"></el-input>
+                </el-col>
+              </el-row>
+            </div>
+
             <el-cascader v-model="proudctLineChecked" v-if="item.code==='productLine'" @change="change1" :props="{ multiple: true }" :options="options1" filterable></el-cascader>
-            <s-group v-else multiple v-model="item.checked" component="s-group" :props="{label:'value',value:'code'}" :data="item.valueList"></s-group>
+            <s-group v-if="item.code!=='associatedAccountType'&&item.code!=='productLine'" multiple v-model="item.checked" component="s-group" :props="{label:'value',value:'code'}" :data="item.valueList"></s-group>
           </s-form-item>
         </div>
       </div>
@@ -182,7 +194,12 @@ export default defineComponent({
               } else {
                 arr.push({
                   name: v.name,
-                  code: v.name === '归属产品线' ? 'productLine' : undefined,
+                  code:
+                    v.name === '归属产品线'
+                      ? 'productLine'
+                      : v.name === '关联账号类型'
+                      ? 'associatedAccountType'
+                      : undefined,
                   valueList: [v],
                 })
               }

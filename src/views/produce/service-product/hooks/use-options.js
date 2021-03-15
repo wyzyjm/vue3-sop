@@ -26,6 +26,14 @@ export default () => {
             valueList: [],
             code: 'productLine'
         })
+        response[3].data.push({
+            name: '关联账号类型',
+            valueList: [{
+                code:'',
+                value:''
+            }],
+            code: 'associatedAccountType'
+        })
         options.propertyList = response[3].data
         getType.options = options
     })
