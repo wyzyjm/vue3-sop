@@ -3,7 +3,7 @@
     <s-dialog v-bind="dialog" @close="dialog.close" @updateTable="handleSearch(form)" />
     <s-dialog v-bind="dialog2" @close="dialog2.close" @updateTable="handleSearch(form)" />
 
-    <s-form slot="form" :model="form" @search="handleSearch" inline>
+    <s-form class="custom-ui-search-form" slot="form" :model="form" @search="handleSearch" inline>
       <s-form-item label="服务商名称" prop="providerId">
         <el-select v-model="form.providerId" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="search.remoteMethod" :loading="search.loading">
           <el-option v-for="item in search.options" :key="item.id" :label="item.basicName" :value="item.id">
