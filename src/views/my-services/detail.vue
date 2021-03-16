@@ -1,7 +1,18 @@
 <!-- 详情 -->
 <template>
 <div class='box'>
-    <btn :code="$route.params.code"></btn>
+    
+    <div class='module-box'>
+        <div class="title-box">服务单进度</div>
+        <p class="clear"></p>
+        <div class="progress_box">
+            <ServiceProgress :serviceOrderId="4"></ServiceProgress>
+            <p class="mb40"></p>
+            <btn :code="$route.params.code"></btn>
+        </div>
+    </div>
+
+
     <div class='module-box' v-for="(item, idx) in formCustInfo" :key="idx">
         <div class="title-box">{{item.title}}</div>
         <p class="clear"></p>
@@ -254,11 +265,14 @@
 import getServicesInfo from '@/api/1710-get-service-order-sevice-order-info-get-cust-info-{serviceorderid}'
 import getServicesContent from '@/api/1811-get-service-order-sevice-order-info-get-service-sontent-{serviceorderid}'
 import getServicesTeam from '@/api/1817-get-service-order-sevice-order-info-get-service-team-{serviceorderid}'
+// import getServicesProgress from '@/api/1823-get-service-order-sevice-order-info-get-service-order-progress-{serviceorderid}'
+import ServiceProgress from './components/service-progress'
 import btn from './components/btns'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {
-    btn
+    btn,
+    ServiceProgress
 },
 data() {
 //这里存放数据
@@ -306,6 +320,10 @@ created() {
     getServicesTeam({serviceOrderId: this.$route.params.id}).then(res => {
         this.servicesTeam = res.data || {}
     })
+    // 服务进度
+    // getServicesProgress().then(res => {
+    //     console.log(res.data, 9999)
+    // })
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
@@ -324,6 +342,10 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 @import url("../system-setting/provider/style.scss");
 .row-box{
     margin:25px auto;
+}
+.progress_box{
+    width:calc(100% - 60px);
+    margin: 100px auto 30px;
 }
 .pro_box{
     width:100%;
