@@ -1,7 +1,7 @@
 <template>
   <div class="box">
-    <s-simple-table :data="table.data" :cols="table.cols">
-        <s-form slot="form" :model="form" inline>
+    <s-table :data="table.data" :cols="table.cols" border>
+        <s-form slot="form" :model="form" >
             <!-- <s-form-item label="售卖渠道" prop="salesChannelId">
                 <s-input v-model="form.salesChannelId" clearable></s-input>
             </s-form-item> -->
@@ -15,16 +15,21 @@
                 </div>
             </s-form-item>
         </s-form>
-    </s-simple-table>
+    </s-table>
   </div>
 </template>
 <script>
 import { defineComponent, reactive } from "@vue/composition-api";
 import getProviderScope from '@/api/1416-get-production-config-product-line-search'
 export default defineComponent({
-  setup() {
+  props: {
+    data: {
+      type: Array,
+    },
+  },
+  setup(props) {
     const table = reactive({
-      data: getProviderScope,
+      data: [],
       cols: [
         {
           showOverflowTooltip: true,
@@ -52,6 +57,11 @@ export default defineComponent({
     const form = reactive({
         name: ''
     });
+    getProviderScope({serviceProviderId: props.data[0].id}).then(res => {
+        table.data = res.data.records || []
+        
+    })
+    console.log(table)
     return {
       table,
       form,

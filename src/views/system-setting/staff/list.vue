@@ -166,7 +166,7 @@ export default defineComponent({
                 onChange={(val) => {
                     changeSuper({id: row.id, superman: val ? 1 : 0}).then(res => {
                         if (res.status == 200) {
-                            root.$message.success('开通成功')
+                            root.$message.success(val ? '已开通' : '已关闭')
                             row.isSuper = val
                             root.$store.commit('table/update')
                         } else {
