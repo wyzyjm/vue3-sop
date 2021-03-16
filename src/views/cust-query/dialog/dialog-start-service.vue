@@ -16,7 +16,7 @@
         <div class="serve-form">
           <s-form-item label="服务内容" prop="serviceTeamId" :rules="['required']" v-if="id == 1">
             <template v-if="teamList.length">
-              <el-radio v-model="form.serviceTeamId" v-for="(info, inx) of teamList" :label="info.orgName" :key="inx">{{info.orgName}}</el-radio>
+              <el-radio v-model="form.serviceTeamId" v-for="(info, inx) of teamList" :label="info.orgId" :key="inx">{{info.orgName}}</el-radio>
             </template>
             <template v-else>暂无团队</template>
           </s-form-item>
@@ -54,7 +54,7 @@
 </template>
 <script>
 import { defineComponent, reactive, toRefs, ref } from '@vue/composition-api'
-// import { Message } from 'element-ui'
+import { Message } from 'element-ui'
 import uploadFile from '@/api/1308-post-frontapi-common-upload-upload'
 import addService from '@/api/1889-post-service-order-user-service-api-add'
 import getTeams from '@/api/1895-get-service-order-user-service-api-get-org-by-custid'
@@ -129,7 +129,7 @@ export default defineComponent({
       .then(res => {
         Message({
           type: 'success',
-          message: '添加成功！',
+          message: '服务发起成功！',
         })
         emit('close')
         console.log("addService=", res)
