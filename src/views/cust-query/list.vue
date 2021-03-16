@@ -223,11 +223,9 @@ export default defineComponent({
         },
         canList: custData.canNewList
       });
-      console.log("发起服务=", id, custData.info)
     }
 
     const custProductEdit = (item) => {
-      console.log("item", item)
       serviceDialog.open({
         id: 1, 
         info: {
