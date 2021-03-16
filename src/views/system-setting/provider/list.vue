@@ -53,7 +53,7 @@
 <script>
 import { defineComponent, reactive } from "@vue/composition-api";
 import getProviderList from '@/api/1306-get-frontapi-service-provider-pagelist'
-import setStatus from '@/api/1302-post-frontapi-service-provider-change-status'
+import setStatus from '@/api/1302-get-frontapi-service-provider-change-status'
 // import getProviderScope from '@/api/1416-get-production-config-product-line-search'
 import { category, status, basictype } from "./utils/form-query";
 import { MessageBox } from 'element-ui'

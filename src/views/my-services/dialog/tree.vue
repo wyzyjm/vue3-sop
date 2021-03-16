@@ -2,7 +2,9 @@
 <template>
 <div class='dialog_box'>
     <div class="tree_box">
-        <el-tree :data="data" :props="defaultProps"></el-tree>
+        <el-tree :props="defaultProps" 
+        highlight-current
+        @node-click="handleNodeClick"></el-tree>
     </div>
     
     <div class="foot_box">
@@ -29,7 +31,10 @@ return {
     defaultProps: {
         children: 'children',
         label: 'orgName'
-    }
+    },
+    lazyload: false,
+    deptId: '', // 部门ID
+    empId: '', // 员工id
 };
 },
 //监听属性 类似于data概念
@@ -38,6 +43,22 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
+    loadNode (node, resolve) {
+
+        getTreeList({ state: 1 }).then(res => {
+            console.log(res.data)
+            this.data = res.data
+        })
+        console.log(node, resolve)
+    },
+    handleNodeClick(data) {
+        // console.log(data);
+        if (!data.children || data.children.length == 0) {
+            this.lazyload = true
+            // this.loadNode()
+            // this.deptId = data.orgId
+        }
+    },
     cancel () {
         this.$store.commit('dialog/close')
     },
@@ -50,10 +71,6 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-    getTreeList({ state: 1 }).then(res => {
-        console.log(res.data)
-        this.data = res.data
-    })
     // getServicesBtn({serviceCode: this.code, buttonType: 'operate_log'}).then(res => {
     //     res.data = res.data
     //     this.tableData = res.data

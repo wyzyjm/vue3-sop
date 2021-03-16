@@ -14,7 +14,8 @@ export const btns = {
         },
         "upload": {
             value: 'upload',
-            label: '上传'
+            label: '上传',
+            fileName:'upload'
         },
         "download": {
             value: 'download',
@@ -107,7 +108,8 @@ export const btns = {
         },
         "design_submit": {
             value: 'design_submit',
-            label: '提交设计稿'
+            label: '提交设计稿',
+            fileName:'upload'
         },
         "design_confirm": {
             value: 'design_confirm',
