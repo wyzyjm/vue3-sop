@@ -88,7 +88,7 @@ export default defineComponent({
         {
           label: '产品类型',
           showOverflowTooltip: true,
-          prop: 'productType',
+          prop: 'productTypeName',
         },
         {
           label: '语言',
@@ -98,17 +98,17 @@ export default defineComponent({
         {
           label: '业务类型',
           showOverflowTooltip: true,
-          prop: 'businessType',
+          prop: 'businessTypeName',
         },
         {
           label: '服务人员',
           showOverflowTooltip: true,
-          prop: 'workStatus',
+          prop: 'servicePersonal',
         },
         {
           label: '状态',
           showOverflowTooltip: true,
-          prop: 'status',
+          prop: 'statusName',
         },
         {
           label: '服务单创建时间',
