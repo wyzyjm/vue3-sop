@@ -9,7 +9,7 @@
         <span class="node-detail">
           <span class="node-name">{{item.nodeName}}</span>
           <span v-if="item.nodeStatus>0" class="executor mt10">{{item.executor}}</span>
-          <span v-if="item.nodeStatus>0" class="completeTime">{{item.completeTime}}</span>
+          <span v-if="item.nodeStatus>0" class="completeTime mt5">{{item.completeTime}}</span>
         </span>
       </span>
 
