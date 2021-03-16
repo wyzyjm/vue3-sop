@@ -102,7 +102,7 @@
           ></el-input>
           <span class="ml14">万元</span>
         </el-form-item>
-        <el-form-item label="纳税人识别号：" prop="ratepayingNumber">
+        <el-form-item label="纳税人识别号：" prop="ratepayingNumber" >
           <el-input
             v-model="form.ratepayingNumber"
             maxlength="100"
@@ -208,8 +208,9 @@ import { registeredCapitalVaild, contactPhoneVaild, contactEmailVaild } from "..
 import Upload from "./upload";
 import addProvider from '@/api/1296-post-frontapi-service-provider-add'
 import editProvider from '@/api/1304-post-frontapi-service-provider-update'
-import getProviderDetail from '@/api/1298-get-frontapi-service-provider-{id}'
+import getProviderDetail from '@/api/1298-get-frontapi-service-provider-detail-{id}'
 import checkProviderName from '@/api/1300-get-frontapi-service-provider-check-name-useful'
+import checkRatenumber from '@/api/1985-get-frontapi-service-provider-check-ratenumber-isuserful'
 import city from "@/util/citys";
 export default {
 //import引入的组件需要注入到对象中才能使用
@@ -241,6 +242,22 @@ const basicNameVaild = (rule, value, callback) => {
         console.log(err, '检查公司名称是否可用error')
     })
 };    
+const checkBlur = (rule, value, callback) => {
+    checkRatenumber({
+        ratenumber: value,
+        id: this.$route.params.pid || '',
+    }).then(res => {
+        // 已存在
+        if (!res.data) {
+            callback(new Error('纳税人识别号不可用'))
+            return false
+        } else {
+            callback()
+        }
+    }).catch(err => {
+        console.log(err, '检查纳税人识别号是否可用error')
+    })
+};   
 const idcardVaild = (rule, value, callback) => {
     console.log(this.form.legalCredentialsType)
     if (!value) {
@@ -331,6 +348,9 @@ return {
         contactPhone: [
             { validator: contactPhoneVaild, trigger: 'blur' }
         ],
+        ratepayingNumber: [
+            { validator: checkBlur, trigger: 'blur' }
+        ],
         contactEmail: [
             { validator: contactEmailVaild, trigger: 'blur' }
         ],
@@ -358,7 +378,14 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-
+    checkBlur () {
+        checkRatenumber({
+            ratenumber: this.form.ratepayingNumber,
+            id: this.form.id || ''
+        }).then(res => {
+            console.log(res)
+        })
+    },
     // 级联选择省市区
     handleCascader(code) {
       let checked = this.$refs["cascader"].getCheckedNodes();

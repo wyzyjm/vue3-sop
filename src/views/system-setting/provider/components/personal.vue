@@ -61,7 +61,7 @@ import { contactPhoneVaild, contactEmailVaild } from "../utils/form-vaild";
 import Upload from "./upload";
 import addProvider from '@/api/1296-post-frontapi-service-provider-add'
 import editProvider from '@/api/1304-post-frontapi-service-provider-update'
-import getProviderDetail from '@/api/1298-get-frontapi-service-provider-{id}'
+import getProviderDetail from '@/api/1298-get-frontapi-service-provider-detail-{id}'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {
