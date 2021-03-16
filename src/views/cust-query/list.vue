@@ -93,7 +93,7 @@
 
         <el-tabs v-model="activePro" type="card" v-if="custId" class="sop-tabs">
             <el-tab-pane label="客户服务单" name="first">
-              <s-simple-table :data="tabData" :cols="tabCols" class="cb-table-style"></s-simple-table>
+              <s-table :data="tabData" :cols="tabCols" class="cb-table-style"></s-table>
             </el-tab-pane>
             <!-- <el-tab-pane label="客户工单" name="first">客户工单</el-tab-pane> -->
         </el-tabs>
@@ -109,7 +109,8 @@ import custList from '@/api/1853-get-service-order-cust-info-api-search-cust'
 import getCustInfo from '@/api/1841-get-service-order-cust-info-api-get-by-custid'
 import getCustWebsite from '@/api/1859-get-service-order-cust-info-api-website-list-by-custid'
 import getCustTabs from '@/api/1865-get-service-order-cust-info-api-other-service-list'
-// import getCustList from '@/api/'
+import getCustList from '@/api/1979-get-service-order-cust-info-api-order-list'
+import getOrderService from '@/api/1829-get-service-order-sevice-order-info-get-service-product-{serviceorderid}'
 export default defineComponent({
   setup(props, { root }) {
     let custData = reactive({
@@ -121,7 +122,7 @@ export default defineComponent({
       productList: [],
       canNewList: [],
       designList: [],
-      tabData: [{code: 'OL20200910293'}],
+      tabData: [],
       tabCols: [
         {
           type: 'expand',
@@ -132,39 +133,57 @@ export default defineComponent({
                   <span>{ row.name }</span>
                 </el-form-item>
                 <el-form-item label="购买套餐">
-                  <span>基础型设计服务套餐      同风格     响应式     高级版</span>
+                  <span>基础测试套餐      测试风格     测试响应式     测试版</span>
                 </el-form-item>
               </el-form>
             ) : ('')
-          },
+          }
         },
         {
           label: '服务单号',
-          prop: 'code',
+          prop: 'serviceCode',
         },
         {
-          showOverflowTooltip: true,
           label: '客户名称',
-          prop: 'name',
+          prop: 'custName'
         },
         {
-          label: '添加时间',
+          sortable: true,
+          label: '产品类型',
+          prop: 'productType',
+        },
+        {
+          label: '语言',
+          prop: 'language',
+        },
+        {
+          label: '服务人员',
+          prop: 'servicePersonal'
+        },
+        {
+          label: '状态',
+          sortable: true,
+          prop: 'status',
+        },
+        {
+          label: '服务单创建时间',
           sortable: true,
           prop: 'createTime',
         },
         {
+          label: '剩余周期',
+          sortable: true,
+          prop: 'wholeMakeSurplusCycle',
+        },
+        {
           label: '操作',
+          fixed: 'right',
+          align: 'center',
           prop: ({ row }) => {
             return [
-              <s-button type="text">
+              <s-button type="text" onClick={() => toDetail(row)}>
                 详情
-              </s-button>,
-              // <s-button
-              //   type="text"
-              //   onClick={() => deleteState(row)}
-              // >
-              //   删除
-              // </s-button>
+              </s-button>
             ]
           },
         }
@@ -185,6 +204,7 @@ export default defineComponent({
     const search = () => {
       __getCustInfo();
       __getCustWebsite();
+      __getCustList(custData.custId);
     }
 
     const custSearch = (queryString, cb) => {
@@ -239,6 +259,12 @@ export default defineComponent({
       });
     }
 
+    const toDetail = (row) => {
+      root.$router.push({
+        path: `/my-services/detail/${row.id}/${row.serviceCode}`
+      })
+    }
+
     const __getCustInfo = ()=> {
       return getCustInfo({ custId: custData.custId })
       .then(({data}) => {
@@ -266,14 +292,28 @@ export default defineComponent({
       })
     }
 
-    // const __getCustList = () => {
-    //   getCustList()
-    // }
+    const __getCustList = (custId) => {
+      getCustList({custId}).then(({data}) => {
+        custData.tabData = data.records || [];
+      })
+    }
+
+    // 列表展开数据
+    const __getOrderService = (serviceOrderId) => {
+      getOrderService({serviceOrderId})
+      .then(({data}) => {
+        console.log("data", data)
+        // custData.tabData = data.records || [];
+      })
+    }    
+    
+    // __getOrderService(4)
 
     return {
       ...toRefs(custData),
       form,
       search,
+      toDetail,
       custSearch,
       custSelect,
       custTabSelect,
