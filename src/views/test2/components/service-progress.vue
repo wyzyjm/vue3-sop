@@ -16,9 +16,7 @@
       <el-popover v-else placement="top" :title="item.statusName" width="200" trigger="manual" :content="item.takeupTime?`耗时:${item.takeupTime}`:''" :value="item.nodeId===actived">
         <span slot="reference" />
       </el-popover>
-      <!-- {{item}} -->
     </div>
-
   </div>
 
 </template>
@@ -66,15 +64,12 @@ export default defineComponent({
 <style lang="scss" scoped>
 .service-progress {
   display: flex;
-  height: 300px;
-  padding-top: 100px;
   .item {
     flex: 1;
-    height: 2px;
-    background-color: #d9d9d9;
+    border-top: 2px solid #d9d9d9;
     position: relative;
     &.finished {
-      background-color: #18b398;
+      border-color: #18b398;
     }
     &.first,
     &.last {
@@ -96,13 +91,12 @@ export default defineComponent({
       border-radius: 6px;
       background: #18b398;
       left: -6px;
-      top: -5px;
+      top: -6px;
     }
     .node-detail {
       color: #666666;
-      position: absolute;
-      left: 0px;
-      top: 20px;
+      display:inline-block;
+      margin-top: 20px;
       transform: translate(-50%);
       .executor,
       .completeTime {
