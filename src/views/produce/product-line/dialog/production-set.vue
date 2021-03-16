@@ -47,8 +47,10 @@
 import { defineComponent, reactive } from '@vue/composition-api'
 import _save from '@/api/1486-post-production-config-product-line-production-setting-batch'
 import getOrg from '@/api/1320-get-frontapi-service-provider-org-get-by-providerid'
+import _getDetail from '@/api/1488-get-production-config-product-line-production-setting-list'
 import useOptions from '../hooks/use-options'
 import { Message } from 'element-ui'
+
 function filterEmptyArray(arr) {
   if (!Array.isArray(arr)) return
   arr.forEach(function (v) {
@@ -82,10 +84,14 @@ export default defineComponent({
       list: [],
     })
 
-    const serviceProviderChange = (item, providerId) => {
+    const serviceProviderChange = (
+      item,
+      providerId,
+      productionOrganizationId = ''
+    ) => {
       // 清空生产组织
-      item.productionOrganizationId = ''
-      item.org=[]
+      item.productionOrganizationId = productionOrganizationId
+      item.org = []
       //赋值服务商名称
       item.serviceProvider = options.serviceProvider.find(
         (v) => v.id === providerId
@@ -103,14 +109,13 @@ export default defineComponent({
         }
 
         if (arr[i].children && arr[i].children.length) {
-         return findProductionOrganizationName(arr[i].children, id)
+          return findProductionOrganizationName(arr[i].children, id)
         }
       }
     }
 
     const productionOrganizationChange = (item, id) => {
       item.productionOrganization = findProductionOrganizationName(item.org, id)
-      console.log(1, item, id)
     }
 
     const save = (form) => {
@@ -134,9 +139,24 @@ export default defineComponent({
     const add = () => {
       form.list.push({ ...item })
     }
-    console.log(data)
+    // console.log(data)
     add()
     form.productLineIdList = data.map((v) => v.id)
+
+    if (Array.isArray(data) && data.length === 1) {
+      _getDetail({ productLineId: data[0].id }).then((response) => {
+        response.data.forEach((v) => {
+          form.list.push(v)
+          serviceProviderChange(
+            v,
+            v.serviceProviderId,
+            v.productionOrganizationId
+          )
+          productionOrganizationChange(v, v.productionOrganizationId)
+        })
+        console.log(response)
+      })
+    }
 
     return {
       add,

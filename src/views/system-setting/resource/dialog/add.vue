@@ -4,8 +4,8 @@
       <s-form-item label="名称" :rules="['required']" prop="resourceName" />
       <s-form-item label="编码" :rules="['required']" v-if="isEdit" component="s-text" :content="form.resourceCode" prop="resourceCode" />
       <s-form-item label="编码" v-else :rules="['required']" prop="resourceCode" />
-      <s-form-item label="URL" :rules="['required']" prop="resourceUrl" />
-      <s-form-item label="父级" prop="parentId" :rules="['required:number']">
+      <s-form-item label="URL" prop="resourceUrl" />
+      <s-form-item label="父级" prop="parentId">
         <el-cascader :props="{
             label:'resourceName',
             value:'id',
@@ -14,7 +14,7 @@
           }" v-model="form.parentId" clearable :show-all-levels="false" :options="parentList"></el-cascader>
       </s-form-item>
 
-      <s-form-item label="描述" :rules="['required']" prop="resourceDesc" type="textarea" />
+      <s-form-item label="描述" prop="resourceDesc" type="textarea" />
       <s-form-item label="图标" prop="resourceIcon" />
       <s-form-item label="排序" :rules="['required:number']" prop="resourceSort" :min="0" component="el-input-number" />
       <s-form-item label="类型" prop="resourceType" :rules="['required:number']" component="s-group" :data="moreOptions.resourceType" />
@@ -71,6 +71,10 @@ export default defineComponent({
     const save = (form) => {
       if (isEdit) {
         form.id = data.id
+      }
+
+      if (!form.parentId) {
+        form.parentId = 0
       }
 
       return (isEdit ? _update(form) : _save(form)).then(() => {

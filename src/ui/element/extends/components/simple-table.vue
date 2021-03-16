@@ -1,5 +1,5 @@
 <template>
-  <div class="ce-simple-table">
+  <div class="ce-simple-table cb-table-style">
     <slot name="form"></slot>
     <slot name="top"></slot>
     <Table border v-bind="$attrs" v-on="$listeners" v-loading="tableIsLoading" :uid="uid" :data="tableData">

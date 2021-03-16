@@ -74,9 +74,10 @@ export default {
             renderConfig.props.clearable = true
         }
 
-        if (this.component.indexOf('el') !== 0) {
-            renderConfig.attrs = props
-        }
+        // if (this.component.indexOf('el') !== 0) {
+        //     renderConfig.attrs = props
+        // }
+        renderConfig.attrs = props
 
         return h('el-form-item', {
             props: {

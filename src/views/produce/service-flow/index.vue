@@ -5,16 +5,7 @@
         <s-form-item label="服务流程名称" prop="businessFlowName">
           <s-input v-model="form.businessFlowName"></s-input>
         </s-form-item>
-        <s-form-item label="状态">
-          <el-select v-model="form.status" clearable placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </s-form-item>
+        <s-form-item label="状态" clearable prop="status" component="s-group" :data="options" />
         <s-form-item label="关联工作流" prop="flowWorkDefName">
           <s-input v-model="form.flowWorkDefName"></s-input>
         </s-form-item>
