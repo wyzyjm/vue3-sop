@@ -3,7 +3,7 @@
     <div class="ce-flow mb20 flow-k">
       <s-form :model="form" label-width="130px" @submit="save" class="flow-form">
         <s-form-item label="服务流程名称" prop="businessFlowName" :rules="['required']" />
-        <s-form-item label="服务产品编号" prop="businessFlowCode" :rules="['required']" />
+        <s-form-item label="服务产品编号" :maxlength="32" prop="businessFlowCode" :rules="['required']" />
         <!-- <s-form-item label="版本" prop="version" :rules="['required']" /> -->
         <s-form-item label="关联工作流" prop="flowWorkDefId" :rules="['required']">
           <el-select v-model="form.flowWorkDefId" placeholder="请选择关联工作流" class="flow-select">
