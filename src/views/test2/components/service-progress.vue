@@ -96,7 +96,7 @@ export default defineComponent({
       border-radius: 6px;
       background: #18b398;
       left: -6px;
-      top: -6px;
+      top: -5px;
     }
     .node-detail {
       color: #666666;
