@@ -19,27 +19,30 @@
     <div>
       <s-button :disabled="table.data.length!==0||form.providerId===''" type="primary" @click="dialog.open({data:{sourceId:form.providerId,orgId:0}})">新增组织</s-button>
     </div>
-    <el-table class="mt20" :data="table.data" v-loading="table.loading" row-key="id" border default-expand-all>
-      <el-table-column prop="orgName" label="组织名称" sortable width="180">
-      </el-table-column>
-      <el-table-column prop="orgId" label="组织编码" sortable width="180">
-      </el-table-column>
-      <el-table-column prop="status" width="140px" label="状态">
-        <template slot-scope="scope">
-          {{getStateText(scope.row.status)}}
-        </template>
-      </el-table-column>
-      <el-table-column prop="remark" label="备注">
-      </el-table-column>
-      <el-table-column label="操作" width="280px">
-        <template slot-scope="scope">
-          <s-button type="text" @click="setState(scope.row)">{{getStateText(1^scope.row.status)}}</s-button>
-          <s-button type="text" @click="edit(scope.row)">编辑</s-button>
-          <s-button type="text" @click="addChild(scope.row)">添加子节点</s-button>
-          <s-button type="text" @click="setCooperation(scope.row)">合作组织</s-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div class="cb-table-style">
+      <el-table class="mt20 " :data="table.data" v-loading="table.loading" row-key="id" border default-expand-all>
+        <el-table-column prop="orgName" label="组织名称" width="180">
+        </el-table-column>
+        <el-table-column prop="orgId" label="组织编码" width="180">
+        </el-table-column>
+        <el-table-column prop="status" width="140px" label="状态">
+          <template slot-scope="scope">
+            {{getStateText(scope.row.status)}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="remark" label="备注">
+        </el-table-column>
+        <el-table-column label="操作" width="280px">
+          <template slot-scope="scope">
+            <s-button type="text" @click="setState(scope.row)">{{getStateText(1^scope.row.status)}}</s-button>
+            <s-button type="text" @click="edit(scope.row)">编辑</s-button>
+            <s-button type="text" @click="addChild(scope.row)">添加子节点</s-button>
+            <s-button type="text" @click="setCooperation(scope.row)">合作组织</s-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+
   </div>
 </template>
 <script>
