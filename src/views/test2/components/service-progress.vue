@@ -2,7 +2,7 @@
   <div class="service-progress">
     <div class="item" :class="{finished:item.nodeStatus>0&&list[i+1]&&list[i+1].nodeStatus>0,last:item.isLast,first:i===0}" v-for="(item,i) in list" :key="i">
       <span v-if="!item.clone">
-        <el-popover placement="top" :title="item.statusName" width="200" trigger="hover" :content="item.takeupTime?`耗时:${item.takeupTime}`:''">
+        <el-popover placement="top" :title="item.statusName" width="200" trigger="hover" :content="item.takeupTime?`${item.takeupTime}`:''">
           <span class="dot" slot="reference" />
         </el-popover>
 
@@ -13,7 +13,7 @@
         </span>
       </span>
 
-      <el-popover v-else placement="top" :title="item.statusName" width="200" trigger="manual" :content="item.takeupTime?`耗时:${item.takeupTime}`:''" :value="item.nodeId===actived">
+      <el-popover v-else placement="top" :title="item.statusName" width="200" trigger="manual" :content="item.takeupTime?`${item.takeupTime}`:''" :value="item.nodeId===actived">
         <span slot="reference" />
       </el-popover>
     </div>
