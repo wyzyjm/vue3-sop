@@ -13,7 +13,7 @@
       <p>2、请选择需要导入的文件</p>
       <s-form :model="form">
         <s-form-item prop="upload">
-          <s-upload fileName="excel" :action="url" v-model="form.upload" :files.sync="fileList" @success="uploadSuccess" @error="uploadError" :auto-upload="false" ref="uploadRef" accept="xls,xlsx" class="ml20">
+          <s-upload :with-credentials="true" fileName="excel" :action="url" v-model="form.upload" :files.sync="fileList" @success="uploadSuccess" @error="uploadError" :auto-upload="false" ref="uploadRef" accept="xls,xlsx" class="ml20">
             <el-button size="mini" type="primary">选择附件</el-button>
             支持xls、xlsx文件，单个文件不得大于2M
           </s-upload>

@@ -105,10 +105,10 @@ export default defineComponent({
             //   index: '/system-setting/document/list',
             //   title: '文档管理',
             // },
-            // {
-            //   index: '/system-setting/resource/list',
-            //   title: '资源管理',
-            // },
+            {
+              index: '/system-setting/resource/list',
+              title: '资源管理',
+            },
           ],
         },
         {

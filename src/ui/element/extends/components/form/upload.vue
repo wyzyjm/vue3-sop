@@ -20,12 +20,8 @@
  * files:[{ name:'',url:''}]
  *
  */
-import axios from 'axios'
+import request from '@/plugins/axios/upload.js'
 
-const request = axios.create({
-  headers: { 'Content-Type': 'multipart/form-data' },
-  responseType: 'blob',
-})
 
 export default {
   props: {
