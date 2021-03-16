@@ -13,6 +13,7 @@
 import { defineComponent, reactive } from '@vue/composition-api'
 import getTableData from '@/api/1392-get-common-service-resource-list-tree'
 import useDialog from '@/hooks/use-dialog'
+import useOptions from './hooks/use-options'
 
 // import useState from '@/hooks/use-state/disable-state'
 // import _setState from '@/api/1402-post-common-service-resource-state'
@@ -75,7 +76,14 @@ export default defineComponent({
           label: '类型',
           width: '120px',
           showOverflowTooltip: true,
-          prop: 'resourceType',
+          prop: ({ row }) => {
+            return (
+              <s-text
+                content={row.resourceType}
+                options={moreOptions.resourceType}
+              />
+            )
+          },
         },
         {
           label: '描述',
@@ -109,9 +117,11 @@ export default defineComponent({
       ],
     })
 
+    const moreOptions = useOptions()
     return {
       table,
       dialog,
+      moreOptions,
     }
   },
 })
