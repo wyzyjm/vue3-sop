@@ -142,7 +142,7 @@ export default defineComponent({
         // filterEmptyArray([response.data])
         table.data = response.data ? [response.data] : []
 
-        addButtonIsDisabled.value = table.data.length>0
+        addButtonIsDisabled.value = table.data.length > 0
 
         tableArr = []
         setTableArr(table.data)
@@ -152,6 +152,13 @@ export default defineComponent({
           )
           Sortable.create(tableEl, {
             onEnd({ newIndex, oldIndex }) {
+              if (oldIndex === 0) {
+                Message({
+                  type: 'error',
+                  message: '不能移动顶级元素',
+                })
+                return
+              }
               if (newIndex !== oldIndex) {
                 console.log(tableArr)
                 console.log(tableArr[newIndex])
