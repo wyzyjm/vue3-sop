@@ -54,9 +54,9 @@
               <div class="cust-product p20">
                 <div class="cust-design-item" v-for="(item, index) of designList" :key="index">
                   <div class="design-item-title">{{item.unitName}}</div>
-                  <p>总购买量 {{item.unitSum}} 个</p>
-                  <p>可用余量 {{item.unitSurplus}} 个</p>
-                  <p>服务进行中 {{item.unitForzen}} 个</p>
+                  <p>总购买量 {{item.unitSum}} </p>
+                  <p>可用余量 {{item.unitSurplus}} </p>
+                  <p>服务进行中 {{item.unitForzen}} </p>
                 </div>
               </div>
               <div class="start-p" v-if="canNewList.length">
