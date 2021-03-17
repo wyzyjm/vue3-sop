@@ -174,6 +174,11 @@ export default defineComponent({
 
     if (Array.isArray(data) && data.length === 1) {
       _getDetail({ productLineId: data[0].id }).then((response) => {
+        if(response.data.length===0){
+          add()
+          return 
+        }
+
         response.data.forEach((v) => {
           v = { ...item, ...v }
 
