@@ -53,10 +53,10 @@
             <el-tab-pane label="设计服务" name="107">
               <div class="cust-product p20">
                 <div class="cust-design-item" v-for="(item, index) of designList" :key="index">
-                  <div class="design-item-title">{{item.unitName}}</div>
-                  <p>总购买量 {{item.unitSum}} 个</p>
-                  <p>可用余量 {{item.unitSurplus}} 个</p>
-                  <p>服务进行中 {{item.unitForzen}} 个</p>
+                  <div class="design-item-title">{{item.instanceDefName}}</div>
+                  <p>总购买量 {{item.totalNum}} </p>
+                  <p>可用余量 {{item.surplusNum}} </p>
+                  <p>服务进行中 {{item.frozenNum}} </p>
                 </div>
               </div>
               <div class="start-p" v-if="canNewList.length">
@@ -66,10 +66,10 @@
             <el-tab-pane label="运营服务" name="169">
               <div class="cust-product p20">
                 <div class="cust-design-item" v-for="(item, index) of designList" :key="index">
-                  <div class="design-item-title">{{item.unitName}}</div>
-                  <p>总购买量 {{item.unitSum}} 个</p>
-                  <p>可用余量 {{item.unitSurplus}} 个</p>
-                  <p>服务进行中 {{item.unitForzen}} 个</p>
+                  <div class="design-item-title">{{item.instanceDefName}}</div>
+                  <p>总购买量 {{item.totalNum}}</p>
+                  <p>可用余量 {{item.surplusNum}}</p>
+                  <p>服务进行中 {{item.frozenNum}}</p>
                 </div>
               </div>
               <div class="start-p" v-if="canNewList.length">
@@ -79,10 +79,10 @@
             <el-tab-pane label="翻译服务" name="68">
               <div class="cust-product p20">
                 <div class="cust-design-item" v-for="(item, index) of designList" :key="index">
-                  <div class="design-item-title">{{item.unitName}}</div>
-                  <p>总购买量 {{item.unitSum}} 个</p>
-                  <p>可用余量 {{item.unitSurplus}} 个</p>
-                  <p>服务进行中 {{item.unitForzen}} 个</p>
+                  <div class="design-item-title">{{item.instanceDefName}}</div>
+                  <p>总购买量 {{item.totalNum}}</p>
+                  <p>可用余量 {{item.surplusNum}}</p>
+                  <p>服务进行中 {{item.frozenNum}}</p>
                 </div>
               </div>
               <div class="start-p" v-if="canNewList.length">
