@@ -22,8 +22,7 @@
             <el-cascader :props="{
             label:'orgName',
             value:'id',
-            emitPath:false
-          }" v-model="item.productionOrganizationId" @change="productionOrganizationChange(item,$event)"  :options="item.org"></el-cascader>
+          }" v-model="item.productionOrganizationId" :show-all-levels="false" @change="productionOrganizationChange(item,$event)" :options="item.org"></el-cascader>
           </s-form-item>
         </el-col>
         <el-col :span="8">
@@ -73,7 +72,7 @@ export default defineComponent({
     const item = {
       serviceProviderId: '',
       serviceProvider: '',
-      productionOrganizationId: '',
+      productionOrganizationId: [],
       productionOrganization: '',
       shareRatio: '',
       org: [],
@@ -84,13 +83,32 @@ export default defineComponent({
       list: [],
     })
 
+    const findAllPath = (data, lastPathId, arr = []) => {
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].id === lastPathId) {
+          arr.push(data[i].id)
+          return arr
+        } else {
+          if (data[i].children && data[i].children.length) {
+            arr.push(data[i].id)
+            const result= findAllPath(data[i].children, lastPathId, arr)
+            if(result) {
+              return result
+            }else{
+              arr.length=arr.length-1
+            }
+          }
+        }
+      }
+    }
+
     const serviceProviderChange = (
       item,
       providerId,
-      productionOrganizationId = ''
+      productionOrganizationId
     ) => {
       // 清空生产组织
-      item.productionOrganizationId = productionOrganizationId
+      item.productionOrganizationId = []
       item.org = []
       //赋值服务商名称
       item.serviceProvider = options.serviceProvider.find(
@@ -99,7 +117,13 @@ export default defineComponent({
       getOrg({ providerId }).then((response) => {
         filterEmptyArray(response.data.children)
         item.org = [response.data]
-        console.log(1, item)
+        if (productionOrganizationId) {
+          item.productionOrganizationId = findAllPath(
+            item.org,
+            parseInt(productionOrganizationId)
+          )
+          productionOrganizationChange(item, item.productionOrganizationId)
+        }
       })
     }
 
@@ -110,24 +134,29 @@ export default defineComponent({
         }
 
         if (arr[i].children && arr[i].children.length) {
-          return findProductionOrganizationName(arr[i].children, id)
+          const result= findProductionOrganizationName(arr[i].children, id)
+          if(result) return result
         }
       }
     }
 
     const productionOrganizationChange = (item, id) => {
-      item.productionOrganization = findProductionOrganizationName(item.org, id)
+      item.productionOrganization = findProductionOrganizationName(
+        item.org,
+        id[id.length - 1]
+      )
     }
 
     const save = (form) => {
-      // console.log(222,form)
-      // const params = JSON.stringify(JSON.parse(form))
+      const params = JSON.parse(JSON.stringify(form))
 
-      // params.list.forEach((v) => {
-      //   delete v.org
-      // })
+      params.list.forEach((v) => {
+        delete v.org
+        v.productionOrganizationId =
+          v.productionOrganizationId[v.productionOrganizationId.length - 1]
+      })
 
-      return _save(form).then(() => {
+      return _save(params).then(() => {
         Message({
           message: '保存成功！',
           type: 'success',
@@ -140,7 +169,6 @@ export default defineComponent({
     const add = () => {
       form.list.push({ ...item })
     }
-    // console.log(data)
 
     form.productLineIdList = data.map((v) => v.id)
 
@@ -155,9 +183,7 @@ export default defineComponent({
             v.serviceProviderId,
             v.productionOrganizationId
           )
-          productionOrganizationChange(v, v.productionOrganizationId)
         })
-        console.log(response)
       })
     } else {
       add()
