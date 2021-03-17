@@ -17,7 +17,7 @@
     <s-panel title="属性信息" border>
       <s-form-item v-for="(item,i) in otherProps" :key="i" :label="item.name" component="s-text" :content="item.valueList.map(v=>v.value)" />
     </s-panel>
-    <s-form-item class="tc">
+    <s-form-item >
       <s-button @click="$router.go(-1)">关闭</s-button>
     </s-form-item>
   </s-form>

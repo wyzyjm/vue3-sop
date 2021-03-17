@@ -11,7 +11,7 @@
       <s-form-item label="状态" component="s-text" :content="form.status" />
       <s-form-item label="售卖渠道" component="s-text" :content="form.salesChannelName" />
     </s-panel>
-    <s-form-item class="tc">
+    <s-form-item>
       <s-button @click="$router.go(-1)">关闭</s-button>
     </s-form-item>
   </s-form>
