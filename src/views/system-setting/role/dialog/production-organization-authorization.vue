@@ -39,16 +39,21 @@ export default defineComponent({
     })
 
     if (data && data.length === 1) {
-      _getDefalut({ roleId: data[0].id,type:1 }).then((response) => {
+      _getDefalut({ roleId: data[0].id, type: 1 }).then((response) => {
         tree.defaultChecked = response.data.map((v) => v.orgId)
       })
     }
 
-
     const save = () => {
       const arr = []
       const nodes = treeRef.value.getCheckedNodes(true)
-
+      if (nodes.length === 0) {
+        Message({
+          type: 'error',
+          message: '没有任何选中项！',
+        })
+        return
+      }
       data.forEach((v) => {
         nodes.forEach((c) => {
           c.type = 1
