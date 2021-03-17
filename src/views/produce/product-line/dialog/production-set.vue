@@ -48,18 +48,9 @@ import _save from '@/api/1486-post-production-config-product-line-production-set
 import getOrg from '@/api/1320-get-frontapi-service-provider-org-get-by-providerid'
 import _getDetail from '@/api/2009-get-production-config-product-line-production-setting-product-line-list'
 import useOptions from '../hooks/use-options'
+import filterEmptyArray from '@/util/filter-empty-array'
 import { Message } from 'element-ui'
 
-function filterEmptyArray(arr) {
-  if (!Array.isArray(arr)) return
-  arr.forEach(function (v) {
-    if (v.children.length === 0) {
-      v.children = null
-    } else {
-      filterEmptyArray(v.children)
-    }
-  })
-}
 export default defineComponent({
   props: {
     data: {
@@ -91,11 +82,11 @@ export default defineComponent({
         } else {
           if (data[i].children && data[i].children.length) {
             arr.push(data[i].id)
-            const result= findAllPath(data[i].children, lastPathId, arr)
-            if(result) {
+            const result = findAllPath(data[i].children, lastPathId, arr)
+            if (result) {
               return result
-            }else{
-              arr.length=arr.length-1
+            } else {
+              arr.length = arr.length - 1
             }
           }
         }
@@ -115,8 +106,9 @@ export default defineComponent({
         (v) => v.id === providerId
       ).basicName
       getOrg({ providerId }).then((response) => {
-        filterEmptyArray(response.data.children)
-        item.org = [response.data]
+        const data = response.data ? [response.data] : []
+        filterEmptyArray(data)
+        item.org = data
         if (productionOrganizationId) {
           item.productionOrganizationId = findAllPath(
             item.org,
@@ -134,8 +126,8 @@ export default defineComponent({
         }
 
         if (arr[i].children && arr[i].children.length) {
-          const result= findProductionOrganizationName(arr[i].children, id)
-          if(result) return result
+          const result = findProductionOrganizationName(arr[i].children, id)
+          if (result) return result
         }
       }
     }
@@ -174,9 +166,9 @@ export default defineComponent({
 
     if (Array.isArray(data) && data.length === 1) {
       _getDetail({ productLineId: data[0].id }).then((response) => {
-        if(response.data.length===0){
+        if (response.data.length === 0) {
           add()
-          return 
+          return
         }
 
         response.data.forEach((v) => {
