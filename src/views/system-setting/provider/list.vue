@@ -89,7 +89,7 @@ export default defineComponent({
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-            return setStatus({id, status}).then(({ msg, status }) => {
+            return setStatus({id, basicStatus:status}).then(({ msg, status }) => {
                 if (status == 200) {
                     root.$message.success(title + '成功')
                 } else {
