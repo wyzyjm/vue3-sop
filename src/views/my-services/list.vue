@@ -68,12 +68,12 @@ export default defineComponent({
           key: 'id',
           width: '40px',
         }, 
-        // {
-        //   type: 'expand',
-        //   prop: ({ row }) => (
-        //     <s-simple-table uid={row.id} data={table.data} cols={table.cols} />
-        //   ),
-        // },
+        {
+          type: 'expand',
+          prop: ({ row }) => (
+              9999888
+          ),
+        },
         {
           showOverflowTooltip: true,
           label: '服务单号',
