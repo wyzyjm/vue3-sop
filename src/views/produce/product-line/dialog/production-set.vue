@@ -23,7 +23,7 @@
             label:'orgName',
             value:'id',
             emitPath:false
-          }" v-model="item.productionOrganizationId" @change="productionOrganizationChange(item,$event)" :show-all-levels="false" :options="item.org"></el-cascader>
+          }" v-model="item.productionOrganizationId" @change="productionOrganizationChange(item,$event)"  :options="item.org"></el-cascader>
           </s-form-item>
         </el-col>
         <el-col :span="8">
@@ -47,7 +47,7 @@
 import { defineComponent, reactive } from '@vue/composition-api'
 import _save from '@/api/1486-post-production-config-product-line-production-setting-batch'
 import getOrg from '@/api/1320-get-frontapi-service-provider-org-get-by-providerid'
-import _getDetail from '@/api/1488-get-production-config-product-line-production-setting-list'
+import _getDetail from '@/api/2009-get-production-config-product-line-production-setting-product-line-list'
 import useOptions from '../hooks/use-options'
 import { Message } from 'element-ui'
 
@@ -99,6 +99,7 @@ export default defineComponent({
       getOrg({ providerId }).then((response) => {
         filterEmptyArray(response.data.children)
         item.org = [response.data]
+        console.log(1, item)
       })
     }
 
@@ -140,12 +141,14 @@ export default defineComponent({
       form.list.push({ ...item })
     }
     // console.log(data)
-    add()
+
     form.productLineIdList = data.map((v) => v.id)
 
     if (Array.isArray(data) && data.length === 1) {
       _getDetail({ productLineId: data[0].id }).then((response) => {
         response.data.forEach((v) => {
+          v = { ...item, ...v }
+
           form.list.push(v)
           serviceProviderChange(
             v,
@@ -156,6 +159,8 @@ export default defineComponent({
         })
         console.log(response)
       })
+    } else {
+      add()
     }
 
     return {
