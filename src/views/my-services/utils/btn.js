@@ -158,7 +158,9 @@ export const btns = {
         },
         "evaluate_see": {
             value: 'evaluate_see',
-            label: '查看评价'
+            label: '查看评价',
+            fileName: 'seeEvaluate',
+            width: '400'
         },
         "score_config": {
             value: 'score_config',

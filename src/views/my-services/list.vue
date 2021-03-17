@@ -81,9 +81,30 @@ export default defineComponent({
         },
         {
           label: '客户名称',
-          prop: 'custName',
+        //   prop: 'custName',
           showOverflowTooltip: true,
           width: '160px',
+            prop: ({ row }) => {
+                let tableData = [
+                    {label: '负责人姓名', date: row.custLinkManName || '----'},
+                    {label: '负责人邮箱', date: row.custLinkManMail || '----'},
+                    {label: '负责人电话', date: row.custLlinkManPhone || '----'},
+                ]
+                return [
+                    <el-popover
+                        placement="top-start"
+                        width="200"
+                        trigger="hover"
+                        >
+                        <el-table data={tableData} size="small" border 
+                        show-header={false}>
+                            <el-table-column property="label" label=""></el-table-column>
+                            <el-table-column property="date" label=""></el-table-column>
+                        </el-table>
+                        <span slot="reference">{row.custName}</span>
+                    </el-popover>
+                ]
+            }
         },
         {
           label: '产品类型',
@@ -103,18 +124,67 @@ export default defineComponent({
         {
           label: '服务人员',
           showOverflowTooltip: true,
-          prop: 'servicePersonal',
+        //   prop: 'servicePersonal',
+            prop: ({ row }) => {
+                let tableData = [
+                    {label: '设计师', date: row.designerEmpName || '----'},
+                    {label: '制作员', date: row.makerEmpName || '----'},
+                    {label: '设计助理', date: row.entryClerkName || '----'},
+                    {label: '质检员', date: row.qualityInspectorName || '----'},
+                ]
+                return [
+                    <el-popover
+                        placement="top-start"
+                        width="200"
+                        trigger="hover"
+                        >
+                        <el-table data={tableData} size="small" border 
+                        show-header={false}>
+                            <el-table-column property="label" label=""></el-table-column>
+                            <el-table-column property="date" label=""></el-table-column>
+                        </el-table>
+                        <span slot="reference">{row.servicePersonal || '----'}</span>
+                    </el-popover>
+                ]
+            }
         },
         {
           label: '状态',
           showOverflowTooltip: true,
-          prop: 'statusName',
+          width: '120',
+        //   prop: 'statusName',
+          prop: ({ row }) => {
+              return [
+                  <el-tag type="success">{row.statusName}</el-tag>
+              ]
+          }
         },
         {
           label: '服务单创建时间',
-          width: 160,
-          showOverflowTooltip: true,
-          prop: 'createTime',
+          width: 180,
+        //   showOverflowTooltip: true,
+        //   prop: 'createTime',
+            prop: ({ row }) => {
+                let tableData = [
+                    {label: '分派服务单', date: row.createTimeStart || '----'},
+                    {label: '设计确认', date: row.publishTimeStart || '----'},
+                    {label: '验收网站', date: row.createTimeEnd || '----'},
+                    {label: '网站发布', date: row.publishTimeEnd || '----'},
+                ]
+                return [
+                    <el-popover
+                        placement="top-start"
+                        width="200"
+                        trigger="hover"
+                        >
+                        <el-table data={tableData} size="small" border show-header={false}>
+                            <el-table-column property="label" label="节点"></el-table-column>
+                            <el-table-column property="date" label="时间"></el-table-column>
+                        </el-table>
+                        <span slot="reference">{row.createTime}</span>
+                    </el-popover>
+                ]
+            }
         },
         {
           label: '剩余周期',

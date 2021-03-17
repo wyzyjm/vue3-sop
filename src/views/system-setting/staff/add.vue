@@ -7,6 +7,7 @@
             <el-form-item label="所属服务商：" prop="sourceId" class="is-required">
                 <el-select
                     v-model="form.sourceId"
+                    filterable
                     placeholder="请选择所属服务商"
                     class="w340"
                     @change="changeOrg"
@@ -26,12 +27,14 @@
                     v-for="(item, idx) in orgList" :key="idx"></el-option>
                 </el-select> -->
                 <el-cascader
-                    :disabled="form.sourceId ? false : true"
+                    :show-all-levels="false"
+                    :key="cascaderKey"
+                    :disabled="form.sourceId || form.sourceId == 0 ? false : true"
                     v-model="form.orgId"
                     placeholder="请选择所属组织"
                     class="w340"
                     :options="orgList"
-                    :props="{ expandTrigger: 'hover' , value:'orgId', label:'orgName', emitPath:false}"
+                    :props="{ expandTrigger: 'hover' , value:'orgId', label:'orgName', em}"
                     @change="handleChange"></el-cascader>
             </el-form-item>
             <el-form-item label="员工姓名：" prop="employeeName" class="is-required">
@@ -104,6 +107,7 @@ components: {},
 data() {
 //这里存放数据
 return {
+    cascaderKey: 1,
     form: {
         employeeName: '', // 员工姓名
         orgId: '', // 机构id
@@ -151,7 +155,7 @@ methods: {
     changeOrg () {
         this.orgList = []
         getOrgList({providerId: this.form.sourceId}).then(res => {
-            res.data.children = this.getTreeData(res.data.children)
+            res.data.children = res.data.children.length > 0 ? this.getTreeData(res.data.children) : undefined
             this.orgList = [res.data]
         }).catch(err => {
             console.log(err, '组织获取失败')
@@ -228,9 +232,11 @@ methods: {
             this.form = res.data
             this.checkRoleObj = res.data.roleMap
             let arr =[] 
-            Object.keys(res.data.roleMap).forEach(key => {
-                arr.push(Number(key))
-            });
+            if (res.data.roleMap) {
+                Object.keys(res.data.roleMap).forEach(key => {
+                    arr.push(Number(key))
+                });
+            }
             this.changeOrg()
             this.form.roleMap = arr
         })
