@@ -17,20 +17,20 @@
     </s-form>
 
     <div>
-      <s-button :disabled="table.data.length!==0||form.providerId===''" type="primary" @click="dialog.open({data:{sourceId:form.providerId,orgId:0}})">新增组织</s-button>
+      <s-button :disabled="addButtonIsDisabled" type="primary" @click="dialog.open({data:{sourceId:form.providerId,orgId:0}})">新增组织</s-button>
     </div>
     <div class="cb-table-style">
       <el-table class="mt20 " :data="table.data" v-loading="table.loading" row-key="id" border default-expand-all>
-        <el-table-column prop="orgName" label="组织名称" width="180">
+        <el-table-column prop="orgName" showOverflowTooltip label="组织名称" width="180">
         </el-table-column>
-        <el-table-column prop="orgId" label="组织编码" width="180">
+        <el-table-column prop="orgId" showOverflowTooltip label="组织编码" width="180">
         </el-table-column>
         <el-table-column prop="status" width="140px" label="状态">
           <template slot-scope="scope">
             {{getStateText(scope.row.status)}}
           </template>
         </el-table-column>
-        <el-table-column prop="remark" label="备注">
+        <el-table-column prop="remark" showOverflowTooltip label="备注">
         </el-table-column>
         <el-table-column label="操作" width="280px">
           <template slot-scope="scope">
@@ -46,7 +46,7 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive } from '@vue/composition-api'
+import { defineComponent, reactive, ref } from '@vue/composition-api'
 import _search from '@/api/1660-get-frontapi-service-provider-list-by-name'
 import _getTableData from '@/api/1320-get-frontapi-service-provider-org-get-by-providerid'
 import useDialog from '@/hooks/use-dialog'
@@ -62,6 +62,8 @@ export default defineComponent({
     const form = reactive({
       providerId: '',
     })
+
+    const addButtonIsDisabled = ref(true)
 
     const { setState, getStateText, options } = useState(
       {
@@ -127,11 +129,21 @@ export default defineComponent({
     }
 
     const handleSearch = (form) => {
+      if (form.providerId === '') {
+        Message({
+          type: 'error',
+          message: '请选择一个服务商进行查询',
+        })
+        return
+      }
       table.loading = true
       _getTableData(form).then((response) => {
         table.loading = false
         // filterEmptyArray([response.data])
         table.data = response.data ? [response.data] : []
+
+        addButtonIsDisabled.value = table.data.length>0
+
         tableArr = []
         setTableArr(table.data)
         root.$nextTick(() => {
@@ -183,6 +195,7 @@ export default defineComponent({
       edit,
       getStateText,
       setState,
+      addButtonIsDisabled,
     }
   },
 })
