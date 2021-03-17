@@ -42,7 +42,10 @@ export default defineComponent({
     })
 
     if (isEdit) {
-      form = { ...form, ...data }
+      Object.keys(form).forEach(v=>{
+        form[v]=data[v]
+      })
+      form.id=data.id
     }
 
     const save = (form) => {

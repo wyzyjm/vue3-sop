@@ -40,7 +40,7 @@ export default defineComponent({
     })
 
     if (data && data.length === 1) {
-      _getDefalut({ roleId: data[0].id ,type:2}).then((response) => {
+      _getDefalut({ roleId: data[0].id, type: 2 }).then((response) => {
         tree.defaultChecked = response.data.map((v) => v.orgId)
       })
     }
@@ -48,7 +48,13 @@ export default defineComponent({
     const save = () => {
       const checkedKeys = treeRef.value.getCheckedNodes(true)
       const arr = []
-
+      if (checkedKeys.length === 0) {
+        Message({
+          type: 'error',
+          message: '没有任何选中项！',
+        })
+        return
+      }
       data.forEach((v) => {
         checkedKeys.forEach((c) => {
           arr.push({

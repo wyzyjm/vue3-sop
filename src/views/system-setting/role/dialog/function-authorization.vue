@@ -67,6 +67,14 @@ export default defineComponent({
       const checkedKeys = treeRef.value.getCheckedNodes()
       const arr = []
 
+      if(checkedKeys.length===0){
+        Message({
+          type:'error',
+          message:'没有任何选中项！'
+        })
+        return
+      }
+
       data.forEach((v) => {
         checkedKeys.forEach((c) => {
           arr.push({
