@@ -243,20 +243,25 @@ const basicNameVaild = (rule, value, callback) => {
     })
 };    
 const checkBlur = (rule, value, callback) => {
-    checkRatenumber({
-        ratenumber: value,
-        id: this.$route.params.pid || '',
-    }).then(res => {
-        // 已存在
-        if (!res.data) {
-            callback(new Error('纳税人识别号不可用'))
-            return false
-        } else {
-            callback()
-        }
-    }).catch(err => {
-        console.log(err, '检查纳税人识别号是否可用error')
-    })
+    console.log(value, 99999)
+    if (value && value != '') {
+        checkRatenumber({
+            ratenumber: value,
+            id: this.$route.params.pid || '',
+        }).then(res => {
+            // 已存在
+            if (!res.data) {
+                callback(new Error('纳税人识别号不可用'))
+                return false
+            } else {
+                callback()
+            }
+        }).catch(err => {
+            console.log(err, '检查纳税人识别号是否可用error')
+        })
+    } else {
+        callback()
+    }
 };   
 const idcardVaild = (rule, value, callback) => {
     console.log(this.form.legalCredentialsType)
