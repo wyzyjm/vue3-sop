@@ -49,28 +49,42 @@ export default defineComponent({
 
     const treeRef = ref(null)
 
+    const setpermissionCode = (tree,arr) => {
+      tree.forEach(v=>{
+        let c=arr.find(c=>c.resourceCode===v.resourceCode)
+
+
+        if(c){
+          console.log(3,c)
+          v.permissionCode=c.permissionCode
+        }
+
+        if(v.children&&v.children.length){
+          setpermissionCode(v.children,arr)
+        }
+
+      })
+    }
+
     getTree().then((response) => {
       setCheckedFild(response.data)
       tree.data = response.data
+      if (data && data.length === 1) {
+        _getDefalut({ roleId: data[0].id }).then((response) => {
+          tree.defaultChecked = response.data.map((v) => v.resourceCode)
+          setpermissionCode(tree.data,response.data)
+        })
+      }
     })
-
-
-
-    if(data&&data.length===1){
-      _getDefalut({roleId:data[0].id}).then(response=>{
-        console.log(response.data.map(v=>v.resourceCode))
-        tree.defaultChecked=response.data.map(v=>v.resourceCode)
-      })
-    }
 
     const save = () => {
       const checkedKeys = treeRef.value.getCheckedNodes()
       const arr = []
 
-      if(checkedKeys.length===0){
+      if (checkedKeys.length === 0) {
         Message({
-          type:'error',
-          message:'没有任何选中项！'
+          type: 'error',
+          message: '没有任何选中项！',
         })
         return
       }
