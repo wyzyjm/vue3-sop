@@ -11,7 +11,7 @@
       <el-row v-for="(item,i) in form.list" :key="i">
         <el-col :span="8">
           <s-form-item>
-            <s-group class="pct90"  filterable :props="{
+            <s-group class="pct90" filterable :props="{
             label:'basicName',
             value:'id'
           }" :data="options.serviceProvider" v-model="item.serviceProviderId" @change="serviceProviderChange(item,$event)"></s-group>
@@ -185,6 +185,8 @@ export default defineComponent({
     } else {
       add()
     }
+
+
 
     return {
       add,
