@@ -34,7 +34,7 @@
                     placeholder="请选择所属组织"
                     class="w340"
                     :options="orgList"
-                    :props="{ expandTrigger: 'hover' , value:'orgId', label:'orgName', em}"
+                    :props="{ expandTrigger: 'hover' , value:'orgId', label:'orgName'}"
                     @change="handleChange"></el-cascader>
             </el-form-item>
             <el-form-item label="员工姓名：" prop="employeeName" class="is-required">
@@ -189,7 +189,9 @@ methods: {
     handleSave () {
         console.log(this.form)
         this.form.roleMap = this.checkRoleObj
-
+        if (this.form.orgId.length > 0) {
+            this.form.orgId = this.form.orgId.join(',')
+        }
         this.$refs['form'].validate((valid) => {
             if (valid) {
                 if (this.$route.params.id) {
@@ -219,10 +221,12 @@ methods: {
                         }
                     }).catch(err => {
                         console.log(err, '添加员工失败')
+                        this.form.orgId = this.form.orgId.split(',')
                         this.form.roleMap = this.checkRoleArr
                     })
                 }
             } else {
+                this.form.orgId = this.form.orgId.split(',')
                 console.log('error')
             }
         });
@@ -231,6 +235,9 @@ methods: {
         getStaff({id: this.sid}).then(res => {
             this.form = res.data
             this.checkRoleObj = res.data.roleMap
+            if (this.form.orgId) {
+                this.form.orgId = this.form.orgId.split(',')
+            }
             let arr =[] 
             if (res.data.roleMap) {
                 Object.keys(res.data.roleMap).forEach(key => {
