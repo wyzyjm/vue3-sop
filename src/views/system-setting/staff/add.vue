@@ -163,7 +163,6 @@ methods: {
     },
     handleChange () {},
     changeVal (e) {
-        console.log(e, 999)
         if (e.length == 0) {
             this.checkRoleObj = {}
         }
@@ -238,7 +237,7 @@ methods: {
     getDetail () {
         getStaff({id: this.sid}).then(res => {
             this.form = res.data
-            this.checkRoleObj = res.data.roleMap
+            this.checkRoleObj = res.data.roleMap || {}
             if (this.form.orgId) {
                 this.form.orgId = this.form.orgId.split(',')
             }
