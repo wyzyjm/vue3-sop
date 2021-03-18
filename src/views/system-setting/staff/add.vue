@@ -79,7 +79,7 @@
                 >
                     <el-option
                     v-for="(item, idx) in roleList" :key="idx"
-                    :label="item.roleGroupName" :value="item.id"></el-option>
+                    :label="item.roleName" :value="item.id"></el-option>
                 </el-select>
             </el-form-item>
         </el-form>
@@ -98,7 +98,7 @@ import { contactPhoneVaild, contactEmailVaild } from "../provider/utils/form-vai
 import addStaff from '@/api/1332-post-frontapi-service-provider-employee-add'
 import editStaff from '@/api/1334-post-frontapi-service-provider-employee-update'
 import getStaff from '@/api/1376-get-frontapi-service-provider-employee-{id}'
-import getRoleList from '@/api/1366-get-common-service-role-group-list'
+import getRoleList from '@/api/1348-get-common-service-role-list'
 import getProviderList from '@/api/1660-get-frontapi-service-provider-list-by-name'
 import getOrgList from '@/api/1320-get-frontapi-service-provider-org-get-by-providerid'
 export default {
@@ -163,13 +163,17 @@ methods: {
     },
     handleChange () {},
     changeVal (e) {
+        console.log(e, 999)
+        if (e.length == 0) {
+            this.checkRoleObj = {}
+        }
         this.checkRoleArr = e
         this.roleList.map(v => {
             e.map(c => {
-                this.checkRoleObj[c] = v.roleGroupName
+                this.checkRoleObj[c] = v.roleName
             })
         })
-        console.log(this.checkRoleObj,)
+        console.log(this.checkRoleObj)
     },
     // 树形
     getTreeData(data){
