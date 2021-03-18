@@ -55,7 +55,6 @@ export default defineComponent({
 
 
         if(c){
-          console.log(3,c)
           v.permissionCode=c.permissionCode
         }
 
