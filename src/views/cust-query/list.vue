@@ -103,7 +103,7 @@
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-// import { Message } from 'element-ui'
+import { Message } from 'element-ui'
 import useDialog from '@/hooks/use-dialog'
 import custList from '@/api/1853-get-service-order-cust-info-api-search-cust'
 import getCustInfo from '@/api/1841-get-service-order-cust-info-api-get-by-custid'
@@ -202,9 +202,16 @@ export default defineComponent({
     })
 
     const search = () => {
-      __getCustInfo();
-      __getCustWebsite();
-      __getCustList(custData.custId);
+      if (custData.custId) {
+        __getCustInfo();
+        __getCustWebsite();
+        __getCustList(custData.custId);
+      } else {
+        Message({
+          type: 'error',
+          message: '没有此客户！',
+        })
+      }      
     }
 
     const custSearch = (queryString, cb) => {
