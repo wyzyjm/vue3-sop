@@ -5,7 +5,7 @@
     :data="tableData"
     size="small"
     border
-    stripe
+    max-height="400"
     style="width: 100%">
     <el-table-column
       prop="operateType"

@@ -1,43 +1,41 @@
 <!-- 操作日志 -->
 <template>
 <div >
-    <div class="title">客户对你的服务评价分数为&nbsp;<strong>{{result.totalScore || '----'}}</strong>&nbsp;分</div>
-    <div class="col_box">
-        <span class="desc_style">设计能力</span>
-        <el-rate
-        style="float:left"
-        v-model="result.designScore"
-        disabled
-        show-score
-        text-color="#ff9900">
-        </el-rate>
-        <span class="score_style">得分：{{result.designScore}}</span>
-    </div>
-    <div class="col_box">
-        <span class="desc_style">服务能力</span>
-        <el-rate
-        style="float:left"
-        v-model="result.serviceScore"
-        disabled
-        show-score
-        text-color="#ff9900">
-        </el-rate>
-        <span class="score_style">得分：{{result.serviceScore}}</span>
-    </div>
-    <div class="col_box">
-        <span class="desc_style">服务周期</span>
-        <el-rate
-        style="float:left"
-        v-model="result.makeScore"
-        disabled
-        show-score
-        text-color="#ff9900">
-        </el-rate>
-        <span class="score_style">得分： {{result.makeScore}}</span>
-    </div>
-    <div class="col_box" style="margin-bottom:16px;">
-        <p class="desc_style" style="line-height:20px;color:#888;">客户评价： {{result.evaluateContent}}看拉萨佳都科技阿三六九等撒家里的看拉萨佳都科技阿三六九等撒家里的看拉萨佳都科技阿三六九等撒家里的看拉萨佳都科技阿三六九等撒家里的看拉萨佳都科技阿三六九等撒家里的看拉萨佳都科技阿三六九等撒家里的看拉萨佳都科技阿三六九等撒家里的</p>
-        <p style="clear:both;"></p>
+  <el-table
+    :data="tableData"
+    size="small"
+    max-height="400"
+    :span-method="dataSpanMethods"
+    border
+    style="width: 100%">
+    <el-table-column
+      prop="classifyName"
+      label="分类">
+    </el-table-column>
+    <el-table-column
+      prop="projectName"
+      label="项目"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="weight"
+      label="权重">
+      <template slot-scope="scope">
+          <el-tag type="info">{{scope.row.weight}}</el-tag>
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="score"
+      label="评分">
+      <template slot-scope="scope">
+          <el-input type="number" v-model="form[scope.row.projectKey]" size="small"></el-input>
+          <!-- <el-tag type="info">{{scope.row.score}}</el-tag> -->
+      </template>
+    </el-table-column>
+  </el-table>
+    <div class="foot_box">
+        <el-button type="default" size="small" @click="cancel">取消</el-button>
+        <el-button type="primary" size="small" @click="save">确定</el-button>
     </div>
 </div>
 </template>
@@ -54,7 +52,10 @@ data() {
 //这里存放数据
 return {
     value: 3.3,
-    result: {}
+    result: {},
+    tableData: [],
+    colLen: {},
+    form: {},
 };
 },
 //监听属性 类似于data概念
@@ -63,11 +64,59 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-
+    cancel () {
+        this.$store.commit('dialog/close')
+    },
+    save () {
+        let arr = []
+        Object.keys(this.form).forEach( key => {
+            console.log(key, this.form[key])
+            let obj = {}
+            obj[key] = this.form[key]
+            arr.push(obj)
+        })
+        getServicesBtn({
+            serviceCode: this.code, 
+            buttonType: this.buttonType,
+            personScoreJson: arr
+            }).then(res => {
+                console.log(res)
+            // res.data = res.data
+            // this.data = res.data
+        }) 
+    },
+    dataSpanMethods ({ row, column, rowIndex, columnIndex }) {
+        if (columnIndex === 0) {
+            if (row.isFirst) {
+                return {
+                    rowspan: this.colLen[row.classifySort],
+                    colspan: 1
+                }
+            } else {
+                return {
+                    rowspan: 0,
+                    colspan: 0
+                }
+            }
+        }
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
     getServicesBtn({serviceCode: this.code, buttonType: 'score_config'}).then(res => {
+        let obj = {}
+        res.data.map(v => {
+            this.$set(this.form, v.projectKey, 0)
+            if (obj[v.classifySort]) {
+                obj[v.classifySort]++
+            } else {
+                obj[v.classifySort] = 1
+                v.isFirst = true
+            }
+        })
+        this.colLen = obj
+        // console.log(obj, res.data,  999)
+        this.tableData = res.data
         // res.data = res.data
         // this.result = res.data
     }) 
@@ -103,5 +152,10 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
         .score_style{
             float:left;margin:0px 0 0 30px;
         }
+    }
+    .foot_box{
+        // height:100px;
+        margin:30px auto;
+        text-align: center;
     }
 </style>

@@ -8,7 +8,6 @@ export const btns = {
             "score_see": {
                 value: 'score_see',
                 label: '查看评分',
-                fileName: 'score'
             },
             "evaluate_see": {
                 value: 'evaluate_see',
@@ -184,13 +183,14 @@ export const btns = {
                 value: 'evaluate_write',
                 label: '评价'
             },
-            "score_config": {
-                value: 'score_config',
-                label: '获取评分配置'
-            },
+            // "score_config": {
+            //     value: 'score_config',
+            //     label: '获取评分配置'
+            // },
             "score": {
                 value: 'score',
-                label: '评分'
+                label: '评分',
+                fileName: 'score'
             },
     
             "pass": {

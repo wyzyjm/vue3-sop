@@ -6,7 +6,7 @@
         <div class="title-box">服务单进度</div>
         <p class="clear"></p>
         <div class="progress_box">
-            <ServiceProgress :serviceOrderId="4"></ServiceProgress>
+            <ServiceProgress :serviceOrderId="$route.params.id"></ServiceProgress>
             <p class="mb40"></p>
             <btn :code="$route.params.code"></btn>
         </div>
