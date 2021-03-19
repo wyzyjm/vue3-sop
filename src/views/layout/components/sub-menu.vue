@@ -1,7 +1,7 @@
 <template>
   <div>
-    <template v-for="(sub) in subMenu">
-      <el-submenu v-if="sub.children&&sub.children.length" :key="sub.resourceCode" :index="sub.resourceCode">
+    <template v-for="(sub) in data">
+      <el-submenu v-if="sub.children&&sub.children.length&&filterHideType(sub.children).length" :key="sub.resourceCode" :index="sub.resourceCode">
         <template #title><i v-if="sub.resourceIcon" :class="sub.resourceIcon"></i>{{sub.resourceName}}</template>
         <sub-menu v-if="sub.children&&sub.children.length" :subMenu="sub.children"></sub-menu>
       </el-submenu>
@@ -19,6 +19,16 @@ export default defineComponent({
     subMenu: {
       required: true,
       type: Array,
+    },
+  },
+  methods: {
+    filterHideType(arr) {
+      return arr.filter((v) => v.resourceType !== 3)
+    },
+  },
+  computed: {
+    data() {
+      return this.filterHideType(this.subMenu)
     },
   },
 })

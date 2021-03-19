@@ -1,5 +1,5 @@
 <template>
-  <s-form class="detal-page" :model="form">
+  <s-form class="detal-page" :model="form" label-width="120px">
     <s-panel title="创建信息" border>
       <s-form-item label="创建人" component="s-text" :content="form.createBy" />
       <s-form-item label="创建时间" component="s-text" :content="form.createTime" />
@@ -11,13 +11,13 @@
       <s-form-item label="单位" :props="{label:'name',value:'code'}" component="s-text" :content="form.unit" :options="options.unit" />
       <s-form-item label="优先级" component="s-text" :content="form.priority" />
       <s-form-item label="业务类型" component="s-text" :content="form.businessTypeName" />
-      <s-form-item label="服务内容" component="s-text" :content="form.serviceContent" />
       <s-form-item label="状态" component="s-text" :content="`已${getStateText(form.status)}`" />
+      <s-form-item label="服务内容" style="width:64%" component="s-text" :content="form.serviceContent" />
     </s-panel>
     <s-panel title="属性信息" border>
       <s-form-item v-for="(item,i) in otherProps" :key="i" :label="item.name" component="s-text" :content="item.valueList.map(v=>v.value)" />
     </s-panel>
-    <s-form-item >
+    <s-form-item>
       <s-button @click="$router.go(-1)">关闭</s-button>
     </s-form-item>
   </s-form>
@@ -89,7 +89,6 @@ export default defineComponent({
 
     const options = useOptions()
 
-    console.log(otherProps)
     return {
       form,
       options,
