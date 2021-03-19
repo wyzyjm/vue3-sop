@@ -14,12 +14,12 @@
       <s-form-item label="状态" component="s-text" :content="`已${getStateText(form.status)}`" />
       <s-form-item label="服务内容" style="width:64%" component="s-text" :content="form.serviceContent" />
     </s-panel>
-    <s-panel title="属性信息" border>
+    <s-panel title="属性信息" border v-if="otherProps&&otherProps.length">
       <s-form-item v-for="(item,i) in otherProps" :key="i" :label="item.name" component="s-text" :content="item.valueList.map(v=>v.value)" />
     </s-panel>
-    <s-form-item>
+    <div>
       <s-button @click="$router.go(-1)">关闭</s-button>
-    </s-form-item>
+    </div>
   </s-form>
 </template>
 <script>
