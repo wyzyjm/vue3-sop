@@ -214,8 +214,6 @@ export default defineComponent({
     })
 
     const logout = () => {
-      console.log( process.env.VUE_APP_API_LOGOUT_URL +
-        decodeURIComponent(window.location.href))
       window.location.href =
         process.env.VUE_APP_API_LOGOUT_URL +
         decodeURIComponent(window.location.href)

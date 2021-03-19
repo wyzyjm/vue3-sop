@@ -1,12 +1,15 @@
 <template>
-  <div>
+  <div class="uNxyjKHEvndYpoDh">
+
     <el-tree ref="treeRef" :data="tree.data" show-checkbox node-key="resourceCode" :default-checked-keys="tree.defaultChecked" :props="tree.defaultProps">
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
-        <s-group size="mini" v-model="data.permissionCode" v-if="node.isLeaf" :data="options.dropList"></s-group>
+        <s-group class="ml10" size="mini" v-model="data.permissionCode" v-if="node.isLeaf" :data="options.dropList"></s-group>
       </span>
     </el-tree>
-
+    <div class="mt20">
+      批量修改选中权限权限：<s-group class="ml10" v-model="globalPermissionCode" @change="modifyPermissionCode" :data="options.dropList"></s-group>
+    </div>
     <div class="mt20">
       <s-button @click="$emit('close')">取消</s-button>
       <s-button type="primary" @click="save">确定</s-button>
@@ -48,6 +51,16 @@ export default defineComponent({
     })
 
     const treeRef = ref(null)
+    const globalPermissionCode=ref(0)
+
+    const modifyPermissionCode = (val) => {
+      const checked = treeRef.value.getCheckedNodes()
+      if (checked && checked.length) {
+        checked.forEach((v) => {
+          v.permissionCode = val
+        })
+      }
+    }
 
     const setpermissionCode = (tree, arr) => {
       tree.forEach((v) => {
@@ -113,17 +126,22 @@ export default defineComponent({
 
     const options = useOptions()
 
-    const cos = (p) => {
-      console.log(p)
-    }
-
     return {
       treeRef,
       tree,
       save,
       options,
-      cos,
+      globalPermissionCode,
+      modifyPermissionCode,
     }
   },
 })
 </script>
+<style lang="scss" >
+// 角色管理-功能授权
+.uNxyjKHEvndYpoDh {
+  .el-tree-node {
+    padding: 2px 0;
+  }
+}
+</style>
