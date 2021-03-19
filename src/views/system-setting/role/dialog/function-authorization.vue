@@ -18,7 +18,7 @@ import { defineComponent, reactive, ref } from '@vue/composition-api'
 import getTree from '@/api/1392-get-common-service-resource-list-tree'
 import _save from '@/api/1438-post-common-service-role-resource-save'
 import _getDefalut from '@/api/1426-get-common-service-role-resource-list-{roleid}'
-
+import Vue from 'vue'
 import useOptions from '../hooks/use-options'
 import { Message } from 'element-ui'
 
@@ -49,19 +49,17 @@ export default defineComponent({
 
     const treeRef = ref(null)
 
-    const setpermissionCode = (tree,arr) => {
-      tree.forEach(v=>{
-        let c=arr.find(c=>c.resourceCode===v.resourceCode)
+    const setpermissionCode = (tree, arr) => {
+      tree.forEach((v) => {
+        let c = arr.find((c) => c.resourceCode === v.resourceCode)
 
-
-        if(c){
-          v.permissionCode=c.permissionCode
+        if (c) {
+          v.permissionCode = c.permissionCode
         }
 
-        if(v.children&&v.children.length){
-          setpermissionCode(v.children,arr)
+        if (v.children && v.children.length) {
+          setpermissionCode(v.children, arr)
         }
-
       })
     }
 
@@ -70,14 +68,19 @@ export default defineComponent({
       tree.data = response.data
       if (data && data.length === 1) {
         _getDefalut({ roleId: data[0].id }).then((response) => {
-          tree.defaultChecked = response.data.map((v) => v.resourceCode)
-          setpermissionCode(tree.data,response.data)
+          Vue.nextTick(() => {
+            response.data.forEach((v) => {
+              treeRef.value.setChecked(v.resourceCode, true)
+            })
+          })
+          setpermissionCode(tree.data, response.data)
         })
       }
     })
 
     const save = () => {
-      const checkedKeys = treeRef.value.getCheckedNodes()
+      const checkedKeys = treeRef.value.getCheckedNodes(false, true)
+
       const arr = []
 
       if (checkedKeys.length === 0) {
