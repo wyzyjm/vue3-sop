@@ -1,15 +1,15 @@
 <template>
   <div class="uNxyjKHEvndYpoDh">
 
+    <div class="mb20">
+       批量修改选中权限：<s-group size="mini" class="ml10" v-model="globalPermissionCode" @change="modifyPermissionCode" :data="options.dropList"></s-group>
+    </div>
     <el-tree ref="treeRef" :data="tree.data" show-checkbox node-key="resourceCode" :default-checked-keys="tree.defaultChecked" :props="tree.defaultProps">
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
         <s-group class="ml10" size="mini" v-model="data.permissionCode" v-if="node.isLeaf" :data="options.dropList"></s-group>
       </span>
     </el-tree>
-    <div class="mt20">
-      批量修改选中权限权限：<s-group class="ml10" v-model="globalPermissionCode" @change="modifyPermissionCode" :data="options.dropList"></s-group>
-    </div>
     <div class="mt20">
       <s-button @click="$emit('close')">取消</s-button>
       <s-button type="primary" @click="save">确定</s-button>
