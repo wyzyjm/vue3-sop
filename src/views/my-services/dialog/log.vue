@@ -1,6 +1,6 @@
 <!-- 操作日志 -->
 <template>
-<div class='dialog_box'>
+<div>
   <el-table
     :data="tableData"
     size="small"
@@ -10,7 +10,7 @@
     <el-table-column
       prop="operateType"
       label="操作类型"
-      show-overflow-tooltip>
+      :show-overflow-tooltip="true">
     </el-table-column>
     <el-table-column
       prop="operaterName"
@@ -19,7 +19,7 @@
     </el-table-column>
     <el-table-column
       prop="orderCode"
-      show-overflow-tooltip
+      :show-overflow-tooltip="true"
       label="操作服务单">
     </el-table-column>
     <el-table-column
@@ -67,7 +67,10 @@ methods: {
 created() {
     getServicesBtn({serviceCode: this.code, buttonType: this.buttonType}).then(res => {
         // res.data = res.data
-        this.tableData = res.data
+        for(let i = 0; i < 100; i++) {
+            this.tableData.push(res.data[0])
+        }
+        // this.tableData = res.data
     }) 
 },
 //生命周期 - 挂载完成（可以访问DOM元素）

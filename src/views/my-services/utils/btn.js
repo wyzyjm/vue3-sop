@@ -8,6 +8,7 @@ export const btns = {
             "score_see": {
                 value: 'score_see',
                 label: '查看评分',
+                fileName: 'score'
             },
             "evaluate_see": {
                 value: 'evaluate_see',
@@ -17,18 +18,25 @@ export const btns = {
             },
             "demand_see": {
                 value: 'demand_see',
-                label: '查看需求'
+                label: '查看需求',
+                fileName: 'webPreview',
             },
-            "preview": {
-                value: 'preview',
-                label: '预览'
+            "web_preview": {
+                value: 'web_preview',
+                label: '网站预览',
+                fileName: 'webPreview'
             }
         },
         dynamicList: {
-            "so_info": {
-                value: 'so_info',
-                label: '服务单详情'
+            "preview": {
+                value: 'preview',
+                label: '图片预览',
+                fileName: 'preview'
             },
+            // "so_info": {
+            //     value: 'so_info',
+            //     label: '服务单详情'
+            // },
             "make_tools": {
                 value: 'make_tools',
                 label: '制作工具'
@@ -45,8 +53,7 @@ export const btns = {
             "assign_designers": {
                 value: 'assign_designers',
                 label: '分派设计师',
-                fileName: 'tree',
-                width: '400'
+                fileName: 'allot',
             },
             "assign_make": {
                 value: 'assign_make',
@@ -160,7 +167,8 @@ export const btns = {
             "quality_back": {
                 value: 'quality_back',
                 label: '质检打回',
-                fileName: 'editForm'
+                fileName: 'editForm',
+                requiredParam: 'reason'
             },
             "quality_remark": {
                 value: 'quality_remark',

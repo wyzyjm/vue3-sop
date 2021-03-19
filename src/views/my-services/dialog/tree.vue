@@ -4,6 +4,7 @@
     <div class="tree_box">
         <el-tree :props="defaultProps" 
         highlight-current
+        :data="data"
         @node-click="handleNodeClick"></el-tree>
     </div>
     
@@ -71,6 +72,10 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
+        getTreeList({ state: 1 }).then(res => {
+            console.log(res.data)
+            this.data = res.data
+        })
     // getServicesBtn({serviceCode: this.code, buttonType: 'operate_log'}).then(res => {
     //     res.data = res.data
     //     this.tableData = res.data

@@ -5,40 +5,29 @@
     :data="tableData"
     size="small"
     max-height="400"
-    :span-method="dataSpanMethods"
     border
     style="width: 100%">
     <el-table-column
-      prop="classifyName"
-      label="分类">
+      prop="name"
+      label="预览内容">
     </el-table-column>
+
     <el-table-column
-      prop="projectName"
-      label="项目"
-      show-overflow-tooltip>
-    </el-table-column>
-    <el-table-column
-      prop="weight"
-      label="权重">
+      prop="pc"
+      label="PC">
       <template slot-scope="scope">
-          <el-tag type="info">{{scope.row.weight * 100}}%</el-tag>
+          <el-tag type="success">{{scope.row.pc}}</el-tag>
       </template>
     </el-table-column>
     <el-table-column
-      prop="score"
-      label="评分">
+      prop="mobile"
+      label="手机">
       <template slot-scope="scope">
-          <el-input type="number" v-model="form[scope.row.projectKey]" size="small"
-          :disabled="disable"></el-input>
-          <!-- <el-tag type="info">{{scope.row.score}}</el-tag> -->
+          <el-tag type="info">{{scope.row.mobile}}</el-tag>
       </template>
     </el-table-column>
   </el-table>
-    <!-- <div class="foot_box" v-if="buttonType != 'score_see'">
-        <el-button type="default" size="small" @click="cancel">取消</el-button>
-        <el-button type="primary" size="small" @click="save">确定</el-button>
-    </div>
-    <div class="foot_box" v-else>
+    <!-- <div class="foot_box">
         <el-button type="default" size="small" @click="cancel">关闭</el-button>
     </div> -->
 </div>
@@ -57,7 +46,10 @@ data() {
 return {
     value: 3.3,
     result: {},
-    tableData: [],
+    tableData: [
+        {name: '制作预览', pc: '制作期', mobile: '制作期'},
+        {name: '正式预览', pc: 'www.300.cn', mobile: 'm.300.cn'},
+    ],
     colLen: {},
     form: {},
     disable: false
@@ -108,50 +100,26 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-    getServicesBtn({serviceCode: this.code, buttonType: 'score_config'}).then(res => {
-        let obj = {}
-        res.data.map(v => {
-            if (this.buttonType != 'score_see') {
-                this.$set(this.form, v.projectKey, 0)
-            }
-            if (obj[v.classifySort]) {
-                obj[v.classifySort]++
-            } else {
-                obj[v.classifySort] = 1
-                v.isFirst = true
-            }
-        })
-        this.colLen = obj
-        // console.log(obj, res.data,  999)
-        this.tableData = res.data
+    getServicesBtn({serviceCode: this.code, buttonType: this.buttonType}).then(res => {
+        // let obj = {}
+        // res.data.map(v => {
+        //     if (this.buttonType != 'score_see') {
+        //         this.$set(this.form, v.projectKey, 0)
+        //     }
+        //     if (obj[v.classifySort]) {
+        //         obj[v.classifySort]++
+        //     } else {
+        //         obj[v.classifySort] = 1
+        //         v.isFirst = true
+        //     }
+        // })
+        // this.colLen = obj
+        console.log(res.data,  999)
+        // this.tableData = res.data
         // res.data = res.data
         // this.result = res.data
     }) 
-    // 查看评分
-    if (this.buttonType == 'score_see') {
-        this.disable = true
-        getServicesBtn({serviceCode: this.code, buttonType: 'score_see'}).then(res => {
-            res.data.map(v => {
-                this.$set(this.form, v.projectKey, v.projectValue)
-            })
-            console.log(this.form, 8098)
-            // let obj = {}
-            // res.data.map(v => {
-            //     this.$set(this.form, v.projectKey, 0)
-            //     if (obj[v.classifySort]) {
-            //         obj[v.classifySort]++
-            //     } else {
-            //         obj[v.classifySort] = 1
-            //         v.isFirst = true
-            //     }
-            // })
-            // this.colLen = obj
-            // // console.log(obj, res.data,  999)
-            // this.tableData = res.data
-            // // res.data = res.data
-            // // this.result = res.data
-        }) 
-    }
+
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
