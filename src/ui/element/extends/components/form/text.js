@@ -8,11 +8,11 @@ export default {
     tag: {
       default: 'span'
     },
-    props:{
-      default(){
+    props: {
+      default() {
         return {
-          label:'label',
-          value:'value'
+          label: 'label',
+          value: 'value'
         }
       }
     },
@@ -30,7 +30,7 @@ export default {
     }
 
     // 选项
-    if (this.options) {
+    if (this.options && this.options.length && content !== undefined) {
       try {
         content = this.options.filter(v => v[this.props.value] === content)[0][this.props.label]
       } catch (error) {

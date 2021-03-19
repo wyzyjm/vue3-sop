@@ -1,15 +1,15 @@
 <template>
   <div class="service-progress">
-    <div class="item" :class="{finished:item.nodeStatus>0&&list[i+1]&&list[i+1].nodeStatus>0,last:item.isLast,first:i===0}" v-for="(item,i) in list" :key="i">
+    <div class="item" :class="{finished:item.nodeStatus>1,last:item.isLast,first:i===0}" v-for="(item,i) in list" :key="i">
       <span v-if="!item.clone">
-        <el-popover placement="top" :title="item.statusName" width="200" trigger="hover" :content="item.takeupTime?`${item.takeupTime}`:''">
+        <el-popover v-if="item.nodeStatus>1" placement="top" :title="item.statusName" width="200" trigger="hover" :content="item.takeupTime?`${item.takeupTime}`:''">
           <span class="dot" slot="reference" />
         </el-popover>
-
+        <span v-else class="dot" />
         <span class="node-detail">
           <span class="node-name">{{item.nodeName}}</span>
-          <span v-if="item.nodeStatus>0" class="executor mt10">{{item.executor}}</span>
-          <span v-if="item.nodeStatus>0" class="completeTime mt5">{{item.completeTime}}</span>
+          <span v-if="item.nodeStatus>1" class="executor mt10">{{item.executor}}</span>
+          <span v-if="item.nodeStatus>1" class="completeTime mt5">{{item.completeTime}}</span>
         </span>
       </span>
 
@@ -40,15 +40,15 @@ export default defineComponent({
             list.value.push({ isLast: true, ...v })
           } else {
             list.value.push(v)
-            list.value.push({ clone: true, visible: false, ...v })
+            list.value.push({
+              clone: true,
+              ...response.data[i + 1],
+            })
           }
         })
         Vue.nextTick(() => {
           list.value.forEach((v) => {
-            if (
-              Object.hasOwnProperty.call(v, 'visible') &&
-              v.nodeStatus === 1
-            ) {
+            if (v.nodeStatus === 1) {
               actived.value = v.nodeId
             }
           })
@@ -95,7 +95,7 @@ export default defineComponent({
     }
     .node-detail {
       color: #666666;
-      display:inline-block;
+      display: inline-block;
       margin-top: 20px;
       transform: translate(-50%);
       .executor,

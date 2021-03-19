@@ -258,7 +258,7 @@ methods: {
     },
     getRoleList () {
         // 获取角色列表
-        getRoleList({pageSize: -1}).then(res => {
+        getRoleList({pageSize:-1}).then(res => {
             this.roleList = res.data.records || []
         }).catch(err => {
             console.log(err, '获取角色列表失败')

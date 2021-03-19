@@ -1,17 +1,13 @@
 <template>
   <div>
-    <template v-for="(sub,index) in subMenu">
-      <template v-if="sub.top">
-        <el-menu-item :key="sub.index" v-bind="sub">
-          <i v-if="sub.icon" :key="index" :class="sub.icon"></i>
-          <span slot="title">{{sub.title}}</span>
-        </el-menu-item>
-      </template>
-      <el-submenu v-else v-bind="sub" :key="sub.index">
-        <template #title><i v-if="sub.icon" :class="sub.icon"></i>{{sub.title}}</template>
-        <sub-menu v-if="sub.subMenu&&sub.subMenu.length" :subMenu="sub.subMenu"></sub-menu>
-        <el-menu-item v-for="item in sub.menuItem" :key="item.index" v-bind="item">{{item.title}}</el-menu-item>
+    <template v-for="(sub) in data">
+      <el-submenu v-if="sub.children&&sub.children.length&&filterHideType(sub.children).length" :key="sub.resourceCode" :index="sub.resourceCode">
+        <template #title><i v-if="sub.resourceIcon" :class="sub.resourceIcon"></i>{{sub.resourceName}}</template>
+        <sub-menu v-if="sub.children&&sub.children.length" :subMenu="sub.children"></sub-menu>
       </el-submenu>
+      <el-menu-item v-else :key="sub.resourceCode" :index="sub.resourceUrl">
+        <template #title><i v-if="sub.resourceIcon" :class="sub.resourceIcon"></i>{{sub.resourceName}}</template>
+      </el-menu-item>
     </template>
   </div>
 </template>
@@ -23,6 +19,16 @@ export default defineComponent({
     subMenu: {
       required: true,
       type: Array,
+    },
+  },
+  methods: {
+    filterHideType(arr) {
+      return arr.filter((v) => v.resourceType !== 3)
+    },
+  },
+  computed: {
+    data() {
+      return this.filterHideType(this.subMenu)
     },
   },
 })

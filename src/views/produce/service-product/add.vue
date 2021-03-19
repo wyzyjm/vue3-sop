@@ -1,10 +1,10 @@
 <template>
   <div>
-    <s-form class="service-one-phase-information" :model="form" label-width="130px" @submit="save">
+    <s-form class="service-one-phase-information"  :model="form" label-width="130px" @submit="save">
       <div class="box">
         <h2>基本信息</h2>
-        <s-form-item label="服务产品名称" prop="name" :rules="['required']" />
-        <s-form-item v-if="!isEdit" label="服务产品编号" prop="codeGenerateType" :rules="['required:number']">
+        <s-form-item label="服务产品名称" prop="name" clearable :rules="['required']" />
+        <s-form-item v-if="!isEdit" label="服务产品编号" clearable prop="codeGenerateType" :rules="['required:number']">
           <el-radio-group v-model="form.codeGenerateType">
             <el-radio :label="1">随机生成</el-radio>
             <el-radio :label="2">自定义编号
@@ -13,11 +13,11 @@
           </el-radio-group>
         </s-form-item>
         <s-form-item v-else component="s-text" :content="form.code" />
-        <s-form-item label="服务产品类型" :props="{label:'name',value:'code'}" prop="type" :rules="['required']" component="s-group" :data="options.type" />
-        <s-form-item label="单位" :props="{label:'name',value:'code'}" prop="unit" :rules="['required']" component="s-group" :data="options.unit" />
-        <s-form-item label="优先级" :min="0" component="el-input-number" prop="priority" :rules="['required:number']" />
-        <s-form-item label="业务类型" prop="businessTypeId" component="s-group" :props="{label:'name',value:'id'}" :data="options.businessType" />
-        <s-form-item label="服务内容" autosize prop="serviceContent" type="textarea" />
+        <s-form-item clearable label="服务产品类型" :props="{label:'name',value:'code'}" prop="type" :rules="['required']" component="s-group" :data="options.type" />
+        <s-form-item clearable label="单位" :props="{label:'name',value:'code'}" prop="unit" :rules="['required']" component="s-group" :data="options.unit" />
+        <s-form-item clearable label="优先级" :min="0" component="el-input-number" prop="priority" :rules="['required:number']" />
+        <s-form-item clearable label="业务类型"  prop="businessTypeId" component="s-group" :props="{label:'name',value:'id'}" :data="options.businessType" />
+        <s-form-item clearable label="服务内容" autosize prop="serviceContent" type="textarea" />
       </div>
       <div class="box mt20">
         <h2>属性信息</h2>
