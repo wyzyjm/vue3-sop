@@ -114,18 +114,18 @@ export default defineComponent({
     }
 
     const save = () => {
-      let serveInfo = [];
+      let contentList = [];
       for (const key in serviceData.serveInfo) {
         if (Object.hasOwnProperty.call(serviceData.serveInfo, key)) {
           let currInfo = serviceData.serveInfo[key];
-          serveInfo.push({
+          contentList.push({
             accountId: currInfo.id,
             contentId: currInfo.instanceDefId
           });
         }
       }
       
-      addService({serveInfo, ...form})
+      addService({contentList, ...form})
       .then(res => {
         Message({
           type: 'success',
