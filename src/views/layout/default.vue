@@ -24,8 +24,7 @@
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-          <span>王小虎</span>
-          <span>{{menu['default-openeds']}}</span>
+          <el-button type="text" @click="logout">退出</el-button>
         </div>
       </el-header>
 
@@ -75,7 +74,7 @@ export default defineComponent({
       'background-color': '#363636',
       'text-color': '#fff',
       router: true,
-      subMenu:[]
+      subMenu: [],
       // subMenu: [
       //   {
       //     icon: 'el-icon-message',
@@ -214,9 +213,18 @@ export default defineComponent({
       menu.subMenu = response.data
     })
 
+    const logout = () => {
+      console.log( process.env.VUE_APP_API_LOGOUT_URL +
+        decodeURIComponent(window.location.href))
+      window.location.href =
+        process.env.VUE_APP_API_LOGOUT_URL +
+        decodeURIComponent(window.location.href)
+    }
+
     return {
       menu,
       layout,
+      logout,
     }
   },
 })
