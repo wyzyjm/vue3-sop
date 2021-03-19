@@ -41,7 +41,7 @@ export default defineComponent({
     const save = () => {
       return _save({
         sourceId: data.id,
-        partnerIds: treeRef.value.getCheckedKeys(),
+        partnerIds: treeRef.value.getCheckedKeys(true),
       }).then(() => {
         Message({
           message: '保存成功！',
