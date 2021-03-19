@@ -2,7 +2,7 @@ export default [
     {
         path: 'service',
         meta:{
-            title:'翻译服务'
+            title:'服务单流程'
         },
         component: () => import(/* webpackChunkName: "translate" */ '@/views/user-service/translate')
     }
