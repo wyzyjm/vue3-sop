@@ -9,7 +9,7 @@
             <i class="iconfont">&#xe7ab;</i>
           </div>
           <div class="con-value">
-            <b>200</b>
+            <b>{{work.totalNum4Month || 0}}</b>
             <p>
               本月新单
             </p>
@@ -21,7 +21,7 @@
             <i class="iconfont">&#xe767;</i>
           </div>
           <div class="con-value">
-            <b>150</b>
+            <b>{{work.noAssignNum || 0}}</b>
             <p>
               未派单
             </p>
@@ -33,7 +33,7 @@
             <i class="iconfont">&#xe63b;</i>
           </div>
           <div class="con-value">
-            <b>65%</b>
+            <b>{{work.producingNum || 0}}</b>
             <p>
               生产中
             </p>
@@ -45,7 +45,7 @@
             <i class="iconfont">&#xe647;</i>
           </div>
           <div class="con-value">
-            <b>10</b>
+            <b>{{work.overtimeNum || 0}}</b>
             <p>
               已超期
             </p>
@@ -58,17 +58,18 @@
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-// import aaaa from '@/api/1562'
-// import aaaa from '@/api/1562'
+import getWork from '@/api/2135-get-service-order-my-work-init'
 export default defineComponent({
-  setup(props, { root }) {
-      console.log(root)
-    let workData = reactive({})
+  setup() {
+    let workData = reactive({
+      work: {}
+    })
+    getWork().then(({data}) => { workData.work = data || {} })
 
     return {
       ...toRefs(workData)
     }
-  },
+  }
 })
 </script>
 <style lang="scss" scoped>

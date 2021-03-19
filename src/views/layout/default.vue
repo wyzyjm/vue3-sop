@@ -199,17 +199,17 @@ export default defineComponent({
             }
           ]
         },
-        // {
-        //   icon: 'el-icon-menu',
-        //   index: '7',
-        //   title: '会员中心服务透明化',
-        //   menuItem: [
-        //     {
-        //       index: '/center/service',
-        //       title: '翻译服务',
-        //     }
-        //   ]
-        // },
+        {
+          icon: 'el-icon-menu',
+          index: '7',
+          title: '会员中心服务透明化',
+          menuItem: [
+            {
+              index: '/center/service',
+              title: '服务单流程',
+            }
+          ]
+        },
       ],
     })
 
