@@ -58,22 +58,27 @@ export default {
 		}
 	},
 	methods: {
+		getEventHandlerFunction(eventName) {
+			if (Object.hasOwnProperty.call(this.$listeners, eventName) && typeof this.$listeners[eventName] === 'function') return this.$listeners[eventName]
+		},
 		async getParams() {
 			const valid = await this.$refs.form.validate()
 			return valid ? Promise.resolve(this.model) : Promise.reject(this.model)
 		},
 		async submit() {
 			const res = await this.getParams()
-			this.$emit('submit', res)
+			const fn = this.getEventHandlerFunction('submit')
+			return fn(res)
 		},
 		async search() {
 			const res = await this.getParams()
 			await this.params.set(res)
-			this.$emit('search', res)
 			// 如果挂载到table下面，触发table下面相应的处理事件
 			if (this.TABLE_PROVIDE) {
 				this.TABLE_PROVIDE.formSearch(res)
 			}
+			const fn = this.getEventHandlerFunction('search')
+			return fn(res)
 		},
 		reset() {
 			this.params.clear()
