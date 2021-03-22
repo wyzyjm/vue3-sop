@@ -128,7 +128,7 @@ export default {
           ...this.params.form,
           ...this.sParams,
         }
-
+        //在不使用分页组件的情况下，不合并分页参数
         if (this.page !== false) {
           params = { ...params, ...this.params.pagination }
         }
