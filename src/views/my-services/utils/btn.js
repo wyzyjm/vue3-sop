@@ -19,7 +19,8 @@ export const btns = {
             "demand_see": {
                 value: 'demand_see',
                 label: '查看需求',
-                fileName: 'webPreview',
+                fileName: 'demand',
+                hideTitle: true
             },
             "web_preview": {
                 value: 'web_preview',
@@ -28,11 +29,11 @@ export const btns = {
             }
         },
         dynamicList: {
-            "preview": {
-                value: 'preview',
-                label: '图片预览',
-                fileName: 'preview'
-            },
+            // "preview": {
+            //     value: 'preview',
+            //     label: '图片预览',
+            //     fileName: 'preview'
+            // },
             // "so_info": {
             //     value: 'so_info',
             //     label: '服务单详情'
@@ -41,11 +42,11 @@ export const btns = {
                 value: 'make_tools',
                 label: '制作工具'
             },
-            "upload": {
-                value: 'upload',
-                label: '上传',
-                fileName:'upload'
-            },
+            // "upload": {
+            //     value: 'upload',
+            //     label: '上传',
+            //     fileName:'upload'
+            // },
             "download": {
                 value: 'download',
                 label: '下载'
@@ -58,60 +59,62 @@ export const btns = {
             "assign_make": {
                 value: 'assign_make',
                 label: '分派制作员',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "assign_assistant": {
                 value: 'assign_assistant',
                 label: '分派助理',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "change_designers": {
                 value: 'change_designers',
                 label: '更换设计师',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "change_make": {
                 value: 'change_make',
                 label: '更换制作员',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "change_assistant": {
                 value: 'change_assistant',
                 label: '更换助理',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "change_liability": {
                 value: 'change_liability',
                 label: '更换担责',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "to_designers": {
                 value: 'to_designers',
                 label: '转单设计',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "to_make": {
                 value: 'to_make',
                 label: '转单制作',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "to_assistant": {
                 value: 'to_assistant',
                 label: '转单助理',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "demand_write": {
                 value: 'demand_write',
-                label: '填写需求'
+                label: '填写需求',
+                fileName: 'demand',
+                hideTitle: true
             },
             "demand_submit": {
                 value: 'demand_submit',
@@ -209,9 +212,9 @@ export const btns = {
                 value: 'back',
                 label: '打回'
             },
-            "unit_consumption": {
-                value: 'unit_consumption',
-                label: '单品消耗'
-            },
+            // "unit_consumption": {
+            //     value: 'unit_consumption',
+            //     label: '单品消耗'
+            // },
         }
 }

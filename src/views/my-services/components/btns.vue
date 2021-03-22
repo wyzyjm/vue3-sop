@@ -9,7 +9,7 @@
     class="drag_box" 
     v-show="dragDialogVisible">
         <!--标题-->
-        <p class="el-popover__title">{{curBtn.label}}</p>
+        <p class="el-popover__title" v-if="!curBtn.hideTitle">{{curBtn.label}}</p>
         <!--业务展示-->
         <component :is="curBtn.fileName" 
         :code="code" 
@@ -35,6 +35,8 @@ import Score from '../dialog/score'
 import webPreview from '../dialog/webPreview'
 import Allot from '../dialog/allot'
 import editForm from '../dialog/editForm'
+import Upload from '../dialog/upload'
+import Demand from '../dialog/demand'
 import getServicesBtn from '@/api/1835-post-service-order-sevice-button-operate'
 export default {
 //import引入的组件需要注入到对象中才能使用
@@ -44,7 +46,9 @@ components: {
     Score,
     webPreview,
     Allot,
-    editForm
+    editForm,
+    Upload,
+    Demand
 },
 props: ['code'],
 data() {
@@ -83,8 +87,10 @@ methods: {
             }
         }
         getServicesBtn(this.form).then(res => {
-            // res.data = res.data
-            // this.data = res.data
+            if (res.status == 200) {
+                this.$message.success(res.msg)
+                this.dragDialogVisible = false
+            }
         }) 
     },
     handleShowBtn (btn, idx) {

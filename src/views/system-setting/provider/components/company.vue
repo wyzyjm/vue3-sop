@@ -449,7 +449,7 @@ methods: {
                 }).catch(err => {
                         console.log(err, '编辑失败')
                         this.form.majorBusiness = this.form.majorBusiness.split(',')
-                        console.log(this.form.majorBusiness, 999)
+                        console.log(this.form.majorBusiness, '重置')
                 })
             } else {
                 addProvider(this.form).then((res) => {
@@ -469,6 +469,7 @@ methods: {
                 })
             }
         } else {
+            this.form.majorBusiness = this.form.majorBusiness.split(',')
             console.log('error')
         }
     }

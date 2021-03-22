@@ -67,10 +67,10 @@ methods: {
 created() {
     getServicesBtn({serviceCode: this.code, buttonType: this.buttonType}).then(res => {
         // res.data = res.data
-        for(let i = 0; i < 100; i++) {
-            this.tableData.push(res.data[0])
-        }
-        // this.tableData = res.data
+        // for(let i = 0; i < 100; i++) {
+        //     this.tableData.push(res.data[0])
+        // }
+        this.tableData = res.data
     }) 
 },
 //生命周期 - 挂载完成（可以访问DOM元素）

@@ -86,7 +86,7 @@
     </div>
     <div class="footer-box">
         <el-button type="primary" @click="handleSave()">保存</el-button>
-        <el-button class="ml20">取消</el-button>
+        <el-button class="ml20" @click="cancel()">取消</el-button>
     </div>     
 </div>
 </template>
@@ -151,6 +151,11 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
+    cancel () {
+        this.$router.push({
+            path: '/system-setting/staff/list'
+        })
+    },
     // 选择组织
     changeOrg () {
         this.orgList = []
