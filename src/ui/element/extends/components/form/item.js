@@ -69,7 +69,7 @@ export default {
             on
         }
 
-        // 全局增加clearable
+        // 表格的查询表单全局增加clearable
         if (this.TABLE_PROVIDE && !Object.hasOwnProperty.call(renderConfig.props, 'clearable')) {
             renderConfig.props.clearable = true
         }
