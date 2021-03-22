@@ -5,10 +5,11 @@ export const COMPONENT_NAME = 'F'
 
 addRule(COMPONENT_NAME, {
 	parse(params) {
-		return JSON.parse(Base64.decode(params))
+		return JSON.parse(Base64.decode(params.replace(/@/g, '/')))
 	},
 	componentization(params) {
-		return Base64.encode(JSON.stringify(params))
+		const result = Base64.encode(JSON.stringify(params))
+		return result.replace(/\//g, '@')
 	}
 })
 
@@ -107,8 +108,8 @@ export default {
 			// 如果挂载到table下面，触发table下面相应的处理事件
 			if (this.TABLE_PROVIDE) {
 				this.TABLE_PROVIDE.formInit(query)
-				Object.keys(query).forEach(v=>{
-					this.setModel(v,query[v])
+				Object.keys(query).forEach(v => {
+					this.setModel(v, query[v])
 				})
 			}
 		}
