@@ -22,6 +22,7 @@ export default {
         const blurArr = ['el-input']
         const event = blurArr.includes(this.component) ? 'blur' : 'change'
         const rules = Array.isArray(this.rules) ? this.rules.map(rule => {
+
             if (typeof rule === 'string' && rule.includes('required')) {
                 const type = rule.split(':')[1] ? rule.split(':')[1] : 'string'
                 return { required: true, type, message: `请${event === 'blur' ? '输入' : '选择'}${this.label}`, tirgger: event }
@@ -34,6 +35,7 @@ export default {
             if (typeof rule === 'string' && rule === 'mobile') {
                 return { pattern: /^1\d{10}$/, message: `手机号格式不正确`, tirgger: event }
             }
+
 
             return rule
         }) : []

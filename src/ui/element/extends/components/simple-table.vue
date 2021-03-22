@@ -1,13 +1,13 @@
 <template>
   <div class="ce-simple-table cb-table-style">
-    <slot name="form"></slot>
-    <slot name="top"></slot>
+    <slot name="form" />
+    <slot name="top" />
     <Table border v-bind="$attrs" v-on="$listeners" v-loading="tableIsLoading" :uid="uid" :data="tableData">
-      <slot></slot>
+      <slot />
     </Table>
-    <slot name="bottom"></slot>
+    <slot name="bottom" />
     <div v-if="page !== false" class="ce-pagination">
-      <slot name="page"></slot>
+      <slot name="page" />
       <Page :page-size="params.pagination.pageSize" layout="total,sizes,prev, pager, next, jumper" :current-page="params.pagination.pageNum" @current-change="currentChange" @size-change="sizeChange" @pageInit="pageInit" :page-sizes="[10, 20, 50, 100]" :uid="uid" :total="total" v-bind="page===true?{}:page" v-if="page !== false" ref="page"></Page>
     </div>
   </div>
