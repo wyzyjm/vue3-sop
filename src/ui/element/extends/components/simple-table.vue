@@ -124,11 +124,15 @@ export default {
       if (Array.isArray(this.data)) {
         this.tableData = this.data
       } else {
-        return this.parseData({
+        let params = {
           ...this.params.form,
-          ...this.params.pagination,
           ...this.sParams,
-        })
+        }
+
+        if (this.page !== false) {
+          params = { ...params, ...this.params.pagination }
+        }
+        return this.parseData(params)
       }
     },
     // 供查询表单调用
