@@ -1,6 +1,6 @@
 <template>
   <div>
-    <s-form class="service-one-phase-information"  :model="form" label-width="130px" @submit="save">
+    <s-form class="service-one-phase-information" :model="form" label-width="130px" @submit="save">
       <div class="box">
         <h2>基本信息</h2>
         <s-form-item label="服务产品名称" prop="name" clearable :rules="['required']" />
@@ -16,7 +16,7 @@
         <s-form-item clearable label="服务产品类型" :props="{label:'name',value:'code'}" prop="type" :rules="['required']" component="s-group" :data="options.type" />
         <s-form-item clearable label="单位" :props="{label:'name',value:'code'}" prop="unit" :rules="['required']" component="s-group" :data="options.unit" />
         <s-form-item clearable label="优先级" :min="0" component="el-input-number" prop="priority" :rules="['required:number']" />
-        <s-form-item clearable label="业务类型"  prop="businessTypeId" component="s-group" :props="{label:'name',value:'id'}" :data="options.businessType" />
+        <s-form-item clearable label="业务类型" prop="businessTypeId" component="s-group" :props="{label:'name',value:'id'}" :data="options.businessType" />
         <s-form-item clearable label="服务内容" autosize prop="serviceContent" type="textarea" />
       </div>
       <div class="box mt20">
@@ -137,12 +137,14 @@ export default defineComponent({
     const isEdit = ref(!!id)
 
     const save = (form) => {
+
+
       form.propertyList = otherProps.value
         .map((v) => {
           v.valueList = v.valueList.filter((c) => v.checked.includes(c.code))
           return v
         })
-        .filter((v) => v.name !== '归属产品线')
+        // .filter((v) => v.name !== '归属产品线')
       return (id ? _update(form) : _save(form)).then(() => {
         Message({
           type: 'success',

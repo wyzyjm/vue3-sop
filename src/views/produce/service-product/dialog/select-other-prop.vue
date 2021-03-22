@@ -23,25 +23,30 @@ export default defineComponent({
       type: Array,
     },
   },
-  setup({data}, { emit }) {
+  setup({ data }, { emit }) {
     let form = reactive({
       propertyList: [],
     })
 
     const options = useOptions()
 
-
-    options.propertyList.forEach((v,i)=>{
-      if(data.some(c=>c.name===v.name)){
+    options.propertyList.forEach((v, i) => {
+      if (data.some((c) => c.name === v.name)) {
         form.propertyList.push(i)
       }
-
     })
 
     const save = () => {
+      const emitData = options.propertyList.filter((v, i) =>
+        form.propertyList.includes(i)
+      )
+
       emit(
         'change',
-        options.propertyList.filter((v, i) => form.propertyList.includes(i))
+        emitData.map((v) => {
+          const cur = data.find((c) => c.name === v.name)
+          return cur || v
+        })
       )
 
       emit('close')
