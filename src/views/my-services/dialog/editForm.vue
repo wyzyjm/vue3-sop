@@ -1,7 +1,7 @@
 <!-- 质检打回 -->
 <template>
 <div >
-    <el-form :model="form" size="small" ref="form" label-width="140px" :rules="rules">
+    <el-form :model="form" size="small" ref="form" label-width="100px" :rules="rules">
         <el-form-item label="操作描述：" prop="reason" >
             <el-input
             type="textarea"
@@ -16,12 +16,12 @@
                 <ce-file :form="form" :data="{'code': 'annexList'}" size="small"></ce-file>
             </div>
         </el-form-item>
-        <el-form-item>
-            <!-- <div class="foot_box"> -->
+        <!-- <el-form-item>
+            <div class="foot_box">
                 <el-button type="default" @click="cancel">取消</el-button>
                 <el-button type="primary" @click="save">确定</el-button>
-            <!-- </div> -->
-        </el-form-item>
+            </div>
+        </el-form-item> -->
     </el-form>
 </div>
 </template>
@@ -36,14 +36,14 @@ export default {
 components: {
     ceFile
 },
-props: ['code', 'buttonType'],
+props: ['code', 'buttonType', 'form'],
 data() {
 //这里存放数据
 return {
-    form: {
-        reason: '',
-        annexList: []
-    },
+    // form: {
+    //     reason: '',
+    //     annexList: []
+    // },
     rules: {
         reason: [
             { required: true, message: '请输入操作描述', trigger: 'blur' },

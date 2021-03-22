@@ -1,6 +1,6 @@
 <!-- 操作日志 -->
 <template>
-<div class='dialog_box'>
+<div>
     <div class="upload_box">
         <el-upload
         class="upload-demo"
@@ -17,10 +17,10 @@
         </el-upload>
         <!-- action="http://test-api-sop.ceboss.cn/common-service/frontApi/common-upload/upload" -->
     </div>
-    <div class="foot_box">
+    <!-- <div class="foot_box">
         <el-button type="default" size="small" @click="cancel">取消</el-button>
         <el-button type="primary" size="small" @click="save">确定</el-button>
-    </div>
+    </div> -->
 </div>
 </template>
 
@@ -32,7 +32,7 @@ import getServicesBtn from '@/api/1835-post-service-order-sevice-button-operate'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {},
-props: ['code', 'buttonType'],
+props: ['code', 'buttonType', 'form'],
 data() {
 //这里存放数据
 return {
@@ -72,22 +72,23 @@ methods: {
     },
     fileSuccess (uploadData) {
         this.fileList.push(uploadData)
-        console.log(this.fileList, 999)
+        this.form.annexList.push(uploadData.id)
+        // console.log(this.form.annexList, 9999)
     },
     // 关闭文件
     closeFile(res, list) {
         list.map((v, idx) => {
-            if (v.fileName == res.name) {
+            if (v.id == res.response.id) {
                 list.splice(idx, 1)
+                this.form.annexList.splice(idx, 1)
             }
         })
-        this.fileList = list
-        console.log(this.fileList, 999)
-    //   this.form[code].splice(index, 1);
+        console.log(this.form.annexList, 9999)
     },
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
+    this.form.annexList = []
     // getServicesBtn({serviceCode: this.code, buttonType: this.buttonType}).then(res => {
     //     // res.data = res.data
     //     this.tableData = res.data
@@ -109,8 +110,9 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
     .upload_box{
-        width:360px;
+        width:400px;
         margin:0 auto;
+        text-align: center;
     }
     .foot_box{
         // height:100px;

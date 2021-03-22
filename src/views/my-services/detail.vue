@@ -1,6 +1,6 @@
 <!-- 详情 -->
 <template>
-<div class='box'>
+<div class='box' style="position:relative">
     
     <div class='module-box'>
         <div class="title-box">服务单进度</div>

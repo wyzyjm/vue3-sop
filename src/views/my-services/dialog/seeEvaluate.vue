@@ -1,6 +1,6 @@
 <!-- 操作日志 -->
 <template>
-<div >
+<div style="margin-left:40px;">
     <div class="title">客户对你的服务评价分数为&nbsp;<strong>{{result.totalScore || '----'}}</strong>&nbsp;分</div>
     <div class="col_box">
         <span class="desc_style">设计能力</span>
@@ -36,7 +36,7 @@
         <span class="score_style">得分： {{result.makeScore}}</span>
     </div>
     <div class="col_box" style="margin-bottom:16px;">
-        <p class="desc_style" style="line-height:20px;color:#888;">客户评价： {{result.evaluateContent}}看拉萨佳都科技阿三六九等撒家里的看拉萨佳都科技阿三六九等撒家里的看拉萨佳都科技阿三六九等撒家里的看拉萨佳都科技阿三六九等撒家里的看拉萨佳都科技阿三六九等撒家里的看拉萨佳都科技阿三六九等撒家里的看拉萨佳都科技阿三六九等撒家里的</p>
+        <p class="desc_style" style="line-height:20px;color:#888;">客户评价： {{result.evaluateContent || '-----'}}</p>
         <p style="clear:both;"></p>
     </div>
 </div>

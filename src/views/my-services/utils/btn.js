@@ -8,6 +8,7 @@ export const btns = {
             "score_see": {
                 value: 'score_see',
                 label: '查看评分',
+                fileName: 'score'
             },
             "evaluate_see": {
                 value: 'evaluate_see',
@@ -17,27 +18,35 @@ export const btns = {
             },
             "demand_see": {
                 value: 'demand_see',
-                label: '查看需求'
+                label: '查看需求',
+                fileName: 'demand',
+                hideTitle: true
             },
-            "preview": {
-                value: 'preview',
-                label: '预览'
+            "web_preview": {
+                value: 'web_preview',
+                label: '网站预览',
+                fileName: 'webPreview'
             }
         },
         dynamicList: {
-            "so_info": {
-                value: 'so_info',
-                label: '服务单详情'
-            },
+            // "preview": {
+            //     value: 'preview',
+            //     label: '图片预览',
+            //     fileName: 'preview'
+            // },
+            // "so_info": {
+            //     value: 'so_info',
+            //     label: '服务单详情'
+            // },
             "make_tools": {
                 value: 'make_tools',
                 label: '制作工具'
             },
-            "upload": {
-                value: 'upload',
-                label: '上传',
-                fileName:'upload'
-            },
+            // "upload": {
+            //     value: 'upload',
+            //     label: '上传',
+            //     fileName:'upload'
+            // },
             "download": {
                 value: 'download',
                 label: '下载'
@@ -45,66 +54,67 @@ export const btns = {
             "assign_designers": {
                 value: 'assign_designers',
                 label: '分派设计师',
-                fileName: 'tree',
-                width: '400'
+                fileName: 'allot',
             },
             "assign_make": {
                 value: 'assign_make',
                 label: '分派制作员',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "assign_assistant": {
                 value: 'assign_assistant',
                 label: '分派助理',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "change_designers": {
                 value: 'change_designers',
                 label: '更换设计师',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "change_make": {
                 value: 'change_make',
                 label: '更换制作员',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "change_assistant": {
                 value: 'change_assistant',
                 label: '更换助理',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "change_liability": {
                 value: 'change_liability',
                 label: '更换担责',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "to_designers": {
                 value: 'to_designers',
                 label: '转单设计',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "to_make": {
                 value: 'to_make',
                 label: '转单制作',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "to_assistant": {
                 value: 'to_assistant',
                 label: '转单助理',
-                fileName: 'tree',
+                fileName: 'allot',
                 width: '400'
             },
             "demand_write": {
                 value: 'demand_write',
-                label: '填写需求'
+                label: '填写需求',
+                fileName: 'demand',
+                hideTitle: true
             },
             "demand_submit": {
                 value: 'demand_submit',
@@ -160,7 +170,8 @@ export const btns = {
             "quality_back": {
                 value: 'quality_back',
                 label: '质检打回',
-                fileName: 'editForm'
+                fileName: 'editForm',
+                requiredParam: 'reason'
             },
             "quality_remark": {
                 value: 'quality_remark',
@@ -201,9 +212,9 @@ export const btns = {
                 value: 'back',
                 label: '打回'
             },
-            "unit_consumption": {
-                value: 'unit_consumption',
-                label: '单品消耗'
-            },
+            // "unit_consumption": {
+            //     value: 'unit_consumption',
+            //     label: '单品消耗'
+            // },
         }
 }

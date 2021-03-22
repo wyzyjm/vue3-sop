@@ -4,7 +4,7 @@
     @changeSearch="changeSearch"/>
     <s-simple-table :data="table.data" :cols="table.cols">
       <s-form slot="form" :model="form" inline>
-        <!-- <s-form-item label="客户名称" prop="custName">
+        <s-form-item label="客户名称" prop="custName">
           <s-input v-model="form.custName" clearable></s-input>
         </s-form-item>
         <s-form-item label="服务单号" prop="serviceCode">
@@ -19,7 +19,7 @@
             <el-radio-group v-model="form.status" size="medium">
                 <el-radio-button :label="item.id" v-for="(item, idx) in options.status" :key="idx">{{item.name}}</el-radio-button>
             </el-radio-group>
-        </s-form-item> -->
+        </s-form-item>
         <s-form-item>
           <s-button type="primary" run="form.search">查询</s-button>
           <s-button run="form.reset">重置</s-button>
@@ -32,7 +32,7 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import getList from '@/api/1700-get-service-order-sevice-order-info-list'
-// import useOptions from './utils/query'
+import useOptions from './utils/query'
 import useDialog from '@/hooks/use-dialog'
 
 export default defineComponent({
@@ -210,11 +210,11 @@ export default defineComponent({
       businessType: '',
       status: '',
     })
-    // const options = useOptions()
+    const options = useOptions()
     return {
       table,
       form,
-    //   options,
+      options,
       openSearchDialog,
       changeSearch
     }
