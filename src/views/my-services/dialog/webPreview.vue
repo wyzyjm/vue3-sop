@@ -14,16 +14,35 @@
 
     <el-table-column
       prop="pc"
+      :show-overflow-tooltip="true"
       label="PC">
       <template slot-scope="scope">
-          <el-tag type="success">{{scope.row.pc}}</el-tag>
+          <!-- <el-tag type="success">{{scope.row.pc}}</el-tag> -->
+          <el-link :href="'http://' + scope.row.pc" type="primary" target="_blank">点击访问
+              <!-- {{scope.row.name == '制作预览' ? '点击访问' : scope.row.pc}} -->
+              </el-link>
       </template>
     </el-table-column>
     <el-table-column
       prop="mobile"
+      :show-overflow-tooltip="true"
       label="手机">
-      <template slot-scope="scope">
-          <el-tag type="info">{{scope.row.mobile}}</el-tag>
+      <template slot-scope="scope"
+      >
+          <!-- <el-tag type="info">{{scope.row.mobile}}</el-tag> -->
+          <el-link :href="'http://' + scope.row.mobile" type="primary" target="_blank">点击访问</el-link>
+      </template>
+    </el-table-column>
+    <el-table-column
+      align="center"
+      prop="qrcode"
+      :show-overflow-tooltip="true"
+      label="二维码">
+      <template slot-scope="scope"
+      >
+        <el-image :src="scope.row.qrcode" style="width:50px;height:50px;"></el-image>
+          <!-- <el-tag type="info">{{scope.row.mobile}}</el-tag> -->
+          <!-- <el-link :href="'http://' + scope.row.mobile" type="primary" target="_blank">点击访问</el-link> -->
       </template>
     </el-table-column>
   </el-table>
@@ -47,8 +66,8 @@ return {
     value: 3.3,
     result: {},
     tableData: [
-        {name: '制作预览', pc: '制作期', mobile: '制作期'},
-        {name: '正式预览', pc: 'www.300.cn', mobile: 'm.300.cn'},
+        {name: '制作预览', pc: '制作期', mobile: '制作期', qrcode: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbpic.588ku.com%2Felement_origin_min_pic%2F00%2F31%2F53%2F8956d2eaced73db.jpg%21rw400&refer=http%3A%2F%2Fbpic.588ku.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1618972020&t=c52b86d33642a18c3d7993acde036279'},
+        {name: '正式预览', pc: 'www.300.cn', mobile: 'm.300.cn', qrcode: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbpic.588ku.com%2Felement_origin_min_pic%2F00%2F31%2F53%2F8956d2eaced73db.jpg%21rw400&refer=http%3A%2F%2Fbpic.588ku.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1618972020&t=c52b86d33642a18c3d7993acde036279'},
     ],
     colLen: {},
     form: {},
@@ -77,9 +96,10 @@ methods: {
             buttonType: this.buttonType,
             personScoreJson: JSON.stringify(this.form)
             }).then(res => {
-                console.log(res)
-            // res.data = res.data
-            // this.data = res.data
+                this.tableData[0].pc = res.data.makeDomain
+                this.tableData[0].mobile = res.data.mobileMakeDomain
+                this.tableData[1].pc = res.data.domain
+                this.tableData[1].mobile = res.data.makeDomain
         }) 
     },
     dataSpanMethods ({ row, column, rowIndex, columnIndex }) {
@@ -101,23 +121,10 @@ methods: {
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
     getServicesBtn({serviceCode: this.code, buttonType: this.buttonType}).then(res => {
-        // let obj = {}
-        // res.data.map(v => {
-        //     if (this.buttonType != 'score_see') {
-        //         this.$set(this.form, v.projectKey, 0)
-        //     }
-        //     if (obj[v.classifySort]) {
-        //         obj[v.classifySort]++
-        //     } else {
-        //         obj[v.classifySort] = 1
-        //         v.isFirst = true
-        //     }
-        // })
-        // this.colLen = obj
-        console.log(res.data,  999)
-        // this.tableData = res.data
-        // res.data = res.data
-        // this.result = res.data
+        this.tableData[0].pc = res.data[0].makeDomain
+        this.tableData[0].mobile = res.data[0].mobileMakeDomain
+        this.tableData[1].pc = res.data[0].domain
+        this.tableData[1].mobile = res.data[0].makeDomain
     }) 
 
 },
