@@ -107,13 +107,13 @@ export default defineComponent({
         },
         {
           label: '状态',
-          width:'80px',
+          width: '80px',
           prop: 'stateLable',
         },
         {
           label: '服务商可见',
           prop: 'isSpVisibleLable',
-          width: '96px'
+          width: '96px',
         },
         {
           label: '创建人',

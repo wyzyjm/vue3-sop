@@ -128,13 +128,20 @@ export default defineComponent({
       })
     }
 
+    const cacheProciderId = ref('')
+
     const handleSearch = (form) => {
-      if (form.providerId === '') {
+      if (form.providerId === '' && cacheProciderId === '') {
         Message({
           type: 'error',
           message: '请选择一个服务商进行查询',
         })
         return
+      }
+      if (cacheProciderId.value) {
+        form.providerId = cacheProciderId.value
+      } else {
+        cacheProciderId.value = form.providerId
       }
       table.loading = true
       _getTableData(form).then((response) => {
