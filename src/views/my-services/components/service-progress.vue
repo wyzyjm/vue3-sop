@@ -2,7 +2,7 @@
   <div class="service-progress">
     <div class="item" :class="{finished:item.nodeStatus>1,last:item.isLast,first:i===0}" v-for="(item,i) in list" :key="i">
       <span v-if="!item.clone">
-        <el-popover v-if="item.nodeStatus>1" placement="top" :title="item.statusName" width="200" trigger="hover">
+        <el-popover v-if="item.nodeStatus>1" placement="bottom" width="200" trigger="hover">
           <span v-if="item.nodeStatus>1" class="executor mt10">{{item.executor}}</span><br />
           <span v-if="item.nodeStatus>1" class="completeTime mt5">{{item.completeTime}}</span>
           <span class="dot" slot="reference" />
