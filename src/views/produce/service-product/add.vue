@@ -13,10 +13,10 @@
           </el-radio-group>
         </s-form-item>
         <s-form-item v-else component="s-text" :content="form.code" />
-        <s-form-item clearable label="服务产品类型" :props="{label:'name',value:'code'}" prop="type" :rules="['required']" component="s-group" :data="options.type" />
-        <s-form-item clearable label="单位" :props="{label:'name',value:'code'}" prop="unit" :rules="['required']" component="s-group" :data="options.unit" />
+        <s-form-item clearable label="服务产品类型" prop="type" :rules="['required']" component="s-group" :data="options.type" />
+        <s-form-item clearable label="单位" prop="unit" :rules="['required']" component="s-group" :data="options.unit" />
         <s-form-item clearable label="优先级" :min="0" component="el-input-number" prop="priority" :rules="['required:number']" />
-        <s-form-item clearable label="业务类型" prop="businessTypeId" component="s-group" :props="{label:'name',value:'id'}" :data="options.businessType" />
+        <s-form-item clearable label="业务类型" prop="businessTypeId" component="s-group"  :data="options.businessType" />
         <s-form-item clearable label="服务内容" autosize prop="serviceContent" type="textarea" />
       </div>
       <div class="box mt20">

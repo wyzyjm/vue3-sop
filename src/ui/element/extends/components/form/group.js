@@ -1,6 +1,7 @@
 const isFunction = (v) => typeof v === 'function'
 const isPromise = (v) => Object.prototype.toString.call(v) === '[object Promise]'
 import tryGetOnlyArray from '../../utils/data-patch-v1/try-get-only-array'
+import tryGetLableAndValue from '../../utils/data-patch-v1/try-get-label-and-value'
 
 const props = {
     tag: {
@@ -14,10 +15,7 @@ const props = {
     },
     props: {
         default() {
-            return {
-                label: 'label',
-                value: 'value'
-            }
+            return null
         }
     }
 }
@@ -26,7 +24,9 @@ export default {
     data() {
         return {
             parsedData: [],
-            status: '组件载入中...'
+            status: '组件载入中...',
+            label: 'label',
+            value: 'value'
         }
     },
     watch: {
@@ -37,6 +37,18 @@ export default {
         }
     },
     methods: {
+        setLabelAndValueKey(data) {
+            const r = tryGetLableAndValue(data)
+            if (r) {
+                if (this.props) {
+                    this.label = this.props.label || r.label
+                    this.value = this.props.value || r.value
+                } else {
+                    this.label = r.label
+                    this.value = r.value
+                }
+            }
+        },
         parseData(data) {
             this.status = '数据加载中...'
             if (isFunction(data)) {
@@ -44,12 +56,14 @@ export default {
             }
             else if (Array.isArray(data)) {
                 this.parsedData = [...data]
+                this.setLabelAndValueKey(this.parsedData)
                 if (this.parsedData.length === 0) {
                     this.status = '暂无数据'
                 }
             } else if (isPromise(data)) {
                 data.then(response => {
                     this.parsedData = [...tryGetOnlyArray(response).data]
+                    this.setLabelAndValueKey(this.parsedData)
                     if (this.parsedData.length === 0) {
                         this.status = '暂无数据'
                     }
@@ -78,8 +92,8 @@ export default {
             children = this.parsedData.map(v => {
                 return h(tag.split('>')[1] || 'el-option', {
                     props: {
-                        label: v[this.props.label],
-                        value: v[this.props.value]
+                        label: v[this.label],
+                        value: v[this.value]
                     }
                 })
             })
@@ -90,9 +104,9 @@ export default {
             children = this.parsedData.map(v => {
                 return h(tag.split('>')[1] || 'el-radio', {
                     props: {
-                        label: v[this.props.value]
+                        label: v[this.value]
                     }
-                }, v[this.props.label])
+                }, v[this.label])
             })
             tag = 'el-radio-group'
         }
@@ -102,9 +116,9 @@ export default {
             children = this.parsedData.map(v => {
                 return h(tag.split('>')[1] || 'el-checkbox', {
                     props: {
-                        label: v[this.props.value]
+                        label: v[this.value]
                     }
-                }, v[this.props.label])
+                }, v[this.label])
             })
             tag = 'el-checkbox-group'
         }
