@@ -213,7 +213,6 @@ export default defineComponent({
     request().then((response) => {
       menu.subMenu = response.data.resource
       root.$store.commit('user/setUserInfo', response.data.emp)
-      console.log(root.$store)
     })
 
     const logout = () => {

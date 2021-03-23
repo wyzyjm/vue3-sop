@@ -32,7 +32,6 @@ const state = {
 
 const mutations = {
   setUserInfo(state, _params) {
-      console.log(state,_params);
     Object.keys(state).forEach(v=>{
         state[v]=_params[v];
     })
