@@ -182,10 +182,10 @@ export default defineComponent({
     }
 
     const exportRecommend = () => {
-      // 导出数据
-      // let link  = document.createElement('a');
-      // link.href = `${process.env.VUE_APP_API_BASE_URL}//production-config/download/product-line/excel`
-      // link.click();
+      let orgId = __getLeafNode(orgIds.value);
+      let link  = document.createElement('a');
+      link.href = `${process.env.VUE_APP_API_BASE_URL}/service-order/web-case/export?orgId=${orgId.join()}&serviceCode=${form.serviceCode}`
+      link.click();
     }
 
     const __getRecommend = () => {
