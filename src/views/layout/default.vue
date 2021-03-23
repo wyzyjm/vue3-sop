@@ -14,17 +14,18 @@
       <!-- 导航 -->
       <el-header class="sop-herder">
         <div class="r">
-          <!-- <el-dropdown>
-            <i class="el-icon-setting" style="margin-right: 15px"></i>
+          <el-dropdown>
+            <i class="el-icon-user-solid avatar"></i>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item>查看</el-dropdown-item>
-                <el-dropdown-item>新增</el-dropdown-item>
-                <el-dropdown-item>删除</el-dropdown-item>
+                <el-dropdown-item>
+                  <el-button type="text" @click="logout">退出</el-button>
+                </el-dropdown-item>
               </el-dropdown-menu>
             </template>
-          </el-dropdown> -->
-          <el-button type="text" @click="logout">退出</el-button>
+          </el-dropdown>
+          <span class="f14">{{$store.state.user.employeeName}}({{$store.state.user.position}})</span>
+
         </div>
       </el-header>
 
@@ -210,7 +211,9 @@ export default defineComponent({
     })
 
     request().then((response) => {
-      menu.subMenu = response.data
+      menu.subMenu = response.data.resource
+      root.$store.commit('user/setUserInfo', response.data.emp)
+      console.log(root.$store)
     })
 
     const logout = () => {
@@ -234,6 +237,15 @@ export default defineComponent({
   img {
     vertical-align: middle;
   }
+}
+.avatar {
+  width: 24px;
+  height: 24px;
+  line-height:24px;
+  text-align: center;
+  border-radius: 50%;
+  background: #fff;
+  margin-right: 10px;
 }
 .menu {
   border-right: none;
