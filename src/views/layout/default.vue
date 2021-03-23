@@ -14,7 +14,7 @@
       <!-- 导航 -->
       <el-header class="sop-herder">
         <div class="r">
-          <el-dropdown>
+          <!-- <el-dropdown>
             <i class="el-icon-setting" style="margin-right: 15px"></i>
             <template #dropdown>
               <el-dropdown-menu>
@@ -23,7 +23,7 @@
                 <el-dropdown-item>删除</el-dropdown-item>
               </el-dropdown-menu>
             </template>
-          </el-dropdown>
+          </el-dropdown> -->
           <el-button type="text" @click="logout">退出</el-button>
         </div>
       </el-header>
