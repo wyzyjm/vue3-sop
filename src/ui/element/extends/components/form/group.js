@@ -40,14 +40,18 @@ export default {
         setLabelAndValueKey(data) {
             const r = tryGetLableAndValue(data)
             if (r) {
-                if (this.props) {
-                    this.label = this.props.label || r.label
-                    this.value = this.props.value || r.value
-                } else {
-                    this.label = r.label
-                    this.value = r.value
+                this.label = r.label
+                this.value = r.value
+            }
+            if (this.props) {
+                if (this.props.label) {
+                    this.label = this.props.label
+                }
+                if (this.props.value) {
+                    this.value = this.props.value
                 }
             }
+
         },
         parseData(data) {
             this.status = '数据加载中...'
