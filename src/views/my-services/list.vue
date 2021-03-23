@@ -189,7 +189,14 @@ export default defineComponent({
         {
           label: '剩余周期',
           showOverflowTooltip: true,
-          prop: 'wholeMakeSurplusCycle',
+        //   width: 140,
+        //   prop: 'wholeMakeSurplusCycle',
+          prop: ({row}) => {
+              return [
+                  <el-tag  color={row.wholeMakeSurplusCycleColor ? row.wholeMakeSurplusCycleColor : '#18B398'}
+                  style="color:#fff">{row.wholeMakeSurplusCycle}</el-tag>
+              ]
+          }
         },
         {
           label: '操作',

@@ -50,7 +50,7 @@ components: {
     Upload,
     Demand
 },
-props: ['code'],
+props: ['code', 'btnList'],
 data() {
 //这里存放数据
 return {
@@ -93,11 +93,12 @@ methods: {
         } else {
             this.form.orderConsumeInfo = ''
         }
-        this.form.orderConsumeInfo
         getServicesBtn(this.form).then(res => {
             if (res.status == 200) {
                 this.$message.success(res.msg)
                 this.dragDialogVisible = false
+                // location.reload()
+                this.$emit('reload', {})
             }
         }) 
     },
@@ -181,10 +182,31 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-    let mergeBtn = {...btns.fixList, ...btns.dynamicList}
-    Object.keys(mergeBtn).forEach(key => {
-        this.btn.push(mergeBtn[key])
+    Object.keys(btns.fixList).forEach(key => {
+        this.btn.push(btns.fixList[key])
     })
+    setTimeout(() => {
+        let btnArr = []
+        console.log(this.btnList, 3789217321)
+        if (this.btnList.length > 0) {
+            this.btnList.map(v => {
+                btnArr.push(v.buttonCode)
+            })
+        }
+        let mergeBtn = {...btns.dynamicList}
+        console.log(mergeBtn, 8321808)
+        // this.btn = 
+        console.log(this.btn, 999)
+        Object.keys(mergeBtn).forEach(key => {
+            btnArr.map(v => {
+                if (v == key) {
+                    this.btn.push(mergeBtn[key])
+                }
+            })
+        })
+        console.log(this.btn, 9999)
+    }, 1000);
+
     // console.log(this.btn, 999)
 },
 beforeCreate() {}, //生命周期 - 创建之前

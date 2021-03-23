@@ -54,6 +54,7 @@
         </el-form-item>
         <el-form-item>
             <div style="margin-top:10px;">
+                {{form.annexList.length}}+++++3281382890
                 <ce-file :form="form" :data="{'code': 'annexList'}" size="small"></ce-file>
             </div>
         </el-form-item>
@@ -88,7 +89,8 @@ return {
 //监听属性 类似于data概念
 computed: {},
 //监控data中的数据变化
-watch: {},
+watch: {
+},
 //方法集合
 methods: {
     checkNum(row, idx) {
@@ -101,19 +103,19 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-    
-    // 单品消耗
+    // console.log( '显示321321')
+    // // 单品消耗
     getServicesBtn({serviceCode: this.code, buttonType: 'demand_see'}).then(res => {
         Object.keys(res.data).forEach(key => {
-            this.form[key] = res.data[key]
-            if (key == 'annexList' && !res.data[key]) {
-                this.form[key] = []
-            }
+                this.form[key] = res.data[key]
+                if (key == 'annexList' && !res.data[key]) {
+                    this.form[key] = []
+                } 
         })
         // this.form.buttonType = 'demand_confirm'
         // this.form = res.data
     }) 
-    console.log(this.form)
+    // console.log(this.form, this.form.annexList, 890890)
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {

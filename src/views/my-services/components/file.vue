@@ -40,7 +40,11 @@ return {
 //监听属性 类似于data概念
 computed: {},
 //监控data中的数据变化
-watch: {},
+watch: {
+    form (val) {
+        console.log(val, 327813782)
+    },
+},
 //方法集合
 methods: {
     handleExceed() {
@@ -82,7 +86,23 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-    // console.log(this.form,this.data, 123)
+    
+    setTimeout(() => {
+        console.log(321)
+        this.showList = []
+        let annexListArr = []
+        if (this.form.annexList.length > 0) {
+            this.form.annexList.map(v => {
+                this.showList.push({
+                    id: v.annexId,
+                    fileUrl: v.annexShowUrl,
+                    fileName: v.annexName
+                })
+                annexListArr.push(v.annexId)
+            })
+            this.form.annexList = annexListArr
+        }
+    }, 1000)
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {

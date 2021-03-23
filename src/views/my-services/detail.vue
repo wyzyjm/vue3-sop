@@ -8,7 +8,8 @@
         <div class="progress_box">
             <ServiceProgress :serviceOrderId="$route.params.id"></ServiceProgress>
             <p class="mb40"></p>
-            <btn :code="$route.params.code"></btn>
+            <btn :code="$route.params.code" @reload="reloadPage"
+            :btnList="servicesInfo.buttonList"></btn>
         </div>
     </div>
 
@@ -20,11 +21,32 @@
             <el-col :span="8" v-for="(value, key, index) in item.keys" :key="index">
                 <div class="item-col">
                     <div class="col-title">{{value}}：</div>
-                    <div class="col-txt" v-if="key == 'linkmanMail' || key == 'linkmanName' || key == 'linkmanPhone'">{{servicesInfo['custLinkmanInfoList'][0] ? servicesInfo['custLinkmanInfoList'][0][key] : '------'}}</div>
+                    <div class="col-txt" v-if="key == 'linkmanMail' || key == 'linkmanName' || key == 'linkmanPhone'">
+                        {{servicesInfo['custLinkmanInfoList'][0] ? servicesInfo['custLinkmanInfoList'][0][key] : '------'}}
+                    </div>
                     <div class="col-txt" v-else>{{servicesInfo[key] || '------'}}</div>
                 </div>
-            </el-col>        
+            </el-col>       
         </el-row>
+        <div style="width:calc(100% - 100px);margin:10px auto 20px;" v-if="servicesInfo['custLinkmanInfoList'].length > 1">
+                <el-table :data="newArray" size="small" border>
+                    <el-table-column
+                    prop="linkmanName"
+                    label="负责人"
+                    :show-overflow-tooltip="true">
+                    </el-table-column>
+                    <el-table-column
+                    prop="linkmanMail"
+                    label="负责人邮箱"
+                    :show-overflow-tooltip="true">
+                    </el-table-column>
+                    <el-table-column
+                    prop="linkmanPhone"
+                    label="负责人联系方式"
+                    :show-overflow-tooltip="true">
+                    </el-table-column>
+                </el-table>
+        </div>
     </div>
 
     <div class='module-box'>
@@ -296,34 +318,43 @@ return {
 };
 },
 //监听属性 类似于data概念
-computed: {},
+computed: {
+    newArray () {
+        return this.servicesInfo['custLinkmanInfoList'].slice(1)
+    }
+},
 //监控data中的数据变化
 watch: {},
 //方法集合
 methods: {
-    cancel () {}
+    reloadPage () {
+        this.getApi()
+    },
+    cancel () {
+        this.$router.push({
+            path: '/my-services/list'
+        })
+    },
+    getApi () {
+        // 客户信息
+        getServicesInfo({serviceOrderId: this.$route.params.id}).then(res => {
+            this.servicesInfo = res.data || {}
+        })
+        // 服务内容
+        getServicesContent({serviceOrderId: this.$route.params.id}).then(res => {
+            this.servicesContent = res.data || {}
+            this.productFile = res.data.serviceAnnexList['1'] || []
+            this.designFile = res.data.serviceAnnexList['2'] || []
+        })
+        // 服务团队
+        getServicesTeam({serviceOrderId: this.$route.params.id}).then(res => {
+            this.servicesTeam = res.data || {}
+        })
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-    console.log(this.$route.params.code, 98890)
-    // 客户信息
-    getServicesInfo({serviceOrderId: this.$route.params.id}).then(res => {
-        this.servicesInfo = res.data || {}
-    })
-    // 服务内容
-    getServicesContent({serviceOrderId: this.$route.params.id}).then(res => {
-        this.servicesContent = res.data || {}
-        this.productFile = res.data.serviceAnnexList['1'] || []
-        this.designFile = res.data.serviceAnnexList['2'] || []
-    })
-    // 服务团队
-    getServicesTeam({serviceOrderId: this.$route.params.id}).then(res => {
-        this.servicesTeam = res.data || {}
-    })
-    // 服务进度
-    // getServicesProgress().then(res => {
-    //     console.log(res.data, 9999)
-    // })
+    this.getApi()
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
