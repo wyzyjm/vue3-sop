@@ -20,7 +20,7 @@
             <el-col :span="8" v-for="(value, key, index) in item.keys" :key="index">
                 <div class="item-col">
                     <div class="col-title">{{value}}：</div>
-                    <div class="col-txt" v-if="key == 'linkmanMail' || key == 'linkmanName' || key == 'linkmanPhone'">{{servicesInfo['custLinkmanInfoList'] ? servicesInfo['custLinkmanInfoList'][key] : '------'}}</div>
+                    <div class="col-txt" v-if="key == 'linkmanMail' || key == 'linkmanName' || key == 'linkmanPhone'">{{servicesInfo['custLinkmanInfoList'][0] ? servicesInfo['custLinkmanInfoList'][0][key] : '------'}}</div>
                     <div class="col-txt" v-else>{{servicesInfo[key] || '------'}}</div>
                 </div>
             </el-col>        

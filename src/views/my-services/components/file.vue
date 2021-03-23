@@ -16,7 +16,7 @@
     <div slot="tip" class="el-upload__tip">只能上传gif,jpg,jpeg,bmp,png,doc,docx,rar,zip,xls,xlsx,txt文件</div>
     </el-upload>
     <div class="upload-tag" v-if="form[data.code].length">
-        <el-tag style="margin-right:10px;" v-for="(file,index) in form[data.code]" :key="index" effect="plain" closable @click="seeFile(file)" @close="closeFile(data.code, index)">{{ file.fileName }}</el-tag>
+        <el-tag style="margin-right:10px;" v-for="(file,index) in showList" :key="index" effect="plain" closable @click="seeFile(file)" @close="closeFile(data.code, index)">{{ file.fileName }}</el-tag>
     </div>
 </div>
 </template>
@@ -34,7 +34,7 @@ data() {
 //这里存放数据
 return {
     accept: ".jpg,.jpeg,.png,.gif,.bmp,.doc,.docx,.rar,.zip,.xls,.xlsx,txt,.JPG,.JPEG,.PBG,.GIF,.BMP,.DOC,.DOCX,.RAR,.ZIP,.XLS,.XLSX,.TXT",
-
+    showList: []
 };
 },
 //监听属性 类似于data概念
@@ -49,7 +49,8 @@ methods: {
     // 文件上传成功时
     fileSuccess (uploadData, code) {
       if (code) {
-        this.form[code].push(uploadData)
+        this.showList.push(uploadData)
+        this.form[code].push(uploadData.id)
       }
       this.imgLoading = false;
     },
@@ -65,6 +66,7 @@ methods: {
 
     // 关闭文件
     closeFile(code, index) {
+      this.showList.splice(index, 1)
       this.form[code].splice(index, 1);
     },
 

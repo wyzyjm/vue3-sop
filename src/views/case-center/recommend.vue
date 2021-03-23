@@ -5,43 +5,48 @@
       <div class="rec-query">
         <span>生产团队：</span>
         <p>
-          <el-select v-model="form.orgId" placeholder="请选择" multiple>
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-              clearable>
-            </el-option>
-          </el-select>
+          <el-cascader
+            ref="cascader"
+            v-model="orgIds"
+            :options="options"
+            :props="{
+              multiple: true,
+              label: 'orgName',
+              value: 'id'
+            }"
+            :collapse-tags="true"
+            :show-all-levels="false"
+            clearable
+            placeholder="请选择生产团队">
+          </el-cascader>
         </p>
         <span>服务单号：</span>
         <p>
-          <el-input v-model="form.serviceCode" placeholder="请输入客户名称"></el-input>
+          <el-input v-model="form.serviceCode" placeholder="请输入服务单号" clearable></el-input>
         </p>
         <el-button type="primary" @click="search">搜索</el-button>
       </div>
       <div class="rec-con">
         <div class="rec-con-item item-1">
-          <b>200</b>
+          <b>{{detail.totalSize || 0}}</b>
           <p>当月发布网站数</p>
           <div class="con-circular-1"></div>
           <div class="con-circular-2"></div>
         </div>
         <div class="rec-con-item item-2">
-          <b>150</b>
+          <b>{{detail.standardSize || 0}}</b>
           <p>当月达标网站数</p>
           <div class="con-circular-1"></div>
           <div class="con-circular-2"></div>
         </div>
         <div class="rec-con-item item-3">
-          <b>65%</b>
+          <b>{{detail.percent || 0}}%</b>
           <p>当月质检达标率</p>
           <div class="con-circular-1"></div>
           <div class="con-circular-2"></div>
         </div>
         <div class="rec-con-item item-4">
-          <b>10<span>当月剩余可推荐 10</span></b>
+          <b>{{detail.recommendNums || 0}}<span>当月剩余可推荐 {{detail.remainderNums || 0}}</span></b>
           <p>当月推荐网站数量</p>
           <div class="con-circular-1"></div>
           <div class="con-circular-2"></div>
@@ -49,33 +54,38 @@
       </div>
     </div>
     <div class="rec-table">
-      <s-simple-table 
+      <div class="mb15">
+        <el-button type="primary" :disabled="isRecommend" @click="recommend(1)">推荐网站</el-button>
+        <el-button type="primary" :disabled="isRecommend" @click="recommend(0)">取消推荐</el-button>
+        <el-button type="info" class="rec-export" @click="exportRecommend" plain>导出数据</el-button>
+      </div>
+      <s-table 
         :data="data" 
         :cols="cols" 
         class="cb-table-style" 
         @selection-change="selectionRecommend">
-          <div slot="top" class="mb15">
-            <el-button type="primary" :disabled="isRecommend" @click="recommend(true)">推荐网站</el-button>
-            <el-button type="primary" :disabled="isRecommend" @click="recommend(false)">取消推荐</el-button>
-            <el-button type="info" class="rec-export" @click="exportRecommend" plain>导出数据</el-button>
-          </div>
-      </s-simple-table>
+      </s-table>
     </div>
   </div>
 </template>
 <script>
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-// import { Message } from 'element-ui'
+import { defineComponent, reactive, toRefs, ref } from '@vue/composition-api'
+import { Message } from 'element-ui'
+import filterEmptyArray from '@/util/filter-empty-array'
+import getLoginuser from '@/api/1775-get-frontapi-service-provider-org-orglist-by-loginuser'
 import webRecommend from '@/api/1739-post-service-order-web-case-statistics'
-// import aaaa from '@/api/1562'
+import getPagelist from '@/api/2189-post-service-order-web-case-pagelist'
+import setRecommand from '@/api/1781-post-service-order-web-case-operation-batch-{isrecommand}'
 export default defineComponent({
-  setup(props, { root }) {
-      console.log(root)
+  setup(props, { root, refs }) {
+    const orgIds = ref([]);
+
     let recommendData = reactive({
       isRecommend: true,
       options: [],
       selection: [],
-      data: [{code: 'OL20200910293'},{code: 'OL20200910292'}],
+      detail: {},
+      data: [],
       cols: [
         {
           type: 'selection'
@@ -83,27 +93,27 @@ export default defineComponent({
         {
           showOverflowTooltip: true,
           label: '服务单号',
-          prop: 'code',
+          prop: 'serviceCode',
         },
         {
           label: '客户姓名',
-          prop: 'name',
-        },
-        {
-          label: '产品类型',
           prop: 'custName',
         },
         {
+          label: '产品类型',
+          prop: 'productType',
+        },
+        {
           label: '语言',
-          prop: 'subCompanyName',
+          prop: 'language',
         },
         {
           label: '设计师',
-          prop: 'orderSourceName',
+          prop: 'designUserName',
         },
         {
           label: '质检评分',
-          prop: 'workStatus',
+          prop: 'score',
         },
         {
           label: '操作',
@@ -111,9 +121,9 @@ export default defineComponent({
             return [
               <s-button
                 type="text"
-                onClick={() => recommend(true, row)}
+                onClick={() => recommend(row.recommandFlag?0:1, row)}
               >
-                取消推荐
+                {row.recommandFlag ? '取消推荐' : '推荐网站'}
               </s-button>,
             ]
           }
@@ -122,36 +132,48 @@ export default defineComponent({
     })
 
     let form = reactive({
-      orgId: [1],
-      type: '',
-      serviceCode: '',
-      pageNum: 1,
-      pageSize: 10
+      serviceCode: ''
     })
 
-    const __getRecommend = () => {
-      // 获取接口
-      webRecommend(form)
-      .then((res) => {
-        console.log("res",res)
-        // recommendData.data = res.data || [];
-      })
-    }
+    getLoginuser({resourceCode: 'case_recommend'})
+    .then(({ data }) => {
+      filterEmptyArray(data || [])
+      recommendData.options = data || [];
+    })
 
     const search = () => {
+      form.orgId = __getLeafNode(orgIds.value);
+
+      __getPagelist();
+      __getRecommend();
       console.log("search",form)
     }
 
-    const recommend = (b, row) => {
-      let ids = '';
+    const recommend = (isRecommand, row) => {
+      let idList = '';
       if (row) {
-        ids = row.code;
+        idList = [ row.id ];
       } else {
-        ids = recommendData.selection.map(item => {
-          return item.code || "";
-        }).join(",");
+        idList = recommendData.selection.map(item => {
+          return item.id || "";
+        });
       }
-      console.log("recommend", b, ids)
+
+      setRecommand({isRecommand, idList})
+      .then(({code, msg}) => {
+        if ( code == "SYS0000") {
+          Message({
+            type: 'success',
+            message: (isRecommand?'网站推荐':'取消推荐')+'成功！'
+          })
+        } else {
+          Message({
+            type: 'error',
+            message: msg
+          })
+        }
+        __getPagelist();
+      })
     }
 
     const selectionRecommend = (selection) => {
@@ -161,17 +183,46 @@ export default defineComponent({
 
     const exportRecommend = () => {
       // 导出数据
+      // let link  = document.createElement('a');
+      // link.href = `${process.env.VUE_APP_API_BASE_URL}//production-config/download/product-line/excel`
+      // link.click();
     }
-    
+
+    const __getRecommend = () => {
+      return webRecommend(form)
+      .then(({ data }) => {
+        recommendData.detail = data || {};
+      })
+    }
+
+    const __getPagelist = () => {
+      return getPagelist(form)
+      .then(({ data }) => {
+        console.log("data", data)
+        recommendData.data = data.records || [];
+      })
+    }
+
+    const __getLeafNode = (aIds = []) => {
+      let result = [];
+      aIds.forEach((a) => {
+        result.push(a[a.length-1])
+      })      
+      return result;
+    }
+
+    __getPagelist();
     __getRecommend();
+    
 
     return {
-      ...toRefs(recommendData),
       form,
+      orgIds,
       search,
       recommend,
       exportRecommend,
-      selectionRecommend
+      selectionRecommend,
+      ...toRefs(recommendData)
     }
   },
 })

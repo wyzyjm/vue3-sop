@@ -70,6 +70,8 @@ return {
         reason: '', // 原因
         serviceCode: '', // 服务单号
         serviceId: '', // 服务商ID
+        serviceMainInstanceCode: '', // 实例号
+        orderConsumeInfo: [], // 消耗单品
     }
 };
 },
@@ -86,6 +88,12 @@ methods: {
                 return false
             }
         }
+        if (this.form.orderConsumeInfo.length > 0) {
+            this.form.orderConsumeInfo = JSON.stringify(this.form.orderConsumeInfo)
+        } else {
+            this.form.orderConsumeInfo = ''
+        }
+        this.form.orderConsumeInfo
         getServicesBtn(this.form).then(res => {
             if (res.status == 200) {
                 this.$message.success(res.msg)
@@ -94,6 +102,12 @@ methods: {
         }) 
     },
     handleShowBtn (btn, idx) {
+        // 直接跳转
+        if (btn.openWindow) {
+            this.openWindow(btn.value)
+            return false
+        }
+
         if (this.curBtn.value == btn.value) {
             // 防止重复点击
             console.log('dbclick')
@@ -104,6 +118,15 @@ methods: {
         this.form.buttonType = btn.value
         this.form.serviceId = this.$route.params.id
         this.dragDialogVisible = true
+    },
+    openWindow (value) {
+        getServicesBtn({serviceCode: this.code, buttonType: value}).then(res => {
+            window.open(res.data)
+            // if (res.status == 200) {
+            //     this.$message.success(res.msg)
+            //     this.dragDialogVisible = false
+            // }
+        }) 
     },
     // 获得焦点取消拖动
     handleFocus () {
@@ -186,6 +209,8 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
     .drag_box{
         width:500px;
         height:auto;
+        max-height:500px;
+        overflow-y:scroll;
         background:#fff;
         position:fixed;
         left:calc(50% - 250px);

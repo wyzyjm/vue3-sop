@@ -6,11 +6,9 @@
     :options="options"
     @change="handleChange"
     placeholder="请选择组织树"
-    :props="{label: 'orgName', value:'orgId', expandTrigger: 'hover', }"></el-cascader>
-    <el-select :disabled="selDisable" style="margin-left:20px;" placeholder="请选择员工">
-        <el-option v-for="(item, idx) in selectList" :key="idx"
-
-        ></el-option>
+    :props="{label: 'orgName', value:'orgId', expandTrigger: 'hover'}"></el-cascader>
+    <el-select :disabled="selDisable" style="margin-left:20px;" placeholder="请选择员工" v-model="form.empId">
+        <el-option v-for="(item, idx) in selectList" :key="idx" :value="item.employeeId" :label="item.employeeName"></el-option>
     </el-select>
 </div>
 </template>
@@ -20,16 +18,19 @@
 //例如：import 《组件名称》 from '《组件路径》';
 import getServicesBtn from '@/api/1835-post-service-order-sevice-button-operate'
 import getTreeList from '@/api/1420-get-common-service-org-list-tree'
+import getStaffList from '@/api/2243-get-common-service-employee-list-{orgid}-{sourcetype}'
+
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {},
-props: ['code', 'buttonType'],
+props: ['code', 'buttonType', 'form'],
 data() {
 //这里存放数据
 return {
     value: [],
     options: [],
     selectList: [],
+    
     selDisable: true
 };
 },
@@ -54,6 +55,11 @@ methods: {
     },
     handleChange (e) {
         console.log(e, 999)
+        getStaffList({orgId: e[e.length - 1], sourceType: 1}).then(res => {
+            console.log(res.data)
+            this.selDisable = false
+            this.selectList = res.data || []
+        })
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）

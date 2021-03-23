@@ -11,7 +11,7 @@
         <div
           :class="{
             item: true,
-            finished: (item.stateLine == 1|| item.stateLine == 2),
+            finished: (item.nodeStatus == 1|| item.nodeStatus == 3),
             first: i===0
           }">
             <el-popover 
@@ -25,18 +25,18 @@
 
             <span class="node-detail">
               <span class="node-name">{{item.nodeName}}</span>
-              <span class="executor mt10">{{item.executor}}</span>
-              <span class="completeTime mt5">{{item.completeTime}}</span>
+              <span class="executor mt10">{{item.nodeCode}}</span>
+              <span class="completeTime mt5">{{item.nodeEndTime}}</span>
             </span>
         </div>
         <template v-if="list.length != i+1">
-          <div class="tip-con" v-if="item.stateLine == 2">
+          <div class="tip-con" v-if="item.nodeStatus == 1">
             <div class="tip-title">{{list[i+1].nodeName}}</div>
           </div>
           <div
             :class="{
               item: true,
-              finished: item.stateLine == 1
+              finished: item.nodeStatus == 3
             }">
           </div>
         </template>

@@ -1,6 +1,6 @@
 export default [
     {
-        path: 'service',
+        path: 'service/:custId/:orderCode',
         meta:{
             title:'服务单流程'
         },

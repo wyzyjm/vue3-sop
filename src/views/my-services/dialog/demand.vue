@@ -4,15 +4,16 @@
     <p class="el-popover__title">消耗单品
         <span style="float:right">本次消耗/总量</span>
     </p>
-    <el-row class="row-box">
-        <el-col :span="4">banner设计</el-col>
-        <el-col :span="13"><el-progress :percentage="50"></el-progress></el-col>
+    <el-row class="row-box" v-for="(item, idx) in form.orderConsumeInfo" :key="idx">
+        <el-col :span="6" class="omit1">{{item.accountText}}</el-col>
+        <el-col :span="11"><el-progress :percentage="(item.consumeNum / item.totalNum).toFixed(2) * 100"></el-progress></el-col>
         <el-col :span="7" style="" class="col_box">
-            <span>100</span>
-            <el-input type="number" size="mini" class="input"></el-input>
+            <span>{{item.totalNum}}</span>
+            <el-input size="mini" class="input" v-model="item.consumeNum"
+            @blur="checkNum(item, idx)"></el-input>
         </el-col>
     </el-row>
-    <el-row class="row-box">
+    <!-- <el-row class="row-box">
         <el-col :span="4">内容录入</el-col>
         <el-col :span="13"><el-progress :percentage="50"></el-progress></el-col>
         <el-col :span="7" style="" class="col_box">
@@ -35,22 +36,20 @@
             <span>100</span>
             <el-input type="number" size="mini" class="input"></el-input>
         </el-col>
-    </el-row>
+    </el-row> -->
 
     <p class="el-popover__title">服务需求</p>
-    <el-form :model="form" size="small" ref="form" label-width="100px" :rules="rules">
-        <el-form-item label="服务主体：" prop="reason" >
-            <el-select>
-                <!-- <el-option></el-option> -->
-            </el-select>
+    <el-form :model="form" size="small" ref="form" label-width="100px">
+        <el-form-item label="服务主体：" prop="serviceMainInstanceCode" >
+            <el-input v-model="form.serviceMainInstanceCode" readonly></el-input>
         </el-form-item>
-        <el-form-item label="需求说明：" prop="reason" >
+        <el-form-item label="需求说明：" prop="demandContent" >
             <el-input
             type="textarea"
             :rows="4"
             maxlength="999"
             placeholder="设计要素,主色调,参考网站,说明"
-            v-model="form.reason">
+            v-model="form.demandContent">
             </el-input>
         </el-form-item>
         <el-form-item>
@@ -82,7 +81,8 @@ components: {
 data() {
 //这里存放数据
 return {
-
+    // unitList: [],
+    // form: {}
 };
 },
 //监听属性 类似于data概念
@@ -91,14 +91,29 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-
+    checkNum(row, idx) {
+        if (row.consumeNum > row.totalNum) {
+            this.$message.warning('消耗数量不能大于总量')
+            this.form.orderConsumeInfo[idx].consumeNum = row.totalNum
+            return false
+        }
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
+    
     // 单品消耗
-    getServicesBtn({serviceCode: this.code, buttonType: 'unit_consumption'}).then(res => {
-
+    getServicesBtn({serviceCode: this.code, buttonType: 'demand_see'}).then(res => {
+        Object.keys(res.data).forEach(key => {
+            this.form[key] = res.data[key]
+            if (key == 'annexList' && !res.data[key]) {
+                this.form[key] = []
+            }
+        })
+        // this.form.buttonType = 'demand_confirm'
+        // this.form = res.data
     }) 
+    console.log(this.form)
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
