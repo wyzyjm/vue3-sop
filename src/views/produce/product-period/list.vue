@@ -50,7 +50,7 @@ export default defineComponent({
           params.serviceProductCreateTimeTo = params.date[1]
           delete params.date
         } catch (err) {
-          console.log(err)
+          // console.log(err)
         }
         return getTableData(params)
       },
