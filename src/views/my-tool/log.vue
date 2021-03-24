@@ -36,7 +36,7 @@ export default defineComponent({
               </span>
             )
           },
-          width: '180px',
+          width: '220px',
         },
         {
           label: '操作人',
