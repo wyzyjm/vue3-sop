@@ -88,7 +88,6 @@ methods: {
 created() {
     
     setTimeout(() => {
-        console.log(321)
         this.showList = []
         let annexListArr = []
         if (this.form.annexList.length > 0) {

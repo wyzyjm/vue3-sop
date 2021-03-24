@@ -34,7 +34,7 @@ return {
         label: 'orgName'
     },
     lazyload: false,
-    deptId: '', // 部门ID
+    orgId: '', // 部门ID
     empId: '', // 员工id
 };
 },
@@ -57,7 +57,7 @@ methods: {
         if (!data.children || data.children.length == 0) {
             this.lazyload = true
             // this.loadNode()
-            // this.deptId = data.orgId
+            // this.orgId = data.orgId
         }
     },
     cancel () {

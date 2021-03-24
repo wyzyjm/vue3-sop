@@ -32,6 +32,7 @@
 <script>
 import { defineComponent, reactive } from '@vue/composition-api'
 import getList from '@/api/1700-get-service-order-sevice-order-info-list'
+import getExpandList from '@/api/1829-get-service-order-sevice-order-info-get-service-product-{serviceorderid}'
 import useOptions from './utils/query'
 import useDialog from '@/hooks/use-dialog'
 
@@ -59,6 +60,29 @@ export default defineComponent({
               path: `/my-services/detail/${row.id}/${row.serviceCode}`
           })
     }
+    const expandData = {
+        data: [],
+        cols: [
+            {
+                label: '服务产品',
+                prop: 'name',
+            },
+            {
+                label: '类型',
+                prop: 'type',
+            },
+            {
+                label: '数量',
+                prop: 'type',
+            }
+        ]
+    }
+    const getExpandListFun = (obj) => {
+           return function () {
+               return getExpandList(obj)
+           }
+           
+    }
     const table = reactive({
       checked: [],
       data: getList,
@@ -71,7 +95,7 @@ export default defineComponent({
         {
           type: 'expand',
           prop: ({ row }) => (
-              9999888
+            <s-simple-table uid={row.id} border data={getExpandListFun({serviceOrderId: row.id})} cols={expandData.cols} ></s-simple-table>              
           ),
         },
         {

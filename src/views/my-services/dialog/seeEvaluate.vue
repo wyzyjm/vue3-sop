@@ -11,7 +11,7 @@
         show-score
         text-color="#ff9900">
         </el-rate>
-        <span class="score_style">得分：{{result.designScore}}</span>
+        <span class="score_style">得分：{{result.designScoreCount}}</span>
     </div>
     <div class="col_box">
         <span class="desc_style">服务能力</span>
@@ -22,7 +22,7 @@
         show-score
         text-color="#ff9900">
         </el-rate>
-        <span class="score_style">得分：{{result.serviceScore}}</span>
+        <span class="score_style">得分：{{result.serviceScoreCount}}</span>
     </div>
     <div class="col_box">
         <span class="desc_style">服务周期</span>
@@ -33,7 +33,7 @@
         show-score
         text-color="#ff9900">
         </el-rate>
-        <span class="score_style">得分： {{result.makeScore}}</span>
+        <span class="score_style">得分： {{result.makeScoreCount}}</span>
     </div>
     <div class="col_box" style="margin-bottom:16px;">
         <p class="desc_style" style="line-height:20px;color:#888;">客户评价： {{result.evaluateContent || '-----'}}</p>

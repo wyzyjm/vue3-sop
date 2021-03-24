@@ -5,9 +5,10 @@
     v-model="value"
     :options="options"
     @change="handleChange"
-    placeholder="请选择组织树"
+    placeholder="请选择团队"
     :props="{label: 'orgName', value:'orgId', expandTrigger: 'hover'}"></el-cascader>
-    <el-select :disabled="selDisable" style="margin-left:20px;" placeholder="请选择员工" v-model="form.empId">
+    <el-select :disabled="selDisable" style="margin-left:20px;" placeholder="请选择员工" v-model="form.empId"
+    v-if="!curBtn.isTerm">
         <el-option v-for="(item, idx) in selectList" :key="idx" :value="item.employeeId" :label="item.employeeName"></el-option>
     </el-select>
 </div>
@@ -23,7 +24,7 @@ import getStaffList from '@/api/2243-get-common-service-employee-list-{orgid}-{s
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {},
-props: ['code', 'buttonType', 'form'],
+props: ['code', 'buttonType', 'form', 'curBtn'],
 data() {
 //这里存放数据
 return {
@@ -54,12 +55,16 @@ methods: {
         return data;
     },
     handleChange (e) {
-        console.log(e, 999)
-        getStaffList({orgId: e[e.length - 1], sourceType: 1}).then(res => {
-            console.log(res.data)
-            this.selDisable = false
-            this.selectList = res.data || []
-        })
+        // console.log(e, 999)
+        this.form.orgId = e[e.length - 1]
+        // this.form.serviceId = 
+        if (!this.curBtn.isTerm) {
+            getStaffList({orgId: e[e.length - 1], sourceType: 1}).then(res => {
+                console.log(res.data)
+                this.selDisable = false
+                this.selectList = res.data || []
+            })  
+        }
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）

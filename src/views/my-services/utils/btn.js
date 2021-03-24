@@ -3,29 +3,34 @@ export const btns = {
             "operate_log": {
                 value: 'operate_log',
                 label: '操作日志',
-                fileName: 'log'
+                fileName: 'log',
+                hideSubmit: true,
             },
             "score_see": {
                 value: 'score_see',
                 label: '查看评分',
-                fileName: 'score'
+                fileName: 'score',
+                hideSubmit: true,
             },
             "evaluate_see": {
                 value: 'evaluate_see',
                 label: '查看评价',
                 fileName: 'seeEvaluate',
-                width: '400'
+                width: '400',
+                hideSubmit: true,
             },
             "demand_see": {
                 value: 'demand_see',
                 label: '查看需求',
                 fileName: 'demand',
-                hideTitle: true
+                hideTitle: true,
+                hideSubmit: true,
             },
             "web_preview": {
                 value: 'web_preview',
                 label: '网站预览',
-                fileName: 'webPreview'
+                fileName: 'webPreview',
+                hideSubmit: true,
             }
         },
         dynamicList: {
@@ -49,38 +54,58 @@ export const btns = {
             //     label: '上传',
             //     fileName:'upload'
             // },
-            "download": {
-                value: 'download',
-                label: '下载'
-            },
+            // "download": {
+            //     value: 'download',
+            //     label: '下载'
+            // },
             "assign_designers": {
                 value: 'assign_designers',
                 label: '分派设计师',
                 fileName: 'allot',
+                requiredParam: {
+                    vaild: 'empId',
+                    errorMsg: '请选择员工'
+                }
             },
             "assign_make": {
                 value: 'assign_make',
                 label: '分派制作员',
                 fileName: 'allot',
-                width: '400'
+                width: '400',
+                requiredParam: {
+                    vaild: 'empId',
+                    errorMsg: '请选择员工'
+                }
             },
             "assign_assistant": {
                 value: 'assign_assistant',
                 label: '分派助理',
                 fileName: 'allot',
-                width: '400'
+                width: '400',
+                requiredParam: {
+                    vaild: 'empId',
+                    errorMsg: '请选择员工'
+                }
             },
             "change_designers": {
                 value: 'change_designers',
                 label: '更换设计师',
                 fileName: 'allot',
-                width: '400'
+                width: '400',
+                requiredParam: {
+                    vaild: 'empId',
+                    errorMsg: '请选择员工'
+                }
             },
             "change_make": {
                 value: 'change_make',
                 label: '更换制作员',
                 fileName: 'allot',
-                width: '400'
+                width: '400',
+                requiredParam: {
+                    vaild: 'empId',
+                    errorMsg: '请选择员工'
+                }
             },
             "change_assistant": {
                 value: 'change_assistant',
@@ -92,25 +117,45 @@ export const btns = {
                 value: 'change_liability',
                 label: '更换担责',
                 fileName: 'allot',
-                width: '400'
+                width: '400',
+                isTerm: true,
+                requiredParam: {
+                    vaild: 'orgId',
+                    errorMsg: '请选择团队'
+                }
             },
             "to_designers": {
                 value: 'to_designers',
                 label: '转单设计',
                 fileName: 'allot',
-                width: '400'
+                width: '400',
+                isTerm: true,
+                requiredParam: {
+                    vaild: 'orgId',
+                    errorMsg: '请选择团队'
+                }
             },
             "to_make": {
                 value: 'to_make',
                 label: '转单制作',
                 fileName: 'allot',
-                width: '400'
+                width: '400',
+                isTerm: true,
+                requiredParam: {
+                    vaild: 'orgId',
+                    errorMsg: '请选择团队'
+                }
             },
             "to_assistant": {
                 value: 'to_assistant',
                 label: '转单助理',
                 fileName: 'allot',
-                width: '400'
+                width: '400',
+                isTerm: true,
+                requiredParam: {
+                    vaild: 'orgId',
+                    errorMsg: '请选择团队'
+                } 
             },
             "demand_write": {
                 value: 'demand_write',
@@ -173,7 +218,10 @@ export const btns = {
                 value: 'quality_back',
                 label: '质检打回',
                 fileName: 'editForm',
-                requiredParam: 'reason'
+                requiredParam: {
+                    vaild: 'reason',
+                    errorMsg: '请输入原因'
+                }
             },
             "quality_remark": {
                 value: 'quality_remark',
