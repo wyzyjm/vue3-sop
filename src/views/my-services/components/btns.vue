@@ -7,17 +7,19 @@
     <div v-bind:id="id" 
     @mousedown="mousedown" 
     class="drag_box" 
-    v-show="dragDialogVisible">
+    v-if="dragDialogVisible">
         <!--标题-->
         <p class="el-popover__title" v-if="!curBtn.hideTitle">{{curBtn.label}}</p>
         <!--业务展示-->
         <component :is="curBtn.fileName" 
         :code="code" 
+        :curBtn="curBtn"
         :buttonType="curBtn.value"
         :form="form"></component>
         <!--底部操作按钮-->
         <div style="text-align:center;margin-top:20px">
-            <el-button @click="submitForm(curBtn)" type="primary" size="small" :loading="btn.loading">确定</el-button>
+            <el-button @click="submitForm(curBtn)" type="primary" size="small" 
+            v-if="!curBtn.hideSubmit" :loading="curBtn.loading">确定</el-button>
             <!-- <el-button @click="$refs['dragForm'].resetFields()" size="small">重置</el-button> -->
             <el-button @click="closeDrag" type="danger" size="small">关闭</el-button>
         </div>
@@ -38,6 +40,7 @@ import editForm from '../dialog/editForm'
 import Upload from '../dialog/upload'
 import Demand from '../dialog/demand'
 import getServicesBtn from '@/api/1835-post-service-order-sevice-button-operate'
+import { cloneDeep } from 'lodash';
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {
@@ -64,7 +67,7 @@ return {
         buttonType: '', // 按钮类型
         configId: '', // 配置ID
         demandContent: '', // 需求
-        deptId: '', // 部门ID
+        orgId: '', // 部门ID
         empId: '', // 员工ID
         personScoreJson: '', // 评分结果
         reason: '', // 原因
@@ -83,24 +86,81 @@ watch: {},
 methods: {
     submitForm (data) {
         if (data.requiredParam) {
-            if (!this.form[data.requiredParam]) {
-                this.$message.error('请输入必填项')
+            if (!this.form[data.requiredParam.vaild]) {
+                this.$message.error(data.requiredParam.errorMsg)
                 return false
             }
         }
-        if (this.form.orderConsumeInfo.length > 0) {
-            this.form.orderConsumeInfo = JSON.stringify(this.form.orderConsumeInfo)
+        let cloneOrderConsumeInfo = cloneDeep(this.form.orderConsumeInfo)
+        // if (this.form.orderConsumeInfo.length > 0) {
+
+        //     this.form.orderConsumeInfo = JSON.stringify(this.form.orderConsumeInfo)
+        // } else {
+        //     this.form.orderConsumeInfo = ''
+        // }
+
+        // 填写需求特殊处理
+        if (this.form.buttonType == 'demand_write') {
+            console.log(321321)
+            getServicesBtn({
+                annexList: this.form.annexList,
+                buttonType: this.form.buttonType,
+                configId: this.form.configId,
+                demandContent: this.form.demandContent,
+                orgId: this.form.orgId,
+                empId: this.form.empId,
+                personScoreJson: this.form.personScoreJson,
+                reason: this.form.reason,
+                serviceCode: this.form.serviceCode,
+                serviceMainInstanceCode: this.form.serviceMainInstanceCode,
+                orderConsumeInfo: JSON.stringify(cloneOrderConsumeInfo)
+            }).then(res => {
+                if (res.status == 200) {
+                    this.$message.success(res.msg)
+                    this.dragDialogVisible = false
+                    this.form = {
+                        annexList: [], // 附件ID集合
+                        buttonType: '', // 按钮类型
+                        configId: '', // 配置ID
+                        demandContent: '', // 需求
+                        orgId: '', // 部门ID
+                        empId: '', // 员工ID
+                        personScoreJson: '', // 评分结果
+                        reason: '', // 原因
+                        serviceCode: '', // 服务单号
+                        serviceId: '', // 服务商ID
+                        serviceMainInstanceCode: '', // 实例号
+                        orderConsumeInfo: [], // 消耗单品
+                    }    
+                    // location.reload()
+                    this.$emit('reload', {})
+                }
+            }) 
         } else {
-            this.form.orderConsumeInfo = ''
+            getServicesBtn(this.form).then(res => {
+                this.form.orderConsumeInfo = cloneOrderConsumeInfo
+                if (res.status == 200) {
+                    this.$message.success(res.msg)
+                    this.dragDialogVisible = false
+                    this.form = {
+                        annexList: [], // 附件ID集合
+                        buttonType: '', // 按钮类型
+                        configId: '', // 配置ID
+                        demandContent: '', // 需求
+                        orgId: '', // 部门ID
+                        empId: '', // 员工ID
+                        personScoreJson: '', // 评分结果
+                        reason: '', // 原因
+                        serviceCode: '', // 服务单号
+                        serviceId: '', // 服务商ID
+                        serviceMainInstanceCode: '', // 实例号
+                        orderConsumeInfo: [], // 消耗单品
+                    }    
+                    // location.reload()
+                    this.$emit('reload', {})
+                }
+            }) 
         }
-        getServicesBtn(this.form).then(res => {
-            if (res.status == 200) {
-                this.$message.success(res.msg)
-                this.dragDialogVisible = false
-                // location.reload()
-                this.$emit('reload', {})
-            }
-        }) 
     },
     handleShowBtn (btn, idx) {
         // 直接跳转
@@ -182,29 +242,28 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-    Object.keys(btns.fixList).forEach(key => {
-        this.btn.push(btns.fixList[key])
-    })
+    // Object.keys(btns.fixList).forEach(key => {
+    //     this.btn.push(btns.fixList[key])
+    // })
     setTimeout(() => {
-        let btnArr = []
-        console.log(this.btnList, 3789217321)
-        if (this.btnList.length > 0) {
-            this.btnList.map(v => {
-                btnArr.push(v.buttonCode)
-            })
-        }
-        let mergeBtn = {...btns.dynamicList}
-        console.log(mergeBtn, 8321808)
-        // this.btn = 
-        console.log(this.btn, 999)
+        let mergeBtn = {...btns.fixList, ...btns.dynamicList}
         Object.keys(mergeBtn).forEach(key => {
-            btnArr.map(v => {
-                if (v == key) {
-                    this.btn.push(mergeBtn[key])
-                }
-            })
+            this.btn.push(mergeBtn[key])
         })
-        console.log(this.btn, 9999)
+        // let btnArr = []
+        // if (this.btnList.length > 0) {
+        //     this.btnList.map(v => {
+        //         btnArr.push(v.buttonCode)
+        //     })
+        // }
+        // let mergeBtn = {...btns.dynamicList}
+        // Object.keys(mergeBtn).forEach(key => {
+        //     btnArr.map(v => {
+        //         if (v == key) {
+        //             this.btn.push(mergeBtn[key])
+        //         }
+        //     })
+        // })
     }, 1000);
 
     // console.log(this.btn, 999)

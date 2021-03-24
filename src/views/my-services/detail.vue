@@ -22,13 +22,17 @@
                 <div class="item-col">
                     <div class="col-title">{{value}}：</div>
                     <div class="col-txt" v-if="key == 'linkmanMail' || key == 'linkmanName' || key == 'linkmanPhone'">
-                        {{servicesInfo['custLinkmanInfoList'][0] ? servicesInfo['custLinkmanInfoList'][0][key] : '------'}}
+                        <span v-if="servicesInfo.custLinkmanInfoList">
+                            {{servicesInfo['custLinkmanInfoList'].length > 0 ? servicesInfo['custLinkmanInfoList'][0][key] : '------'}}
+                        </span>
+                        
+                        
                     </div>
                     <div class="col-txt" v-else>{{servicesInfo[key] || '------'}}</div>
                 </div>
             </el-col>       
         </el-row>
-        <div style="width:calc(100% - 100px);margin:10px auto 20px;" v-if="servicesInfo['custLinkmanInfoList'].length > 1">
+        <div style="width:calc(100% - 100px);margin:10px auto 20px;" v-if="servicesInfo['custLinkmanInfoList'] && servicesInfo['custLinkmanInfoList'].length > 1">
                 <el-table :data="newArray" size="small" border>
                     <el-table-column
                     prop="linkmanName"
@@ -52,54 +56,10 @@
     <div class='module-box'>
         <div class="title-box">服务内容</div>
         <!-- <p class="clear"></p> -->
-        <div v-for="(item, idx) in servicesContent.serviceProductList" :key="idx">
-            <p style="margin:40px 0 10px 30px;font-size:14px;">{{item.name || '------'}}</p>
+         <!-- v-for="(item, idx) in servicesContent.serviceProductList" :key="item.id" -->
+        <div>
+            <p style="margin:40px 0 10px 30px;font-size:14px;">{{servicesContent.productTypeName || '------'}}</p>
             <el-row :gutter="20" class="row-box" style="margin:0 auto 25px; border-bottom:1px solid #ebebeb;padding-bottom:10px">
-                <el-col :span="8">
-                    <div class="item-col">
-                        <div class="col-title">购买版本：</div>
-                        <div class="col-txt">{{'------'}}</div>
-                    </div>
-                </el-col>    
-                <el-col :span="8">
-                    <div class="item-col">
-                        <div class="col-title">业务类型：</div>
-                        <div class="col-txt">{{'------'}}</div>
-                    </div>
-                </el-col>    
-                <el-col :span="8">
-                    <div class="item-col"></div>
-                </el-col>    
-                <el-col :span="8">
-                    <div class="item-col">
-                        <div class="col-title">购买套餐：</div>
-                        <div class="col-txt">{{'------'}}</div>
-                    </div>
-                </el-col>    
-                <el-col :span="8">
-                    <div class="item-col">
-                        <div class="col-title">购买功能：</div>
-                        <div class="col-txt">{{'------'}}</div>
-                    </div>
-                </el-col>    
-                <el-col :span="8">
-                    <div class="item-col"></div>
-                </el-col>  
-                <el-col :span="8">
-                    <div class="item-col">
-                        <div class="col-title">消耗单品：</div>
-                        <div class="col-txt">{{'------'}}</div>
-                    </div>
-                </el-col>    
-                <el-col :span="8">
-                    <div class="item-col">
-                        <div class="col-title">服务说明：</div>
-                        <div class="col-txt">{{'------'}}</div>
-                    </div>
-                </el-col> 
-                <el-col :span="8">
-                    <div class="item-col"></div>
-                </el-col>  
                 <el-col :span="8">
                     <div class="item-col">
                         <div class="col-title">产品实例号：</div>
@@ -117,9 +77,85 @@
                         <div class="col-title">文本序号：</div>
                         <div class="col-txt">{{servicesContent.contractTextCode || '------'}}</div>
                     </div>
+                </el-col> 
+                <el-col :span="8">
+                    <div class="item-col">
+                        <div class="col-title">购买版本：</div>
+                        <div class="col-txt">{{servicesContent.productVersionName || '------'}}</div>
+                    </div>
+                </el-col>    
+                <el-col :span="8">
+                    <div class="item-col">
+                        <div class="col-title">业务类型：</div>
+                        <div class="col-txt">{{servicesContent.businessTypeName || '------'}}</div>
+                    </div>
+                </el-col>    
+                <el-col :span="8">
+                    <div class="item-col">
+                        <div class="col-title">服务说明：</div>
+                        <div class="col-txt">{{servicesContent.productTypeName || '------'}}</div>
+                    </div>
+                </el-col>
+                <!-- <el-col :span="8">
+                    <div class="item-col"></div>
+                </el-col>     -->
+                <!-- <el-col :span="8">
+                    <div class="item-col">
+                        <div class="col-title">购买套餐：</div>
+                        <div class="col-txt">{{servicesContent.businessTypeName || '------'}}</div>
+                    </div>
+                </el-col>    
+                <el-col :span="8">
+                    <div class="item-col">
+                        <div class="col-title">购买功能：</div>
+                        <div class="col-txt">{{'------'}}</div>
+                    </div>
+                </el-col>    
+                <el-col :span="8">
+                    <div class="item-col"></div>
                 </el-col>  
+                <el-col :span="8">
+                    <div class="item-col">
+                        <div class="col-title">消耗单品：</div>
+                        <div class="col-txt">{{'------'}}</div>
+                    </div>
+                </el-col>    
+
+                <!-- <el-col :span="8">
+                    <div class="item-col"></div>
+                </el-col>   --> 
             </el-row>
         </div>
+
+        <div style="width:calc(100% - 100px);margin:10px auto 20px;">
+                <el-table :data="servicesContent.serviceProductList" size="small" border>
+                    <el-table-column
+                    prop="name"
+                    label="服务产品"
+                    :show-overflow-tooltip="true">
+                        <template scope="scope">
+                            <el-popover
+                                placement="top-start"
+                                width="200"
+                                trigger="hover"
+                                :content="scope.row.serviceContent">
+                                <span slot="reference">{{scope.row.name}}</span>
+                            </el-popover>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                    prop="type"
+                    label="类型"
+                    :show-overflow-tooltip="true">
+                    </el-table-column>
+                    <el-table-column
+                    prop="type"
+                    label="数量"
+                    :show-overflow-tooltip="true">
+                    </el-table-column>
+                </el-table>
+        </div>
+
         <p style="margin:40px 0 10px 30px;font-size:14px;" v-if="productFile.length > 0">生产资料</p>
         <div v-for="(item, idx) in productFile" :key="idx">
             <el-row :gutter="20" class="row-box" style="margin:0 auto 25px; border-bottom:1px solid #ebebeb;padding-bottom:10px">

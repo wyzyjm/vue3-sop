@@ -1,6 +1,6 @@
 <!-- 查看填写需求 -->
 <template>
-<div class=''>
+<div style="max-height:450px;overflow-y:scroll">
     <p class="el-popover__title">消耗单品
         <span style="float:right">本次消耗/总量</span>
     </p>
@@ -10,6 +10,7 @@
         <el-col :span="7" style="" class="col_box">
             <span>{{item.totalNum}}</span>
             <el-input size="mini" class="input" v-model="item.consumeNum"
+            :disabled="isSee"
             @blur="checkNum(item, idx)"></el-input>
         </el-col>
     </el-row>
@@ -45,6 +46,7 @@
         </el-form-item>
         <el-form-item label="需求说明：" prop="demandContent" >
             <el-input
+            :readonly="isSee"
             type="textarea"
             :rows="4"
             maxlength="999"
@@ -54,8 +56,11 @@
         </el-form-item>
         <el-form-item>
             <div style="margin-top:10px;">
-                {{form.annexList.length}}+++++3281382890
-                <ce-file :form="form" :data="{'code': 'annexList'}" size="small"></ce-file>
+                <ce-file :form="form" :data="{'code': 'annexList'}" size="small" v-if="!isSee"></ce-file>
+                <div v-else>
+                    <el-tag v-for="(file, idx) in form.annexList" :key="idx" @click="preview(file)">{{file.annexName}}</el-tag>
+                </div>
+                
             </div>
         </el-form-item>
         <!-- <el-form-item>
@@ -82,6 +87,7 @@ components: {
 data() {
 //这里存放数据
 return {
+    isSee: false
     // unitList: [],
     // form: {}
 };
@@ -94,16 +100,25 @@ watch: {
 //方法集合
 methods: {
     checkNum(row, idx) {
+        if (!row.consumeNum || row.consumeNum == '') {
+            row.consumeNum = 0
+        }
         if (row.consumeNum > row.totalNum) {
             this.$message.warning('消耗数量不能大于总量')
             this.form.orderConsumeInfo[idx].consumeNum = row.totalNum
             return false
         }
+    },
+    preview (file) {
+        window.open(file.annexShowUrl)
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-    // console.log( '显示321321')
+    // 查看需求
+    if (this.buttonType == 'demand_see') {
+        this.isSee = true
+    }
     // // 单品消耗
     getServicesBtn({serviceCode: this.code, buttonType: 'demand_see'}).then(res => {
         Object.keys(res.data).forEach(key => {
@@ -115,7 +130,7 @@ created() {
         // this.form.buttonType = 'demand_confirm'
         // this.form = res.data
     }) 
-    // console.log(this.form, this.form.annexList, 890890)
+
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
