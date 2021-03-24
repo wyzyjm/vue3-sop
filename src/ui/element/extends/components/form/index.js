@@ -84,6 +84,8 @@ export default {
 
 			if (Object.keys(res).length !== 0) {
 				await this.params.set(res)
+			} else {
+				await this.params.clear()
 			}
 			// 如果挂载到table下面，触发table下面相应的处理事件
 			if (this.TABLE_PROVIDE) {
