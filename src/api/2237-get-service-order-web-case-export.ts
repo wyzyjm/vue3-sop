@@ -1,7 +1,7 @@
 
 /**
  * 文档地址：http://10.12.52.224:3000/project/119/interface/api/2237
- * 生成日期：Wed Mar 24 2021 09:21:48 GMT+0800 (中国标准时间)
+ * 生成日期：Wed Mar 24 2021 10:38:31 GMT+0800 (中国标准时间)
  * 生成工具版本：ts-v0.0.2
  * 接口名称：导出
  * 创建人：付兵浩
@@ -15,8 +15,6 @@ export interface ReqQuery {
 }
 
 export interface ReqBody {
-  orgId?:any[]           /**选中的组织id集合，默认为null*/
-  serviceCode?:string    /**服务单code*/
 }
 
 interface _Params extends ReqQuery,ReqBody {}
