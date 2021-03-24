@@ -62,7 +62,7 @@ export default defineComponent({
         {
           showOverflowTooltip: true,
           label: '服务产品名称',
-          prop: 'serviceProductName	',
+          prop: 'serviceProductName'
         },
         {
           label: '服务产品编码',
