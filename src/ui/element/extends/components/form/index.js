@@ -78,7 +78,9 @@ export default {
 				this.TABLE_PROVIDE.formSearch(res)
 			}
 			const fn = this.getEventHandlerFunction('search')
-			return fn(res)
+			if (typeof fn === 'function') {
+				return fn(res)
+			}
 		},
 		reset() {
 			this.params.clear()
