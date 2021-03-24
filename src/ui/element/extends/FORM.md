@@ -10,7 +10,7 @@
 
 <br />
 
-## data example
+## example
 ### 1、基本用法
 ```html
 
@@ -42,6 +42,7 @@
         <s-button run="form.clear">清空</s-button>
 
         <!-- 普通click -->
+        <!-- 如果handleClick返回promise对象，会自动加载loading状态，无需手动设置 -->
         <s-button @click="handleClick">点击</s-button>
 
 
@@ -62,9 +63,7 @@ export default {
 
 
     const handleClick=()=>{
-        // 业务代码
         ...
-        //如果返回promise对象，会自动加载loading状态，无需手动设置
         return request()
     }
 
