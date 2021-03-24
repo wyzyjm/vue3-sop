@@ -68,7 +68,9 @@ export default {
 		async submit() {
 			const res = await this.getParams()
 			const fn = this.getEventHandlerFunction('submit')
-			return fn(res)
+			if (typeof fn === 'function') {
+				return fn(res)
+			}
 		},
 		async search() {
 			const res = await this.getParams()
