@@ -15,7 +15,7 @@ export interface ReqQuery {
 }
 
 export interface ReqBody {
-  orgId?:any[]           /**选中的组织id集合，默认为null*/
+  orgId?:string           /**选中的组织id集合，默认为null*/
   serviceCode?:string    /**服务单code*/
 }
 
