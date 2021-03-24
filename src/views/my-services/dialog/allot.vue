@@ -7,10 +7,14 @@
     ref="refSubCat"
     @change="handleChange"
     placeholder="请选择团队"
-    :props="{label: 'orgName', value:'orgId', expandTrigger: 'hover'}"></el-cascader>
+    :props="{label: 'orgName', value:'orgId', expandTrigger: 'hover'}" v-if="buttonType == 'change_liability'"></el-cascader>
     <el-select :disabled="selDisable" style="margin-left:20px;" placeholder="请选择员工" v-model="form.empId"
-    v-if="!curBtn.isTerm">
+    v-if="buttonType != 'change_liability' && !term">
         <el-option v-for="(item, idx) in selectList" :key="idx" :value="item.employeeId" :label="item.employeeName"></el-option>
+    </el-select>
+    <el-select :disabled="selDisable" style="margin-left:20px;" placeholder="请选择组织" v-model="form.orgId" v-if="term"
+    @change="selectChange">
+        <el-option v-for="(item, idx) in selectList" :key="idx" :value="item.orgId" :label="item.orgName"></el-option>
     </el-select>
 </div>
 </template>
@@ -33,7 +37,8 @@ return {
     options: [],
     selectList: [],
     
-    selDisable: true
+    selDisable: false,
+    term: false
 };
 },
 //监听属性 类似于data概念
@@ -55,6 +60,15 @@ methods: {
         }
         return data;
     },
+    selectChange (e) {
+        this.selectList.map(v => {
+            if (v.orgId == e) {
+                this.form.serviceId = v.providerId
+            }
+        })
+        this.form.orgId = e
+        console.log(this.form.serviceId, 9999)
+    },
     handleChange (e) {
         let node = this.$refs["refSubCat"].getCheckedNodes()[0].data
         this.form.orgId = e[e.length - 1]
@@ -70,12 +84,38 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-    // 获取组织
-    getTreeList({ state: 1 }).then(res => {
-        console.log(res.data)
-        this.options = res.data
-        this.options = this.getTreeData(res.data || [], 'children')
-    })
+
+    if (this.buttonType == 'assign_designers' || this.buttonType == 'assign_make' || this.buttonType == 'assign_assistant'
+     || this.buttonType == 'change_designers' || this.buttonType == 'change_make' || this.buttonType == 'change_assistant') {
+        getServicesBtn({serviceCode: this.code, buttonType: 'get_assign_person'}).then(res => {
+            // 获取设计师列表
+            if (this.buttonType == 'assign_designers' || this.buttonType == 'change_designers') {
+                this.selectList = res.data.designList
+                //制作
+            } else if (this.buttonType == 'assign_make' || this.buttonType == 'change_make') {
+                this.selectList = res.data.makeList
+                // 助理
+            } else if (this.buttonType == 'assistantList' || this.buttonType == 'change_assistant') {
+                this.selectList = res.data.assistantList
+            } else {
+                this.selectList = res.data.qualityList
+            }
+        }) 
+    } else if (this.buttonType == 'to_designers' || this.buttonType == 'to_make' || this.buttonType == 'to_assistant') {
+        getServicesBtn({serviceCode: this.code, buttonType: 'get_to_org', resourceCode: this.buttonType}).then(res => {
+            // console.log(res, 999)
+            this.term = true
+            // this.form.serviceId = res
+            this.selectList = res.data
+        })
+    } else {
+        // 获取组织
+        getTreeList({ state: 1 }).then(res => {
+            console.log(res.data)
+            this.options = res.data
+            this.options = this.getTreeData(res.data || [], 'children')
+        }) 
+    }
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {

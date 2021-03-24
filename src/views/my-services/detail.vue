@@ -93,7 +93,16 @@
                 <el-col :span="8">
                     <div class="item-col">
                         <div class="col-title">服务说明：</div>
-                        <div class="col-txt">{{servicesContent.productTypeName || '------'}}</div>
+                        <div class="col-txt">
+                            <!-- {{servicesContent.demandContent || '------'}} -->
+                            <el-popover
+                                placement="top-start"
+                                width="200"
+                                trigger="hover"
+                                :content="servicesContent.demandContent">
+                                <span slot="reference">{{servicesContent.demandContent || '------'}}</span>
+                            </el-popover>
+                        </div>
                     </div>
                 </el-col>
                 <!-- <el-col :span="8">
@@ -149,14 +158,29 @@
                     :show-overflow-tooltip="true">
                     </el-table-column>
                     <el-table-column
-                    prop="type"
+                    prop="num"
                     label="数量"
                     :show-overflow-tooltip="true">
                     </el-table-column>
                 </el-table>
         </div>
 
-        <p style="margin:40px 0 10px 30px;font-size:14px;" v-if="productFile.length > 0">生产资料</p>
+        <div v-for="(v, k, i) in servicesFile" :key="i">
+            <p style="margin:40px 0 10px 30px;font-size:14px;">{{k}}</p>
+            <div>
+                <el-row :gutter="20" class="row-box" style="margin:0 auto 25px; border-bottom:1px solid #ebebeb;padding-bottom:10px">
+                    <el-col :span="8" v-for="(item, idx) in v" :key="idx">
+                        <div class="item-col">
+                            <div class="col-title">生产资料{{idx + 1}}：</div>
+                            <div class="col-txt">
+                                <a :href="item.annexShowUrl" style="display:block;float:left;width:100px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{item.annexName}}</a>
+                                {{item.uploadTime}}</div>
+                        </div>
+                    </el-col>   
+                </el-row>
+            </div>
+        </div>
+        <!-- <p style="margin:40px 0 10px 30px;font-size:14px;" v-if="productFile.length > 0">生产资料</p>
         <div v-for="(item, idx) in productFile" :key="idx">
             <el-row :gutter="20" class="row-box" style="margin:0 auto 25px; border-bottom:1px solid #ebebeb;padding-bottom:10px">
                 <el-col :span="8">
@@ -168,8 +192,8 @@
                     </div>
                 </el-col>   
             </el-row>
-        </div>
-        <p style="margin:40px 0 10px 30px;font-size:14px;" v-if="designFile.length > 0">设计稿</p>
+        </div> -->
+        <!-- <p style="margin:40px 0 10px 30px;font-size:14px;" v-if="designFile.length > 0">设计稿</p>
         <div  v-for="(item, idx) in designFile" :key="idx">
             <el-row :gutter="20" class="row-box" style="margin:0 auto 25px;">
                 <el-col :span="8">
@@ -187,7 +211,7 @@
                     </div>
                 </el-col>    
             </el-row>
-        </div>
+        </div> -->
     </div>
 
 
@@ -350,7 +374,8 @@ return {
     servicesTeam: {},
     productFile: [],
     designFile: [],
-    btns: []
+    btns: [],
+    servicesFile: {}
 };
 },
 //监听属性 类似于data概念
@@ -379,8 +404,9 @@ methods: {
         // 服务内容
         getServicesContent({serviceOrderId: this.$route.params.id}).then(res => {
             this.servicesContent = res.data || {}
-            this.productFile = res.data.serviceAnnexList['1'] || []
-            this.designFile = res.data.serviceAnnexList['2'] || []
+            this.servicesFile = res.data.serviceAnnexList
+            // this.productFile = res.data.serviceAnnexList['0'] || []
+            // this.designFile = res.data.serviceAnnexList['1'] || []
         })
         // 服务团队
         getServicesTeam({serviceOrderId: this.$route.params.id}).then(res => {

@@ -73,7 +73,7 @@ export default defineComponent({
             },
             {
                 label: '数量',
-                prop: 'type',
+                prop: 'num',
             }
         ]
     }
@@ -95,7 +95,7 @@ export default defineComponent({
         {
           type: 'expand',
           prop: ({ row }) => (
-            <s-simple-table uid={row.id} border data={getExpandListFun({serviceOrderId: row.id})} cols={expandData.cols} ></s-simple-table>              
+            <s-simple-table uid={row.id} page={false} border data={getExpandListFun({serviceOrderId: row.id})} cols={expandData.cols} ></s-simple-table>              
           ),
         },
         {
@@ -190,10 +190,10 @@ export default defineComponent({
         //   prop: 'createTime',
             prop: ({ row }) => {
                 let tableData = [
-                    {label: '分派服务单', date: row.createTimeStart || '----'},
-                    {label: '设计确认', date: row.publishTimeStart || '----'},
-                    {label: '验收网站', date: row.createTimeEnd || '----'},
-                    {label: '网站发布', date: row.publishTimeEnd || '----'},
+                    {label: '分派服务单', date: row.assignTime || '----'},
+                    {label: '设计确认', date: row.demandConfirmTime || '----'},
+                    {label: '验收网站', date: row.custAcceptTime || '----'},
+                    {label: '网站发布', date: row.orderPushTime || '----'},
                 ]
                 return [
                     <el-popover
