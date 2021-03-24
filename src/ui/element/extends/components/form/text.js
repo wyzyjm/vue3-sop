@@ -54,8 +54,6 @@ export default {
       }
     }, [h('div', {
       class: 'ell'
-    }, content)]) : h(this.tag, {
-      class: 'g9'
-    }, content)
+    }, content)]) : h(this.tag, null, content)
   },
 }
