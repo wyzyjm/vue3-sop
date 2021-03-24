@@ -24,7 +24,7 @@ export default defineComponent({
         {
           showOverflowTooltip: true,
           label: '操作类型',
-          prop: ({ row }) => {
+          prop: ({ row}) => {
             return (
               <span>
                 <span
@@ -88,6 +88,9 @@ export default defineComponent({
   .red {
     color: #f04134;
     border-color: #f04134;
+    .dot{
+        background-color: #f04134;
+    }
   }
   .dot,
   .ring {
@@ -95,9 +98,9 @@ export default defineComponent({
     vertical-align: middle;
     width: 8px;
     height: 8px;
-    background: #0dac5d;
     border-radius: 50%;
     margin-right: 10px;
+    background: #0dac5d;
   }
   .ring {
     background: #fff;

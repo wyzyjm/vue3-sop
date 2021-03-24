@@ -4,6 +4,7 @@
       <s-form-item label="组织名称" :rules="['required']" prop="orgName" />
       <s-form-item label="组织编码" :rules="['required']" v-if="isEdit" component="s-text" :content="form.orgId" prop="orgId" />
       <s-form-item label="组织编码" v-else :rules="['required']" prop="orgId" />
+      <s-form-item label="组织类型" :rules="['required']" prop="orgType" component="s-group" :data="types" tag="el-radio-group" />
       <s-form-item label="状态" :rules="['required:number']" prop="status" component="s-group" :data="options" tag="el-radio-group" />
       <s-form-item label="描述" type="textarea" prop="remark" />
       <s-form-item>
@@ -19,6 +20,7 @@ import _save from '@/api/1316-post-frontapi-service-provider-org-add'
 import _update from '@/api/1322-post--frontapi-service-provider-org-update'
 import useState from '@/hooks/use-state/disable-state'
 import { Message } from 'element-ui'
+import useOptions from '../hooks/use-options'
 export default defineComponent({
   props: {
     isEdit: {
@@ -32,6 +34,7 @@ export default defineComponent({
     let form = reactive({
       orgName: '',
       orgId: '',
+      orgType:'',
       remark: '',
       status: 1,
     })
@@ -40,6 +43,7 @@ export default defineComponent({
       form.orgName = data.orgName
       form.remark = data.remark
       form.status = data.status
+      form.orgType = data.orgType
       form.orgId = data.orgId
     }
 
@@ -62,11 +66,13 @@ export default defineComponent({
     }
 
     const { options } = useState()
+    const types=useOptions()
 
     return {
       save,
       form,
       options,
+      types
     }
   },
 })

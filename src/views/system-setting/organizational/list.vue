@@ -4,7 +4,7 @@
     <s-dialog v-bind="dialog2" @close="dialog2.close" @updateTable="handleSearch(form)" />
 
     <s-form class="custom-ui-search-form" slot="form" :model="form" @search="handleSearch" inline>
-      <s-form-item label="服务商名称" prop="providerId">
+      <s-form-item label="服务商名称" prop="providerId" :rules="['required:number']">
         <el-select v-model="form.providerId" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="search.remoteMethod" :loading="search.loading">
           <el-option v-for="item in search.options" :key="item.id" :label="item.basicName" :value="item.id">
           </el-option>
@@ -24,6 +24,11 @@
         <el-table-column prop="orgName" showOverflowTooltip label="组织名称" width="180">
         </el-table-column>
         <el-table-column prop="orgId" showOverflowTooltip label="组织编码" width="180">
+        </el-table-column>
+        <el-table-column prop="orgType" showOverflowTooltip label="组织类型" width="180">
+          <template slot-scope="scope">
+            <s-text :options="types" :content="scope.row.orgType" />
+          </template>
         </el-table-column>
         <el-table-column prop="status" width="140px" label="状态">
           <template slot-scope="scope">
@@ -54,6 +59,7 @@ import useState from '@/hooks/use-state/disable-state'
 import { Message } from 'element-ui'
 import _setState from '@/api/1318-get-frontapi-service-provider-org-change-status'
 import Sortable from 'sortablejs'
+import useOptions from './hooks/use-options'
 
 import _move from '@/api/1324-get-frontapi-service-provider-org-move-org'
 
@@ -99,13 +105,10 @@ export default defineComponent({
       remoteMethod(query) {
         if (query !== '') {
           search.loading = true
-          setTimeout(() => {
+          _search({ name: query }).then((response) => {
             search.loading = false
-
-            _search({ name: query }).then((response) => {
-              search.options = response.data
-            })
-          }, 200)
+            search.options = response.data
+          })
         } else {
           search.options = []
         }
@@ -128,21 +131,7 @@ export default defineComponent({
       })
     }
 
-    const cacheProciderId = ref('')
-
     const handleSearch = (form) => {
-      if (form.providerId === '' && cacheProciderId === '') {
-        Message({
-          type: 'error',
-          message: '请选择一个服务商进行查询',
-        })
-        return
-      }
-      if (cacheProciderId.value) {
-        form.providerId = cacheProciderId.value
-      } else {
-        cacheProciderId.value = form.providerId
-      }
       table.loading = true
       _getTableData(form).then((response) => {
         table.loading = false
@@ -195,8 +184,10 @@ export default defineComponent({
     const edit = (row) => {
       dialog.open({ data: row, isEdit: true })
     }
+    const types = useOptions()
 
     return {
+      types,
       options,
       dialog,
       dialog2,
