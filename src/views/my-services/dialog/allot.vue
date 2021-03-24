@@ -4,6 +4,7 @@
   <el-cascader
     v-model="value"
     :options="options"
+    ref="refSubCat"
     @change="handleChange"
     placeholder="请选择团队"
     :props="{label: 'orgName', value:'orgId', expandTrigger: 'hover'}"></el-cascader>
@@ -55,11 +56,11 @@ methods: {
         return data;
     },
     handleChange (e) {
-        // console.log(e, 999)
+        let node = this.$refs["refSubCat"].getCheckedNodes()[0].data
         this.form.orgId = e[e.length - 1]
-        // this.form.serviceId = 
+        this.form.serviceId = node.sourceId
         if (!this.curBtn.isTerm) {
-            getStaffList({orgId: e[e.length - 1], sourceType: 1}).then(res => {
+            getStaffList({orgId: e[e.length - 1], sourceType: node.sourceType}).then(res => {
                 console.log(res.data)
                 this.selDisable = false
                 this.selectList = res.data || []
