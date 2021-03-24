@@ -20,7 +20,7 @@
     <!-- 下拉框 -->
     <s-form-item label="订单状态" prop="status" component="s-group" :data="options" />
     <!-- 多/单选 -->
-    <s-form-item label="订单状态" prop="status" component="s-group" :data="options"  type="checkbox" />
+    <s-form-item label="订单状态" prop="status" component="s-group" :data="options"  tag="checkbox" />
     <!-- 快捷校验 （目前支持 required,email,mobile） -->
     <s-form-item label="订单状态" :rules="['required:number','email']" prop="status" component="s-group" :data="options" />
     <!-- 组合校验 -->
@@ -74,5 +74,49 @@ export default {
 
 ```
 
+</br>
 
+# s-button 说明文档
+
+
+## attributes
+
+| 参数	 | 说明 | 类型	 | 可选值 | 默认值 |
+| :-----| :---- | :---- | :---- | :---- |
+| run | 快捷命令 | string |form.submit/form.search/form.reset/form.clear |- |
+| confirm | 提示信息（会在点击按钮的时候弹出提示，确定后执行click事件） | string |- |- |
+
+
+</br>
+</br>
+
+# s-group 说明文档
+
+
+## attributes
+
+| 参数	 | 说明 | 类型	 | 可选值 | 默认值 |
+| :-----| :---- | :---- | :---- | :---- |
+| tag | 要渲染元素 | string |所有全局能访问到的组件 |el-input |
+| data | 选项的数据（如下拉列表） | array/function/promise |- |- |
+| init | 是否在组件加载完成后加载数据 | boolen | true/false | true |
+| props | 手动指定label和value对应的字段（不指定会自动读取） | object | label/value |  {label:'label',value:'value'}  |
+
+</br>
+</br>
+
+# s-text 说明文档
+
+
+## attributes
+
+| 参数	 | 说明 | 类型	 | 可选值 | 默认值 |
+| :-----| :---- | :---- | :---- | :---- |
+| formatDate | 时间格式化 | string | yyyy/MM/dd hh:mm:ss | yyyy/MM/dd |
+| content | 要现实的数据字段 | string |- |- |
+| tag | 渲染的元素 | string | - | span |
+| tip | 鼠标移动上去的提示信息 | string | - | - |
+| emptyText | 数据为空时候的占位符 | string | - | -- |
+| options | 选项的数据（会通过content===value的方式匹配出对应的lable） | string | - | - |
+| props | 手动指定label和value对应的字段（不指定会自动读取） | object | label/value |  {label:'label',value:'value'}  |
 

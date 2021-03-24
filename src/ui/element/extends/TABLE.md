@@ -16,6 +16,15 @@
 
 <br />
 
+### 主动触发表格数据更新方法
+```javascript
+//单表格默认值
+ $store.commit('table/update')
+ 
+//通过uid单独更新某个表格，或者需要添加额外参数
+ $store.commit('table/update',{_uid:'',...params}) //uid不传使用默认0，params是额外参数，表单和分页的参数默认自动读取
+```
+
 ## data example
 ### 1、基本用法
 ```html
