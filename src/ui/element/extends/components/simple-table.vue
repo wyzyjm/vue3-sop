@@ -100,13 +100,6 @@ export default {
       this.total = total
     },
     parseData(params) {
-      // 去除空参数
-      Object.keys(params).forEach((v) => {
-        if (params[v] === '') {
-          params[v] = undefined
-        }
-      })
-
       if (typeof this.data === 'function') {
         this.tableIsLoading = true
         return this.data(params).then(

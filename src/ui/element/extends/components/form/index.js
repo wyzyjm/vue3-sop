@@ -63,7 +63,8 @@ export default {
 		},
 		async getParams() {
 			const valid = await this.$refs.form.validate()
-			return valid ? Promise.resolve(this.model) : Promise.reject(this.model)
+			const params = JSON.parse(JSON.stringify(this.model))
+			return valid ? Promise.resolve(params) : Promise.reject(params)
 		},
 		async submit() {
 			const res = await this.getParams()
@@ -74,7 +75,16 @@ export default {
 		},
 		async search() {
 			const res = await this.getParams()
-			await this.params.set(res)
+			// 去除空参数
+			Object.keys(res).forEach((v) => {
+				if (res[v] === '' || res[v] === undefined || res[v] === null) {
+					delete res[v]
+				}
+			})
+
+			if (Object.keys(res).length !== 0) {
+				await this.params.set(res)
+			}
 			// 如果挂载到table下面，触发table下面相应的处理事件
 			if (this.TABLE_PROVIDE) {
 				this.TABLE_PROVIDE.formSearch(res)
