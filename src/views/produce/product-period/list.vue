@@ -50,7 +50,7 @@ export default defineComponent({
           params.serviceProductCreateTimeTo = params.date[1]
           delete params.date
         } catch (err) {
-          console.log(err)
+          // console.log(err)
         }
         return getTableData(params)
       },
@@ -62,7 +62,7 @@ export default defineComponent({
         {
           showOverflowTooltip: true,
           label: '服务产品名称',
-          prop: 'serviceProductName	',
+          prop: 'serviceProductName'
         },
         {
           label: '服务产品编码',

@@ -26,7 +26,7 @@
               </div>
               <div class="r-step__content">
                 <template v-if="item.stageStatus">
-                  <user-flow :list="item.outsideShowNodeDTOList"></user-flow>
+                  <user-flow :list="item.outsideShowNodeDTOList" :orderCode="detail.orderCode"></user-flow>
                 </template>
               </div>
             </div>

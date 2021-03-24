@@ -78,6 +78,7 @@ export default {
           pageNum: 1,
         },
       },
+      mandatoryInit: false,
       tableData: [],
       tableIsLoading: false,
       total: undefined,
@@ -99,13 +100,6 @@ export default {
       this.total = total
     },
     parseData(params) {
-      // 去除空参数
-      Object.keys(params).forEach((v) => {
-        if (params[v] === '') {
-          params[v] = undefined
-        }
-      })
-
       if (typeof this.data === 'function') {
         this.tableIsLoading = true
         return this.data(params).then(
@@ -153,9 +147,11 @@ export default {
     },
     // 供查询表单调用
     formInit(params) {
+      this.mandatoryInit = true
       this.params.form = params
     },
     pageInit(params) {
+      this.mandatoryInit = true
       this.params.pagination = { ...this.params.pagination, ...params }
     },
     sizeChange(pageSize) {
@@ -171,6 +167,12 @@ export default {
     if (this.init) {
       setTimeout(() => {
         this.change()
+      })
+    }else{
+      setTimeout(() => {
+        if(this.mandatoryInit){
+          this.change()
+        }
       })
     }
   },

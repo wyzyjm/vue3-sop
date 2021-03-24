@@ -4,7 +4,6 @@
       <s-form-item label="组织名称" :rules="['required']" prop="orgName" />
       <s-form-item label="组织编码" :rules="['required']" v-if="isEdit" component="s-text" :content="form.orgId" prop="orgId" />
       <s-form-item label="组织编码" v-else :rules="['required']" prop="orgId" />
-
       <s-form-item label="状态" :rules="['required:number']" prop="status" component="s-group" :data="options" tag="el-radio-group" />
       <s-form-item label="描述" type="textarea" prop="remark" />
       <s-form-item>

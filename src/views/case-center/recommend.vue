@@ -146,7 +146,6 @@ export default defineComponent({
 
       __getPagelist();
       __getRecommend();
-      console.log("search",form)
     }
 
     const recommend = (isRecommand, row) => {
@@ -198,7 +197,6 @@ export default defineComponent({
     const __getPagelist = () => {
       return getPagelist(form)
       .then(({ data }) => {
-        console.log("data", data)
         recommendData.data = data.records || [];
       })
     }
