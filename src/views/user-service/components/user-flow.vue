@@ -4,15 +4,24 @@
       <div
         :class="{
           'wrap-item': true,
-          last: list.length == i+1
+          first: i===0
         }"
         v-for="(item,i) in list" 
         :key="i">
         <div
           :class="{
             item: true,
-            finished: (item.nodeStatus == 1|| item.nodeStatus == 3),
-            first: i===0
+            finished: (item.nodeStatus == 1|| item.nodeStatus == 3)
+          }">
+        </div>
+        <div class="tip-con" v-if="item.nodeStatus == 1">
+          <div class="tip-title">{{item.nodeName}}</div>
+        </div>
+        <div
+          :class="{
+            item: true,
+            finished: item.nodeStatus == 3,
+            last: list.length == i+1
           }">
             <el-popover 
               placement="top" 
@@ -29,43 +38,64 @@
               <span class="completeTime mt5">{{item.nodeEndTime}}</span>
             </span>
         </div>
-        <template v-if="list.length != i+1">
-          <div class="tip-con" v-if="item.nodeStatus == 1">
-            <div class="tip-title">{{list[i+1].nodeName}}</div>
-          </div>
-          <div
-            :class="{
-              item: true,
-              finished: item.nodeStatus == 3
-            }">
-          </div>
-        </template>
       </div>
     </div>
     <div class="service-desc">
-      <p class="desc-active">以下为设计师与您沟通后的服务需求，请您确认</p>
+      <p class="desc-active">{{currData.nodeShowTerm}}</p>
       <p>如有任何疑问，请电话或邮件联系您的专属设计师</p>
-      <s-button type="primary">确认需求</s-button>
+      {{JSON.stringify(currData)}}
+      <div class="desc-btn" v-if="currData.buttonList&&currData.buttonList.length">
+        <s-button 
+          type="primary" 
+          :disabled="o.buttonDisabled"
+          v-for="(o, i) in buttonList" 
+          :key="i">
+            {{o.buttonName}}
+        </s-button>
+      </div>
+      <div class="desc-explain">
+        <el-row type="flex">
+          <el-col :span="4">需求说明 ：</el-col>
+          <el-col :span="20">{{demandData.demandContent}}</el-col>
+        </el-row>
+      </div>
     </div>
   </div>
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import getDemand from '@/api/2315-get-service-order-interface-api-demand'
+// import request from '@/api/1100'
+// import request from '@/api/1100'
 // import request from '@/api/1100'
 export default defineComponent({
   props: {
-    activeId: {
-      type: Number,
-      required: 0
+    orderCode: {
+      type: String,
+      required: ''
     },
     list: {
       type: Array,
       required: []
     },
   },
-  setup({ list }) {
+  setup({ orderCode, list }) {
     let progressData = reactive({
-      visible: true
+      currData: {},
+      demandData: {}
+    })
+    
+    console.log("list", list)
+
+    list.forEach(element => {
+      if (element.nodeStatus == 1) {
+        progressData.currData = element;
+      }
+    });
+
+    getDemand({orderCode}).then(({ data }) => {
+      progressData.demandData = data || {};
+      console.log("res", data)
     })
 
     return {
@@ -80,7 +110,7 @@ export default defineComponent({
     .wrap-item {
       display: flex;
       flex: 1;
-      &.last {
+      &.first {
         flex: none;
         width: 12px;
         .item {
@@ -88,7 +118,11 @@ export default defineComponent({
           .node-detail {
             width: 100px;
             text-align: center;
+            transform: translate(-30%);
           }
+        }
+        .dot {
+          left: 0;
         }
       }
       .item {
@@ -98,29 +132,21 @@ export default defineComponent({
         &.finished {
           border-color: #18b398;
         }
-        &.first,
-        &.last {
-          .dot {
-            left: 0;
-          }
-          .node-detail {
-            transform: none;
-          }
-        }
         .dot {
           position: absolute;
           width: 12px;
           height: 12px;
           border-radius: 6px;
           background: #18b398;
-          left: -6px;
+          right: -6px;
           top: -6px;
+          z-index: 99;
         }
         .node-detail {
           color: #666666;
           display:inline-block;
           margin-top: 20px;
-          transform: translate(-50%);
+          transform: translate(50%);
           .executor,
           .completeTime {
             font-size: 12px;
@@ -163,11 +189,18 @@ export default defineComponent({
     font-size: 14px;
     p {
       margin: 0;
-      padding-bottom: 6px;
+      padding-bottom: 10px;
     }
     .desc-active {
       color: $sop-color-theme;
       font-weight: bold;
+    }
+    .desc-btn {
+      margin-bottom: 10px;
+    }
+    .desc-explain {
+      width: 100%;
+      margin-bottom: 10px;
     }
   }
 </style>
