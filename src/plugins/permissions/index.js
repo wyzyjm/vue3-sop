@@ -1,7 +1,8 @@
 import Vue from 'vue'
-import has from './has'
+import { hasPermissions, getResourceObject } from './funs'
 Vue.use({
     install(Vue) {
-        Vue.prototype.$hasPermissions = has
+        Vue.prototype.$hasPermissions = hasPermissions
+        Vue.prototype.$getResourceObject = getResourceObject
     }
 })

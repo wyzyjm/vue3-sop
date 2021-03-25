@@ -33,6 +33,9 @@ import useState from '@/hooks/use-state/disable-state'
 import useOptions from '../hooks/use-options'
 import { Message } from 'element-ui'
 import getTableData from '@/api/1392-get-common-service-resource-list-tree'
+import filterEmptyArray from '@/util/filter-empty-array'
+
+
 
 export default defineComponent({
   props: {
@@ -59,6 +62,7 @@ export default defineComponent({
     const parentList = ref([])
 
     getTableData().then((response) => {
+      filterEmptyArray(response.data)
       parentList.value = response.data
     })
 
