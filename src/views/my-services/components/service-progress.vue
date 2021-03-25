@@ -57,7 +57,7 @@ export default defineComponent({
       return list
     }
 
-    return { list: init(serviceOrderId), actived }
+    return { list: init(serviceOrderId), actived,init }
   },
 })
 </script>

@@ -3,7 +3,7 @@
 <div class='btns_box'>
     <el-button size="small" type="primary" style="margin-bottom:10px"
     @click="handleShowBtn(btn, idx)"
-    v-for="(btn, idx) in btn" :key="idx">{{btn.label}}</el-button>
+    v-for="(btn, idx) in filterButtons" :key="idx">{{btn.label}}</el-button>
     <div v-bind:id="id" 
     @mousedown="mousedown" 
     class="drag_box" 
@@ -79,7 +79,11 @@ return {
 };
 },
 //监听属性 类似于data概念
-computed: {},
+computed: {
+    filterButtons(){
+        return this.btn.filter(v=>this.$hasPermissions(v.value))
+    }
+},
 //监控data中的数据变化
 watch: {},
 //方法集合
@@ -161,7 +165,7 @@ methods: {
             }) 
         }
     },
-    handleShowBtn (btn, idx) {
+    handleShowBtn (btn) {
         // 直接跳转
         if (btn.openWindow) {
             this.openWindow(btn.value)

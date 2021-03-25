@@ -212,7 +212,8 @@ export default defineComponent({
 
     request().then((response) => {
       menu.subMenu = response.data.resource
-      root.$store.commit('user/setUserInfo', response.data.emp)
+      root.$store.commit('user/set', response.data.emp)
+      root.$store.commit('resource/set', response.data.resource)
     })
 
     const logout = () => {
@@ -240,7 +241,7 @@ export default defineComponent({
 .avatar {
   width: 24px;
   height: 24px;
-  line-height:24px;
+  line-height: 24px;
   text-align: center;
   border-radius: 50%;
   background: #fff;

@@ -6,7 +6,7 @@
         <div class="title-box">服务单进度</div>
         <p class="clear"></p>
         <div class="progress_box">
-            <ServiceProgress :serviceOrderId="$route.params.id"></ServiceProgress>
+            <ServiceProgress ref="progress" :serviceOrderId="$route.params.id"></ServiceProgress>
             <p class="mb40"></p>
             <btn :code="$route.params.code" @reload="reloadPage"
             :btnList="servicesInfo.buttonList"></btn>
@@ -130,7 +130,7 @@
                     </div>
                 </el-col>    
 
-                <!-- <el-col :span="8">
+                <el-col :span="8">
                     <div class="item-col"></div>
                 </el-col>   --> 
             </el-row>
@@ -412,6 +412,10 @@ methods: {
         getServicesTeam({serviceOrderId: this.$route.params.id}).then(res => {
             this.servicesTeam = res.data || {}
         })
+        
+       if(this.$refs.progress){
+           this.$refs.progress.init(this.$route.params.id)
+       }
     }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
@@ -420,6 +424,7 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
+    this.getApi()
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前

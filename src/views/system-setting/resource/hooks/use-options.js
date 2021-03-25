@@ -1,6 +1,5 @@
 import { reactive } from '@vue/composition-api'
 import getDropDownList from '@/api/1398-get-common-service-resource-drop-down-list'
-
 export default () => {
     if (getDropDownList.options) {
         return getDropDownList.options
