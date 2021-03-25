@@ -43,13 +43,13 @@
     <div class="service-desc">
       <p class="desc-active">{{currData.nodeShowTerm}}</p>
       <p>如有任何疑问，请电话或邮件联系您的专属设计师</p>
-      {{JSON.stringify(currData)}}
       <div class="desc-btn" v-if="currData.buttonList&&currData.buttonList.length">
         <s-button 
           type="primary" 
-          :disabled="o.buttonDisabled"
-          v-for="(o, i) in buttonList" 
-          :key="i">
+          v-for="(o, i) in currData.buttonList" 
+          :key="i"
+          :disabled="!!o.buttonDisabled"
+          @click="flowButton(o)">
             {{o.buttonName}}
         </s-button>
       </div>
@@ -64,6 +64,8 @@
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import axios from 'axios'
+import { Message } from 'element-ui'
 import getDemand from '@/api/2315-get-service-order-interface-api-demand'
 // import request from '@/api/1100'
 // import request from '@/api/1100'
@@ -79,26 +81,60 @@ export default defineComponent({
       required: []
     },
   },
-  setup({ orderCode, list }) {
+  setup({ orderCode, list }, { emit }) {
     let progressData = reactive({
       currData: {},
       demandData: {}
     })
-    
-    console.log("list", list)
 
-    list.forEach(element => {
-      if (element.nodeStatus == 1) {
-        progressData.currData = element;
-      }
-    });
+    let currStatu = list.find((v) => v.nodeStatus == 1)
+    if (!currStatu) {
+      currStatu = list[list.length-1];  
+    }
+
+    progressData.currData = currStatu;
 
     getDemand({orderCode}).then(({ data }) => {
       progressData.demandData = data || {};
-      console.log("res", data)
+      console.log("需求说明", data)
     })
 
+    const flowButton = (o) => {
+      switch(o.buttonType) {
+        case 1:
+          o.buttonUrl&&axios.request({
+            url: `${process.env.VUE_APP_API_BASE_URL}${o.buttonUrl}`,
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            data: {
+              orderCode
+            }
+          }).then(({ data }) => {
+            if (data.code == 'SYS0000') {
+              emit('update');
+              Message({
+                type: 'success',
+                message: '确认成功！',
+              })
+            } else {
+              Message({
+                type: 'error',
+                message: data.msg || ''
+              })
+            }
+          })
+          
+        break;
+        default:
+          console.error(o.nodeName+'按钮类型配置错误');
+        break;
+      }
+    }
+
     return {
+      flowButton,
       ...toRefs(progressData)
     }
   }

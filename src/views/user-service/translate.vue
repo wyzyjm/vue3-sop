@@ -26,7 +26,11 @@
               </div>
               <div class="r-step__content">
                 <template v-if="item.stageStatus">
-                  <user-flow :list="item.outsideShowNodeDTOList" :orderCode="detail.orderCode"></user-flow>
+                  <user-flow 
+                    :list="item.outsideShowNodeDTOList" 
+                    :orderCode="detail.orderCode" 
+                    @update="userFLowUpdate">
+                  </user-flow>
                 </template>
               </div>
             </div>
@@ -46,6 +50,12 @@ export default defineComponent({
     'user-flow': UserProgress
   },
   setup(props, { root }) {
+    const params = root.$route.params;
+    if (params.custId&&params.orderCode) {
+      sessionStorage.setItem("custId", params.custId);
+      sessionStorage.setItem("orderCode", params.orderCode)
+    }
+
     let translateData = reactive({
         detail: {},
         list: [
@@ -99,20 +109,25 @@ export default defineComponent({
       name: ''
     })
 
-    getDetail(root.$route.params)
-    .then(({data}) => {
-      translateData.detail = data || {};
-      translateData.list = data.showStageDTOList || [];
-      // console.log("res", data.showStageDTOList)
-    })
+    const __getDetail = () => {
+      getDetail({
+        custId: sessionStorage.getItem("custId"),
+        orderCode: sessionStorage.getItem("orderCode")
+      })
+      .then(({data}) => {
+        translateData.detail = data || {};
+        translateData.list = data.showStageDTOList || [];
+      })
+    }      
+    __getDetail();
 
-    const search = () => {
-      console.log("search")
+    const userFLowUpdate = () => {
+      __getDetail();
     }
 
     return {
       form,
-      search,
+      userFLowUpdate,
       ...toRefs(translateData)
     }
   },
