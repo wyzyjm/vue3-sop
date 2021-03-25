@@ -84,18 +84,18 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-
     if (this.buttonType == 'assign_designers' || this.buttonType == 'assign_make' || this.buttonType == 'assign_assistant'
      || this.buttonType == 'change_designers' || this.buttonType == 'change_make' || this.buttonType == 'change_assistant') {
         getServicesBtn({serviceCode: this.code, buttonType: 'get_assign_person'}).then(res => {
             // 获取设计师列表
+
             if (this.buttonType == 'assign_designers' || this.buttonType == 'change_designers') {
                 this.selectList = res.data.designList
                 //制作
             } else if (this.buttonType == 'assign_make' || this.buttonType == 'change_make') {
                 this.selectList = res.data.makeList
                 // 助理
-            } else if (this.buttonType == 'assistantList' || this.buttonType == 'change_assistant') {
+            } else if (this.buttonType == 'assign_assistant' || this.buttonType == 'change_assistant') {
                 this.selectList = res.data.assistantList
             } else {
                 this.selectList = res.data.qualityList
