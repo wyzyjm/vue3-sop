@@ -5,6 +5,7 @@ import store from './store'
 import './ui/element'
 import './hooks/composition-api'
 import './components'
+import './plugins/permissions'
 
 Vue.config.productionTip = false
 new Vue({
