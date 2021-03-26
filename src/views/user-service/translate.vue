@@ -23,12 +23,24 @@
               <div class="r-step__head">
                 <span>{{item.stageStatusName}}</span>
                 <b>{{item.stageName}}</b>
+                <el-link 
+                  type="primary" 
+                  v-if="item.stageStatus == 3"
+                  @click="seeDeatil(item)"
+                  :underline="false" >
+                    {{item.stepHidden?'收起详情':'展开详情'}}
+                </el-link>
               </div>
-              <div class="r-step__content">
+              <div 
+                :class="{
+                  'r-step__content': true,
+                  'r-step__content__hidden': item.stageStatus == 3&&!item.stepHidden
+                }">
                 <template v-if="item.stageStatus">
                   <user-flow 
                     :list="item.outsideShowNodeDTOList" 
                     :orderCode="detail.orderCode" 
+                    :type="item.stageType"
                     @update="userFLowUpdate">
                   </user-flow>
                 </template>
@@ -36,13 +48,12 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </template>
 <script>
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, reactive, toRefs, set } from '@vue/composition-api'
 import UserProgress from './components/user-flow'
 import getDetail from '@/api/2147-get-service-order-interface-api-process_detail-{custid}-{ordercode}'
 export default defineComponent({
@@ -125,8 +136,13 @@ export default defineComponent({
       __getDetail();
     }
 
+    const seeDeatil = (stage) => {
+      set(stage, 'stepHidden', !stage.stepHidden)
+    }
+
     return {
       form,
+      seeDeatil,
       userFLowUpdate,
       ...toRefs(translateData)
     }
@@ -211,11 +227,16 @@ export default defineComponent({
           }
           b {
             font-size: 14px;
+            margin-right: 15px;
           }
         }
         .r-step__content {
           color: $sop-color-6;
           padding: 30px 40px;
+          &.r-step__content__hidden {
+            height: 0;
+            opacity: 0;
+          }
         }
       }
       &.flow-setp-active {

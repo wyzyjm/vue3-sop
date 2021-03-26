@@ -34,7 +34,7 @@
 
             <span class="node-detail">
               <span class="node-name">{{item.nodeName}}</span>
-              <span class="executor mt10">{{item.nodeCode}}</span>
+              <!-- <span class="executor mt10">{{item.nodeCode}}</span> -->
               <span class="completeTime mt5">{{item.nodeEndTime}}</span>
             </span>
         </div>
@@ -54,24 +54,104 @@
         </s-button>
       </div>
       <div class="desc-explain">
-        <el-row type="flex">
-          <el-col :span="4">需求说明 ：</el-col>
-          <el-col :span="20">{{demandData.demandContent}}</el-col>
-        </el-row>
+        <div class="desc-explain-row" v-if="type == 'demand_stage'">
+          <span>需求说明 ：</span>
+          <p>{{demandData.demandContent || '--'}}</p>
+        </div>
+        <div class="desc-explain-row" v-if="type == 'demand_stage'&&demandData.annexFileShowUrl">
+          <span>需求资料 ：</span>
+          <p>
+            <el-link class="mr10" :href="demandData.annexFileShowUrl"  target="_blank" type="primary">
+              {{demandData.annexFileName}}
+              <i class="iconfont">&#xe646;</i>
+            </el-link>
+            {{demandData.uploadTime}}
+          </p>
+        </div>
+        <div class="desc-explain-row" v-if="type == 'demand_stage'&&demandData.orderConsumeInfo&&demandData.orderConsumeInfo.length">
+          <span>单品消耗 ：</span>
+          <p>
+            <el-table
+              :data="demandData.orderConsumeInfo"
+              style="width: 100%">
+              <el-table-column
+                prop="accountText"
+                label="名称">
+              </el-table-column>
+              <el-table-column
+                prop="consumeNum"
+                label="消耗量">
+              </el-table-column>
+              <el-table-column
+                prop="totalNum"
+                label="总量">
+              </el-table-column>
+            </el-table>
+          </p>
+        </div>
+        <!-- 写死 设计确认node006展示 -->
+        <div class="desc-explain-row exp-img" v-if="type == 'produce_stage' && currData.nodeCode == 'node006'">
+          <el-image 
+            v-if="designUrl"
+            style="width: 400px; height: 220px"
+            :src="designUrl" 
+            :preview-src-list="designList"
+            lazy>
+          </el-image>
+        </div>
+        <div class="desc-explain-row exp-decode" v-if="type == 'deliver_stage'">
+          <div class="decode-col" v-for="(p, i) of previewList" :key="i">
+            <i class="iconfont col-icon" v-if="p.type">&#xe63c;</i>
+            <i class="iconfont col-icon" v-else>&#xe623;</i>
+            <p>{{p.languageVersion || '--'}}  -（{{p.statusName}}）</p>
+            <el-popover
+              placement="top"
+              width="160"
+              trigger="hover"
+              v-if="p.type">
+              <div class="exp-qrcode">
+                <vue-qrcode v-if="p.type==1&&p.url" :value='p.url' />
+                <el-image v-else>
+                  <div slot="error" class="image-slot">
+                    <i class="el-icon-picture-outline"></i>
+                  </div>
+                </el-image>
+              </div>
+              <el-button type="success" slot="reference" plain>
+                <i class="iconfont">&#xe648;</i>
+                二维码
+              </el-button>
+            </el-popover>
+            <el-button v-else type="success" @click="previewSee(p)" plain>
+              <i class="iconfont">&#xeb47;</i>
+              预览
+            </el-button>
+          </div>
+        </div>
       </div>
     </div>
+    <s-dialog v-bind="dialog" @close="dialog.close" />
   </div>
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import axios from 'axios'
 import { Message } from 'element-ui'
+import VueQrcode from 'vue-qrcode'
+import useDialog from '@/hooks/use-dialog';
 import getDemand from '@/api/2315-get-service-order-interface-api-demand'
-// import request from '@/api/1100'
-// import request from '@/api/1100'
-// import request from '@/api/1100'
+import getDesign from '@/api/2321-get-service-order-interface-api-design'
+import getPreviews from '@/api/2381-get-service-order-interface-api-preview_url'
 export default defineComponent({
   props: {
+    index: {
+      type: Number,
+      require: 1
+    },
+    type: {
+      type: String,
+      require: ''
+    },
     orderCode: {
       type: String,
       required: ''
@@ -81,10 +161,14 @@ export default defineComponent({
       required: []
     },
   },
-  setup({ orderCode, list }, { emit }) {
+  components: { VueQrcode },
+  setup({ orderCode, list, type }, { emit }) {
     let progressData = reactive({
       currData: {},
-      demandData: {}
+      demandData: {},
+      designUrl: '',
+      designList: [],
+      previewList: []
     })
 
     let currStatu = list.find((v) => v.nodeStatus == 1)
@@ -94,10 +178,39 @@ export default defineComponent({
 
     progressData.currData = currStatu;
 
-    getDemand({orderCode}).then(({ data }) => {
-      progressData.demandData = data || {};
-      console.log("需求说明", data)
+    const dialog = useDialog({
+      uid: 'stage-evaluate',
+      dynamicTitle: () => '服务评价',
+      width: '500px',
+      component: require('../dialog/dialog-evaluate'),
     })
+
+    switch (type) {
+      case 'demand_stage':
+        getDemand({orderCode})
+        .then(({ data }) => {
+          progressData.demandData = data || {};
+        })
+        break;
+      case 'produce_stage':
+        getDesign({orderCode})
+        .then(({ data }) => {
+          if (data.annexFileShowUrl) {
+            progressData.designUrl = data.annexFileShowUrl;
+            progressData.designList.push(data.annexFileShowUrl);
+          }
+        })
+        break;
+      case 'deliver_stage':
+        getPreviews({orderCode})
+        .then(({ data }) => {
+          progressData.previewList = data || [];
+        })
+        break;
+      default:
+        console.error("超出流程类型！")
+        break;
+    }
 
     const flowButton = (o) => {
       switch(o.buttonType) {
@@ -127,14 +240,28 @@ export default defineComponent({
           })
           
         break;
+        case 2:
+          dialog.open()
+        break;
         default:
           console.error(o.nodeName+'按钮类型配置错误');
         break;
       }
     }
 
+    const previewSee = (p) => {
+      if (p.url) {
+        var link = document.createElement('a')
+        link.href   = p.url;
+        link.target = "_blank";
+        link.click()
+      }
+    }
+
     return {
+      dialog,
       flowButton,
+      previewSee,
       ...toRefs(progressData)
     }
   }
@@ -182,6 +309,7 @@ export default defineComponent({
           color: #666666;
           display:inline-block;
           margin-top: 20px;
+          font-size: 12px;
           transform: translate(50%);
           .executor,
           .completeTime {
@@ -232,11 +360,64 @@ export default defineComponent({
       font-weight: bold;
     }
     .desc-btn {
-      margin-bottom: 10px;
+      margin-bottom: 20px;
     }
     .desc-explain {
       width: 100%;
       margin-bottom: 10px;
+      &-row{
+        display: flex;
+        margin-bottom: 10px;
+        // justify-content: center;
+        span {
+          width: 90px;
+          min-width: 90px;
+          display: inline-block;
+        }
+        p {
+          width: 80%;
+          max-width: 80%;
+          margin: 0;
+          display: inline-block;
+          word-wrap:break-word;
+        }
+        &.exp-decode {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .decode-col{
+          width: 180px;
+          height: 180px;
+          padding: 30px 12px;
+          background: #FFFFFF;
+          border: 1px solid #EBEBEB;
+          border-radius: 6px;
+          font-size: 14px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin:0 30px 30px 0;
+          .col-icon {
+            font-size: 50px;
+            margin-bottom: 30px;
+            color: $sop-color-theme;
+          }
+          p {
+            margin-bottom: 20px;
+          }
+        }
+        &.exp-img {
+          justify-content: center;
+        }
+        .exp-qrcode {
+          width: 160px;
+          height: 160px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          overflow: hidden;
+        }
+      }
     }
   }
 </style>

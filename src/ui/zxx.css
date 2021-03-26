@@ -1437,3 +1437,13 @@ a.tdl:hover {
     height:500px;
     overflow-y:scroll
 }
+.image-slot {
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 160px;
+  height: 160px;
+  background: #f5f7fa;
+  color: #909399;
+}
