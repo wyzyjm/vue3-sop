@@ -8,9 +8,35 @@
           <span 
             :class="{
               'star-not': true,
-              'star-active': index < form.a
+              'star-active': index < form.serviceScore
             }"
             @click="starA(index)"
+            v-for="(item, index) of starList"
+            :key="index">
+              <i class="iconfont">&#xe602;</i>
+            </span>
+        </div>
+        <div class="star-item">
+          服务态度
+          <span 
+            :class="{
+              'star-not': true,
+              'star-active': index < form.designScore
+            }"
+            @click="starB(index)"
+            v-for="(item, index) of starList"
+            :key="index">
+              <i class="iconfont">&#xe602;</i>
+            </span>
+        </div>
+        <div class="star-item">
+          服务周期
+          <span 
+            :class="{
+              'star-not': true,
+              'star-active': index < form.makeScore
+            }"
+            @click="starC(index)"
             v-for="(item, index) of starList"
             :key="index">
               <i class="iconfont">&#xe602;</i>
@@ -19,41 +45,84 @@
         <el-input
           type="textarea"
           :autosize="{ minRows: 4, maxRows: 4}"
+          :maxlength="200"
+          :disabled="!isEdit"
           placeholder="欢迎您留下宝贵的意见，200字以内。"
-          v-model="form.d">
+          v-model="form.evaluateContent">
         </el-input>
       </div>
-      <s-button type="primary" @click="save">评价</s-button>
+      <s-button type="primary" @click="save" v-if="isEdit">评价</s-button>
     </div>
   </div>
 </template>
 <script>
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { Message } from 'element-ui'
+import setScore from '@/api/2387-post-service-order-interface-api-customer_score'
+import getScore from '@/api/2393-get-service-order-interface-api-get_customer_score'
 export default defineComponent({
-  setup() {
+  props: {
+    orderCode: {
+      type: String,
+      required: ''
+    },
+    isEdit: {
+      type: Boolean,
+      required: false
+    }
+  },
+  setup({ orderCode, isEdit }, { emit }) {
     let data = reactive({
       starList: [true, true, true, true, true]
     })
 
     let form = reactive({
-      a: 2,
-      b: 2,
-      c: 3,
-      d: 'desc'
+      orderCode,
+      serviceScore: 1,
+      designScore: 1,
+      makeScore: 1,
+      evaluateContent: ''
     })
 
+    if (!isEdit) {
+      getScore({orderCode})
+      .then(({ data }) => {
+        form.serviceScore = data.serviceScore;
+        form.designScore = data.designScore;
+        form.makeScore = data.makeScore;
+        form.evaluateContent = data.evaluateContent;
+      })
+    }
+
     const starA = (index) => {
-      form.a = index+1;
+      isEdit && (form.serviceScore = index+1);
+    }
+
+    const starB = (index) => {
+      isEdit && (form.designScore = index+1);
+    }
+
+    const starC = (index) => {
+      isEdit && (form.makeScore = index+1);
     }
 
     const save = () => {
-      console.log('form', form)
+      setScore(form).then(({ data }) => {
+        emit('close')
+        emit('update');
+        Message({
+          type: 'success',
+          message: '评价成功！',
+        })
+      })
     }
 
     return {
       save,
       form,
       starA,
+      starB,
+      starC,
       ...toRefs(data)
     }
   },

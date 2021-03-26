@@ -130,7 +130,7 @@
         </div>
       </div>
     </div>
-    <s-dialog v-bind="dialog" @close="dialog.close" />
+    <s-dialog v-bind="dialog" @close="dialog.close" @update="dialogUpdate" />
   </div>
 </template>
 <script>
@@ -241,7 +241,7 @@ export default defineComponent({
           
         break;
         case 2:
-          dialog.open()
+          dialog.open({ orderCode, isEdit: o.buttonCode == 'evaluate_write' })
         break;
         default:
           console.error(o.nodeName+'按钮类型配置错误');
@@ -258,10 +258,15 @@ export default defineComponent({
       }
     }
 
+    const dialogUpdate = () => {
+      emit('update');
+    }
+
     return {
       dialog,
       flowButton,
       previewSee,
+      dialogUpdate,
       ...toRefs(progressData)
     }
   }
