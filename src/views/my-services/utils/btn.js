@@ -262,6 +262,12 @@ export const btns = {
                 value: 'back',
                 label: '打回'
             },
+            "input_completed": {
+                value: 'input_completed',
+                label: '录入完成',
+                popover: true,
+                visible: false,
+            },
             // "unit_consumption": {
             //     value: 'unit_consumption',
             //     label: '单品消耗'

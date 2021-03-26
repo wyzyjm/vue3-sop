@@ -266,13 +266,14 @@ mounted() {
         let btnArr = []
         if (this.btnList.length > 0) {
             this.btnList.map(v => {
-                btnArr.push(v.buttonCode)
+                btnArr.push(v)
             })
         }
         let mergeBtn = {...btns.dynamicList}
         Object.keys(mergeBtn).forEach(key => {
             btnArr.map(v => {
-                if (v == key) {
+                if (v.buttonCode == key) {
+                    mergeBtn[key].label = v.buttonName
                     this.btn.push(mergeBtn[key])
                 }
             })
