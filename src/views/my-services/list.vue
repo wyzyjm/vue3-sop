@@ -216,9 +216,13 @@ export default defineComponent({
         //   width: 140,
         //   prop: 'wholeMakeSurplusCycle',
           prop: ({row}) => {
+              let render = ''
+              if (row.wholeMakeSurplusCycle) {
+                  render = <el-tag  color={row.wholeMakeSurplusCycleColor ? row.wholeMakeSurplusCycleColor : '#18B398'}
+                  style="color:#fff" >{row.wholeMakeSurplusCycle}</el-tag>
+              }
               return [
-                  <el-tag  color={row.wholeMakeSurplusCycleColor ? row.wholeMakeSurplusCycleColor : '#18B398'}
-                  style="color:#fff">{row.wholeMakeSurplusCycle}</el-tag>
+                  render
               ]
           }
         },
