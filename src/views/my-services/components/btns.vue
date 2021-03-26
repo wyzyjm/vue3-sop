@@ -255,28 +255,28 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-    // Object.keys(btns.fixList).forEach(key => {
-    //     this.btn.push(btns.fixList[key])
-    // })
+    Object.keys(btns.fixList).forEach(key => {
+        this.btn.push(btns.fixList[key])
+    })
     setTimeout(() => {
-        let mergeBtn = {...btns.fixList, ...btns.dynamicList}
-        Object.keys(mergeBtn).forEach(key => {
-            this.btn.push(mergeBtn[key])
-        })
-        // let btnArr = []
-        // if (this.btnList.length > 0) {
-        //     this.btnList.map(v => {
-        //         btnArr.push(v.buttonCode)
-        //     })
-        // }
-        // let mergeBtn = {...btns.dynamicList}
+        // let mergeBtn = {...btns.fixList, ...btns.dynamicList}
         // Object.keys(mergeBtn).forEach(key => {
-        //     btnArr.map(v => {
-        //         if (v == key) {
-        //             this.btn.push(mergeBtn[key])
-        //         }
-        //     })
+        //     this.btn.push(mergeBtn[key])
         // })
+        let btnArr = []
+        if (this.btnList.length > 0) {
+            this.btnList.map(v => {
+                btnArr.push(v.buttonCode)
+            })
+        }
+        let mergeBtn = {...btns.dynamicList}
+        Object.keys(mergeBtn).forEach(key => {
+            btnArr.map(v => {
+                if (v == key) {
+                    this.btn.push(mergeBtn[key])
+                }
+            })
+        })
     }, 1000);
 
     // console.log(this.btn, 999)
