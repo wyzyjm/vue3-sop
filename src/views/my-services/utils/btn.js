@@ -239,7 +239,38 @@ export const btns = {
                 popover: true,
                 visible: false,
             },
-    
+            "apply_completed": {
+                value: 'apply_completed',
+                label: '申请完成',
+                popover: true,
+                visible: false,
+            },
+            "comfirm_completed": {
+                value: 'comfirm_completed',
+                label: '确认完成',
+                popover: true,
+                visible: false,
+            },
+            "verificate_pass": {
+                value: 'verificate_pass',
+                label: '核验通过',
+                popover: true,
+                visible: false,
+            },
+
+            "not_need_assist": {
+                value: 'not_need_assist',
+                label: '不要协助',
+                popover: true,
+                visible: false,
+            },
+            "verificate_back": {
+                value: 'verificate_back',
+                label: '核验打回',
+                popover: true,
+                visible: false,
+            },
+
             "quality_confirm_back": {
                 value: 'quality_confirm_back',
                 label: '验收打回',
