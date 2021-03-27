@@ -400,6 +400,10 @@ methods: {
         // 客户信息
         getServicesInfo({serviceOrderId: this.$route.params.id}).then(res => {
             this.servicesInfo = res.data || {}
+            // this.servicesInfo.buttonList.push({
+            //     buttonName: '提交设计搞1',
+            //     buttonCode: 'quality_back'
+            // })
         })
         // 服务内容
         getServicesContent({serviceOrderId: this.$route.params.id}).then(res => {

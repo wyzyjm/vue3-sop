@@ -185,7 +185,11 @@ export const btns = {
             "design_submit": {
                 value: 'design_submit',
                 label: '提交设计稿',
-                fileName:'upload'
+                fileName:'upload',
+                requiredParam: {
+                    vaild: 'annexList',
+                    errorMsg: '请先上传附件'
+                }
             },
             "design_confirm": {
                 value: 'design_confirm',

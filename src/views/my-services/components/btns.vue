@@ -122,7 +122,7 @@ methods: {
     },
     submitForm (data) {
         if (data.requiredParam) {
-            if (!this.form[data.requiredParam.vaild]) {
+            if (!this.form[data.requiredParam.vaild] || this.form[data.requiredParam.vaild].length == 0) {
                 this.$message.error(data.requiredParam.errorMsg)
                 return false
             }
