@@ -401,8 +401,8 @@ methods: {
         getServicesInfo({serviceOrderId: this.$route.params.id}).then(res => {
             this.servicesInfo = res.data || {}
             // this.servicesInfo.buttonList.push({
-            //     buttonName: '提交设计搞1',
-            //     buttonCode: 'quality_back'
+            //     buttonName: '质检备注',
+            //     buttonCode: 'quality_remark'
             // })
         })
         // 服务内容

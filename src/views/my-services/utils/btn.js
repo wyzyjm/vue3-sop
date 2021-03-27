@@ -229,7 +229,9 @@ export const btns = {
             },
             "quality_remark": {
                 value: 'quality_remark',
-                label: '质检备注'
+                label: '质检备注',
+                fileName: 'log',
+                hideSubmit: true,
             },
             "quality_confirm_pass": {
                 value: 'quality_confirm_pass',
@@ -260,11 +262,15 @@ export const btns = {
     
             "pass": {
                 value: 'pass',
-                label: '通过'
+                label: '通过',
+                popover: true,
+                visible: false,
             },
             "back": {
                 value: 'back',
-                label: '打回'
+                label: '打回',
+                popover: true,
+                visible: false,
             },
             "input_completed": {
                 value: 'input_completed',

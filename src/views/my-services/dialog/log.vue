@@ -2,6 +2,7 @@
 <template>
 <div>
   <el-table
+    v-if="buttonType == 'operate_log'"
     :data="tableData"
     size="small"
     border
@@ -38,6 +39,36 @@
       label="操作详情">
     </el-table-column>
   </el-table>
+
+  <el-table
+    v-if="buttonType == 'quality_remark'"
+    :data="tableData"
+    size="small"
+    border
+    max-height="400"
+    style="width: 100%">
+    <el-table-column
+      prop="communicatorId"
+      label="操作人ID"
+      :show-overflow-tooltip="true">
+    </el-table-column>
+    <el-table-column
+      prop="communicatorName"
+      label="操作人"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="orderCode"
+      :show-overflow-tooltip="true"
+      label="操作服务单">
+    </el-table-column>
+    <el-table-column
+      prop="communicateContent"
+      show-overflow-tooltip
+      label="备注">
+    </el-table-column>
+  </el-table>
+
 </div>
 </template>
 

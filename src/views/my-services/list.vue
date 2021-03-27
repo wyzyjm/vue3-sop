@@ -209,7 +209,7 @@ export default defineComponent({
                     {label: '分派服务单', date: row.assignTime || '----'},
                     {label: '设计确认', date: row.demandConfirmTime || '----'},
                     {label: '验收网站', date: row.custAcceptTime || '----'},
-                    {label: '网站发布', date: row.orderPushTime || '----'},
+                    {label: '网站发布', date: row.publishTime || '----'},
                 ]
                 return [
                     <el-popover
