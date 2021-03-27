@@ -69,6 +69,34 @@
     </el-table-column>
   </el-table>
 
+  <el-table
+    v-if="buttonType == 'make_tools'"
+    :data="tableData"
+    size="small"
+    border
+    max-height="400"
+    style="width: 100%">
+    <el-table-column
+      prop="name"
+      label="工具名称"
+      :show-overflow-tooltip="true">
+    </el-table-column>
+    <el-table-column
+      prop="language"
+      label="语言"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="url"
+      :show-overflow-tooltip="true"
+      label="工具地址">
+        <template scope="scope">
+            <el-link v-if="scope.row.ifDirectJump == 0" @click="openWindow" type="primary">访问</el-link>
+            <el-link v-else :href="scope.row.url" type="primary" target="_blank">访问</el-link>
+        </template>
+    </el-table-column>
+  </el-table>  
+
 </div>
 </template>
 
@@ -76,6 +104,7 @@
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
 import getServicesBtn from '@/api/1835-post-service-order-sevice-button-operate'
+import getMarkTool from '@/api/2399-get-service-order-sevice-order-info-urllist'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {},
@@ -92,17 +121,35 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-
+    openWindow () {
+        getServicesBtn({serviceCode: this.code, buttonType: this.buttonType}).then(res => {
+            window.open(res.data)
+            // if (res.status == 200) {
+            //     this.$message.success(res.msg)
+            //     this.dragDialogVisible = false
+            // }
+        }) 
+    }
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-    getServicesBtn({serviceCode: this.code, buttonType: this.buttonType}).then(res => {
-        // res.data = res.data
-        // for(let i = 0; i < 100; i++) {
-        //     this.tableData.push(res.data[0])
-        // }
-        this.tableData = res.data
-    }) 
+    if (this.buttonType == 'make_tools') {
+        getMarkTool({serviceOrderCode: this.code}).then(res => {
+            // res.data = res.data
+            // for(let i = 0; i < 100; i++) {
+            //     this.tableData.push(res.data[0])
+            // }
+            this.tableData = res.data
+        }) 
+    } else {
+        getServicesBtn({serviceCode: this.code, buttonType: this.buttonType}).then(res => {
+            // res.data = res.data
+            // for(let i = 0; i < 100; i++) {
+            //     this.tableData.push(res.data[0])
+            // }
+            this.tableData = res.data
+        })
+    } 
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {

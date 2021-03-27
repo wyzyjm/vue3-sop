@@ -46,8 +46,9 @@ export const btns = {
             "make_tools": {
                 value: 'make_tools',
                 label: '制作工具',
-                openWindow: true
-                // fileName: 'webPreview'
+                // openWindow: true
+                fileName: 'log',
+                hideSubmit: true
             },
             // "upload": {
             //     value: 'upload',

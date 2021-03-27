@@ -55,6 +55,7 @@ import editForm from '../dialog/editForm'
 import Upload from '../dialog/upload'
 import Demand from '../dialog/demand'
 import getServicesBtn from '@/api/1835-post-service-order-sevice-button-operate'
+// import getMarkTool from '@/api/2399-get-service-order-sevice-order-info-urllist'
 import { cloneDeep } from 'lodash';
 export default {
 //import引入的组件需要注入到对象中才能使用
@@ -96,7 +97,8 @@ return {
 //监听属性 类似于data概念
 computed: {
     filterButtons(){
-        return this.btn.filter(v=>this.$hasPermissions(v.value))
+        return this.btn
+        // return this.btn.filter(v=>this.$hasPermissions(v.value))
     }
 },
 //监控data中的数据变化
