@@ -170,6 +170,11 @@ methods: {
                 }
             }) 
         }
+        this.filterButtons.map(v => {
+            if (v.value == data.value) {
+                v.visible = false
+            }
+        })
     },
     handleShowBtn (btn) {
         // 直接跳转
