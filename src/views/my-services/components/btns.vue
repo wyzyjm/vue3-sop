@@ -280,7 +280,7 @@ mounted() {
         })
     }, 1000);
 
-    // console.log(this.btn, 999)
+    console.log(this.btn, 999)
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前
