@@ -10,7 +10,7 @@
         <s-form-item label="服务单号" prop="serviceCode">
           <s-input v-model="form.serviceCode" clearable></s-input>
         </s-form-item>
-        <s-form-item label="服务单号" prop="businessType">
+        <s-form-item label="业务类型" prop="businessType">
             <el-radio-group v-model="form.businessType" size="medium">
                 <el-radio-button :label="item.id" v-for="(item, idx) in options.businessType" :key="idx">{{item.name}}</el-radio-button>
             </el-radio-group>

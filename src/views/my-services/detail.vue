@@ -224,7 +224,7 @@
                 <div class="item-col">
                     <div class="col-title" style="width:auto;margin-left:22px;">
                         {{servicesTeam.liabilityAreaName || '---'}}/{{servicesTeam.liabilitySubName || '---'}}/{{servicesTeam.liabilityDeptName || '---'}}
-                        <el-button type="primary" size="small" style="margin-left:20px">更换团队</el-button>
+                        <!-- <el-button type="primary" size="small" style="margin-left:20px">更换团队</el-button> -->
                     </div>
                 </div>
             </el-col>    
