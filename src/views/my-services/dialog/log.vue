@@ -91,7 +91,7 @@
       :show-overflow-tooltip="true"
       label="工具地址">
         <template scope="scope">
-            <el-link v-if="scope.row.ifDirectJump == 0" @click="openWindow" type="primary">访问</el-link>
+            <el-link v-if="scope.row.ifDirectJump == 0" @click="openWindow(scope.row)" type="primary">访问</el-link>
             <el-link v-else :href="scope.row.url" type="primary" target="_blank">访问</el-link>
         </template>
     </el-table-column>
@@ -121,8 +121,14 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
-    openWindow () {
-        getServicesBtn({serviceCode: this.code, buttonType: this.buttonType}).then(res => {
+    openWindow (row) {
+        console.log(row)
+        getServicesBtn({
+            serviceCode: this.code, 
+            buttonType: this.buttonType,
+            viewType: row.type,
+            designProductType: row.tenantType
+        }).then(res => {
             window.open(res.data)
             // if (res.status == 200) {
             //     this.$message.success(res.msg)
