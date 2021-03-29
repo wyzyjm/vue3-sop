@@ -1,32 +1,43 @@
 <template>
-  <div>
+  <div class="services_box">
     <s-dialog v-bind="openSearchDialog" @close="openSearchDialog.close" 
     @changeSearch="changeSearch"/>
     <s-simple-table :data="table.data" :cols="table.cols" v-model="table.checked">
-      <s-form slot="form" :model="form" inline>
-        <s-form-item label="客户名称" prop="custName">
-          <s-input v-model="form.custName" clearable></s-input>
+      <s-form :model="form" size="small" slot="form">
+        <el-row>
+            <el-col :span="8">
+                <s-form-item label="客户名称" prop="custName">
+                    <s-input v-model="form.custName" placeholder="请输入" class="w220" clearable></s-input>
+                </s-form-item>
+            </el-col>
+            <el-col :span="8">
+                <s-form-item label="服务单号" prop="serviceCode">
+                    <s-input v-model="form.serviceCode" placeholder="请输入" class="w220" clearable></s-input>
+                </s-form-item>
+            </el-col>
+            <el-col :span="8">
+                <s-form-item>
+                    <s-button type="primary" run="form.search">搜索</s-button>
+                    <s-button run="form.reset" @click="resetFun">重置</s-button>
+                    <s-button type="primary" @click="openSearchDialog.open({data: form})">高级搜索</s-button>
+                </s-form-item>
+            </el-col>
+        </el-row>
+        <s-form-item label="业务类型" prop="businessTypes">
+            <ul class="ul_list">
+                <li v-for="(item, idx) in options.businessTypes" :key="idx"
+                :class="(check.businessTypes.some(v => v == item.id)) ? 'active': ''"
+                @click="checkList('businessTypes', item.id)">{{item.name}}</li>
+            </ul>
         </s-form-item>
-        <s-form-item label="服务单号" prop="serviceCode">
-          <s-input v-model="form.serviceCode" clearable></s-input>
+        <s-form-item label="生产状态" prop="statuss">
+            <ul class="ul_list">
+                <li v-for="(item, idx) in options.statuss" :key="idx"
+                :class="(check.statuss.some(v => v == item.id)) ? 'active': ''"
+                @click="checkList('statuss', item.id)">{{item.name}}</li>
+            </ul>
         </s-form-item>
-        <s-form-item label="业务类型" prop="businessType">
-            <el-radio-group v-model="form.businessType" size="medium">
-                <el-radio-button :label="item.id" v-for="(item, idx) in options.businessType" :key="idx">{{item.name}}</el-radio-button>
-            </el-radio-group>
-        </s-form-item>
-        <s-form-item label="生产状态" prop="status">
-            <el-radio-group v-model="form.status" size="medium">
-                <el-radio-button :label="item.id" v-for="(item, idx) in options.status" :key="idx">{{item.name}}</el-radio-button>
-            </el-radio-group>
-        </s-form-item>
-        <s-form-item>
-          <s-button type="primary" run="form.search">查询</s-button>
-          <s-button run="form.reset">重置</s-button>
-          <s-button type="primary" @click="openSearchDialog.open()">高级查询</s-button>
-        </s-form-item>
-      </s-form>
-
+      </s-form> 
     <!--批量操作按钮-->
     <div slot="top" class="mb20">
         <el-radio-group v-model="form.status">
@@ -51,10 +62,37 @@ import getList from '@/api/1700-get-service-order-sevice-order-info-list'
 import getExpandList from '@/api/1829-get-service-order-sevice-order-info-get-service-product-{serviceorderid}'
 import useOptions from './utils/query'
 import useDialog from '@/hooks/use-dialog'
-
 export default defineComponent({
+  data () {
+      return {
+        check: {
+            statuss: [],
+            businessTypes: []
+        }
+      }
+  },
   methods: {
-
+    checkList (type, id) {
+        console.log(type, id)
+        // return
+        if (this.check[type].some(v => v == id)) {
+            this.check[type].map((c, i) => {
+                if (c == id) {
+                    this.check[type].splice(i, 1)
+                }
+            })
+        } else {
+            this.check[type].push(id)
+        }
+        console.log(this.check[type], type)
+        this.form[type] = this.check[type].join(',')
+        console.log(this.form[type], 99999)
+        
+    },
+    resetFun () {
+        this.check.statuss = []
+        this.check.businessTypes = []
+    }
   },
   setup(props, { root }) {
     const changeSearch = function (data) {
@@ -68,8 +106,9 @@ export default defineComponent({
     const openSearchDialog = useDialog({
       uid: 'search',
       title: '高级搜索',
+    //   dynamicTitle: (form) => ('高级搜索1'),
       width: '1000px',
-      component: require('./dialog/search'),
+      component: require('./dialog/search')
     })
     const toDetail = (row) => {
           root.$router.push({
@@ -256,12 +295,29 @@ export default defineComponent({
     })
 
     const form = reactive({
-      serviceCode: '',
-      custName: '',
-      businessType: '',
-      status: '',
+      custName: '', // 客户名称
+      serviceCode: '', // 服务单
+      businessTypes: '', // 业务类型
+      statuss: '', // 服务单状态
+      productInstanceCode: '', // 产品实例code
+      contractTextCode: '', // 合同文本号
+      productDomain: '', // 产品标识
+      saleChannel: '', // 售卖渠道
+      designerEmpId: '', // 设计师员工id
+      makerEmpId: '', // 制作员id
+      entryClerkId: '', // 录入员id
+      designerMakerEntryId: '', // 设计师员工/制作员/录入员id
+      createTimeStart: '', // 服务单生成时间开始
+      publishTimeStart: '', // 服务单发布时间开始
+      createTimeEnd: '', // 服务单生成时间结束
+      publishTimeEnd: '', // 服务单发布时间结束
+      productType: '', // 产品类型
+      publishTimeAscSort: '', // 创建时间升序排序
+      cycleAscSort: '', // 周期升序排序
+      custId: '', // 客户id
     })
     const options = useOptions()
+    console.log(options, 88908)
     return {
       table,
       form,
@@ -272,3 +328,44 @@ export default defineComponent({
   },
 })
 </script>
+<style lang="scss" scoped>
+    .ul_list{
+        margin:0;
+        padding-left:83px;
+        list-style: none;
+        // width:calc(100% - 200px);
+        // background: #0f0;
+        // float:left;
+    }
+    .ul_list::after{
+        clear:both;
+        content:'';
+        display: block;
+    }
+    .ul_list > li{
+        width: 90px;
+        height:30px;
+        line-height: 30px;
+        color:#666;
+        background: #fff;
+        border:1px solid #e1e1e1;
+        text-align: center;
+        overflow: hidden;
+        float:left;
+        margin:0px 10px 10px 0;
+        font-size: 12px;
+        cursor: pointer;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
+    .ul_list > .active{
+        background: #18B398 !important;
+        border:1px solid #18B398 !important;
+        color:#fff !important;
+    }
+</style>
+<style>
+    .services_box .el-form-item__label{
+        float:left;
+    }
+</style>

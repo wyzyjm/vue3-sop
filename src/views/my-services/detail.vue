@@ -400,10 +400,10 @@ methods: {
         // 客户信息
         getServicesInfo({serviceOrderId: this.$route.params.id}).then(res => {
             this.servicesInfo = res.data || {}
-            this.servicesInfo.buttonList.push({
-                buttonName: '制作工具',
-                buttonCode: 'make_tools'
-            })
+            // this.servicesInfo.buttonList.push({
+            //     buttonName: '制作工具',
+            //     buttonCode: 'make_tools'
+            // })
         })
         // 服务内容
         getServicesContent({serviceOrderId: this.$route.params.id}).then(res => {

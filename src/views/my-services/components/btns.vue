@@ -102,7 +102,13 @@ computed: {
     }
 },
 //监控data中的数据变化
-watch: {},
+watch: {
+    btnList (newValue, oldValue) {
+        console.log(newValue, oldValue, 'watch test')
+        this.btnList = newValue
+        this.loadBtn()
+    }
+},
 //方法集合
 methods: {
     // 数据初始化
@@ -242,6 +248,34 @@ methods: {
         this.dragDialogVisible = false
         this.resetData() 
     },
+    loadBtn () {
+        console.log('loading btn')
+        this.btn = []
+        Object.keys(btns.fixList).forEach(key => {
+            this.btn.push(btns.fixList[key])
+        })
+        setTimeout(() => {
+            // let mergeBtn = {...btns.fixList, ...btns.dynamicList}
+            // Object.keys(mergeBtn).forEach(key => {
+            //     this.btn.push(mergeBtn[key])
+            // })
+            let btnArr = []
+            if (this.btnList.length > 0) {
+                this.btnList.map(v => {
+                    btnArr.push(v)
+                })
+            }
+            let mergeBtn = {...btns.dynamicList}
+            Object.keys(mergeBtn).forEach(key => {
+                btnArr.map(v => {
+                    if (v.buttonCode == key) {
+                        mergeBtn[key].label = v.buttonName
+                        this.btn.push(mergeBtn[key])
+                    }
+                })
+            })
+        }, 1000);
+    },
     // submit (btnType) {
     //     getServicesBtn({serviceCode: this.code, buttonType: btnType}).then(res => {
     //         console.log(res)
@@ -262,30 +296,7 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-    Object.keys(btns.fixList).forEach(key => {
-        this.btn.push(btns.fixList[key])
-    })
-    setTimeout(() => {
-        // let mergeBtn = {...btns.fixList, ...btns.dynamicList}
-        // Object.keys(mergeBtn).forEach(key => {
-        //     this.btn.push(mergeBtn[key])
-        // })
-        let btnArr = []
-        if (this.btnList.length > 0) {
-            this.btnList.map(v => {
-                btnArr.push(v)
-            })
-        }
-        let mergeBtn = {...btns.dynamicList}
-        Object.keys(mergeBtn).forEach(key => {
-            btnArr.map(v => {
-                if (v.buttonCode == key) {
-                    mergeBtn[key].label = v.buttonName
-                    this.btn.push(mergeBtn[key])
-                }
-            })
-        })
-    }, 1000);
+    // this.loadBtn()
 
     console.log(this.btn, 999)
 },
