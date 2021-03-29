@@ -134,7 +134,7 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, reactive, toRefs, set } from '@vue/composition-api'
 import axios from 'axios'
 import { Message } from 'element-ui'
 import VueQrcode from 'vue-qrcode'
@@ -146,7 +146,7 @@ export default defineComponent({
   props: {
     index: {
       type: Number,
-      require: 1
+      require: 0
     },
     type: {
       type: String,
@@ -162,21 +162,23 @@ export default defineComponent({
     },
   },
   components: { VueQrcode },
-  setup({ orderCode, list, type }, { emit }) {
+  setup({ 
+    orderCode, 
+    list, 
+    type,
+    index
+  }, 
+  { 
+    emit
+  }) {
     let progressData = reactive({
+      flowIndex: 0,
       currData: {},
       demandData: {},
       designUrl: '',
       designList: [],
       previewList: []
     })
-
-    let currStatu = list.find((v) => v.nodeStatus == 1)
-    if (!currStatu) {
-      currStatu = list[list.length-1];  
-    }
-
-    progressData.currData = currStatu;
 
     const dialog = useDialog({
       uid: 'stage-evaluate',
@@ -185,32 +187,50 @@ export default defineComponent({
       component: require('../dialog/dialog-evaluate'),
     })
 
-    switch (type) {
-      case 'demand_stage':
-        getDemand({orderCode})
-        .then(({ data }) => {
-          progressData.demandData = data || {};
-        })
-        break;
-      case 'produce_stage':
-        getDesign({orderCode})
-        .then(({ data }) => {
-          if (data.annexFileShowUrl) {
-            progressData.designUrl = data.annexFileShowUrl;
-            progressData.designList.push(data.annexFileShowUrl);
-          }
-        })
-        break;
-      case 'deliver_stage':
-        getPreviews({orderCode})
-        .then(({ data }) => {
-          progressData.previewList = data || [];
-        })
-        break;
-      default:
-        console.error("超出流程类型！")
-        break;
+    let currStatu = null;
+    list.find((v, i) => {
+      if (v.nodeStatus == 1) {
+        currStatu = v;
+        progressData.flowIndex = i;
+      }
+    })
+    if (!currStatu) {
+      currStatu = list[list.length-1];  
     }
+
+    set(progressData, 'currData', currStatu || {})
+
+    const initStage = () => {
+      
+      switch (type) {
+        case 'demand_stage':
+          getDemand({orderCode})
+          .then(({ data }) => {
+            set(progressData, 'demandData', data || {})
+          })
+          break;
+        case 'produce_stage':
+          getDesign({orderCode})
+          .then(({ data }) => {
+            if (data.annexFileShowUrl) {
+              set(progressData, 'designUrl', data.annexFileShowUrl || '')
+              progressData.designList = [];
+              progressData.designList.push(data.annexFileShowUrl);
+            }
+          })
+          break;
+        case 'deliver_stage':
+          getPreviews({orderCode})
+          .then(({ data }) => {
+            set(progressData, 'previewList', data || [])
+          })
+          break;
+        default:
+          console.error("超出流程类型！")
+          break;
+      }
+    }
+    initStage();
 
     const flowButton = (o) => {
       switch(o.buttonType) {
@@ -226,7 +246,8 @@ export default defineComponent({
             }
           }).then(({ data }) => {
             if (data.code == 'SYS0000') {
-              emit('update');
+              set(progressData, 'currData', list[progressData.flowIndex+1] || {})
+              dialogUpdate();
               Message({
                 type: 'success',
                 message: '确认成功！',
@@ -259,11 +280,12 @@ export default defineComponent({
     }
 
     const dialogUpdate = () => {
-      emit('update');
+      emit('update', index);
     }
 
     return {
       dialog,
+      initStage,
       flowButton,
       previewSee,
       dialogUpdate,

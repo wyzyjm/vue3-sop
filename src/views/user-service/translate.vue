@@ -38,9 +38,11 @@
                 }">
                 <template v-if="item.stageStatus">
                   <user-flow 
+                    :ref="'flowPath'+index"
                     :list="item.outsideShowNodeDTOList" 
                     :orderCode="detail.orderCode" 
                     :type="item.stageType"
+                    :index="index"
                     @update="userFLowUpdate">
                   </user-flow>
                 </template>
@@ -60,7 +62,7 @@ export default defineComponent({
   components: {
     'user-flow': UserProgress
   },
-  setup(props, { root }) {
+  setup(props, { root, refs }) {
     const params = root.$route.params;
     if (params.custId&&params.orderCode) {
       sessionStorage.setItem("custId", params.custId);
@@ -69,71 +71,41 @@ export default defineComponent({
 
     let translateData = reactive({
         detail: {},
-        list: [
-          // {
-          //   stageStatus: 1, // 0：未开始，1：进行中，3：已完成
-          //   stageName: '需求阶段',
-          //   stageStatusName: '进行中',
-          //   outsideShowNodeDTOList: [
-          //     {
-          //       nodeStatus: 3, // 0：未开始，1：进行中，3：已完成
-          //       nodeEndTime: "2021-03-09 20:03:40",
-          //       executor: "张三",
-          //       nodeId: 63,
-          //       nodeName: "创建服务单"
-          //     },
-          //     {
-          //       nodeStatus: 1,
-          //       nodeEndTime: "2021-03-10 20:03:40",
-          //       executor: "李四",
-          //       nodeId: 80,
-          //       nodeName: "服务单已分派"
-          //     },
-          //     {
-          //       nodeStatus: 0,
-          //       executor: "张婷婷",
-          //       nodeId: 66,
-          //       nodeName: "提交需求"
-          //     },
-          //     {
-          //       nodeStatus: 0,
-          //       executor: "王二",
-          //       nodeId: 65,
-          //       nodeName: "需求确认"
-          //     }
-          //   ]
-          // },
-          // {
-          //   stageStatus: 0,
-          //   stageName: '生产阶段',
-          //   stageStatusName: '未完成',
-          // },
-          // {
-          //   stageStatus: 0,
-          //   stageName: '交付阶段',
-          //   stageStatusName: '未完成',
-          // }
-        ]
+        /** 
+        * stageStatus > 阶段状态  0：未开始，1：进行中，3：已完成
+        * nodeStatus > 流程状态 // 0：未开始，1：进行中，3：已完成
+        */
+        list: []
     })
 
     let form = reactive({
       name: ''
     })
 
-    const __getDetail = () => {
-      getDetail({
+    const __getDetail = (callback) => {
+      return getDetail({
         custId: sessionStorage.getItem("custId"),
         orderCode: sessionStorage.getItem("orderCode")
       })
       .then(({data}) => {
-        translateData.detail = data || {};
-        translateData.list = data.showStageDTOList || [];
+        set(translateData, 'detail', data || {})
+        set(translateData, 'list', data.showStageDTOList || [])
+        callback&&callback();
       })
     }      
     __getDetail();
 
-    const userFLowUpdate = () => {
-      __getDetail();
+    const userFLowUpdate = (index=0) => {
+      console.log("index=", index)
+      __getDetail(() => {
+        if (refs.hasOwnProperty('flowPath'+index)) {
+          for (const key in refs) {
+            const element = refs[key];
+            element&&element[0].initStage();
+          }
+        }
+        // refs['flowPath'+index]&&refs['flowPath'+index][0].initStage();
+      });
     }
 
     const seeDeatil = (stage) => {
