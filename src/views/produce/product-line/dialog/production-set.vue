@@ -21,8 +21,9 @@
           <s-form-item>
             <el-cascader :props="{
             label:'orgName',
-            value:'id',
-          }" v-model="item.productionOrganizationId" :show-all-levels="false" @change="productionOrganizationChange(item,$event)" :options="item.org"></el-cascader>
+            value:'orgId',
+          }" v-model="item.productionOrganizationId" :show-all-levels="false" @change="productionOrganizationChange(item,$event)" :options="item.org"
+          ref="orgbox"></el-cascader>
           </s-form-item>
         </el-col>
         <el-col :span="8">
@@ -121,7 +122,7 @@ export default defineComponent({
 
     const findProductionOrganizationName = (arr, id) => {
       for (let i = 0; i < arr.length; i++) {
-        if (arr[i].id === id) {
+        if (arr[i].orgId === id) {
           return arr[i].orgName
         }
 
@@ -131,8 +132,8 @@ export default defineComponent({
         }
       }
     }
-
     const productionOrganizationChange = (item, id) => {
+      console.log(item.org, id[id.length - 1])
       item.productionOrganization = findProductionOrganizationName(
         item.org,
         id[id.length - 1]

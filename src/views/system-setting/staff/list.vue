@@ -1,10 +1,11 @@
 <template>
   <div>
+    <s-dialog v-bind="importDialog" @close="importDialog.close" />
     <s-simple-table :data="table.data" :cols="table.cols">
       <div slot="top" class="mt40 mb20">
         <el-button type="primary" @click="toPath('/system-setting/staff/add')">新增</el-button>
         <el-button type="primary">批量授权</el-button>
-        <el-button >导入</el-button>
+        <el-button @click="importDialog.open">导入</el-button>
       </div>
       <s-form slot="form" :model="form" inline>
         <s-form-item label="员工账号" prop="workMail">
@@ -41,6 +42,7 @@ import getList from '@/api/1342-get-frontapi-service-provider-employee-list'
 import changeSuper from '@/api/1338-get-frontapi-service-provider-employee-change-superman'
 import changeStatus from '@/api/1340-get-frontapi-service-provider-employee-change-status'
 import getRoleList from '@/api/1366-get-common-service-role-group-list'
+import useDialog from '@/hooks/use-dialog'
 export default defineComponent({
   methods: {
       toPath (path) {
@@ -68,6 +70,12 @@ export default defineComponent({
               path: `/system-setting/staff/detail/${row.id}`
           })
     }
+    const importDialog = useDialog({
+      uid: 'importDialog',
+      title: '导入数据',
+      width: '600px',
+      component: require('./dialog/import'),
+    })
     const setState = (row) => {
         let status = 0
         if (row.state != 1) {
@@ -207,6 +215,7 @@ export default defineComponent({
     return {
       table,
       form,
+      importDialog
     }
   },
 })
