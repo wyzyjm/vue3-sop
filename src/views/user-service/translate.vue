@@ -236,6 +236,7 @@ export default defineComponent({
           &.r-step__content__hidden {
             height: 0;
             opacity: 0;
+            overflow: hidden;
           }
         }
       }

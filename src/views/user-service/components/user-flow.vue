@@ -89,8 +89,8 @@
             </el-table>
           </p>
         </div>
-        <!-- 写死 设计确认node006展示 -->
-        <div class="desc-explain-row exp-img" v-if="type == 'produce_stage' && currData.nodeCode == 'node006'">
+        <!-- produce_stage阶段展示 -->
+        <div class="desc-explain-row exp-img" v-if="type == 'produce_stage'">
           <el-image 
             v-if="designUrl"
             style="width: 400px; height: 220px"
