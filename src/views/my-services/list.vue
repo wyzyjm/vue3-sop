@@ -39,20 +39,20 @@
         </s-form-item>
       </s-form> 
     <!--批量操作按钮-->
-    <div slot="top" class="mb20">
+    <!-- <div slot="top" class="mb20">
         <el-radio-group v-model="form.status">
             <el-radio-button label="全部"></el-radio-button>
             <el-radio-button label="生产中"></el-radio-button>
             <el-radio-button label="已完成"></el-radio-button>
         </el-radio-group>
-        <div style="float:right">
+        <div style="float:right;margin-bottom:15px">
             <el-button type="primary" size="small">更换服务人员</el-button>
             <el-button type="primary" size="small">更换设计师</el-button>
             <el-button type="primary" size="small">更换制作员</el-button>
             <el-button type="primary" size="small">更换助理</el-button>
             <el-button type="primary" size="small">领取</el-button>
         </div>
-    </div>
+    </div> -->
     </s-simple-table>
   </div>
 </template>
