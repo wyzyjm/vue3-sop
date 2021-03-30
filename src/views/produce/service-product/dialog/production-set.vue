@@ -10,13 +10,13 @@
       <el-row v-for="(item,i) in form.productionProcessList" :key="i">
         <el-col :span="10">
           <s-form-item :prop="`productionProcessList.${i}.salesChannelId`" :rules="[{required:true,type:'array',message:'请选择售卖渠道',trigger: 'change'}]">
-            <el-cascader clearable class="pct90" :props="{
-              checkStrictly : true,
+            <el-cascader ref="d"  collapse-tags	 clearable class="pct90" :props="{
+            checkStrictly : true,
             label:'name',
             value:'id',
             multiple:true,
             emitPath:false
-          }" v-model="item.salesChannelId"  :show-all-levels="false" :options="options.salesChannelList"></el-cascader>
+          }" v-model="item.salesChannelId" key="id" :show-all-levels="false" :options="options.salesChannelList"></el-cascader>
           </s-form-item>
         </el-col>
         <el-col :span="10">
@@ -40,10 +40,11 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive } from '@vue/composition-api'
+import { defineComponent, reactive, ref } from '@vue/composition-api'
 import useOptions from '../hooks/use-production-set-options'
 import _save from '@/api/1504-post-production-config-service-product-production-process-batch'
 import { Message } from 'element-ui'
+import Vue from 'vue'
 import _getDetail from '@/api/1705-get-production-config-service-product-details'
 export default defineComponent({
   props: {
@@ -106,6 +107,8 @@ export default defineComponent({
       }
     }
 
+    const d = ref(null)
+
     if (data && data.length === 1) {
       _getDetail({ id: data[0].id }).then((response) => {
         // form.productionProcessList=
@@ -114,21 +117,33 @@ export default defineComponent({
             (c) => c.productionProcessId === v.productionProcessId
           )
           if (current) {
-            current.salesChannelId.push([v.salesChannelId])
+            current.salesChannelId.push(v.salesChannelId)
           } else {
             form.productionProcessList.push({
-              salesChannelId: [[v.salesChannelId]],
+              salesChannelId: [v.salesChannelId],
               productionProcessId: v.productionProcessId,
               productionProcessName: v.productionProcessName,
             })
           }
         })
+        try {
+          Vue.nextTick(() => {
+            d.value.forEach((v, i) => {
+              form.productionProcessList[
+                i
+              ].salesChannelId = v.getCheckedNodes().map((v) => v.value)
+            })
+          })
+        } catch (err) {
+          console.log(err)
+        }
       })
     } else {
       add()
     }
 
     return {
+      d,
       del,
       add,
       save,
