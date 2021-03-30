@@ -246,7 +246,8 @@ export default defineComponent({
             }
           }).then(({ data }) => {
             if (data.code == 'SYS0000') {
-              set(progressData, 'currData', list[progressData.flowIndex+1] || {})
+              let len = progressData.flowIndex < list.length ? progressData.flowIndex+1 : list.length
+              set(progressData, 'currData', list[len] || {})
               dialogUpdate();
               Message({
                 type: 'success',

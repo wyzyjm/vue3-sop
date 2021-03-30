@@ -91,7 +91,7 @@ export default defineComponent({
       })
     }
 
-    statusList().then(({data}) => { flowData.serviceState = data||[] })
+    statusList({status:1}).then(({data}) => { flowData.serviceState = data||[] })
 
     return {
       ...toRefs(flowData),

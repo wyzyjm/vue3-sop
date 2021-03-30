@@ -1,10 +1,11 @@
 <template>
   <div>
     <s-dialog v-bind="importDialog" @close="importDialog.close" />
-    <s-simple-table :data="table.data" :cols="table.cols">
+    <s-dialog v-bind="authDialog" @close="authDialog.close" />
+    <s-simple-table :data="table.data" :cols="table.cols" v-model="table.checked">
       <div slot="top" class="mt40 mb20">
         <el-button type="primary" @click="toPath('/system-setting/staff/add')">新增</el-button>
-        <el-button type="primary">批量授权</el-button>
+        <el-button type="primary" @click="authDialog.open({data: table.checked})" :disabled="table.checked.length===0">批量授权</el-button>
         <el-button @click="importDialog.open">导入</el-button>
       </div>
       <s-form slot="form" :model="form" inline>
@@ -76,6 +77,12 @@ export default defineComponent({
       width: '600px',
       component: require('./dialog/import'),
     })
+    const authDialog = useDialog({
+      uid: 'authDialog',
+      title: '批量授权',
+      width: '800px',
+      component: require('./dialog/auth'),
+    })
     const setState = (row) => {
         let status = 0
         if (row.state != 1) {
@@ -115,8 +122,14 @@ export default defineComponent({
       })
     }
     const table = reactive({
+      checked: [],
       data: getList,
       cols: [
+        {
+          type: 'checkbox',
+          key: 'id',
+          width: '40px',
+        },
         {
           showOverflowTooltip: true,
           label: '账号',
@@ -215,7 +228,8 @@ export default defineComponent({
     return {
       table,
       form,
-      importDialog
+      importDialog,
+      authDialog
     }
   },
 })
