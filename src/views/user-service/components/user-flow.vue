@@ -111,7 +111,7 @@
               v-if="p.type">
               <div class="exp-qrcode">
                 <vue-qrcode v-if="p.type==1&&p.url" :value='p.url' />
-                <el-image v-else>
+                <el-image :src="p.url" v-else>
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
                   </div>
@@ -246,7 +246,8 @@ export default defineComponent({
             }
           }).then(({ data }) => {
             if (data.code == 'SYS0000') {
-              set(progressData, 'currData', list[progressData.flowIndex+1] || {})
+              let len = progressData.flowIndex < list.length ? progressData.flowIndex+1 : list.length
+              set(progressData, 'currData', list[len] || {})
               dialogUpdate();
               Message({
                 type: 'success',
