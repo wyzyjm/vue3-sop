@@ -16,7 +16,7 @@
             value:'id',
             multiple:true,
             emitPath:false
-          }" v-model="item.salesChannelId" :collapse-tags="true" :show-all-levels="false" :options="options.salesChannelList"></el-cascader>
+          }" v-model="item.salesChannelId"  :show-all-levels="false" :options="options.salesChannelList"></el-cascader>
           </s-form-item>
         </el-col>
         <el-col :span="10">

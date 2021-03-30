@@ -22,8 +22,8 @@
             <el-cascader :props="{
             label:'orgName',
             value:'orgId',
-          }" v-model="item.productionOrganizationId" :show-all-levels="false" @change="productionOrganizationChange(item,$event)" :options="item.org"
-          ref="orgbox"></el-cascader>
+            checkStrictly:true
+          }" v-model="item.productionOrganizationId" :show-all-levels="false" @change="productionOrganizationChange(item,$event)" :options="item.org" ref="orgbox"></el-cascader>
           </s-form-item>
         </el-col>
         <el-col :span="8">
@@ -77,12 +77,12 @@ export default defineComponent({
 
     const findAllPath = (data, lastPathId, arr = []) => {
       for (let i = 0; i < data.length; i++) {
-        if (data[i].id === lastPathId) {
-          arr.push(data[i].id)
+        if (data[i].orgId == lastPathId) {
+          arr.push(data[i].orgId)
           return arr
         } else {
           if (data[i].children && data[i].children.length) {
-            arr.push(data[i].id)
+            arr.push(data[i].orgId)
             const result = findAllPath(data[i].children, lastPathId, arr)
             if (result) {
               return result
@@ -110,10 +110,11 @@ export default defineComponent({
         const data = response.data ? [response.data] : []
         filterEmptyArray(data)
         item.org = data
+
         if (productionOrganizationId) {
           item.productionOrganizationId = findAllPath(
             item.org,
-            parseInt(productionOrganizationId)
+            productionOrganizationId
           )
           productionOrganizationChange(item, item.productionOrganizationId)
         }
@@ -133,7 +134,6 @@ export default defineComponent({
       }
     }
     const productionOrganizationChange = (item, id) => {
-      console.log(item.org, id[id.length - 1])
       item.productionOrganization = findProductionOrganizationName(
         item.org,
         id[id.length - 1]
@@ -186,8 +186,6 @@ export default defineComponent({
     } else {
       add()
     }
-
-
 
     return {
       add,
