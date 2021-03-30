@@ -97,7 +97,7 @@ export default {
 
 | 参数	 | 说明 | 类型	 | 可选值 | 默认值 |
 | :-----| :---- | :---- | :---- | :---- |
-| tag | 要渲染元素 | string |所有全局能访问到的组件 |el-input |
+| tag | 要渲染元素 | string |el-select/el-radio-group/el-checkbox-group/el-radio-group>el-button/el-checkbox-group>el-button |el-input |
 | data | 选项的数据（如下拉列表） | array/function/promise |- |- |
 | init | 是否在组件加载完成后加载数据 | boolen | true/false | true |
 | props | 手动指定label和value对应的字段（不指定会自动读取） | object | label/value |  {label:'label',value:'value'}  |
