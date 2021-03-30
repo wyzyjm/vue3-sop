@@ -46,8 +46,9 @@ export const btns = {
             "make_tools": {
                 value: 'make_tools',
                 label: '制作工具',
-                openWindow: true
-                // fileName: 'webPreview'
+                // openWindow: true
+                fileName: 'log',
+                hideSubmit: true
             },
             // "upload": {
             //     value: 'upload',
@@ -185,7 +186,11 @@ export const btns = {
             "design_submit": {
                 value: 'design_submit',
                 label: '提交设计稿',
-                fileName:'upload'
+                fileName:'upload',
+                requiredParam: {
+                    vaild: 'annexList',
+                    errorMsg: '请先上传附件'
+                }
             },
             "design_confirm": {
                 value: 'design_confirm',
@@ -225,7 +230,9 @@ export const btns = {
             },
             "quality_remark": {
                 value: 'quality_remark',
-                label: '质检备注'
+                label: '质检备注',
+                fileName: 'log',
+                hideSubmit: true,
             },
             "quality_confirm_pass": {
                 value: 'quality_confirm_pass',
@@ -233,7 +240,38 @@ export const btns = {
                 popover: true,
                 visible: false,
             },
-    
+            "apply_completed": {
+                value: 'apply_completed',
+                label: '申请完成',
+                popover: true,
+                visible: false,
+            },
+            "comfirm_completed": {
+                value: 'comfirm_completed',
+                label: '确认完成',
+                popover: true,
+                visible: false,
+            },
+            "verificate_pass": {
+                value: 'verificate_pass',
+                label: '核验通过',
+                popover: true,
+                visible: false,
+            },
+
+            "not_need_assist": {
+                value: 'not_need_assist',
+                label: '不要协助',
+                popover: true,
+                visible: false,
+            },
+            "verificate_back": {
+                value: 'verificate_back',
+                label: '核验打回',
+                popover: true,
+                visible: false,
+            },
+
             "quality_confirm_back": {
                 value: 'quality_confirm_back',
                 label: '验收打回',
@@ -256,11 +294,21 @@ export const btns = {
     
             "pass": {
                 value: 'pass',
-                label: '通过'
+                label: '通过',
+                popover: true,
+                visible: false,
             },
             "back": {
                 value: 'back',
-                label: '打回'
+                label: '打回',
+                popover: true,
+                visible: false,
+            },
+            "input_completed": {
+                value: 'input_completed',
+                label: '录入完成',
+                popover: true,
+                visible: false,
             },
             // "unit_consumption": {
             //     value: 'unit_consumption',

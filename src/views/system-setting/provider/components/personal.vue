@@ -117,7 +117,7 @@ return {
         legalCredentialsType: '', // 法人证件类型 1:身份证,2:临时身份证,3:护照,4:港澳台身份证/5:外国护照6:户口卡7:军人身份证8:警察身份证
         legalCredentialsNumber: '', // 法人证件编码
         category: 1, // 1:个人，2：企业
-        basicType: 1, // 1、自营，2、非自营
+        basicType: 2, // 1、自营，2、非自营
         contactTel: '', // 联系人电话
         serviceStoptimeStr: '', // 服务到期时间
     },

@@ -1,9 +1,24 @@
 <!-- 按钮集合 -->
 <template>
 <div class='btns_box'>
-    <el-button size="small" type="primary" style="margin-bottom:10px"
-    @click="handleShowBtn(btn, idx)"
-    v-for="(btn, idx) in filterButtons" :key="idx">{{btn.label}}</el-button>
+    <!--点击popover业务-->
+    <span v-for="(btn, idx) in filterButtons" :key="idx">
+        <el-popover
+        placement="top"
+        width="160"
+        :disabled="!btn.popover"
+        v-model="btn.visible">
+        <p>您是否要{{btn.label}}?</p>
+        <div style="text-align: right; margin: 0">
+            <el-button size="mini" type="default" @click="btn.visible = false">取消</el-button>
+            <el-button type="primary" size="mini" @click="submitForm(btn)">确定</el-button>
+        </div>
+        <!-- <el-button size="small" type="primary" style="margin:0 0 10px 10px" slot="reference" v-if="btn.popover">{{btn.label}}</el-button> -->
+        <el-button size="small" type="primary" style="margin:0 0 10px 10px"
+        @click="handleShowBtn(btn)" slot="reference">{{btn.label}}</el-button>
+        </el-popover>
+    </span>
+
     <div v-bind:id="id" 
     @mousedown="mousedown" 
     class="drag_box" 
@@ -40,6 +55,7 @@ import editForm from '../dialog/editForm'
 import Upload from '../dialog/upload'
 import Demand from '../dialog/demand'
 import getServicesBtn from '@/api/1835-post-service-order-sevice-button-operate'
+// import getMarkTool from '@/api/2399-get-service-order-sevice-order-info-urllist'
 import { cloneDeep } from 'lodash';
 export default {
 //import引入的组件需要注入到对象中才能使用
@@ -81,16 +97,40 @@ return {
 //监听属性 类似于data概念
 computed: {
     filterButtons(){
+        // return this.btn
         return this.btn.filter(v=>this.$hasPermissions(v.value))
     }
 },
 //监控data中的数据变化
-watch: {},
+watch: {
+    btnList (newValue, oldValue) {
+        console.log(newValue, oldValue, 'watch test')
+        this.btnList = newValue
+        this.loadBtn()
+    }
+},
 //方法集合
 methods: {
+    // 数据初始化
+    resetData () {
+        this.form = {
+            annexList: [], // 附件ID集合
+            buttonType: '', // 按钮类型
+            configId: '', // 配置ID
+            demandContent: '', // 需求
+            orgId: '', // 部门ID
+            empId: '', // 员工ID
+            personScoreJson: '', // 评分结果
+            reason: '', // 原因
+            serviceCode: '', // 服务单号
+            serviceId: '', // 服务商ID
+            serviceMainInstanceCode: '', // 实例号
+            orderConsumeInfo: '', // 消耗单品
+        }    
+    },
     submitForm (data) {
         if (data.requiredParam) {
-            if (!this.form[data.requiredParam.vaild]) {
+            if (!this.form[data.requiredParam.vaild] || this.form[data.requiredParam.vaild].length == 0) {
                 this.$message.error(data.requiredParam.errorMsg)
                 return false
             }
@@ -121,20 +161,7 @@ methods: {
                 if (res.status == 200) {
                     this.$message.success(res.msg)
                     this.dragDialogVisible = false
-                    this.form = {
-                        annexList: [], // 附件ID集合
-                        buttonType: '', // 按钮类型
-                        configId: '', // 配置ID
-                        demandContent: '', // 需求
-                        orgId: '', // 部门ID
-                        empId: '', // 员工ID
-                        personScoreJson: '', // 评分结果
-                        reason: '', // 原因
-                        serviceCode: '', // 服务单号
-                        serviceId: '', // 服务商ID
-                        serviceMainInstanceCode: '', // 实例号
-                        orderConsumeInfo: '', // 消耗单品
-                    }    
+                    this.resetData()
                     // location.reload()
                     this.$emit('reload', {})
                 }
@@ -145,25 +172,17 @@ methods: {
                 if (res.status == 200) {
                     this.$message.success(res.msg)
                     this.dragDialogVisible = false
-                    this.form = {
-                        annexList: [], // 附件ID集合
-                        buttonType: '', // 按钮类型
-                        configId: '', // 配置ID
-                        demandContent: '', // 需求
-                        orgId: '', // 部门ID
-                        empId: '', // 员工ID
-                        personScoreJson: '', // 评分结果
-                        reason: '', // 原因
-                        serviceCode: '', // 服务单号
-                        serviceId: '', // 服务商ID
-                        serviceMainInstanceCode: '', // 实例号
-                        orderConsumeInfo: '', // 消耗单品
-                    }    
+                    this.resetData()
                     // location.reload()
                     this.$emit('reload', {})
                 }
             }) 
         }
+        this.filterButtons.map(v => {
+            if (v.value == data.value) {
+                v.visible = false
+            }
+        })
     },
     handleShowBtn (btn) {
         // 直接跳转
@@ -177,11 +196,14 @@ methods: {
         //     console.log('dbclick')
         //     return false
         // }
+        this.resetData()
         this.curBtn = btn
         this.form.serviceCode = this.code
         this.form.buttonType = btn.value
         this.form.serviceId = this.$route.params.id
-        this.dragDialogVisible = true
+        if (!btn.popover) {
+            this.dragDialogVisible = true
+        }
     },
     openWindow (value) {
         getServicesBtn({serviceCode: this.code, buttonType: value}).then(res => {
@@ -224,6 +246,35 @@ methods: {
     closeDrag () {
         this.curBtn = {}
         this.dragDialogVisible = false
+        this.resetData() 
+    },
+    loadBtn () {
+        console.log('loading btn')
+        this.btn = []
+        Object.keys(btns.fixList).forEach(key => {
+            this.btn.push(btns.fixList[key])
+        })
+        setTimeout(() => {
+            // let mergeBtn = {...btns.fixList, ...btns.dynamicList}
+            // Object.keys(mergeBtn).forEach(key => {
+            //     this.btn.push(mergeBtn[key])
+            // })
+            let btnArr = []
+            if (this.btnList.length > 0) {
+                this.btnList.map(v => {
+                    btnArr.push(v)
+                })
+            }
+            let mergeBtn = {...btns.dynamicList}
+            Object.keys(mergeBtn).forEach(key => {
+                btnArr.map(v => {
+                    if (v.buttonCode == key) {
+                        mergeBtn[key].label = v.buttonName
+                        this.btn.push(mergeBtn[key])
+                    }
+                })
+            })
+        }, 1000);
     },
     // submit (btnType) {
     //     getServicesBtn({serviceCode: this.code, buttonType: btnType}).then(res => {
@@ -245,31 +296,9 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-    Object.keys(btns.fixList).forEach(key => {
-        this.btn.push(btns.fixList[key])
-    })
-    setTimeout(() => {
-        // let mergeBtn = {...btns.fixList, ...btns.dynamicList}
-        // Object.keys(mergeBtn).forEach(key => {
-        //     this.btn.push(mergeBtn[key])
-        // })
-        let btnArr = []
-        if (this.btnList.length > 0) {
-            this.btnList.map(v => {
-                btnArr.push(v.buttonCode)
-            })
-        }
-        let mergeBtn = {...btns.dynamicList}
-        Object.keys(mergeBtn).forEach(key => {
-            btnArr.map(v => {
-                if (v == key) {
-                    this.btn.push(mergeBtn[key])
-                }
-            })
-        })
-    }, 1000);
+    // this.loadBtn()
 
-    // console.log(this.btn, 999)
+    console.log(this.btn, 999)
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前

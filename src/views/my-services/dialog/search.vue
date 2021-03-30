@@ -43,6 +43,8 @@
                 <el-form-item label="服务单生成时间：">
                     <el-date-picker
                     type="date"
+                    v-model="createTime"
+                    @change="changeTime($event, 'createTime')"
                     placeholder="选择日期">
                     </el-date-picker>
                 </el-form-item>
@@ -51,6 +53,8 @@
                 <el-form-item label="服务单发布时间：">
                     <el-date-picker
                     type="date"
+                    v-model="publishTime"
+                    @change="changeTime($event, 'publishTime')"
                     placeholder="选择日期">
                     </el-date-picker>
                 </el-form-item>
@@ -59,22 +63,22 @@
         <el-form-item label="生产状态：">
             <ul class="ul_list">
                 <li v-for="(item, idx) in statusList" :key="idx"
-                :class="(check.status.some(v => v == item.id)) ? 'active': ''"
-                @click="checkList('status', item.id)">{{item.name}}</li>
+                :class="(check.statuss.some(v => v == item.id)) ? 'active': ''"
+                @click="checkList('statuss', item.id)">{{item.name}}</li>
             </ul>
         </el-form-item>
         <el-form-item label="产品类型：">
             <ul class="ul_list">
                 <li v-for="(item, idx) in productList" :key="idx"
-                :class="(check.productType.some(v => v == item.id)) ? 'active': ''"
-                @click="checkList('productType', item.id)">{{item.name}}</li>
+                :class="(check.productTypes.some(v => v == item.id)) ? 'active': ''"
+                @click="checkList('productTypes', item.id)">{{item.name}}</li>
             </ul>
         </el-form-item>
         <el-form-item label="业务类型：">
             <ul class="ul_list">
                 <li v-for="(item, idx) in businessList" :key="idx"
-                :class="(check.businessType.some(v => v == item.id)) ? 'active': ''"
-                @click="checkList('businessType', item.id)">{{item.name}}</li>
+                :class="(check.businessTypes.some(v => v == item.id)) ? 'active': ''"
+                @click="checkList('businessTypes', item.id)">{{item.name}}</li>
             </ul>
         </el-form-item>
     </el-form>
@@ -91,24 +95,49 @@
 import getStatusList from '@/api/1685-get-production-config-service-order-status-list'
 import getBusinessList from '@/api/1408-get-production-config-business-type-search'
 import getProductList from '@/api/1665-get-production-config-product-group-by-code-list'
+import formatDate from '@/ui/element/extends/utils/format-date'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {},
+  props: {
+    data: {
+      type: Object,
+    },
+  },
 data() {
 //这里存放数据
 return {
     form: {
-        productType: '',
-        businessType: '',
-        status: ''
+      custName: '', // 客户名称
+      serviceCode: '', // 服务单
+      businessTypes: '', // 业务类型
+      statuss: '', // 服务单状态
+      productInstanceCode: '', // 产品实例code
+      contractTextCode: '', // 合同文本号
+      productDomain: '', // 产品标识
+      saleChannel: '', // 售卖渠道
+      designerEmpId: '', // 设计师员工id
+      makerEmpId: '', // 制作员id
+      entryClerkId: '', // 录入员id
+      designerMakerEntryId: '', // 设计师员工/制作员/录入员id
+      createTimeStart: '', // 服务单生成时间开始
+      publishTimeStart: '', // 服务单发布时间开始
+      createTimeEnd: '', // 服务单生成时间结束
+      publishTimeEnd: '', // 服务单发布时间结束
+      productType: '', // 产品类型
+      publishTimeAscSort: '', // 创建时间升序排序
+      cycleAscSort: '', // 周期升序排序
+      custId: '', // 客户id
     },
+    publishTime: '',
+    createTime: '',
     statusList: [], // 状态
     businessList: [], // 业务类型
     productList: [], // 产品类型
     check: {
-        productType: [],
-        status: [],
-        businessType: []
+        productTypes: [],
+        statuss: [],
+        businessTypes: []
     },
 };
 },
@@ -119,6 +148,25 @@ computed: {
 watch: {},
 //方法集合
 methods: {
+    changeTime (evt, type) {
+        if (evt) {
+            if (type == 'createTime') { //生成时间
+                this.form.createTimeStart = formatDate(evt) + ' 00:00:01'
+                this.form.createTimeEnd = formatDate(evt) + ' 23:59:59'
+            } else {
+                this.form.publishTimeStart = formatDate(evt) + ' 00:00:01'
+                this.form.publishTimeEnd = formatDate(evt) + ' 23:59:59' 
+            }
+        } else {
+            if (type == 'createTime') { //生成时间
+                this.form.createTimeStart = ''
+                this.form.createTimeEnd = ''
+            } else {
+                this.form.publishTimeStart = ''
+                this.form.publishTimeEnd = ''
+            }
+        }
+    },
     checkList (type, id) {
         if (this.check[type].some(v => v == id)) {
             this.check[type].map((c, i) => {
@@ -133,9 +181,9 @@ methods: {
     },
     search () {
         console.log(this.form)
-        this.form.status = this.check.status.join(',')
-        this.form.businessType = this.check.businessType.join(',')
-        this.form.productType = this.check.productType.join(',')
+        this.form.statuss = this.check.statuss.join(',')
+        this.form.businessTypes = this.check.businessTypes.join(',')
+        this.form.productTypes = this.check.productTypes.join(',')
         this.$emit('changeSearch', this.form)
         this.$emit('close')
     }
@@ -154,7 +202,11 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-
+    this.form = Object.assign(this.form, this.data)
+    console.log(this.form)
+    // this.check.statuss = this.form.statuss.split(',')
+    // this.check.productTypes = this.form.productTypes.split(',')
+    // this.check.businessTypes = this.form.businessTypes.split(',')
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前

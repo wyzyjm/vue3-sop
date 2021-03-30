@@ -224,7 +224,7 @@
                 <div class="item-col">
                     <div class="col-title" style="width:auto;margin-left:22px;">
                         {{servicesTeam.liabilityAreaName || '---'}}/{{servicesTeam.liabilitySubName || '---'}}/{{servicesTeam.liabilityDeptName || '---'}}
-                        <el-button type="primary" size="small" style="margin-left:20px">更换团队</el-button>
+                        <!-- <el-button type="primary" size="small" style="margin-left:20px">更换团队</el-button> -->
                     </div>
                 </div>
             </el-col>    
@@ -400,6 +400,10 @@ methods: {
         // 客户信息
         getServicesInfo({serviceOrderId: this.$route.params.id}).then(res => {
             this.servicesInfo = res.data || {}
+            // this.servicesInfo.buttonList.push({
+            //     buttonName: '制作工具',
+            //     buttonCode: 'make_tools'
+            // })
         })
         // 服务内容
         getServicesContent({serviceOrderId: this.$route.params.id}).then(res => {
@@ -420,7 +424,7 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-    this.getApi()
+    // this.getApi()
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {

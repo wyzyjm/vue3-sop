@@ -161,4 +161,9 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
             }
         }
     }
+    .omit1{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 </style>

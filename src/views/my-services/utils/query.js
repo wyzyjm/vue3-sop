@@ -7,20 +7,20 @@ export default () => {
         return getBusinessList.options
     }
     const options = reactive({
-        businessType: [],
+        businessTypes: [],
     })
     getBusinessList().then(({ data }) => {
-        data.records.unshift({name: '全部', id: ''})
-        console.log(data.records)
-        options.businessType = data.records
+        // data.records.unshift({name: '全部', id: ''})
+        // console.log(data.records)
+        options.businessTypes = data.records
         getBusinessList.options = options
     })
 
     getStatusList().then(({ data }) => {
+        // console.log(data)
+        // data.unshift({name: '全部', id: ''})
         console.log(data)
-        data.unshift({name: '全部', id: ''})
-        console.log(data)
-        options.status = data
+        options.statuss = data
         getStatusList.options = options
     })    
 
