@@ -10,7 +10,7 @@
       <el-row v-for="(item,i) in form.productionProcessList" :key="i">
         <el-col :span="10">
           <s-form-item :prop="`productionProcessList.${i}.salesChannelId`" :rules="[{required:true,type:'array',message:'请选择售卖渠道',trigger: 'change'}]">
-            <el-cascader ref="d"  collapse-tags	 clearable class="pct90" :props="{
+            <el-cascader ref="d" collapse-tags clearable class="pct90" :props="{
             checkStrictly : true,
             label:'name',
             value:'id',
@@ -109,38 +109,47 @@ export default defineComponent({
 
     const d = ref(null)
 
-    if (data && data.length === 1) {
-      _getDetail({ id: data[0].id }).then((response) => {
-        // form.productionProcessList=
-        response.data.productionProcessList.forEach((v) => {
-          const current = form.productionProcessList.find(
-            (c) => c.productionProcessId === v.productionProcessId
-          )
-          if (current) {
-            current.salesChannelId.push(v.salesChannelId)
-          } else {
-            form.productionProcessList.push({
-              salesChannelId: [v.salesChannelId],
-              productionProcessId: v.productionProcessId,
-              productionProcessName: v.productionProcessName,
+    const init = () => {
+      if (data && data.length === 1) {
+        _getDetail({ id: data[0].id }).then((response) => {
+          // 对部分网速条件不好的情况下简单兼容
+         if(options.salesChannelList.length===0){
+           setTimeout(init,500)
+           return 
+         }
+          // form.productionProcessList=
+          response.data.productionProcessList.forEach((v) => {
+            const current = form.productionProcessList.find(
+              (c) => c.productionProcessId === v.productionProcessId
+            )
+            if (current) {
+              current.salesChannelId.push(v.salesChannelId)
+            } else {
+              form.productionProcessList.push({
+                salesChannelId: [v.salesChannelId],
+                productionProcessId: v.productionProcessId,
+                productionProcessName: v.productionProcessName,
+              })
+            }
+          })
+          try {
+            Vue.nextTick(() => {
+              d.value.forEach((v, i) => {
+                form.productionProcessList[
+                  i
+                ].salesChannelId = v.getCheckedNodes().map((v) => v.value)
+              })
             })
+          } catch (err) {
+            console.log(err)
           }
         })
-        try {
-          Vue.nextTick(() => {
-            d.value.forEach((v, i) => {
-              form.productionProcessList[
-                i
-              ].salesChannelId = v.getCheckedNodes().map((v) => v.value)
-            })
-          })
-        } catch (err) {
-          console.log(err)
-        }
-      })
-    } else {
-      add()
+      } else {
+        add()
+      }
     }
+
+    init()
 
     return {
       d,
