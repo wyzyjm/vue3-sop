@@ -8,73 +8,29 @@
     border
     style="width: 100%">
     <el-table-column
+      prop="typeName"
+      width="100"
       :show-overflow-tooltip="true"
       label="预览类型">
     </el-table-column>
     <el-table-column
       :show-overflow-tooltip="true"
       label="预览内容">
+        <template slot-scope="scope">
+            <div v-if="scope.row.type == 'qrcode'">
+                <p v-for="(item, idx) in scope.row.previewContent" :key="idx" style="width:80px;height:100px;float:left;margin-left:18px; text-align:center">
+                    <el-image :src="item.value" style="width:80px;height:80px;display:block"
+                    ></el-image>
+                    {{item.label}}
+                </p>
+            </div>
+            <p v-else>
+                <el-tag type="success" v-for="(item, idx) in scope.row.previewContent" :key="idx"
+                style="margin-right:6px;cursor:pointer;" @click="toPath(item.value)">{{item.label}}</el-tag>
+            </p>
+        </template>
     </el-table-column>
-    <!-- <el-table-column
-      prop="languageVersion"
-      :show-overflow-tooltip="true"
-      label="语言版本">
-    </el-table-column>
-    <el-table-column
-      prop="statusName"
-      :show-overflow-tooltip="true"
-      label="状态">
-    </el-table-column>
-    <el-table-column
-      prop="pc"
-      :show-overflow-tooltip="true"
-      label="PC">
-      <template slot-scope="scope">
-          <el-tag type="success">{{scope.row.pc}}</el-tag>
-          <el-link :href="'http://' + scope.row.pc" type="primary" target="_blank">点击访问
-              {{scope.row.name == '制作预览' ? '点击访问' : scope.row.pc}}
-              </el-link>
-      </template>
-    </el-table-column>
-    <el-table-column
-      prop="mobile"
-      :show-overflow-tooltip="true"
-      label="手机">
-      <template slot-scope="scope"
-      >
-          <el-tag type="info">{{scope.row.mobile}}</el-tag>
-          <el-link :href="'http://' + scope.row.mobile" type="primary" target="_blank">点击访问</el-link>
-      </template>
-    </el-table-column>
-    <el-table-column
-      prop="url"
-      :show-overflow-tooltip="true"
-      label="URL">
-      <template slot-scope="scope"
-      >
-          <el-tag type="info">{{scope.row.mobile}}</el-tag>
-          <el-link :href="scope.row.url" type="primary" target="_blank">点击访问</el-link>
-      </template>
-    </el-table-column> -->
-    <!-- <el-table-column
-      align="center"
-      prop="qrcode"
-      :show-overflow-tooltip="true"
-      label="二维码">
-      <template slot-scope="scope"
-      >
-        <el-image :src="scope.row.qrcode" style="width:50px;height:50px;"></el-image>
-          <el-tag type="info">{{scope.row.mobile}}</el-tag>
-          <el-link :href="'http://' + scope.row.mobile" type="primary" target="_blank">点击访问</el-link>
-      </template>
-    </el-table-column> -->
   </el-table>
-    <!-- <div class="foot_box">
-        <el-button type="default" size="small" @click="cancel">关闭</el-button>
-    </div> -->
-    <!-- <div class="" v-for="(v, k, i) in tableData" :key="i">
-        {{k}}
-    </div> -->
 </div>
 </template>
 
@@ -144,35 +100,17 @@ methods: {
                 }
             }
         }
-    }
+    },
+    toPath (path) {
+        window.open(path)
+    },
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
     console.log(321)
     getServicesBtn({serviceCode: this.code, buttonType: this.buttonType}).then(res => {
         // let cols = []
-        // // this.tableData = res.data
-        // Object.keys(res.data).forEach(key => {
-        //     console.log(key)
-        //     res.data[key].map(v => {
-        //         Object.keys(v).forEach(sv => {
-        //             cols.push({
-        //                 label: sv,
-        //                 value: v[sv]
-        //             })
-        //         })
-        //     })
-        //     cols.unshift({
-        //         label: '预览内容',
-        //         value: key
-        //     })
-        // })
-        // this.cols = cols
-        // console.log(this.cols, 999)
-        // this.tableData[0].pc = res.data[0].makeDomain
-        // this.tableData[0].mobile = res.data[0].mobileMakeDomain
-        // this.tableData[1].pc = res.data[0].domain
-        // this.tableData[1].mobile = res.data[0].makeDomain
+        this.tableData = res.data
     }) 
 
 },
