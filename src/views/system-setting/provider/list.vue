@@ -6,7 +6,7 @@
       <div slot="top" class="mt40 mb20">
         <el-button type="primary" @click="toPath()">新增</el-button>
       </div>
-        <s-form slot="form" :model="form" inline>
+        <s-form slot="form" :model="form" inline label-width="100px">
             <s-form-item label="服务商名称" prop="providerName">
             <s-input v-model="form.providerName" clearable></s-input>
             </s-form-item>
@@ -40,7 +40,7 @@
                 ></el-option>
             </el-select>
             </s-form-item>
-            <s-form-item>
+            <s-form-item style="margin-left:100px">
                 <div class="query-box">
                     <s-button type="primary" run="form.search">查询</s-button>
                     <s-button run="form.reset">重置</s-button>

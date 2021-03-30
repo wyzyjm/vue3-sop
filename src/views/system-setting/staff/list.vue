@@ -8,7 +8,7 @@
         <el-button type="primary" @click="authDialog.open({data: table.checked})" :disabled="table.checked.length===0">批量授权</el-button>
         <el-button @click="importDialog.open">导入</el-button>
       </div>
-      <s-form slot="form" :model="form" inline>
+      <s-form slot="form" :model="form" inline label-width="100px">
         <s-form-item label="员工账号" prop="workMail">
           <s-input v-model="form.workMail" clearable></s-input>
         </s-form-item>
@@ -21,14 +21,37 @@
                 <el-option :value="1" label="启用"></el-option>
             </el-select>
         </s-form-item>
+        <s-form-item label="服务商" prop="providerId">
+            <el-select v-model="form.providerId" placeholder="请选择" clearable filterable
+            @change="changeProvider()">
+                <el-option :value="item.id" :label="item.basicName" v-for="item in options.providerList" :key="item.id"></el-option>
+            </el-select>
+        </s-form-item>
+        <s-form-item label="所属组织" prop="state">
+            <el-cascader
+                clearable
+                :show-all-levels="false"
+                :key="1"
+                :disabled="this.form.providerId ? false : true"
+                v-model="form.orgId"
+                placeholder="请选择所属组织"
+                style="width:195px"
+                :options="orgList"
+                :props="{ expandTrigger: 'hover' , value:'orgId', label:'orgName', emitPath: false}"></el-cascader>
+        </s-form-item>
+        <s-form-item label="角色名称" prop="state">
+            <el-select v-model="form.roleId" placeholder="请选择" clearable filterable>
+                <el-option :value="item.id" :label="item.roleName" v-for="item in options.roleList" :key="item.id"></el-option>
+            </el-select>
+        </s-form-item>
         <!-- <s-form-item label="授权角色" prop="state">
             <el-select v-model="form.roleId" placeholder="请选择" clearable>
                 <el-option :value="0" label="停用"></el-option>
             </el-select>
         </s-form-item> -->
-        <s-form-item>
+        <s-form-item style="margin-left:100px;">
           <s-button type="primary" run="form.search">查询</s-button>
-          <s-button run="form.reset">重置</s-button>
+          <s-button run="form.reset" @click="resetFun">重置</s-button>
         </s-form-item>
       </s-form>
     </s-simple-table>
@@ -44,8 +67,25 @@ import changeSuper from '@/api/1338-get-frontapi-service-provider-employee-chang
 import changeStatus from '@/api/1340-get-frontapi-service-provider-employee-change-status'
 import getRoleList from '@/api/1366-get-common-service-role-group-list'
 import useDialog from '@/hooks/use-dialog'
+import useOptions from './utils/query'
+import getOrgList from '@/api/1320-get-frontapi-service-provider-org-get-by-providerid'
+
 export default defineComponent({
+  data () {
+      return {
+          orgList: [],
+          disable: true
+      }
+  },
   methods: {
+      resetFun () {
+          this.form.providerId = ''
+          this.form.orgId = ''
+          this.form.roleId = ''
+      },
+        handleChange (e) {
+            console.log(e, 999)
+        },
       toPath (path) {
           this.$router.push({
               path
@@ -55,9 +95,41 @@ export default defineComponent({
           getRoleList().then(res => {
               console.log(res)
           })
-      }
+      },
+      changeProvider () {
+          this.orgList = []
+          this.form.orgId = ''
+          if (this.form.providerId) {
+            getOrgList({providerId: this.form.providerId}).then(res => {
+                console.log(res)
+                res.data.children = res.data.children.length > 0 ? this.getTreeData(res.data.children) : undefined
+                this.orgList = [res.data]
+            }).catch(err => {
+                console.log(err, '组织获取失败')
+            }) 
+          }
+      },
+    // 树形
+    getTreeData(data){
+        // 循环遍历json数据
+        for(var i=0;i<data.length;i++){
+            if(data[i].children.length<1){
+                // children若为空数组，则将children设为undefined
+                data[i].children=undefined;
+            }else {
+                // children若不为空数组，则继续 递归调用 本方法
+                this.getTreeData(data[i].children);
+            }
+        }
+        
+        return data;
+    },
   },
   created () {
+    //   console.log(321, this.form.providerId)
+    //   if (this.form.providerId) {
+    //       this.disable = false
+    //   }
     //   this.getRoleList()
   },
   setup(props, {root} ) {
@@ -217,17 +289,20 @@ export default defineComponent({
         },
       ],
     })
-
+    const options = useOptions()
     const form = reactive({
       workMail: '',
       name: '',
       state: '',
       roleId: '',
+      providerId: '',
+      orgId: '',
     })
 
     return {
       table,
       form,
+      options,
       importDialog,
       authDialog
     }

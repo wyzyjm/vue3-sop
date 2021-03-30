@@ -13,13 +13,21 @@
       <p>2、请选择需要导入的文件</p>
       <s-form :model="form">
         <s-form-item prop="upload">
-          <el-upload :with-credentials="true" fileName="file" 
-          action="" 
-          :http-request="httpRequest"
-           class="ml20">
+          <s-upload 
+          type="staffUpload"
+          @staffUpdate="update"
+          :with-credentials="true" 
+          fileName="file" 
+          :action="url" 
+          v-model="form.upload" 
+          :files.sync="fileList" 
+          @success="uploadSuccess" 
+          @error="uploadError" 
+          :auto-upload="false" 
+          ref="uploadRef" accept="xls,xlsx" class="ml20">
             <el-button size="mini" type="primary">选择附件</el-button>
             支持xls、xlsx文件，单个文件不得大于2M
-          </el-upload>
+          </s-upload>
         </s-form-item>
         <s-form-item class="tc mt20">
           <s-button type="primary" @click="uploadSubmit">开始导入</s-button>
@@ -35,8 +43,17 @@
     </div>
 
     <div v-show="active===2">
-      <p>导入完成<span v-if="fileState.error">，请查看错误报告</span> </p>
-      <p>{{fileState.errorMessage}}</p>
+        <p>导入完成，本次成功导入
+            <span style="color:#18B398;font-size:20px">{{fileState.success}}</span>
+            条，导入失败
+            <span style="color:#f00;font-size:20px">{{fileState.error}}</span>
+            条<br/>
+            <el-link v-if="fileState.error > 0" type="primary" :href="fileState.errorMessage" style="margin-top:10px;">查看错误报告</el-link>
+        </p>
+      <!-- <p>导入完成<span v-if="fileState.error">，请查看错误报告</span> </p>
+      <p>{{fileState.errorMessage}}
+          <el-link></el-link>
+      </p> -->
       <s-button class="mt20" @click="$emit('close')">关闭</s-button>
     </div>
 
@@ -45,24 +62,22 @@
 <script>
 import { defineComponent, reactive, ref } from '@vue/composition-api'
 import { Message } from 'element-ui'
-import getTemplate from '@/api/1344-get-fronapi-service-provider-employee-download-employee-template'
-import importTemplate from '@/api/1346-post-frontapi-service-provider-employee-import-person'
-
 export default defineComponent({
-  created () {
-      getTemplate().then(res => {
-          console.log(res)
-      })
-  },
   methods: {
-    httpRequest (data) {
-        console.log(data, 9999)
-        const formData  = new FormData()
-        formData.append('file', data.file)
-        importTemplate(formData).then(res => {
-            // data.onSuccess(res.data);
-        })
-    },
+      update (data) {
+          this.active = 2
+          this.fileState.error = data.failure
+          this.fileState.success = data.success
+          this.fileState.errorMessage = data.errorAdress
+          // 有错误信息
+        //   if (data.failure && data.failure > 0) {
+        //     this.fileState.errorMessage = `本次成功导入${data.success}条，失败${data.failure}条`
+        //   } else {
+        //     this.fileState.errorMessage = `导入完成`
+        //   }
+          
+          console.log(data, 9999888)
+      }
   },
   setup() {
     const active = ref(0)
@@ -83,7 +98,7 @@ export default defineComponent({
     )
 
     const downloadURL = ref(
-      `${process.env.VUE_APP_API_BASE_URL}//production-config/download/product-line/excel`
+      `${process.env.VUE_APP_API_BASE_URL}/common-service/frontApi/service-provider-employee/download-employee-template`
     )
 
     const uploadRef = ref(null)
@@ -96,15 +111,8 @@ export default defineComponent({
         })
         return
       }
-    //   importTemplate()
-        // const formData  = new FormData()
-        // formData.append('file', uploadRef.value.$refs.upload.uploadFiles)
-        // importTemplate(formData).then(res => {
-        //     console.log(res)
-        //     // data.onSuccess(res.data);
-        // })
-    //   uploadRef.value.$refs.upload.submit()
-    //   active.value = 1
+      uploadRef.value.$refs.upload.submit()
+      active.value = 1
     }
 
     function downFile(blob, fileName) {

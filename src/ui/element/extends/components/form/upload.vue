@@ -21,10 +21,13 @@
  *
  */
 import request from '@/plugins/axios/upload.js'
-
+import importStaff from '@/api/1346-post-frontapi-service-provider-employee-import-person'
 
 export default {
   props: {
+    type: {
+        default: ''
+    },
     listType: {
       default: 'text',
     },
@@ -71,24 +74,33 @@ export default {
     httpRequest({ file, action, onSuccess, onError, onProgress }) {
       const params = new FormData()
       params.append(this.fileName, file)
-      params.append(
-        'filterFileExtNames',
-        this.accept
-          .split(',')
-          .map((v) => v.toLocaleLowerCase().trim())
-          .join()
-      )
-      params.append('allowFileSizeStr', this.size)
-      request
-        .post(action, params, {
-          onUploadProgress: (progressEvent) => {
-            const percent =
-              ((progressEvent.loaded / progressEvent.total) * 100) | 0
-            onProgress({ percent: percent })
-          },
+      // 员工上传不需要其余参数
+      if (this.type != 'staffUpload') {
+        params.append(
+            'filterFileExtNames',
+            this.accept
+            .split(',')
+            .map((v) => v.toLocaleLowerCase().trim())
+            .join()
+        )
+        params.append('allowFileSizeStr', this.size)
+        request
+            .post(action, params, {
+            onUploadProgress: (progressEvent) => {
+                const percent =
+                ((progressEvent.loaded / progressEvent.total) * 100) | 0
+                onProgress({ percent: percent })
+            },
+            })
+            .then((response) => onSuccess(response))
+            .catch((error) => onError(error))
+      } else {
+        const formData  = new FormData()
+        formData.append('file', file)
+        importStaff(formData).then(res => {
+            this.$emit('staffUpdate', res.data)
         })
-        .then((response) => onSuccess(response))
-        .catch((error) => onError(error))
+      }
     },
     syncFileList(fileList) {
       const fileData = this.getEmitData(fileList)
@@ -148,6 +160,7 @@ export default {
       // }
     },
     success(response, file, fileList) {
+        console.log(response, 'hudsao')
       this.$emit('success', fileList)
       this.syncFileList(fileList)
     },

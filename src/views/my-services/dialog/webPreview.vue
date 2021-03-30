@@ -8,18 +8,31 @@
     border
     style="width: 100%">
     <el-table-column
-      prop="name"
+      :show-overflow-tooltip="true"
+      label="预览类型">
+    </el-table-column>
+    <el-table-column
+      :show-overflow-tooltip="true"
       label="预览内容">
     </el-table-column>
-
+    <!-- <el-table-column
+      prop="languageVersion"
+      :show-overflow-tooltip="true"
+      label="语言版本">
+    </el-table-column>
+    <el-table-column
+      prop="statusName"
+      :show-overflow-tooltip="true"
+      label="状态">
+    </el-table-column>
     <el-table-column
       prop="pc"
       :show-overflow-tooltip="true"
       label="PC">
       <template slot-scope="scope">
-          <!-- <el-tag type="success">{{scope.row.pc}}</el-tag> -->
+          <el-tag type="success">{{scope.row.pc}}</el-tag>
           <el-link :href="'http://' + scope.row.pc" type="primary" target="_blank">点击访问
-              <!-- {{scope.row.name == '制作预览' ? '点击访问' : scope.row.pc}} -->
+              {{scope.row.name == '制作预览' ? '点击访问' : scope.row.pc}}
               </el-link>
       </template>
     </el-table-column>
@@ -29,11 +42,21 @@
       label="手机">
       <template slot-scope="scope"
       >
-          <!-- <el-tag type="info">{{scope.row.mobile}}</el-tag> -->
+          <el-tag type="info">{{scope.row.mobile}}</el-tag>
           <el-link :href="'http://' + scope.row.mobile" type="primary" target="_blank">点击访问</el-link>
       </template>
     </el-table-column>
     <el-table-column
+      prop="url"
+      :show-overflow-tooltip="true"
+      label="URL">
+      <template slot-scope="scope"
+      >
+          <el-tag type="info">{{scope.row.mobile}}</el-tag>
+          <el-link :href="scope.row.url" type="primary" target="_blank">点击访问</el-link>
+      </template>
+    </el-table-column> -->
+    <!-- <el-table-column
       align="center"
       prop="qrcode"
       :show-overflow-tooltip="true"
@@ -41,13 +64,16 @@
       <template slot-scope="scope"
       >
         <el-image :src="scope.row.qrcode" style="width:50px;height:50px;"></el-image>
-          <!-- <el-tag type="info">{{scope.row.mobile}}</el-tag> -->
-          <!-- <el-link :href="'http://' + scope.row.mobile" type="primary" target="_blank">点击访问</el-link> -->
+          <el-tag type="info">{{scope.row.mobile}}</el-tag>
+          <el-link :href="'http://' + scope.row.mobile" type="primary" target="_blank">点击访问</el-link>
       </template>
-    </el-table-column>
+    </el-table-column> -->
   </el-table>
     <!-- <div class="foot_box">
         <el-button type="default" size="small" @click="cancel">关闭</el-button>
+    </div> -->
+    <!-- <div class="" v-for="(v, k, i) in tableData" :key="i">
+        {{k}}
     </div> -->
 </div>
 </template>
@@ -65,9 +91,10 @@ data() {
 return {
     value: 3.3,
     result: {},
+    cols: [],
     tableData: [
-        {name: '制作预览', pc: '制作期', mobile: '制作期', qrcode: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbpic.588ku.com%2Felement_origin_min_pic%2F00%2F31%2F53%2F8956d2eaced73db.jpg%21rw400&refer=http%3A%2F%2Fbpic.588ku.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1618972020&t=c52b86d33642a18c3d7993acde036279'},
-        {name: '正式预览', pc: 'www.300.cn', mobile: 'm.300.cn', qrcode: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbpic.588ku.com%2Felement_origin_min_pic%2F00%2F31%2F53%2F8956d2eaced73db.jpg%21rw400&refer=http%3A%2F%2Fbpic.588ku.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1618972020&t=c52b86d33642a18c3d7993acde036279'},
+        // {name: '制作预览', pc: '制作期', mobile: '制作期', qrcode: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbpic.588ku.com%2Felement_origin_min_pic%2F00%2F31%2F53%2F8956d2eaced73db.jpg%21rw400&refer=http%3A%2F%2Fbpic.588ku.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1618972020&t=c52b86d33642a18c3d7993acde036279'},
+        // {name: '正式预览', pc: 'www.300.cn', mobile: 'm.300.cn', qrcode: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbpic.588ku.com%2Felement_origin_min_pic%2F00%2F31%2F53%2F8956d2eaced73db.jpg%21rw400&refer=http%3A%2F%2Fbpic.588ku.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1618972020&t=c52b86d33642a18c3d7993acde036279'},
     ],
     colLen: {},
     form: {},
@@ -96,6 +123,7 @@ methods: {
             buttonType: this.buttonType,
             personScoreJson: JSON.stringify(this.form)
             }).then(res => {
+                // this.tableData = res.data
                 this.tableData[0].pc = res.data.makeDomain
                 this.tableData[0].mobile = res.data.mobileMakeDomain
                 this.tableData[1].pc = res.data.domain
@@ -120,11 +148,31 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
+    console.log(321)
     getServicesBtn({serviceCode: this.code, buttonType: this.buttonType}).then(res => {
-        this.tableData[0].pc = res.data[0].makeDomain
-        this.tableData[0].mobile = res.data[0].mobileMakeDomain
-        this.tableData[1].pc = res.data[0].domain
-        this.tableData[1].mobile = res.data[0].makeDomain
+        // let cols = []
+        // // this.tableData = res.data
+        // Object.keys(res.data).forEach(key => {
+        //     console.log(key)
+        //     res.data[key].map(v => {
+        //         Object.keys(v).forEach(sv => {
+        //             cols.push({
+        //                 label: sv,
+        //                 value: v[sv]
+        //             })
+        //         })
+        //     })
+        //     cols.unshift({
+        //         label: '预览内容',
+        //         value: key
+        //     })
+        // })
+        // this.cols = cols
+        // console.log(this.cols, 999)
+        // this.tableData[0].pc = res.data[0].makeDomain
+        // this.tableData[0].mobile = res.data[0].mobileMakeDomain
+        // this.tableData[1].pc = res.data[0].domain
+        // this.tableData[1].mobile = res.data[0].makeDomain
     }) 
 
 },

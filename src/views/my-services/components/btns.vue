@@ -11,7 +11,7 @@
         <p>您是否要{{btn.label}}?</p>
         <div style="text-align: right; margin: 0">
             <el-button size="mini" type="default" @click="btn.visible = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="submitForm(btn)">确定</el-button>
+            <el-button type="primary" size="mini" @click="submitForm(btn)" :loading="loading">确定</el-button>
         </div>
         <!-- <el-button size="small" type="primary" style="margin:0 0 10px 10px" slot="reference" v-if="btn.popover">{{btn.label}}</el-button> -->
         <el-button size="small" type="primary" style="margin:0 0 10px 10px"
@@ -34,7 +34,7 @@
         <!--底部操作按钮-->
         <div style="text-align:center;margin-top:20px">
             <el-button @click="submitForm(curBtn)" type="primary" size="small" 
-            v-if="!curBtn.hideSubmit" :loading="curBtn.loading">确定</el-button>
+            v-if="!curBtn.hideSubmit" :loading="loading">确定</el-button>
             <!-- <el-button @click="$refs['dragForm'].resetFields()" size="small">重置</el-button> -->
             <el-button @click="closeDrag" type="danger" size="small">关闭</el-button>
         </div>
@@ -77,6 +77,7 @@ return {
     id: 'drag_box',
     move: true,
     btn: [],
+    loading: false,
     curBtn: {},
     form: {
         annexList: [], // 附件ID集合
@@ -135,13 +136,8 @@ methods: {
                 return false
             }
         }
+        this.loading = true
         let cloneOrderConsumeInfo = cloneDeep(this.form.orderConsumeInfo)
-        // if (this.form.orderConsumeInfo.length > 0) {
-
-        //     this.form.orderConsumeInfo = JSON.stringify(this.form.orderConsumeInfo)
-        // } else {
-        //     this.form.orderConsumeInfo = ''
-        // }
 
         // 填写需求特殊处理
         if (this.form.buttonType == 'demand_write') {
@@ -158,6 +154,7 @@ methods: {
                 serviceMainInstanceCode: this.form.serviceMainInstanceCode,
                 orderConsumeInfo: JSON.stringify(cloneOrderConsumeInfo)
             }).then(res => {
+                this.loading = false
                 if (res.status == 200) {
                     this.$message.success(res.msg)
                     this.dragDialogVisible = false
@@ -165,18 +162,23 @@ methods: {
                     // location.reload()
                     this.$emit('reload', {})
                 }
-            }) 
+            }).catch(err => {
+                this.loading = false
+            })
         } else {
             getServicesBtn(this.form).then(res => {
                 this.form.orderConsumeInfo = cloneOrderConsumeInfo
                 if (res.status == 200) {
+                    this.loading = false
                     this.$message.success(res.msg)
                     this.dragDialogVisible = false
                     this.resetData()
                     // location.reload()
                     this.$emit('reload', {})
                 }
-            }) 
+            }).catch(err => {
+                this.loading = false
+            })
         }
         this.filterButtons.map(v => {
             if (v.value == data.value) {
@@ -276,6 +278,7 @@ methods: {
             })
         }, 1000);
     },
+    
     // submit (btnType) {
     //     getServicesBtn({serviceCode: this.code, buttonType: btnType}).then(res => {
     //         console.log(res)
