@@ -12,7 +12,7 @@
             </el-radio>
           </el-radio-group>
         </s-form-item>
-        <s-form-item v-else component="s-text" :content="form.code" />
+        <s-form-item v-else   label="服务产品编号" component="s-text" :content="form.code" />
         <s-form-item clearable label="服务产品类型" prop="type" :rules="['required']" component="s-group" :data="options.type" />
         <s-form-item clearable label="单位" prop="unit" :rules="['required']" component="s-group" :data="options.unit" />
         <s-form-item clearable label="优先级" :min="0" component="el-input-number" prop="priority" :rules="['required:number']" />

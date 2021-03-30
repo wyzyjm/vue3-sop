@@ -30,10 +30,11 @@ export default defineComponent({
       required: true,
     },
   },
-  setup({ serviceOrderId }) {
+  setup() {
     const actived = ref('')
+    const list = ref([])
     const init = (serviceOrderId) => {
-      const list = ref([])
+      list.value = []
       request({ serviceOrderId }).then((response) => {
         response.data.forEach((v, i) => {
           if (i === response.data.length - 1) {
@@ -57,7 +58,7 @@ export default defineComponent({
       return list
     }
 
-    return { list: init(serviceOrderId), actived,init }
+    return { list, actived, init }
   },
 })
 </script>
