@@ -8,6 +8,7 @@ export default () => {
     }
     const options = reactive({
         businessTypes: [],
+        statuss: [],
     })
     getBusinessList().then(({ data }) => {
         // data.records.unshift({name: '全部', id: ''})

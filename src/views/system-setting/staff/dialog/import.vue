@@ -13,10 +13,13 @@
       <p>2、请选择需要导入的文件</p>
       <s-form :model="form">
         <s-form-item prop="upload">
-          <s-upload :with-credentials="true" fileName="excel" :action="url" v-model="form.upload" :files.sync="fileList" @success="uploadSuccess" @error="uploadError" :auto-upload="false" ref="uploadRef" accept="xls,xlsx" class="ml20">
+          <el-upload :with-credentials="true" fileName="file" 
+          action="" 
+          :http-request="httpRequest"
+           class="ml20">
             <el-button size="mini" type="primary">选择附件</el-button>
             支持xls、xlsx文件，单个文件不得大于2M
-          </s-upload>
+          </el-upload>
         </s-form-item>
         <s-form-item class="tc mt20">
           <s-button type="primary" @click="uploadSubmit">开始导入</s-button>
@@ -51,6 +54,16 @@ export default defineComponent({
           console.log(res)
       })
   },
+  methods: {
+    httpRequest (data) {
+        console.log(data, 9999)
+        const formData  = new FormData()
+        formData.append('file', data.file)
+        importTemplate(formData).then(res => {
+            // data.onSuccess(res.data);
+        })
+    },
+  },
   setup() {
     const active = ref(0)
 
@@ -66,7 +79,7 @@ export default defineComponent({
     })
 
     const url = ref(
-      `${process.env.VUE_APP_API_BASE_URL}/production-config/product-line/import`
+      `${process.env.VUE_APP_API_BASE_URL}/common-service/frontApi/service-provider-employee/import-person`
     )
 
     const downloadURL = ref(
@@ -90,8 +103,8 @@ export default defineComponent({
         //     console.log(res)
         //     // data.onSuccess(res.data);
         // })
-      uploadRef.value.$refs.upload.submit()
-      active.value = 1
+    //   uploadRef.value.$refs.upload.submit()
+    //   active.value = 1
     }
 
     function downFile(blob, fileName) {

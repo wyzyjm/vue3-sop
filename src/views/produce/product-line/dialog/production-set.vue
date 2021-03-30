@@ -133,7 +133,7 @@ export default defineComponent({
       }
     }
     const productionOrganizationChange = (item, id) => {
-      console.log(item.org, id[id.length - 1])
+      console.log(item.org, id)
       item.productionOrganization = findProductionOrganizationName(
         item.org,
         id[id.length - 1]

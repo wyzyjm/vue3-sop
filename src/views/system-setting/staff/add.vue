@@ -170,13 +170,13 @@ methods: {
         console.log(e, 999)
     },
     changeVal (e) {
-        if (e.length == 0) {
-            this.checkRoleObj = {}
-        }
+        this.checkRoleObj = {}
         this.checkRoleArr = e
         this.roleList.map(v => {
             e.map(c => {
-                this.checkRoleObj[c] = v.roleName
+                if (c == v.id) {
+                    this.checkRoleObj[c] = v.roleName
+                }
             })
         })
         console.log(this.checkRoleObj)
