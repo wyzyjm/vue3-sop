@@ -150,7 +150,7 @@ export default defineComponent({
         {
           sortable: true,
           label: '产品类型',
-          prop: 'productType',
+          prop: 'productTypeName',
         },
         {
           label: '语言',
@@ -162,8 +162,13 @@ export default defineComponent({
         },
         {
           label: '状态',
-          sortable: true,
-          prop: 'status',
+          showOverflowTooltip: true,
+          width: '120',
+          prop: ({ row }) => {
+              return [
+                  <el-tag type="success">{row.statusName}</el-tag>
+              ]
+          }
         },
         {
           label: '服务单创建时间',
@@ -172,8 +177,17 @@ export default defineComponent({
         },
         {
           label: '剩余周期',
-          sortable: true,
-          prop: 'wholeMakeSurplusCycle',
+          showOverflowTooltip: true,
+          prop: ({row}) => {
+              let render = ''
+              if (row.wholeMakeSurplusCycle) {
+                  render = <el-tag  color={row.wholeMakeSurplusCycleColor ? row.wholeMakeSurplusCycleColor : '#18B398'}
+                  style="color:#fff" >{row.wholeMakeSurplusCycle}</el-tag>
+              }
+              return [
+                  render
+              ]
+          }
         },
         {
           label: '操作',
