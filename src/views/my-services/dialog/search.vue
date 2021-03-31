@@ -1,90 +1,90 @@
 <!-- 高级查询 -->
 <template>
 <div class='search_box' style="height:500px;overflow-y:scroll;position:relative">
-    <el-form v-model="form" size="small" label-width="140px">
+    <s-form v-model="form" size="small" label-width="140px">
         <el-row>
             <el-col :span="12">
-                <el-form-item label="客户名称：">
+                <s-form-item label="客户名称：">
                     <el-input v-model="form.custName" placeholder="请输入" class="w220" clearable></el-input>
-                </el-form-item>
+                </s-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="服务单号：">
+                <s-form-item label="服务单号：">
                     <el-input v-model="form.serviceCode" placeholder="请输入" class="w220" clearable></el-input>
-                </el-form-item>
+                </s-form-item>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="12">
-                <el-form-item label="产品实例编号：">
+                <s-form-item label="产品实例编号：">
                     <el-input v-model="form.productInstanceCode" placeholder="请输入" class="w220" clearable></el-input>
-                </el-form-item>
+                </s-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="产品标识：">
+                <s-form-item label="产品标识：">
                     <el-input v-model="form.productDomain" placeholder="请输入" class="w220" clearable></el-input>
-                </el-form-item>
+                </s-form-item>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="12">
-                <el-form-item label="文本序号：">
+                <s-form-item label="文本序号：">
                     <el-input v-model="form.contractTextCode" placeholder="请输入" class="w220" clearable></el-input>
-                </el-form-item>
+                </s-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="售卖渠道：">
+                <s-form-item label="售卖渠道：">
                     <el-input v-model="form.saleChannel" placeholder="请输入" class="w220" clearable></el-input>
-                </el-form-item>
+                </s-form-item>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="12">
-                <el-form-item label="服务单生成时间：">
+                <s-form-item label="服务单生成时间：">
                     <el-date-picker
                     type="date"
                     v-model="createTime"
                     @change="changeTime($event, 'createTime')"
                     placeholder="选择日期">
                     </el-date-picker>
-                </el-form-item>
+                </s-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="服务单发布时间：">
+                <s-form-item label="服务单发布时间：">
                     <el-date-picker
                     type="date"
                     v-model="publishTime"
                     @change="changeTime($event, 'publishTime')"
                     placeholder="选择日期">
                     </el-date-picker>
-                </el-form-item>
+                </s-form-item>
             </el-col>
         </el-row>
-        <el-form-item label="生产状态：">
+        <s-form-item label="生产状态：">
             <ul class="ul_list">
                 <li v-for="(item, idx) in statusList" :key="idx"
                 :class="(check.statuss.some(v => v == item.id)) ? 'active': ''"
                 @click="checkList('statuss', item.id)">{{item.name}}</li>
             </ul>
-        </el-form-item>
-        <el-form-item label="产品类型：">
+        </s-form-item>
+        <s-form-item label="产品类型：">
             <ul class="ul_list">
                 <li v-for="(item, idx) in productList" :key="idx"
                 :class="(check.productTypes.some(v => v == item.id)) ? 'active': ''"
                 @click="checkList('productTypes', item.id)">{{item.name}}</li>
             </ul>
-        </el-form-item>
-        <el-form-item label="业务类型：">
+        </s-form-item>
+        <s-form-item label="业务类型：">
             <ul class="ul_list">
                 <li v-for="(item, idx) in businessList" :key="idx"
                 :class="(check.businessTypes.some(v => v == item.id)) ? 'active': ''"
                 @click="checkList('businessTypes', item.id)">{{item.name}}</li>
             </ul>
-        </el-form-item>
-    </el-form>
+        </s-form-item>
+    </s-form>
     <div class="query-box" style="margin:0 auto; text-align:center;padding:0 0 30px 0">
         <s-button type="primary" @click="search">查询</s-button>
-        <s-button run="form.reset">重置</s-button>
+        <!-- <s-button run="form.reset" @click="resetFun">重置</s-button> -->
     </div>
 </div>
 </template>
@@ -180,11 +180,22 @@ methods: {
         console.log(this.check[type], type)
     },
     search () {
-        console.log(this.form)
+        let filterForm = {}
         this.form.statuss = this.check.statuss.join(',')
         this.form.businessTypes = this.check.businessTypes.join(',')
         this.form.productTypes = this.check.productTypes.join(',')
-        this.$emit('changeSearch', this.form)
+        Object.keys(this.form).forEach(key => {
+            if (this.form[key] != '') {
+                filterForm[key] = this.form[key]
+            }
+        })
+        console.log(filterForm, '筛选参数')
+        this.$emit('changeSearch', filterForm)
+        // this.$store.commit('table/update', filterForm)
+        this.$emit('close')
+    },
+    resetFun () {
+        this.$emit('changeReset', {})
         this.$emit('close')
     }
 },
@@ -202,11 +213,12 @@ created() {
 },
 //生命周期 - 挂载完成（可以访问DOM元素）
 mounted() {
-    this.form = Object.assign(this.form, this.data)
-    console.log(this.form)
-    // this.check.statuss = this.form.statuss.split(',')
-    // this.check.productTypes = this.form.productTypes.split(',')
-    // this.check.businessTypes = this.form.businessTypes.split(',')
+    Object.assign(this.form, this.data)
+    console.log(this.form, 999999)
+    this.check.statuss = this.form.statuss ? this.form.statuss.split(',') : []
+    this.check.productTypes = this.form.productTypes ? this.form.productTypes.split(',') : []
+    this.check.businessTypes = this.form.businessTypes ? this.form.businessTypes.split(',') : []
+    console.log(this.check)
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前

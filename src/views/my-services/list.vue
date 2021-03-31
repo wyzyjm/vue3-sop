@@ -1,7 +1,7 @@
 <template>
   <div class="services_box">
     <s-dialog v-bind="openSearchDialog" @close="openSearchDialog.close" 
-    @changeSearch="changeSearch"/>
+    @changeSearch="changeSearch" @changeReset="resetFun"/>
     <s-simple-table :data="table.data" :cols="table.cols" v-model="table.checked">
       <s-form :model="form" size="small" slot="form">
         <el-row>
@@ -73,7 +73,7 @@ export default defineComponent({
   },
   methods: {
     checkList (type, id) {
-        console.log(type, id)
+        // console.log(type, id)
         // return
         if (this.check[type].some(v => v == id)) {
             this.check[type].map((c, i) => {
@@ -84,25 +84,54 @@ export default defineComponent({
         } else {
             this.check[type].push(id)
         }
-        console.log(this.check[type], type)
+        // console.log(this.check[type], type)
         this.form[type] = this.check[type].join(',')
-        console.log(this.form[type], 99999)
+        // console.log(this.form[type], 99999)
         
     },
     resetFun () {
+        console.log(32321)
         this.check.statuss = []
         this.check.businessTypes = []
-    }
+        this.form = {}
+    },
+    // changeSearch (data) {
+    //     // this.form = JSON.parse(JSON.stringify(data))
+    //     console.log(this.form, '回显数据')
+    //     this.form.custName = 'cesh'
+    //     // this.$store.commit('table/update', data)
+    // }
   },
   setup(props, { root }) {
+    const form = reactive({
+      custName: '', // 客户名称
+      serviceCode: '', // 服务单
+      businessTypes: '', // 业务类型
+      statuss: '', // 服务单状态
+      productInstanceCode: '', // 产品实例code
+      contractTextCode: '', // 合同文本号
+      productDomain: '', // 产品标识
+      saleChannel: '', // 售卖渠道
+      designerEmpId: '', // 设计师员工id
+      makerEmpId: '', // 制作员id
+      entryClerkId: '', // 录入员id
+      designerMakerEntryId: '', // 设计师员工/制作员/录入员id
+      createTimeStart: '', // 服务单生成时间开始
+      publishTimeStart: '', // 服务单发布时间开始
+      createTimeEnd: '', // 服务单生成时间结束
+      publishTimeEnd: '', // 服务单发布时间结束
+      productType: '', // 产品类型
+      publishTimeAscSort: '', // 创建时间升序排序
+      cycleAscSort: '', // 周期升序排序
+      custId: '', // 客户id
+    })
     const changeSearch = function (data) {
-        // console.log(data, 9999)
-        // data.status = data.status.join(',')
-        // data.productType = data.productType.join(',')
-        // data.businessType = data.businessType.join(',')
-        root.$store.commit('table/update', data)
-        // console.log(data, 999, 8888)
+        // this.form = JSON.parse(JSON.stringify(data))
+        console.log(form, '回显数据123')
+        form.serviceCode = 'ceshi'
+        // this.$store.commit('table/update', data)
     }
+
     const openSearchDialog = useDialog({
       uid: 'search',
       title: '高级搜索',
@@ -294,28 +323,6 @@ export default defineComponent({
       ],
     })
 
-    const form = reactive({
-      custName: '', // 客户名称
-      serviceCode: '', // 服务单
-      businessTypes: '', // 业务类型
-      statuss: '', // 服务单状态
-      productInstanceCode: '', // 产品实例code
-      contractTextCode: '', // 合同文本号
-      productDomain: '', // 产品标识
-      saleChannel: '', // 售卖渠道
-      designerEmpId: '', // 设计师员工id
-      makerEmpId: '', // 制作员id
-      entryClerkId: '', // 录入员id
-      designerMakerEntryId: '', // 设计师员工/制作员/录入员id
-      createTimeStart: '', // 服务单生成时间开始
-      publishTimeStart: '', // 服务单发布时间开始
-      createTimeEnd: '', // 服务单生成时间结束
-      publishTimeEnd: '', // 服务单发布时间结束
-      productType: '', // 产品类型
-      publishTimeAscSort: '', // 创建时间升序排序
-      cycleAscSort: '', // 周期升序排序
-      custId: '', // 客户id
-    })
     const options = useOptions()
     console.log(options, 88908)
     return {
