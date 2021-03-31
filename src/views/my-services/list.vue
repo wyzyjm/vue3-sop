@@ -118,11 +118,11 @@ function checkList(type, id) {
     const tableRef=ref(null)
 
     const changeSearch = function (data) {
-      // this.form = JSON.parse(JSON.stringify(data))
       Object.keys(form).forEach((v) => {
         form[v] = data[v] || ''
       })
-
+      check.statuss = form.statuss ? form.statuss.split(',') : []
+      check.businessTypes = form.businessTypes ? form.businessTypes.split(',') : []
 
       tableRef.value.formSearch(data)
       this.$store.commit('table/update')
