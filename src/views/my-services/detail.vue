@@ -401,8 +401,20 @@ methods: {
         getServicesInfo({serviceOrderId: this.$route.params.id}).then(res => {
             this.servicesInfo = res.data || {}
             // this.servicesInfo.buttonList.push({
-            //     buttonName: 'design_submit',
-            //     buttonCode: 'design_submit'
+            //     buttonName: '打回通配',
+            //     buttonCode: 'back*abs'
+            // })
+            // this.servicesInfo.buttonList.push({
+            //     buttonName: '打回通配2',
+            //     buttonCode: 'back*bbb'
+            // })
+            // this.servicesInfo.buttonList.push({
+            //     buttonName: '通过通配',
+            //     buttonCode: 'pass*999'
+            // })
+            // this.servicesInfo.buttonList.push({
+            //     buttonName: '通过通配2',
+            //     buttonCode: 'pass*bbbcsad'
             // })
         })
         // 服务内容
