@@ -7,13 +7,14 @@
         drag
         action=""
         :on-exceed="handleExceed"
+        :before-upload="beforeAvatarUpload"
         :http-request="httpRequest"
         :on-success="(res,file) => fileSuccess(res)"
         :on-remove="(res,file) => closeFile(res, fileList)"
         multiple>
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+        <div class="el-upload__tip" slot="tip">只能上传jpg/png/pdf文件，且不超过5MB</div>
         </el-upload>
         <!-- action="http://test-api-sop.ceboss.cn/common-service/frontApi/common-upload/upload" -->
     </div>
@@ -58,6 +59,20 @@ methods: {
             console.log(res)
             this.$store.commit('dialog/close')
         }) 
+    },
+    beforeAvatarUpload (file) {
+        let types = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf']
+        const isImage = types.includes(file.type)
+        const maxSize = 1024 * 1000 * 5
+        if (!isImage) {
+            this.$message.error('上传图片只能是 JPG、JPEG、PNG、PDF格式!')
+            return false
+        }
+        if (file.size > maxSize) {
+            this.$message.error('上传文件超过5MB！')
+            return false
+        }
+        
     },
     httpRequest (data) {
         console.log(data)
