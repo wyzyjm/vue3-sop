@@ -262,9 +262,26 @@ methods: {
             //     this.btn.push(mergeBtn[key])
             // })
             let btnArr = []
+            // let likeBtnArr = []
             if (this.btnList.length > 0) {
                 this.btnList.map(v => {
-                    btnArr.push(v)
+                    if (v.buttonCode.includes('pass*')) {
+                        this.btn.push({
+                            value: 'pass',
+                            label: v.buttonName,
+                            popover: true,
+                            visible: false,
+                        })
+                    } else if (v.buttonCode.includes('back*')) {
+                        this.btn.push({
+                            value: 'back',
+                            label: v.buttonName,
+                            popover: true,
+                            visible: false,
+                        })
+                    } else{
+                        btnArr.push(v)
+                    }
                 })
             }
             let mergeBtn = {...btns.dynamicList}
@@ -276,6 +293,20 @@ methods: {
                     }
                 })
             })
+            // Object.keys(btns.likeList).forEach(key => {
+            //     console.log(key)
+            //     likeBtnArr.map(v => {
+            //         if (v.buttonCode.includes('pass*')) {
+            //             btns.likeList[key].label = v.buttonName
+            //             this.btn.push(btns.likeList[key])
+            //         } else if (v.buttonCode.includes('back*')) {
+            //             btns.likeList[key].label = v.buttonName
+            //             this.btn.push(btns.likeList[key])
+            //         }
+            //     })
+            // })
+            // this.btn = [...new Set(this.btn)]
+            // console.log(this.btn, 328108)
         }, 1000);
     },
     

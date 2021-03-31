@@ -314,5 +314,19 @@ export const btns = {
             //     value: 'unit_consumption',
             //     label: '单品消耗'
             // },
+        },
+        likeList: {
+            "pass*": {
+                value: 'pass',
+                label: '通过*',
+                popover: true,
+                visible: false,
+            },
+            "back*": {
+                value: 'back',
+                label: '打回*',
+                popover: true,
+                visible: false,
+            },
         }
 }

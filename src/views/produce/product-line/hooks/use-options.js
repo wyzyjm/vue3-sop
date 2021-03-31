@@ -19,7 +19,7 @@ function filterEmptyArrayAndSetDisabled(arr) {
 }
 
 export default () => {
-    if (getBusinessType.options) {
+    if (getBusinessType.options && Object.keys(getBusinessType.options).length === 5) {
         return getBusinessType.options
     }
     const options = reactive({

@@ -3,9 +3,9 @@ import getBusinessList from '@/api/1408-get-production-config-business-type-sear
 import getStatusList from '@/api/1685-get-production-config-service-order-status-list'
 
 export default () => {
-    if (getBusinessList.options) {
-        return getBusinessList.options
-    }
+    // if (getBusinessList.options) {
+    //     return getBusinessList.options
+    // }
     const options = reactive({
         businessTypes: [],
         statuss: [],
