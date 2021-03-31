@@ -14,7 +14,7 @@
             <s-group class="pct90" filterable :props="{
             label:'basicName',
             value:'id'
-          }" :data="options.serviceProvider" v-model="item.serviceProviderId" @change="serviceProviderChange(item,$event)"></s-group>
+          }" :data="serviceProvider" v-model="item.serviceProviderId" @change="serviceProviderChange(item,$event)"></s-group>
           </s-form-item>
         </el-col>
         <el-col :span="8">
@@ -44,13 +44,14 @@
   </div>
 </template>
 <script>
-import { defineComponent, reactive } from '@vue/composition-api'
+import { defineComponent, reactive,ref } from '@vue/composition-api'
 import _save from '@/api/1486-post-production-config-product-line-production-setting-batch'
 import getOrg from '@/api/1320-get-frontapi-service-provider-org-get-by-providerid'
 import _getDetail from '@/api/2009-get-production-config-product-line-production-setting-product-line-list'
 import useOptions from '../hooks/use-options'
 import filterEmptyArray from '@/util/filter-empty-array'
 import { Message } from 'element-ui'
+import getServiceProvider from '@/api/1306-get-frontapi-service-provider-pagelist'
 
 export default defineComponent({
   props: {
@@ -93,6 +94,12 @@ export default defineComponent({
         }
       }
     }
+
+    const serviceProvider=ref([])
+
+    getServiceProvider({ status: 0, pageSize: -1 }).then(response=>{
+      serviceProvider.value=response.data.records
+    })
 
     const serviceProviderChange = (
       item,
@@ -188,6 +195,7 @@ export default defineComponent({
     }
 
     return {
+      serviceProvider,
       add,
       save,
       form,
