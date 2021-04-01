@@ -1447,3 +1447,10 @@ a.tdl:hover {
   background: #f5f7fa;
   color: #909399;
 }
+
+::-webkit-scrollbar {
+    width: 0;
+    height:0;
+    /*或者直接写下面的样式*/
+    display:none;
+}
