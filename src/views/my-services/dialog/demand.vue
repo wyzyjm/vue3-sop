@@ -127,9 +127,9 @@ created() {
                     this.form[key] = []
                 } 
         })
-        for(let i = 0; i < 7; i++) {
-            this.form.orderConsumeInfo.push(this.form.orderConsumeInfo[0])
-        }
+        // for(let i = 0; i < 7; i++) {
+        //     this.form.orderConsumeInfo.push(this.form.orderConsumeInfo[0])
+        // }
         // this.form.buttonType = 'demand_confirm'
         // this.form = res.data
     }) 
