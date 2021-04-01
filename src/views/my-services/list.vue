@@ -34,29 +34,29 @@
         </s-form-item>
       </s-form>
       <!--批量操作按钮-->
-      <!-- <div slot="top" class="mb20">
-        <el-radio-group v-model="form.status">
+      <div slot="top" class="mb20">
+        <!-- <el-radio-group v-model="form.status">
             <el-radio-button label="全部"></el-radio-button>
             <el-radio-button label="生产中"></el-radio-button>
             <el-radio-button label="已完成"></el-radio-button>
-        </el-radio-group>
-        <div style="float:right;margin-bottom:15px">
-            <el-button type="primary" size="small">更换服务人员</el-button>
-            <el-button type="primary" size="small">更换设计师</el-button>
-            <el-button type="primary" size="small">更换制作员</el-button>
-            <el-button type="primary" size="small">更换助理</el-button>
-            <el-button type="primary" size="small">领取</el-button>
+        </el-radio-group> -->
+        <div style="float:right;margin-bottom:15px;margin-top:-20px;">
+             
+            <el-button type="primary" size="small" :disabled="!table.disButton"
+            >批量质检领取</el-button>
+            <!-- @click="batchQulity" -->
         </div>
-    </div> -->
+    </div>
     </s-simple-table>
   </div>
 </template>
 <script>
-import { defineComponent, reactive,ref } from '@vue/composition-api'
+import { computed, defineComponent, reactive,ref } from '@vue/composition-api'
 import getList from '@/api/1700-get-service-order-sevice-order-info-list'
 import getExpandList from '@/api/1829-get-service-order-sevice-order-info-get-service-product-{serviceorderid}'
 import useOptions from './utils/query'
 import useDialog from '@/hooks/use-dialog'
+import { btns } from './utils/btn.js'
 export default defineComponent({
   setup(props, { root }) {
     const form = reactive({
@@ -82,7 +82,6 @@ export default defineComponent({
       custId: '', // 客户id
     })
 
-
     const check=reactive( {
         statuss: [],
         businessTypes: [],
@@ -90,7 +89,6 @@ export default defineComponent({
 
    const resetFun=()=> {
       // return
-      console.log(32321)
       check.statuss = []
       check.businessTypes = []
       Object.keys(form).forEach((v) => {
@@ -164,12 +162,19 @@ function checkList(type, id) {
     }
     const table = reactive({
       checked: [],
+      disButton: computed(() => {
+          if (table.checked.length == 0) {
+              return false
+          }
+          return table.checked.every(v => v.status == 50)
+      }),
       data: getList,
       cols: [
         {
           type: 'checkbox',
           key: 'id',
           width: '40px',
+          fixed: 'left',
         },
         {
           type: 'expand',
@@ -186,7 +191,14 @@ function checkList(type, id) {
         {
           showOverflowTooltip: true,
           label: '服务单号',
-          prop: 'serviceCode',
+          width:160,
+        //   prop: 'serviceCode',
+          prop: ({row}) => {
+              let src = `/my-services/detail/${row.id}/${row.serviceCode}`
+              return [
+                  <el-link href={src}>{row.serviceCode}</el-link>
+              ]
+          }
         },
         {
           label: '客户名称',
@@ -200,7 +212,7 @@ function checkList(type, id) {
               { label: '负责人电话', date: row.custLlinkManPhone || '----' },
             ]
             return [
-              <el-popover placement="top-start" width="200" trigger="hover">
+              <el-popover placement="top-start" width="260" trigger="hover">
                 <el-table
                   data={tableData}
                   size="small"
@@ -279,7 +291,7 @@ function checkList(type, id) {
               { label: '网站发布', date: row.publishTime || '----' },
             ]
             return [
-              <el-popover placement="top-start" width="200" trigger="hover">
+              <el-popover placement="top-start" width="260" trigger="hover">
                 <el-table
                   data={tableData}
                   size="small"
@@ -326,16 +338,23 @@ function checkList(type, id) {
         },
         {
           label: '操作',
+          width: 200,
+          fixed:'right',
           prop: ({ row }) => {
-            return [
-              <s-button
-                data-pid="provider"
-                type="text"
-                onClick={() => toDetail(row)}
-              >
-                查看详情
-              </s-button>,
-            ]
+            // Object.keys(btns.dynamicList).forEach(key => {
+
+            // })
+            // let filterBtns = row.buttonList.filter(v=>root.$hasPermissions(v.buttonCode))
+            // return [
+
+            //   <s-button
+            //     data-pid="provider"
+            //     type="text"
+            //     onClick={() => toDetail(row)}
+            //   >
+            //     查看详情
+            //   </s-button>,
+            // ]
           },
         },
       ],
@@ -346,11 +365,10 @@ function checkList(type, id) {
     }
 
     const options = useOptions()
-    console.log(options, 88908)
     return {
       checkList,
       check,
-    resetFun,
+      resetFun,
       tableRef,
       table,
       form,

@@ -207,11 +207,21 @@ export const btns = {
             },
             "quality_receive": {
                 value: 'quality_receive',
-                label: '质检领取'
+                label: '质检领取',
+                popover: true,
+                visible: false,
+            },
+            "modified_completed": {
+                value: 'modified_completed',
+                label: '修改完成',
+                popover: true,
+                visible: false,
             },
             "quality_receive_back": {
                 value: 'quality_receive_back',
-                label: '退回领取'
+                label: '退回领取',
+                popover: true,
+                visible: false,
             },
             "quality_pass": {
                 value: 'quality_pass',
