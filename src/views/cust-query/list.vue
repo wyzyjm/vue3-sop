@@ -46,7 +46,7 @@
                     </div>
                   </div>
                   <div class="item-date">{{item.state==2?(item.beginTime+' 到 '+item.endTime):item.stateName}}</div>
-                  <div class="cust-product-mark" @click="custProductEdit(item)"><i class="iconfont">&#xe615;</i></div>
+                  <div v-if="$hasPermissions('start-service')" class="cust-product-mark" @click="custProductEdit(item)"><i class="iconfont">&#xe615;</i></div>
                 </div>
               </div>
             </el-tab-pane>
