@@ -1,6 +1,6 @@
 <template>
   <div>
-    <s-form :model="form" label-width="140px" @submit="save">
+    <s-form :model="form" label-width="auto" @submit="save">
       <div class="start-serve">
         <div class="serve-title">客户信息</div>
         <div class="serve-form">
@@ -10,41 +10,53 @@
           <s-form-item label="联系邮箱" prop="contactUserEmail" :rules="['required', 'email']" />
         </div>
       </div>
+
       <el-divider style="margin-top:none"></el-divider>
       <div class="start-serve">
-        <div class="serve-title">服务信息{{id}}</div>
+        <div class="serve-title">服务信息</div>
         <div class="serve-form">
-          <s-form-item label="服务内容" prop="serviceTeamId" :rules="['required']" v-if="id == 1">
+          <!-- <s-form-item label="服务内容" prop="serviceTeamId" :rules="['required']" v-if="id == 1">
             <template v-if="teamList.length">
               <el-radio v-model="form.serviceTeamId" v-for="(info, inx) of teamList" :label="info.orgId" :key="inx">{{info.orgName}}</el-radio>
             </template>
             <template v-else>暂无团队</template>
-          </s-form-item>
-          <s-form-item label="服务内容" prop="sInfo" :rules="['required:array']" v-else>
+          </s-form-item> -->
+          <!-- <s-form-item label="服务内容" prop="sInfo" :rules="['required:array']" v-else>
             <el-checkbox-group v-model="form.sInfo" size="mini">
               <el-checkbox-button v-for="(info, inx) of canList" :label="inx" :key="inx" @change="serviceChange($event, info, inx)">
                 {{info.instanceDefName}}
               </el-checkbox-button>
             </el-checkbox-group>
-          </s-form-item>
+          </s-form-item> -->
+
+          <div v-if="id==1">
+            <s-form-item :label="item.accountText" v-for="(item,i) in accountList" :key="i">
+              <el-col :span="12">
+                <el-slider :max="item.totalNum" v-model="item.consumeNumber"></el-slider>
+              </el-col>
+              <el-col :span="10" :offset="2">
+                <el-input :max="item.totalNum" v-model.number="item.consumeNumber" size="mini">
+                  <template slot="append">{{item.totalNum}}</template>
+                </el-input>
+              </el-col>
+            </s-form-item>
+
+            <s-form-item label="服务主体" component="s-text" :content="info.domain" />
+          </div>
+
+          <s-form-item v-else label="服务主体" :props="{label:'domain',value:'instanceCode'}" component="s-group" :data="getMallsite" prop="productInstaceCode" />
+
           <s-form-item label="服务说明" prop="serviceDesc" type="textarea" />
           <s-form-item label="资料上传" prop="uploadId">
-            <el-upload
-              action=""
-              class="service-uploader"
-              :show-file-list="false"
-              :on-success="uploadSuccess"
-              :http-request="httpRequest"
-              ref="uploadRef"
-              accept="docx,rar,zip,doc,pdf,jpg">
-                <img v-if="form.fileUrl" :src="form.fileUrl" class="avatar">
-                <i v-else class="el-icon-plus service-uploader-icon"></i>  
+            <el-upload action="" class="service-uploader" :show-file-list="false" :on-success="uploadSuccess" :http-request="httpRequest" ref="uploadRef" accept="docx,rar,zip,doc,pdf,jpg">
+              <img v-if="form.fileUrl" :src="form.fileUrl" class="avatar">
+              <i v-else class="el-icon-plus service-uploader-icon"></i>
             </el-upload>
             支持格式为: .rar .zip .doc .docx .pdf .jpg
           </s-form-item>
         </div>
       </div>
-      
+
       <s-form-item>
         <s-button @click="$emit('close')">取消</s-button>
         <s-button type="primary" run="form.submit">确定</s-button>
@@ -58,24 +70,26 @@ import { Message } from 'element-ui'
 import uploadFile from '@/api/1308-post-frontapi-common-upload-upload'
 import addService from '@/api/1889-post-service-order-user-service-api-add'
 import getTeams from '@/api/1895-get-service-order-user-service-api-get-org-by-custid'
+import _getMallsite from '@/api/2441-get-service-order-cust-info-api-mallsite-list-by-custid'
+import _getAccountList from '@/api/2447-get-service-order-cust-info-api--all-account-list-by-custid'
 
 export default defineComponent({
   props: {
     id: {
       type: Number,
-      default: 1
+      default: 1,
     },
     info: {
       type: Object,
     },
     canList: {
-      type: Array
-    }
+      type: Array,
+    },
   },
-  setup({ id, info }, {root, emit}) {
+  setup({ id, info }, { root, emit }) {
     const serviceData = reactive({
       serveInfo: {},
-      teamList: []
+      teamList: [],
     })
 
     let form = reactive({
@@ -83,25 +97,39 @@ export default defineComponent({
       uploadId: '',
       serviceTeamId: '',
       sInfo: [],
-      serviceType: id
+      serviceType: id,
     })
+
+    const accountList = ref([])
 
     form = { ...form, ...info }
 
-    getTeams({custId: form.custId}).then(({data}) => { serviceData.teamList = data || []})
+    _getAccountList({
+      custId: form.custId,
+      operProductId: form.operProductId,
+    }).then((response) => {
+      accountList.value = response.data.map((v) => {
+        v.consumeNumber = 0
+        return v
+      })
+    })
+
+    getTeams({ custId: form.custId }).then(({ data }) => {
+      serviceData.teamList = data || []
+    })
 
     const httpRequest = (upload) => {
       // let file = upload.file;
       const formData = new FormData()
       formData.append('file', upload.file)
-      uploadFile(formData).then(response => {
-        upload.onSuccess(response.data);
+      uploadFile(formData).then((response) => {
+        upload.onSuccess(response.data)
       })
     }
 
     const uploadSuccess = (fileData, file) => {
-      form.fileUrl  = fileData.fileUrl || '';
-      form.uploadId = fileData.id || '';
+      form.fileUrl = fileData.fileUrl || ''
+      form.uploadId = fileData.id || ''
       // console.log("上传成功=", fileData)
     }
 
@@ -109,56 +137,70 @@ export default defineComponent({
       if (isSelect) {
         serviceData.serveInfo[index] = info
       } else {
-        delete serviceData.serveInfo[index];
+        delete serviceData.serveInfo[index]
       }
     }
 
     const save = () => {
-      let contentList = [];
-      for (const key in serviceData.serveInfo) {
-        if (Object.hasOwnProperty.call(serviceData.serveInfo, key)) {
-          let currInfo = serviceData.serveInfo[key];
-          contentList.push({
-            accountId: currInfo.id,
-            contentId: currInfo.instanceDefId
-          });
+      let contentList = []
+      // for (const key in serviceData.serveInfo) {
+      //   if (Object.hasOwnProperty.call(serviceData.serveInfo, key)) {
+      //     let currInfo = serviceData.serveInfo[key]
+      //     contentList.push({
+      //       accountId: currInfo.id,
+      //       contentId: currInfo.instanceDefId,
+      //     })
+      //   }
+      // }
+
+      contentList = accountList.value.map((v) => {
+        return {
+          accountId: v.instanceAccountId,
+          contentId: v.instanceAccountType,
+          consumeNumber: v.consumeNumber,
         }
-      }
-      
-      addService({contentList, ...form})
-      .then(res => {
+      }).filter(v=>{
+        return v.consumeNumber>0
+      })
+
+      addService({ contentList, ...form }).then((res) => {
         Message({
           type: 'success',
           message: '服务发起成功！',
         })
         emit('close')
-        console.log("addService=", res)
+        console.log('addService=', res)
       })
     }
 
+    const getMallsite = () => {
+      return _getMallsite({ custId: form.custId })
+    }
+
     return {
+      accountList,
+      getMallsite,
       save,
       form,
       uploadSuccess,
       httpRequest,
       serviceChange,
-      ...toRefs(serviceData)
+      ...toRefs(serviceData),
     }
   },
 })
 </script>
 <style lang="scss" scoped>
- .start-serve {
-   display: flex;
-   line-height: 36px;
-   margin-bottom: -22px;
-   .serve-title {
-     font-weight: bold;
-     padding-right: 20px;
-   }
-   .serve-form {
-     width: 80%;
-   }
- }
-  
+.start-serve {
+  display: flex;
+  line-height: 36px;
+  margin-bottom: -22px;
+  .serve-title {
+    font-weight: bold;
+    padding-right: 20px;
+  }
+  .serve-form {
+    width: 80%;
+  }
+}
 </style>
