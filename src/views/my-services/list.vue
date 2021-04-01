@@ -1,6 +1,7 @@
 <template>
   <div class="services_box">
     <s-dialog v-bind="openSearchDialog" @close="openSearchDialog.close" @changeSearch="changeSearch" @changeReset="resetFun" />
+    <s-dialog v-bind="allotDialog" @close="allotDialog.close" />
     <s-simple-table ref="tableRef" :data="table.data" :cols="table.cols" v-model="table.checked">
       <s-form :model="form" size="small" slot="form">
         <el-row>
@@ -95,6 +96,35 @@ export default defineComponent({
         form[v] = ''
       })
 
+    }
+
+    const allotDialog = useDialog({
+      uid: 'allot',
+      title: '分派/转单',
+      width: '600px',
+      component: require('./dialog/allot'),
+    })
+    const allotFun = (row, i, btnArr) => {
+            allotDialog.open({
+                isBtn: true,
+                code: row.serviceCode, 
+                buttonType: btnArr[i].value,
+                curBtn: btnArr[i],
+                form:{
+                    annexList: [], // 附件ID集合
+                    buttonType: btnArr[i].value, // 按钮类型
+                    configId: '', // 配置ID
+                    demandContent: '', // 需求
+                    orgId: '', // 部门ID
+                    empId: '', // 员工ID
+                    personScoreJson: '', // 评分结果
+                    reason: '', // 原因
+                    serviceCode: row.serviceCode, // 服务单号
+                    serviceId: row.id, // 服务商ID
+                    serviceMainInstanceCode: '', // 实例号
+                    orderConsumeInfo: '', // 消耗单品
+                }
+            })
     }
 function checkList(type, id) {
       // console.log(type, id)
@@ -338,23 +368,46 @@ function checkList(type, id) {
         },
         {
           label: '操作',
-          width: 200,
+          width: 160,
           fixed:'right',
           prop: ({ row }) => {
-            // Object.keys(btns.dynamicList).forEach(key => {
+            let btnArr = []
+            let filterBtns = row.buttonList.filter(v=>root.$hasPermissions(v.buttonCode))
+            Object.keys(btns.dynamicList).forEach(key => {
+                filterBtns.map(v => {
+                    if (v.buttonCode == btns.dynamicList[key].value) {
+                        btns.dynamicList[key].label = v.buttonName
+                        btnArr.push(btns.dynamicList[key])
+                    }
+                })
+            })
+            // let btnArr = row.buttonList.filter(v=>root.$hasPermissions(v.buttonCode))
+            if (btnArr.length > 1) {
+                let item = btnArr.slice(1).map((v, i) => {
+                    return <el-dropdown-item>
+                            <div onClick={() => allotFun(row, i, btnArr)}>{v.label}</div>
+                        </el-dropdown-item>
+                    
+                })
+                return [
+                    <s-button type="text" onClick={() => allotFun(row, 0, btnArr)}>{btnArr[0].label}</s-button>,
+                    <el-dropdown>
+                    <span class="el-dropdown-link el-button--text" style="margin-left:10px;cursor:pointer">
+                        更多<i class="el-icon-arrow-down el-icon--right"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                        {item}
+                    </el-dropdown-menu>
+                    </el-dropdown> 
+                ]
 
-            // })
-            // let filterBtns = row.buttonList.filter(v=>root.$hasPermissions(v.buttonCode))
-            // return [
-
-            //   <s-button
-            //     data-pid="provider"
-            //     type="text"
-            //     onClick={() => toDetail(row)}
-            //   >
-            //     查看详情
-            //   </s-button>,
-            // ]
+            } else if (btnArr.length == 1) {
+                return [
+                    <s-button type="text" onClick={() => allotFun(row, 0, btnArr)}>{btnArr[0].buttonName}</s-button>
+                ]
+            } else {
+                return []
+            }
           },
         },
       ],
@@ -376,6 +429,8 @@ function checkList(type, id) {
       openSearchDialog,
       changeSearch,
       advSearch,
+      allotDialog,
+      allotFun
     }
   },
 })
