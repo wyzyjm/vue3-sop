@@ -16,6 +16,10 @@
     @change="selectChange">
         <el-option v-for="(item, idx) in selectList" :key="idx" :value="item.orgId" :label="item.orgName"></el-option>
     </el-select>
+    <div class="foot_box" v-if="isBtn">
+        <el-button type="default" size="small" @click="$emit('close')">取消</el-button>
+        <el-button type="primary" size="small" @click="save">确定</el-button>
+    </div>
 </div>
 </template>
 
@@ -29,7 +33,7 @@ import getStaffList from '@/api/2243-get-common-service-employee-list-{orgid}-{s
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {},
-props: ['code', 'buttonType', 'form', 'curBtn'],
+props: ['code', 'buttonType', 'form', 'curBtn', 'isBtn'],
 data() {
 //这里存放数据
 return {
@@ -47,6 +51,32 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
+    cancel () {
+        this.$store.commit('dialog/close')
+    },
+    save () {
+        // 员工
+        if (this.buttonType == 'change_liability' || (this.buttonType != 'change_liability' && !this.term)) {
+            if (!this.form.empId) {
+                this.$message.error('请选择员工')
+                return false
+            }
+        }
+        if (this.term) {
+            if (!this.form.orgId) {
+                this.$message.error('请选择组织')
+                return false
+            }
+        }
+        getServicesBtn(this.form).then(res => {
+            if (res.status == 200) {
+                this.$message.success('操作成功')
+                this.$store.commit('table/update')
+            }
+        }).catch(err => {
+            this.$message.error('请求失败')
+        })
+    },
     // 递归去除空级联bug
     getTreeData (data, children) {
         for(var i=0;i<data.length;i++){
@@ -84,6 +114,7 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
+    // console.log(this.buttonType, this.curBtn, this.code, this.form, this.isBtn)
     if (this.buttonType == 'assign_designers' || this.buttonType == 'assign_make' || this.buttonType == 'assign_assistant'
      || this.buttonType == 'change_designers' || this.buttonType == 'change_make' || this.buttonType == 'change_assistant') {
         getServicesBtn({serviceCode: this.code, buttonType: 'get_assign_person'}).then(res => {
@@ -132,5 +163,9 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 </script>
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
-
+    .foot_box{
+        // height:100px;
+        margin:30px auto;
+        text-align: center;
+    }
 </style>
