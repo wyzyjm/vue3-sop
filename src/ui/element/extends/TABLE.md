@@ -14,7 +14,22 @@
 | props | 手动指定数据和分页数据字段(不指定会自动获取) | object | - | {data: 'data',total: 'total'} |
 
 
+
 <br />
+
+
+## cols attributes （默认继承 el-table-column 所有属性，这里只列举额外属性）
+| 参数	 | 说明 | 类型	 | 可选值 | 默认值 |
+| :-----| :---- | :---- | :---- | :---- |
+| type | 在原type基础上增加checkbox/raido,对应的table使用v-model接收选中数据 | string | selection/index/expand/checkbox/radio	 |- |
+| label | 扩展支持类型Function，可通过render渲染自定义表头 | string/function | -	 |- |
+| prop | 扩展支持类型Function，可通过render渲染自定义表头 | string/function | -	 |- |
+
+
+
+<br />
+
+
 
 ### 主动触发表格数据更新方法
 ```javascript
