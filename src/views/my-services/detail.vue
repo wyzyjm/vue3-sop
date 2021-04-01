@@ -400,10 +400,10 @@ methods: {
         // 客户信息
         getServicesInfo({serviceOrderId: this.$route.params.id}).then(res => {
             this.servicesInfo = res.data || {}
-            // this.servicesInfo.buttonList.push({
-            //     buttonName: '打回通配',
-            //     buttonCode: 'back*abs'
-            // })
+            this.servicesInfo.buttonList.push({
+                buttonName: '修改完成',
+                buttonCode: 'modified_completed'
+            })
             // this.servicesInfo.buttonList.push({
             //     buttonName: '打回通配2',
             //     buttonCode: 'back*bbb'

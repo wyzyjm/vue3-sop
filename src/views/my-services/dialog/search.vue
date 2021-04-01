@@ -4,43 +4,43 @@
     <s-form v-model="form" size="small" label-width="140px">
         <el-row>
             <el-col :span="12">
-                <s-form-item label="客户名称：">
+                <s-form-item label="客户名称">
                     <el-input v-model="form.custName" placeholder="请输入" class="w220" clearable></el-input>
                 </s-form-item>
             </el-col>
             <el-col :span="12">
-                <s-form-item label="服务单号：">
+                <s-form-item label="服务单号">
                     <el-input v-model="form.serviceCode" placeholder="请输入" class="w220" clearable></el-input>
                 </s-form-item>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="12">
-                <s-form-item label="产品实例编号：">
+                <s-form-item label="产品实例编号">
                     <el-input v-model="form.productInstanceCode" placeholder="请输入" class="w220" clearable></el-input>
                 </s-form-item>
             </el-col>
             <el-col :span="12">
-                <s-form-item label="产品标识：">
+                <s-form-item label="产品标识">
                     <el-input v-model="form.productDomain" placeholder="请输入" class="w220" clearable></el-input>
                 </s-form-item>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="12">
-                <s-form-item label="文本序号：">
+                <s-form-item label="文本序号">
                     <el-input v-model="form.contractTextCode" placeholder="请输入" class="w220" clearable></el-input>
                 </s-form-item>
             </el-col>
             <el-col :span="12">
-                <s-form-item label="售卖渠道：">
+                <s-form-item label="售卖渠道">
                     <el-input v-model="form.saleChannel" placeholder="请输入" class="w220" clearable></el-input>
                 </s-form-item>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="12">
-                <s-form-item label="服务单生成时间：">
+                <s-form-item label="服务单生成时间">
                     <el-date-picker
                     type="date"
                     v-model="createTime"
@@ -50,7 +50,7 @@
                 </s-form-item>
             </el-col>
             <el-col :span="12">
-                <s-form-item label="服务单发布时间：">
+                <s-form-item label="服务单发布时间">
                     <el-date-picker
                     type="date"
                     v-model="publishTime"
@@ -60,21 +60,21 @@
                 </s-form-item>
             </el-col>
         </el-row>
-        <s-form-item label="生产状态：">
+        <s-form-item label="生产状态">
             <ul class="ul_list">
                 <li v-for="(item, idx) in statusList" :key="idx"
                 :class="(check.statuss.some(v => v == item.id)) ? 'active': ''"
                 @click="checkList('statuss', item.id)">{{item.name}}</li>
             </ul>
         </s-form-item>
-        <s-form-item label="产品类型：">
+        <s-form-item label="产品类型">
             <ul class="ul_list">
                 <li v-for="(item, idx) in productList" :key="idx"
                 :class="(check.productTypes.some(v => v == item.id)) ? 'active': ''"
                 @click="checkList('productTypes', item.id)">{{item.name}}</li>
             </ul>
         </s-form-item>
-        <s-form-item label="业务类型：">
+        <s-form-item label="业务类型">
             <ul class="ul_list">
                 <li v-for="(item, idx) in businessList" :key="idx"
                 :class="(check.businessTypes.some(v => v == item.id)) ? 'active': ''"
