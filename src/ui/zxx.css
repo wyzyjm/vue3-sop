@@ -1449,10 +1449,10 @@ a.tdl:hover {
 }
 
 ::-webkit-scrollbar {
-    width: 0;
+    /* width: 0;
     height:0;
     overflow-x: scroll;
-    overflow-y: hidden;
+    overflow-y: hidden; */
     /*或者直接写下面的样式*/
     /* display:none; */
 }
