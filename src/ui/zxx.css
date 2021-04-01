@@ -1447,3 +1447,7 @@ a.tdl:hover {
   background: #f5f7fa;
   color: #909399;
 }
+
+::-webkit-scrollbar {
+    /* display:none; */
+}

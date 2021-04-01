@@ -71,6 +71,7 @@ methods: {
         getServicesBtn(this.form).then(res => {
             if (res.status == 200) {
                 this.$message.success('操作成功')
+                this.$emit('close')
                 this.$store.commit('table/update')
             }
         }).catch(err => {

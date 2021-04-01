@@ -127,6 +127,9 @@ created() {
                     this.form[key] = []
                 } 
         })
+        // for(let i = 0; i < 7; i++) {
+        //     this.form.orderConsumeInfo.push(this.form.orderConsumeInfo[0])
+        // }
         // this.form.buttonType = 'demand_confirm'
         // this.form = res.data
     }) 
@@ -146,6 +149,9 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 }
 </script>
 <style lang='scss' scoped>
+::-webkit-scrollbar {
+    display:none;
+}
 //@import url(); 引入公共css类
     .row-box{
         margin:20px 0 0 0;border-bottom:1px solid #ebebeb;height:36px;

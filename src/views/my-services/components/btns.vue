@@ -332,7 +332,7 @@ created() {
 mounted() {
     // this.loadBtn()
 
-    console.log(this.btn, 999)
+    console.log(this.btn, 'style')
 },
 beforeCreate() {}, //生命周期 - 创建之前
 beforeMount() {}, //生命周期 - 挂载之前
@@ -344,8 +344,6 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
 }
 </script>
 <style lang='scss' scoped>
-//@import url(); 引入公共css类
-//@import url(); 引入公共css类
 .btns_box{
     // width:100%;
     height:auto;
@@ -357,7 +355,7 @@ activated() {}, //如果页面有keep-alive缓存功能，这个函数会触发
         width:500px;
         height:auto;
         max-height:500px;
-        overflow-y:scroll;
+        // overflow-y:scroll;
         background:#fff;
         position:fixed;
         left:calc(50% - 250px);
