@@ -9,7 +9,7 @@
       </el-row>
 
       <el-row v-for="(item,i) in form.list" :key="i">
-        <el-col :span="8">
+        <el-col :span="7">
           <s-form-item>
             <s-group class="pct90" filterable :props="{
             label:'basicName',
@@ -17,7 +17,7 @@
           }" :data="options.serviceProvider" v-model="item.serviceProviderId" @change="serviceProviderChange(item,$event)"></s-group>
           </s-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="7">
           <s-form-item>
             <el-cascader :props="{
             label:'orgName',
@@ -26,10 +26,13 @@
           }" v-model="item.productionOrganizationId" :show-all-levels="false" @change="productionOrganizationChange(item,$event)" :options="item.org" ref="orgbox"></el-cascader>
           </s-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="7">
           <s-form-item>
             <el-input-number :precision="0" :min="1" class="pct90" v-model="item.shareRatio"></el-input-number>
           </s-form-item>
+        </el-col>
+        <el-col :span="2" :offset="1">
+          <s-button class="f" :disabled="form.list.length===1" icon="el-icon-delete" type="text" @click="del(i)" />
         </el-col>
       </el-row>
 
@@ -163,6 +166,10 @@ export default defineComponent({
       form.list.push({ ...item })
     }
 
+    const del=(i)=>{
+      form.list.splice(i,1)
+    }
+
     form.productLineIdList = data.map((v) => v.id)
 
     if (Array.isArray(data) && data.length === 1) {
@@ -188,6 +195,7 @@ export default defineComponent({
     }
 
     return {
+      del,
       add,
       save,
       form,

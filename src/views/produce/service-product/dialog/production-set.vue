@@ -2,6 +2,7 @@
   <div>
     <s-form :model="form" label-width="0" @submit="save">
 
+
       <el-row class="lh40">
         <el-col :span="12">售卖渠道</el-col>
         <el-col :span="12">生产流程</el-col>
