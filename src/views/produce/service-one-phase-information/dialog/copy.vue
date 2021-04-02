@@ -26,9 +26,7 @@ export default defineComponent({
 
     const save = (form) => {
       return _save(form).then(() => {
-        root.$store.commit('table/update', {
-          _uid: data.id,
-        })
+        root.$store.commit('table/update')
 
         emit('close')
       })
