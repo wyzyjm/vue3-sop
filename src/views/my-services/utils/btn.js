@@ -19,12 +19,30 @@ export const btns = {
                 width: '400',
                 hideSubmit: true,
             },
-            "demand_see": {
-                value: 'demand_see',
-                label: '查看需求',
-                fileName: 'demand',
+            // "demand_see": {
+            //     value: 'demand_see',
+            //     label: '查看需求',
+            //     fileName: 'demand',
+            //     hideTitle: true,
+            //     hideSubmit: true,
+            // },
+            "programme_see": {
+                value: 'programme_see',
+                label: '查看方案',
+                fileName: 'plan',
                 hideTitle: true,
                 hideSubmit: true,
+            },
+            // ASSIGN_MH_ADVISER("分派门户营销顾问","assign_mh_adviser"),
+            // ASSIGN_DS_ADVISER("分派电商运营顾问","assign_ds_adviser"),
+            // PROGRAMME_UPLOAD("上传方案","programme_upload"),
+            // PROGRAMME_SEE("查看方案","programme_see"),
+            // PROGRAMME_SEE_HISTORY("历史方案","programme_see_history");
+            "programme_upload": {
+                value: 'programme_upload',
+                label: '上传方案',
+                fileName: 'plan',
+                hideTitle: true
             },
             "web_preview": {
                 value: 'web_preview',
@@ -71,6 +89,26 @@ export const btns = {
             "assign_make": {
                 value: 'assign_make',
                 label: '分派制作员',
+                fileName: 'allot',
+                width: '400',
+                requiredParam: {
+                    vaild: 'empId',
+                    errorMsg: '请选择员工'
+                }
+            },
+            "assign_mh_adviser": {
+                value: 'assign_mh_adviser',
+                label: '分派门户营销顾问',
+                fileName: 'allot',
+                width: '400',
+                requiredParam: {
+                    vaild: 'empId',
+                    errorMsg: '请选择员工'
+                }
+            },
+            "assign_ds_advise": {
+                value: 'assign_ds_advise',
+                label: '分派电商营销顾问',
                 fileName: 'allot',
                 width: '400',
                 requiredParam: {

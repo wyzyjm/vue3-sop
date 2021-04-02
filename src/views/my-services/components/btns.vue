@@ -54,6 +54,7 @@ import Allot from '../dialog/allot'
 import editForm from '../dialog/editForm'
 import Upload from '../dialog/upload'
 import Demand from '../dialog/demand'
+import Plan from '../dialog/plan'
 import getServicesBtn from '@/api/1835-post-service-order-sevice-button-operate'
 // import getMarkTool from '@/api/2399-get-service-order-sevice-order-info-urllist'
 import { cloneDeep } from 'lodash';
@@ -67,7 +68,8 @@ components: {
     Allot,
     editForm,
     Upload,
-    Demand
+    Demand,
+    Plan
 },
 props: ['code', 'btnList'],
 data() {
@@ -98,8 +100,8 @@ return {
 //监听属性 类似于data概念
 computed: {
     filterButtons(){
-        // return this.btn
-        return this.btn.filter(v=>this.$hasPermissions(v.value))
+        return this.btn
+        // return this.btn.filter(v=>this.$hasPermissions(v.value))
     }
 },
 //监控data中的数据变化
@@ -126,7 +128,8 @@ methods: {
             serviceCode: '', // 服务单号
             serviceId: '', // 服务商ID
             serviceMainInstanceCode: '', // 实例号
-            orderConsumeInfo: '', // 消耗单品
+            orderConsumeInfo: '', // 消耗单品,
+            instanceAccount: '', // 查看方案
         }    
     },
     submitForm (data) {
