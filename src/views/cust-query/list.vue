@@ -8,7 +8,7 @@
       </p>
       <el-button type="primary" @click="search">搜索</el-button>
     </div>
-    <div class="query-info mb20 flow-k">
+    <div class="query-info mb20 flow-k" v-if="custId">
       <div class="info-cust">
         <el-row class="info-cust-item">
           <b>客户信息</b>
@@ -25,7 +25,7 @@
         </el-row>
       </div>
 
-      <el-tabs v-model="activeWeb" type="card" v-if="custId" class="sop-tabs mb20" @tab-click="custTabSelect">
+      <el-tabs v-model="activeWeb" type="card" class="sop-tabs mb20" @tab-click="custTabSelect">
         <el-tab-pane label="网站产品" name="first">
           <div class="cust-product p20">
             <div :class="{'cust-product-item':true, 'cust-product-active': item.displayUpdateBtn}" v-for="(item, index) of productList" :key="index">
@@ -64,7 +64,6 @@
               <p>总购买量 {{item.totalNum}}</p>
               <p>可用余量 {{item.surplusNum}}</p>
               <p>服务进行中 {{item.frozenNum}}</p>
-              {{item}}
               <div class="start-p" v-if="item.isCanBeNewService">
                 <s-button type="primary" @click="startSerivce(169)">发起服务</s-button>
               </div>
@@ -88,9 +87,9 @@
         </el-tab-pane>
       </el-tabs>
 
-      <el-tabs v-model="activePro" type="card" v-if="custId" class="sop-tabs">
+      <el-tabs v-model="activePro" type="card" class="sop-tabs">
         <el-tab-pane label="客户服务单" name="first">
-          <s-table :data="tabData" :cols="tabCols" class="cb-table-style"></s-table>
+          <s-simple-table :data="getTableData" :cols="tabCols" class="cb-table-style"></s-simple-table>
         </el-tab-pane>
         <!-- <el-tab-pane label="客户工单" name="first">客户工单</el-tab-pane> -->
       </el-tabs>
@@ -272,7 +271,6 @@ export default defineComponent({
     }
 
     const custProductEdit = (item) => {
-      // console.log(item)
       serviceDialog.open({
         id: 1,
         info: {
@@ -321,9 +319,12 @@ export default defineComponent({
     }
 
     const __getCustList = (custId) => {
-      getCustList({ custId }).then(({ data }) => {
-        custData.tabData = data.records || []
-      })
+      custData.custId=custId
+      root.$store.commit('table/update')
+    }
+
+    const getTableData=(params)=>{
+      return getCustList({custId:custData.custId,...params  })
     }
 
     // 列表展开数据
@@ -347,6 +348,7 @@ export default defineComponent({
       startSerivce,
       custProductEdit,
       serviceDialog,
+      getTableData
     }
   },
 })

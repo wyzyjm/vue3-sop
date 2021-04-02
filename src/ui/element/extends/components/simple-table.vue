@@ -8,7 +8,7 @@
     <slot name="bottom" />
     <div v-if="page !== false" class="ce-pagination">
       <slot name="page" />
-      <Page :page-size="params.pagination.pageSize" layout="total,sizes,prev, pager, next, jumper" :current-page="params.pagination.pageNum" @current-change="currentChange" @size-change="sizeChange" @pageInit="pageInit" :page-sizes="[10, 20, 50, 100]" :uid="uid" :total="total" v-bind="page===true?{}:page" v-if="page !== false" ref="page"></Page>
+      <Page :page-size="params.pagination.pageSize" layout="total,prev, pager, next, jumper" :current-page="params.pagination.pageNum" @current-change="currentChange" @size-change="sizeChange" @pageInit="pageInit" :page-sizes="[10, 20, 50, 100]" :uid="uid" :total="total" v-bind="page===true?{}:page" v-if="page !== false" ref="page"></Page>
     </div>
   </div>
 </template>

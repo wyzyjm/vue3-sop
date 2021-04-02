@@ -71,6 +71,9 @@ export default defineComponent({
     position: relative;
     &.finished {
       border-color: #18b398;
+      .dot{
+        background:#18b398;
+      }
     }
     &.first,
     &.last {
@@ -93,7 +96,7 @@ export default defineComponent({
       width: 12px;
       height: 12px;
       border-radius: 6px;
-      background: #18b398;
+      background: #d9d9d9;
       left: -6px;
       top: -6px;
     }
