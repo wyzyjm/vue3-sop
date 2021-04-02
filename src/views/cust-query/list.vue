@@ -323,8 +323,8 @@ export default defineComponent({
       root.$store.commit('table/update')
     }
 
-    const getTableData=()=>{
-      return getCustList({custId:custData.custId  })
+    const getTableData=(params)=>{
+      return getCustList({custId:custData.custId,...params  })
     }
 
     // 列表展开数据
