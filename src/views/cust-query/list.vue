@@ -8,7 +8,7 @@
       </p>
       <el-button type="primary" @click="search">搜索</el-button>
     </div>
-    <div class="query-info mb20 flow-k">
+    <div class="query-info mb20 flow-k" v-if="custId">
       <div class="info-cust">
         <el-row class="info-cust-item">
           <b>客户信息</b>
@@ -25,7 +25,7 @@
         </el-row>
       </div>
 
-      <el-tabs v-model="activeWeb" type="card" v-if="custId" class="sop-tabs mb20" @tab-click="custTabSelect">
+      <el-tabs v-model="activeWeb" type="card" class="sop-tabs mb20" @tab-click="custTabSelect">
         <el-tab-pane label="网站产品" name="first">
           <div class="cust-product p20">
             <div :class="{'cust-product-item':true, 'cust-product-active': item.displayUpdateBtn}" v-for="(item, index) of productList" :key="index">
@@ -87,7 +87,7 @@
         </el-tab-pane>
       </el-tabs>
 
-      <el-tabs v-model="activePro" type="card" v-if="custId" class="sop-tabs">
+      <el-tabs v-model="activePro" type="card" class="sop-tabs">
         <el-tab-pane label="客户服务单" name="first">
           <s-simple-table :data="getTableData" :cols="tabCols" class="cb-table-style"></s-simple-table>
         </el-tab-pane>
