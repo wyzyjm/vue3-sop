@@ -335,10 +335,11 @@ export default defineComponent({
         }
         .node-detail {
           color: #666666;
-          display:inline-block;
           margin-top: 20px;
           font-size: 12px;
+          text-align: center;
           transform: translate(50%);
+          float: right;
           .executor,
           .completeTime {
             font-size: 12px;
