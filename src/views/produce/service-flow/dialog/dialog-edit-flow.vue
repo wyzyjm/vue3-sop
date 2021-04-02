@@ -3,10 +3,10 @@
     <s-form :model="form" label-width="140px" @submit="save">
       <template v-if="isEdit">
         <s-form-item label="业务流程名称" :rules="['required']" prop="businessFlowName" />
-        <s-form-item label="业务流程code" :disabled="true" prop="businessFlowCode" />
+        <s-form-item label="业务流程code" :disabled="data.status" prop="businessFlowCode" />
         <s-form-item label="版本" :disabled="true" :rules="['required']" prop="version" />
         <s-form-item label="关联工作流" prop="flowWorkDefId" :rules="['required']">
-          <el-select v-model="form.flowWorkDefId" :disabled="true" placeholder="请选择关联工作流" class="flow-select">
+          <el-select v-model="form.flowWorkDefId" :disabled="data.status" placeholder="请选择关联工作流" class="flow-select">
             <el-option
               v-for="item in flowList"
               :key="item.id"
