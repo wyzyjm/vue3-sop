@@ -173,7 +173,17 @@ function checkList(type, id) {
       cols: [
         {
           label: '服务产品',
-          prop: 'name',
+        //   prop: 'name',
+          prop: ({row}) => {
+              return <el-popover
+                    placement="top-start"
+                    width="200"
+                    trigger="hover"
+                    content={row.serviceContent}>
+                    <span slot="reference">{row.name || '----'}</span>
+                </el-popover>
+              
+          }
         },
         {
           label: '类型',
@@ -204,11 +214,12 @@ function checkList(type, id) {
           type: 'checkbox',
           key: 'id',
           width: '40px',
-          fixed: 'left',
+        //   fixed: 'left',
         },
         {
           type: 'expand',
           prop: ({ row }) => (
+
             <s-simple-table
               uid={row.id}
               page={false}
@@ -369,7 +380,7 @@ function checkList(type, id) {
         {
           label: '操作',
           width: 160,
-          fixed:'right',
+        //   fixed:'right',
           prop: ({ row }) => {
             let btnArr = []
             let filterBtns = row.buttonList.filter(v=>root.$hasPermissions(v.buttonCode))

@@ -233,7 +233,7 @@
         <el-row :gutter="20" class="row-box" style="margin:0 auto 25px; border-bottom:1px solid #ebebeb;padding-bottom:10px">
             <el-col :span="8">
                 <div class="item-col">
-                    <div class="col-title">设计师：</div>
+                    <div class="col-title">顾问：</div>
                     <div class="col-txt">{{servicesTeam.designerEmpName || '------'}}</div>
                 </div>
             </el-col>   
@@ -245,7 +245,7 @@
             </el-col>   
             <el-col :span="8">
                 <div class="item-col">
-                    <div class="col-title">设计师团队：</div>
+                    <div class="col-title">顾问团队：</div>
                     <div class="col-txt">
                         {{servicesTeam.designerServiceName || '---'}}/{{servicesTeam.desigberAreaName || '---'}}/{{servicesTeam.designerSubName || '---'}}/{{servicesTeam.designerDeptName || '---'}}
                     </div>
@@ -253,7 +253,7 @@
             </el-col>     
             <el-col :span="8">
                 <div class="item-col">
-                    <div class="col-title">制作员：</div>
+                    <div class="col-title">设计师：</div>
                     <div class="col-txt">{{servicesTeam.makerEmpName || '------'}}</div>
                 </div>
             </el-col>   
@@ -265,7 +265,7 @@
             </el-col>   
             <el-col :span="8">
                 <div class="item-col">
-                    <div class="col-title">制作员团队：</div>
+                    <div class="col-title">设计师团队：</div>
                     <div class="col-txt">
                         {{servicesTeam.makerServiceName || '---'}}/{{servicesTeam.makerAreaName || '---'}}/{{servicesTeam.makerSubName || '---'}}/{{servicesTeam.makerDeptName || '---'}}
                     </div>
@@ -400,13 +400,13 @@ methods: {
         // 客户信息
         getServicesInfo({serviceOrderId: this.$route.params.id}).then(res => {
             this.servicesInfo = res.data || {}
+            this.servicesInfo.buttonList.push({
+                buttonName: '填写方案',
+                buttonCode: 'programme_upload'
+            })
             // this.servicesInfo.buttonList.push({
-            //     buttonName: '修改完成',
-            //     buttonCode: 'modified_completed'
-            // })
-            // this.servicesInfo.buttonList.push({
-            //     buttonName: '打回通配2',
-            //     buttonCode: 'back*bbb'
+            //     buttonName: '电商',
+            //     buttonCode: 'assign_ds_adviser'
             // })
             // this.servicesInfo.buttonList.push({
             //     buttonName: '通过通配',
