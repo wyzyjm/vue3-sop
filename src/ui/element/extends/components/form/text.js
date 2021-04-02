@@ -3,7 +3,10 @@ export default {
   props: {
     formatDate: String,
     content: {
-      required: true
+      default: ''
+    },
+    value: {
+      default: ''
     },
     tag: {
       default: 'span'
@@ -23,7 +26,7 @@ export default {
     }
   },
   render(h) {
-    let content = this.content
+    let content = this.content || this.value
     // 日期
     if (this.formatDate) {
       content = formatDate(content, this.formatDate)

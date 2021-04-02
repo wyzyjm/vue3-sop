@@ -1,6 +1,7 @@
 <template>
   <div>
     <s-dialog v-bind="dialog" @close="dialog.close" />
+    <s-dialog v-bind="copyDialog" @close="copyDialog.close" />
     <s-simple-table :data="table.data" :cols="table.cols">
       <s-form slot="form" inline>
         <s-form-item label="服务单名称" prop="flowShowName" />
@@ -15,6 +16,7 @@
         <router-link to="./add">
           <s-button type="primary">新增</s-button>
         </router-link>
+        <s-button type="primary" class="ml20" @click="copyDialog.open">复制</s-button>
       </div>
     </s-simple-table>
   </div>
@@ -61,6 +63,12 @@ export default defineComponent({
       title: '新增阶段',
       width: '500px',
       component: require('./dialog/add-phase'),
+    })
+    const copyDialog = useDialog({
+      uid: 'copy',
+      title: '复制',
+      width: '500px',
+      component: require('./dialog/copy'),
     })
 
     const table = reactive({
@@ -168,9 +176,11 @@ export default defineComponent({
       ],
     })
 
+
     const moreOptions = useOptions()
 
     return {
+      copyDialog,
       dialog,
       table,
       options,
