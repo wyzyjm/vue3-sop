@@ -35,9 +35,8 @@
                 <el-slider :max="item.totalNum" v-model="item.consumeNumber"></el-slider>
               </el-col>
               <el-col :span="10" :offset="2">
-                <el-input :max="item.totalNum" v-model.number="item.consumeNumber" size="mini">
-                  <template slot="append">{{item.totalNum}}</template>
-                </el-input>
+                <el-input-number  :precision="0" :controls="false" :max="item.totalNum" v-model.number="item.consumeNumber" size="mini" />
+                <!-- <span>{{item.totalNum}}</span> -->
               </el-col>
             </s-form-item>
 
