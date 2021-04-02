@@ -64,7 +64,6 @@
               <p>总购买量 {{item.totalNum}}</p>
               <p>可用余量 {{item.surplusNum}}</p>
               <p>服务进行中 {{item.frozenNum}}</p>
-              {{item}}
               <div class="start-p" v-if="item.isCanBeNewService">
                 <s-button type="primary" @click="startSerivce(169)">发起服务</s-button>
               </div>
@@ -90,7 +89,7 @@
 
       <el-tabs v-model="activePro" type="card" v-if="custId" class="sop-tabs">
         <el-tab-pane label="客户服务单" name="first">
-          <s-table :data="tabData" :cols="tabCols" class="cb-table-style"></s-table>
+          <s-simple-table :data="getTableData" :cols="tabCols" class="cb-table-style"></s-simple-table>
         </el-tab-pane>
         <!-- <el-tab-pane label="客户工单" name="first">客户工单</el-tab-pane> -->
       </el-tabs>
@@ -272,7 +271,6 @@ export default defineComponent({
     }
 
     const custProductEdit = (item) => {
-      // console.log(item)
       serviceDialog.open({
         id: 1,
         info: {
@@ -321,9 +319,12 @@ export default defineComponent({
     }
 
     const __getCustList = (custId) => {
-      getCustList({ custId }).then(({ data }) => {
-        custData.tabData = data.records || []
-      })
+      custData.custId=custId
+      root.$store.commit('table/update')
+    }
+
+    const getTableData=()=>{
+      return getCustList({custId:custData.custId  })
     }
 
     // 列表展开数据
@@ -347,6 +348,7 @@ export default defineComponent({
       startSerivce,
       custProductEdit,
       serviceDialog,
+      getTableData
     }
   },
 })

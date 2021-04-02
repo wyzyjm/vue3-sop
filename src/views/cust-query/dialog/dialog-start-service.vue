@@ -35,7 +35,7 @@
                 <el-slider :max="item.totalNum" v-model="item.consumeNumber"></el-slider>
               </el-col>
               <el-col :span="10" :offset="2">
-                <el-input-number  :precision="0" :controls="false" :max="item.totalNum" v-model.number="item.consumeNumber" size="mini" />
+                <el-input-number :precision="0" :controls="false" :max="item.totalNum" v-model.number="item.consumeNumber" size="mini" />
                 <!-- <span>{{item.totalNum}}</span> -->
               </el-col>
             </s-form-item>
@@ -103,15 +103,17 @@ export default defineComponent({
 
     form = { ...form, ...info }
 
-    _getAccountList({
-      custId: form.custId,
-      operProductId: form.operProductId,
-    }).then((response) => {
-      accountList.value = response.data.map((v) => {
-        v.consumeNumber = 0
-        return v
+    if (id == 1) {
+      _getAccountList({
+        custId: form.custId,
+        operProductId: form.operProductId,
+      }).then((response) => {
+        accountList.value = response.data.map((v) => {
+          v.consumeNumber = 0
+          return v
+        })
       })
-    })
+    }
 
     getTeams({ custId: form.custId }).then(({ data }) => {
       serviceData.teamList = data || []
@@ -152,15 +154,17 @@ export default defineComponent({
       //   }
       // }
 
-      contentList = accountList.value.map((v) => {
-        return {
-          accountId: v.instanceAccountId,
-          contentId: v.instanceAccountType,
-          consumeNumber: v.consumeNumber,
-        }
-      }).filter(v=>{
-        return v.consumeNumber>0
-      })
+      contentList = accountList.value
+        .map((v) => {
+          return {
+            accountId: v.instanceAccountId,
+            contentId: v.instanceAccountType,
+            consumeNumber: v.consumeNumber,
+          }
+        })
+        .filter((v) => {
+          return v.consumeNumber > 0
+        })
 
       addService({ contentList, ...form }).then((res) => {
         Message({
