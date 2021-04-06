@@ -201,6 +201,28 @@ export const btns = {
                     errorMsg: '请选择团队'
                 }
             },
+            "to_ds_adviser": {
+                value: 'to_ds_adviser',
+                label: '转单电商运营顾问',
+                fileName: 'allot',
+                width: '400',
+                isTerm: true,
+                requiredParam: {
+                    vaild: 'orgId',
+                    errorMsg: '请选择团队'
+                }
+            },
+            "to_mh_adviser": {
+                value: 'to_mh_adviser',
+                label: '转单门户营销顾问',
+                fileName: 'allot',
+                width: '400',
+                isTerm: true,
+                requiredParam: {
+                    vaild: 'orgId',
+                    errorMsg: '请选择团队'
+                }
+            },
             "to_assistant": {
                 value: 'to_assistant',
                 label: '转单助理',
