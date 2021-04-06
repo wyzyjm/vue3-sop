@@ -215,7 +215,7 @@ export default defineComponent({
     const serviceDialog = useDialog({
       uid: 'startServiceDialog',
       title: '发起服务',
-      width: '600px',
+      width: '800px',
       component: require('./dialog/dialog-start-service'),
     })
 

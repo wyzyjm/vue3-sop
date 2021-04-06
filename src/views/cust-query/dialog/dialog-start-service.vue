@@ -1,6 +1,6 @@
 <template>
   <div>
-    <s-form :model="form" label-width="auto" @submit="save">
+    <s-form :model="form" label-width="95px" @submit="save">
       <div class="start-serve">
         <div class="serve-title">客户信息</div>
         <div class="serve-form">
@@ -30,15 +30,20 @@
           </s-form-item> -->
 
           <div v-if="id==1">
-            <s-form-item :label="item.accountText" v-for="(item,i) in accountList" :key="i">
-              <el-col :span="12">
-                <el-slider :max="item.totalNum" v-model="item.consumeNumber"></el-slider>
-              </el-col>
-              <el-col :span="10" :offset="2">
-                <el-input-number :precision="0" :controls="false" :max="item.totalNum" v-model.number="item.consumeNumber" size="mini" />
-                <!-- <span>{{item.totalNum}}</span> -->
-              </el-col>
-            </s-form-item>
+            <el-table class="mb20" border :data="accountList">
+              <el-table-column label="单品类型"  prop="accountText"></el-table-column>
+              <el-table-column label="消耗数量" >
+                <template slot-scope="scope">
+                   <div class="pl10 pr10"><el-slider :max="scope.row.totalNum" v-model="scope.row.consumeNumber"></el-slider></div>
+                </template>
+              </el-table-column>
+              <el-table-column label="消耗数量/可消耗数量" >
+                <template slot-scope="scope">
+                   <el-input-number :precision="0" :controls="false" :max="scope.row.totalNum" v-model.number="scope.row.consumeNumber" size="mini" />/{{scope.row.totalNum}}
+                </template>
+              </el-table-column>
+            </el-table>
+ 
 
             <s-form-item label="服务主体" component="s-text" :content="info.domain" />
           </div>
