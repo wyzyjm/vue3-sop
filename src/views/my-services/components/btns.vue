@@ -291,14 +291,19 @@ methods: {
                 })
             }
             let mergeBtn = {...btns.dynamicList}
-            Object.keys(mergeBtn).forEach(key => {
-                btnArr.map(v => {
-                    if (v.buttonCode == key) {
-                        mergeBtn[key].label = v.buttonName
-                        this.btn.push(mergeBtn[key])
-                    }
-                })
+            btnArr.map((v, i) => {
+                mergeBtn[v.buttonCode].label = v.buttonName
+                v = mergeBtn[v.buttonCode]
+                this.btn.push(v)
             })
+            // Object.keys(mergeBtn).forEach(key => {
+            //     btnArr.map(v => {
+            //         if (v.buttonCode == key) {
+            //             mergeBtn[key].label = v.buttonName
+            //             this.btn.push(mergeBtn[key])
+            //         }
+            //     })
+            // })
             // Object.keys(btns.likeList).forEach(key => {
             //     console.log(key)
             //     likeBtnArr.map(v => {

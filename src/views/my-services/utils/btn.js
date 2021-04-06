@@ -94,7 +94,7 @@ export const btns = {
             },
             "assign_mh_adviser": {
                 value: 'assign_mh_adviser',
-                label: '分派门户营销顾问',
+                label: '分派门户营销顾问321',
                 fileName: 'allot',
                 width: '400',
                 requiredParam: {
@@ -113,7 +113,7 @@ export const btns = {
                 }
             },
             "change_mh_adviser": {
-                value: 'assign_mh_adviser',
+                value: 'change_mh_adviser',
                 label: '更换门户营销顾问',
                 fileName: 'allot',
                 width: '400',
@@ -123,7 +123,7 @@ export const btns = {
                 }
             },
             "change_ds_adviser": {
-                value: 'assign_ds_adviser',
+                value: 'change_ds_adviser',
                 label: '更换电商营销顾问',
                 fileName: 'allot',
                 width: '400',

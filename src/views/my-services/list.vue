@@ -105,6 +105,7 @@ export default defineComponent({
       component: require('./dialog/allot'),
     })
     const allotFun = (row, i, btnArr) => {
+        console.log(i , 999)
             allotDialog.open({
                 isBtn: true,
                 code: row.serviceCode, 
@@ -237,7 +238,7 @@ function checkList(type, id) {
           prop: ({row}) => {
               let src = `/my-services/detail/${row.id}/${row.serviceCode}`
               return [
-                  <el-link href={src}>{row.serviceCode}</el-link>
+                  <el-link href={src} type="primary">{row.serviceCode}</el-link>
               ]
           }
         },
@@ -387,21 +388,16 @@ function checkList(type, id) {
             if (row.buttonList && row.buttonList.length > 0) {
                 filterBtns = row.buttonList.filter(v=>root.$hasPermissions(v.buttonCode))
             }
-            // console.log(filterBtns, 999)
-            Object.keys(btns.dynamicList).forEach(key => {
-                filterBtns.map(v => {
-                    if (v.buttonCode == btns.dynamicList[key].value) {
-                        btns.dynamicList[key].label = v.buttonName
-                        btnArr.push(btns.dynamicList[key])
-                    }
-                })
+            filterBtns.map((v, i) => {
+                btns.dynamicList[v.buttonCode].label = v.buttonName
+                v = btns.dynamicList[v.buttonCode]
+                btnArr.push(v)
             })
-            // console.log(btnArr, 888)
             // let btnArr = row.buttonList.filter(v=>root.$hasPermissions(v.buttonCode))
             if (btnArr.length > 1) {
                 let item = btnArr.slice(1).map((v, i) => {
                     return <el-dropdown-item>
-                            <div onClick={() => allotFun(row, i, btnArr)}>{v.label}</div>
+                            <div onClick={() => allotFun(row, i + 1, btnArr)}>{v.label}</div>
                         </el-dropdown-item>
                     
                 })

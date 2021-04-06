@@ -116,7 +116,7 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-    // console.log(this.buttonType, this.curBtn, this.code, this.form, this.isBtn)
+    console.log(this.buttonType, this.curBtn, this.code, this.form, this.isBtn)
     if (this.buttonType == 'assign_designers' || this.buttonType == 'assign_make' || this.buttonType == 'assign_assistant'
      || this.buttonType == 'change_designers' || this.buttonType == 'change_make' || this.buttonType == 'change_assistant'
      || this.buttonType == 'assign_mh_adviser' || this.buttonType == 'assign_ds_adviser'
