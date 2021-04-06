@@ -1,6 +1,6 @@
 <template>
   <div>
-    <s-form :model="form" label-width="95px" @submit="save">
+    <s-form :model="form" label-width="95px" @submit="preSave">
       <div class="start-serve">
         <div class="serve-title">客户信息</div>
         <div class="serve-form">
@@ -31,19 +31,20 @@
 
           <div v-if="id==1">
             <el-table class="mb20" border :data="accountList">
-              <el-table-column label="单品类型"  prop="accountText"></el-table-column>
-              <el-table-column label="消耗数量" >
+              <el-table-column label="单品类型" prop="accountText"></el-table-column>
+              <el-table-column label="消耗数量">
                 <template slot-scope="scope">
-                   <div class="pl10 pr10"><el-slider :max="scope.row.totalNum" v-model="scope.row.consumeNumber"></el-slider></div>
+                  <div class="pl10 pr10">
+                    <el-slider :max="scope.row.totalNum" v-model="scope.row.consumeNumber"></el-slider>
+                  </div>
                 </template>
               </el-table-column>
-              <el-table-column label="消耗数量/可消耗数量" >
+              <el-table-column label="消耗数量/可消耗数量">
                 <template slot-scope="scope">
-                   <el-input-number :precision="0" :controls="false" :max="scope.row.totalNum" v-model.number="scope.row.consumeNumber" size="mini" />/{{scope.row.totalNum}}
+                  <el-input-number :precision="0" :controls="false" :max="scope.row.totalNum" v-model.number="scope.row.consumeNumber" size="mini" />/{{scope.row.totalNum}}
                 </template>
               </el-table-column>
             </el-table>
- 
 
             <s-form-item label="服务主体" component="s-text" :content="info.domain" />
           </div>
@@ -70,13 +71,13 @@
 </template>
 <script>
 import { defineComponent, reactive, toRefs, ref } from '@vue/composition-api'
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import uploadFile from '@/api/1308-post-frontapi-common-upload-upload'
 import addService from '@/api/1889-post-service-order-user-service-api-add'
 import getTeams from '@/api/1895-get-service-order-user-service-api-get-org-by-custid'
 import _getMallsite from '@/api/2441-get-service-order-cust-info-api-mallsite-list-by-custid'
 import _getAccountList from '@/api/2447-get-service-order-cust-info-api--all-account-list-by-custid'
-
+import _checkInstance from '@/api/2453-get-service-order-cust-info-api-check-instance-isproducting'
 export default defineComponent({
   props: {
     id: {
@@ -180,12 +181,30 @@ export default defineComponent({
         console.log('addService=', res)
       })
     }
-
+    const preSave = () => {
+      _checkInstance({ instanceCode: form.productInstaceCode }).then(
+        (response) => {
+          if (response.data) {
+            return MessageBox.confirm(
+              '该网站有正在生产中的服务单，请确认是否发起服务？',
+              '提示',
+              {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+              }
+            ).then(save)
+          }
+          return save()
+        }
+      )
+    }
     const getMallsite = () => {
       return _getMallsite({ custId: form.custId })
     }
 
     return {
+      preSave,
       accountList,
       getMallsite,
       save,
