@@ -383,7 +383,11 @@ function checkList(type, id) {
         //   fixed:'right',
           prop: ({ row }) => {
             let btnArr = []
-            let filterBtns = row.buttonList.filter(v=>root.$hasPermissions(v.buttonCode))
+            let filterBtns = []
+            if (row.buttonList && row.buttonList.length > 0) {
+                filterBtns = row.buttonList.filter(v=>root.$hasPermissions(v.buttonCode))
+            }
+            // console.log(filterBtns, 999)
             Object.keys(btns.dynamicList).forEach(key => {
                 filterBtns.map(v => {
                     if (v.buttonCode == btns.dynamicList[key].value) {
@@ -392,6 +396,7 @@ function checkList(type, id) {
                     }
                 })
             })
+            // console.log(btnArr, 888)
             // let btnArr = row.buttonList.filter(v=>root.$hasPermissions(v.buttonCode))
             if (btnArr.length > 1) {
                 let item = btnArr.slice(1).map((v, i) => {
@@ -414,7 +419,7 @@ function checkList(type, id) {
 
             } else if (btnArr.length == 1) {
                 return [
-                    <s-button type="text" onClick={() => allotFun(row, 0, btnArr)}>{btnArr[0].buttonName}</s-button>
+                    <s-button type="text" onClick={() => allotFun(row, 0, btnArr)}>{btnArr[0].label}</s-button>
                 ]
             } else {
                 return []

@@ -4,7 +4,7 @@
     <p class="el-popover__title">消耗单品/运营
         <span style="float:right">本次消耗/可消耗量</span>
     </p>
-    <el-row class="row-box" v-for="(item, idx) in form.instanceAccount" :key="idx">
+    <el-row class="row-box" v-for="(item, idx) in form.orderConsumeInfo" :key="idx">
         <el-col :span="6" class="omit1">{{item.accountText}}</el-col>
         <el-col :span="11"><el-progress :percentage="(item.consumeNum / item.totalNum).toFixed(2) * 100"></el-progress></el-col>
         <el-col :span="7" style="" class="col_box">
@@ -100,7 +100,7 @@ methods: {
             if (res.status == 200) {
                 this.$set(this.fileList[idx], 'file', res.data)
                 this.form.annexList[idx] = res.data.id
-                console.log(this.form.annexList)
+                console.log(this.form.annexList, 'test arr')
             }
         }).catch(err => {
             console.log(err, '上传失败')
@@ -129,12 +129,13 @@ created() {
     }
     // // 单品消耗
     getServicesBtn({serviceCode: this.code, buttonType: 'programme_see'}).then(res => {
-        Object.keys(res.data).forEach(key => {
-                this.form[key] = res.data[key]
-                if (key == 'annexList' && !res.data[key]) {
-                    this.form[key] = []
-                } 
-        })
+        // Object.keys(res.data).forEach(key => {
+        //         this.form[key] = res.data[key]
+        //         if (key == 'annexList' && !res.data[key]) {
+        //             this.form[key] = []
+        //         } 
+        // })
+        this.form.orderConsumeInfo = res.data.instanceAccount
         if (res.data.pdf) {
             this.fileList[0].file.fileUrl = res.data.pdf.annexShowUrl
             this.fileList[0].file.fileName = res.data.pdf.annexName

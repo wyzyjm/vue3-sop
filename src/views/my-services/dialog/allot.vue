@@ -118,7 +118,7 @@ created() {
     // console.log(this.buttonType, this.curBtn, this.code, this.form, this.isBtn)
     if (this.buttonType == 'assign_designers' || this.buttonType == 'assign_make' || this.buttonType == 'assign_assistant'
      || this.buttonType == 'change_designers' || this.buttonType == 'change_make' || this.buttonType == 'change_assistant'
-     || this.buttonType == 'assign_mh_adviser' || this.buttonType == 'assign_ds_advise') {
+     || this.buttonType == 'assign_mh_adviser' || this.buttonType == 'assign_ds_adviser') {
         getServicesBtn({serviceCode: this.code, buttonType: 'get_assign_person'}).then(res => {
             // 获取设计师列表
 

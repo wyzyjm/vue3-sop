@@ -102,8 +102,8 @@ export const btns = {
                     errorMsg: '请选择员工'
                 }
             },
-            "assign_ds_advise": {
-                value: 'assign_ds_advise',
+            "assign_ds_adviser": {
+                value: 'assign_ds_adviser',
                 label: '分派电商营销顾问',
                 fileName: 'allot',
                 width: '400',
@@ -204,7 +204,12 @@ export const btns = {
                 popover: true,
                 visible: false,
             },
-    
+            "programme_submit": {
+                value: 'programme_submit',
+                label: '提交方案',
+                popover: true,
+                visible: false,
+            },
             "demand_confirm": {
                 value: 'demand_confirm',
                 label: '确认需求',

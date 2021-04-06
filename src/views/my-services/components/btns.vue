@@ -100,8 +100,8 @@ return {
 //监听属性 类似于data概念
 computed: {
     filterButtons(){
-        return this.btn
-        // return this.btn.filter(v=>this.$hasPermissions(v.value))
+        // return this.btn
+        return this.btn.filter(v=>this.$hasPermissions(v.value))
     }
 },
 //监控data中的数据变化
@@ -129,7 +129,7 @@ methods: {
             serviceId: '', // 服务商ID
             serviceMainInstanceCode: '', // 实例号
             orderConsumeInfo: '', // 消耗单品,
-            instanceAccount: '', // 查看方案
+            // instanceAccount: '', // 查看方案
         }    
     },
     submitForm (data) {
@@ -141,7 +141,7 @@ methods: {
         }
         this.loading = true
         let cloneOrderConsumeInfo = cloneDeep(this.form.orderConsumeInfo)
-        let cloneInstanceAccount = cloneDeep(this.form.instanceAccount)
+        // let cloneInstanceAccount = cloneDeep(this.form.instanceAccount)
         // 填写需求特殊处理
         if (this.form.buttonType == 'programme_upload') { // demand_write 填写需求暂时搁置 更换为上传方案
             getServicesBtn({
@@ -155,8 +155,8 @@ methods: {
                 reason: this.form.reason,
                 serviceCode: this.form.serviceCode,
                 serviceMainInstanceCode: this.form.serviceMainInstanceCode,
-                // orderConsumeInfo: JSON.stringify(cloneOrderConsumeInfo)
-                instanceAccount: JSON.stringify(cloneInstanceAccount)
+                orderConsumeInfo: JSON.stringify(cloneOrderConsumeInfo)
+                // instanceAccount: JSON.stringify(cloneInstanceAccount)
             }).then(res => {
                 this.loading = false
                 if (res.status == 200) {
