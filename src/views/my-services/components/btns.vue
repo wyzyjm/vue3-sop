@@ -141,9 +141,9 @@ methods: {
         }
         this.loading = true
         let cloneOrderConsumeInfo = cloneDeep(this.form.orderConsumeInfo)
-
+        let cloneInstanceAccount = cloneDeep(this.form.instanceAccount)
         // 填写需求特殊处理
-        if (this.form.buttonType == 'demand_write') {
+        if (this.form.buttonType == 'programme_upload') { // demand_write 填写需求暂时搁置 更换为上传方案
             getServicesBtn({
                 annexList: this.form.annexList,
                 buttonType: this.form.buttonType,
@@ -155,7 +155,8 @@ methods: {
                 reason: this.form.reason,
                 serviceCode: this.form.serviceCode,
                 serviceMainInstanceCode: this.form.serviceMainInstanceCode,
-                orderConsumeInfo: JSON.stringify(cloneOrderConsumeInfo)
+                // orderConsumeInfo: JSON.stringify(cloneOrderConsumeInfo)
+                instanceAccount: JSON.stringify(cloneInstanceAccount)
             }).then(res => {
                 this.loading = false
                 if (res.status == 200) {

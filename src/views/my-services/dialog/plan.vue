@@ -20,8 +20,11 @@
         label="上传按钮">
             <template scope="scope">
                 <div style="width:104px;height:32px;position:relative">
-                    <input type="file" :accept="scope.row.accept" class="hide_input" @change="uploadFile($event, scope.row.type, scope.row.id)">
-                    <el-button type="primary" size="small">上传{{scope.row.type}}文件</el-button>
+                    <input type="file" 
+                     v-if="buttonType != 'programme_see'" 
+                     :accept="scope.row.accept" class="hide_input" @change="uploadFile($event, scope.row.type, scope.row.id)">
+                    <el-button type="primary" size="small"
+                    :disabled="buttonType == 'programme_see' ? true : false">上传{{scope.row.type}}文件</el-button>
                 </div>
             </template>
         </el-table-column>
@@ -58,8 +61,12 @@ data() {
 return {
     isSee: false,
     fileList: [
-        {id: 0, type: 'PDF', tips: '只能上传PDF格式文件', file: {}, accept: 'application/pdf'},
-        {id: 1, type: 'PPT', tips: '只能上传ppt,pptx格式文件', file: {}, accept: ''}
+        {id: 0, type: 'PDF', tips: '只能上传PDF格式文件', file: {
+            fileUrl: '', fileName: ''
+        }, accept: 'application/pdf'},
+        {id: 1, type: 'PPT', tips: '只能上传ppt,pptx格式文件', file: {
+            fileUrl: '', fileName: ''
+        }, accept: ''}
     ]
     // unitList: [],
     // form: {}
@@ -106,7 +113,7 @@ methods: {
         }
         if (row.consumeNum > row.totalNum) {
             this.$message.warning('消耗数量不能大于总量')
-            this.form.orderConsumeInfo[idx].consumeNum = row.totalNum
+            this.form.instanceAccount[idx].consumeNum = row.totalNum
             return false
         }
     },
@@ -128,6 +135,16 @@ created() {
                     this.form[key] = []
                 } 
         })
+        if (res.data.pdf) {
+            this.fileList[0].file.fileUrl = res.data.pdf.annexShowUrl
+            this.fileList[0].file.fileName = res.data.pdf.annexName
+            this.form.annexList[0] = res.data.pdf.annexId
+        } 
+        if (res.data.ppt) {
+            this.fileList[1].file.fileUrl = res.data.ppt.annexShowUrl
+            this.fileList[1].file.fileName = res.data.ppt.annexName
+            this.form.annexList[1] = res.data.ppt.annexId
+        } 
         // for(let i = 0; i < 7; i++) {
         //     this.form.orderConsumeInfo.push(this.form.orderConsumeInfo[0])
         // }

@@ -187,7 +187,7 @@ function checkList(type, id) {
         },
         {
           label: '类型',
-          prop: 'type',
+          prop: 'typeName',
         },
         {
           label: '数量',
