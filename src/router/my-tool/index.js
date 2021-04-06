@@ -14,6 +14,13 @@ export default [
                 component: () => import(/* webpackChunkName: "log" */ '@/views/my-tool/log')
             },
             {
+                path: 'errData',
+                meta:{
+                    title:'异常数据'
+                },
+                component: () => import(/* webpackChunkName: "errData" */ '@/views/my-tool/errData')
+            },
+            {
                 path: 'evaluate',
                 meta:{
                     title:'复评'
