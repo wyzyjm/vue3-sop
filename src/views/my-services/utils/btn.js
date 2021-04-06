@@ -33,11 +33,7 @@ export const btns = {
                 hideTitle: true,
                 hideSubmit: true,
             },
-            // ASSIGN_MH_ADVISER("分派门户营销顾问","assign_mh_adviser"),
-            // ASSIGN_DS_ADVISER("分派电商运营顾问","assign_ds_adviser"),
-            // PROGRAMME_UPLOAD("上传方案","programme_upload"),
-            // PROGRAMME_SEE("查看方案","programme_see"),
-            // PROGRAMME_SEE_HISTORY("历史方案","programme_see_history");
+
             "programme_upload": {
                 value: 'programme_upload',
                 label: '上传方案',

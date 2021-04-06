@@ -153,7 +153,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                    prop="type"
+                    prop="typeName"
                     label="类型"
                     :show-overflow-tooltip="true">
                     </el-table-column>
@@ -400,10 +400,10 @@ methods: {
         // 客户信息
         getServicesInfo({serviceOrderId: this.$route.params.id}).then(res => {
             this.servicesInfo = res.data || {}
-            this.servicesInfo.buttonList.push({
-                buttonName: '填写方案',
-                buttonCode: 'programme_upload'
-            })
+            // this.servicesInfo.buttonList.push({
+            //     buttonName: '填写方案',
+            //     buttonCode: 'programme_upload'
+            // })
             // this.servicesInfo.buttonList.push({
             //     buttonName: '电商',
             //     buttonCode: 'assign_ds_adviser'
