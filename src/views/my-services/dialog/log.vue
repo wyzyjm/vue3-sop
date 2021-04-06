@@ -97,6 +97,35 @@
     </el-table-column>
   </el-table>  
 
+
+  <el-table
+    v-if="buttonType == 'programme_see_history'"
+    :data="tableData"
+    size="small"
+    border
+    max-height="400"
+    style="width: 100%">
+    <el-table-column
+      width="200px"
+      prop="annexName"
+      label="方案名称"
+      :show-overflow-tooltip="true">
+        <template scope="scope">
+            <!-- <el-link v-if="scope.row.annexType == 4" @click="openWindow(scope.row)" type="primary">{{scope.row.annexName}}</el-link> -->
+            <el-link :href="scope.row.annexShowUrl" type="primary" target="_blank">{{scope.row.annexName}}</el-link>
+        </template>
+    </el-table-column>
+    <el-table-column
+      prop="uploadTime"
+      label="创建时间"
+      show-overflow-tooltip>
+    </el-table-column>
+    <el-table-column
+      prop="uploaderName"
+      :show-overflow-tooltip="true"
+      label="操作人">
+    </el-table-column>
+  </el-table>  
 </div>
 </template>
 

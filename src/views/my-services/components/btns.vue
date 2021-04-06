@@ -167,6 +167,7 @@ methods: {
                     this.$emit('reload', {})
                 }
             }).catch(err => {
+                console.log(err)
                 this.loading = false
             })
         } else {
@@ -181,6 +182,7 @@ methods: {
                     this.$emit('reload', {})
                 }
             }).catch(err => {
+                console.log(err)
                 this.loading = false
             })
         }

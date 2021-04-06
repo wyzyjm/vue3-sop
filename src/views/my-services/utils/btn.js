@@ -33,13 +33,6 @@ export const btns = {
                 hideTitle: true,
                 hideSubmit: true,
             },
-
-            "programme_upload": {
-                value: 'programme_upload',
-                label: '上传方案',
-                fileName: 'plan',
-                hideTitle: true
-            },
             "web_preview": {
                 value: 'web_preview',
                 label: '网站预览',
@@ -48,6 +41,13 @@ export const btns = {
             }
         },
         dynamicList: {
+
+            "programme_upload": {
+                value: 'programme_upload',
+                label: '上传方案',
+                fileName: 'plan',
+                // hideTitle: true
+            },
             // "preview": {
             //     value: 'preview',
             //     label: '图片预览',
@@ -105,6 +105,26 @@ export const btns = {
             "assign_ds_adviser": {
                 value: 'assign_ds_adviser',
                 label: '分派电商营销顾问',
+                fileName: 'allot',
+                width: '400',
+                requiredParam: {
+                    vaild: 'empId',
+                    errorMsg: '请选择员工'
+                }
+            },
+            "change_mh_adviser": {
+                value: 'assign_mh_adviser',
+                label: '更换门户营销顾问',
+                fileName: 'allot',
+                width: '400',
+                requiredParam: {
+                    vaild: 'empId',
+                    errorMsg: '请选择员工'
+                }
+            },
+            "change_ds_adviser": {
+                value: 'assign_ds_adviser',
+                label: '更换电商营销顾问',
                 fileName: 'allot',
                 width: '400',
                 requiredParam: {
@@ -209,6 +229,12 @@ export const btns = {
                 label: '提交方案',
                 popover: true,
                 visible: false,
+            },
+            "programme_see_history": {
+                value: 'programme_see_history',
+                label: '历史方案',
+                fileName: 'log',
+                hideSubmit: true,
             },
             "demand_confirm": {
                 value: 'demand_confirm',

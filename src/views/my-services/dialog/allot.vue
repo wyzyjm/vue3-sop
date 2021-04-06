@@ -74,7 +74,8 @@ methods: {
                 this.$emit('close')
                 this.$store.commit('table/update')
             }
-        }).catch(err => {
+        }).catch((err) => {
+            console.log(err)
             this.$message.error('请求失败')
         })
     },
@@ -118,7 +119,8 @@ created() {
     // console.log(this.buttonType, this.curBtn, this.code, this.form, this.isBtn)
     if (this.buttonType == 'assign_designers' || this.buttonType == 'assign_make' || this.buttonType == 'assign_assistant'
      || this.buttonType == 'change_designers' || this.buttonType == 'change_make' || this.buttonType == 'change_assistant'
-     || this.buttonType == 'assign_mh_adviser' || this.buttonType == 'assign_ds_adviser') {
+     || this.buttonType == 'assign_mh_adviser' || this.buttonType == 'assign_ds_adviser'
+     || this.buttonType == 'change_mh_adviser' || this.buttonType == 'change_ds_adviser') {
         getServicesBtn({serviceCode: this.code, buttonType: 'get_assign_person'}).then(res => {
             // 获取设计师列表
 
@@ -130,9 +132,9 @@ created() {
                 // 助理
             } else if (this.buttonType == 'assign_assistant' || this.buttonType == 'change_assistant') {
                 this.selectList = res.data.assistantList
-            } else if (this.buttonType == 'assign_mh_adviser') {
+            } else if (this.buttonType == 'assign_mh_adviser' || this.buttonType == 'change_mh_adviser') {
                 this.selectList = res.data.pmcList
-            } else if (this.buttonType == 'assign_ds_adviser') {
+            } else if (this.buttonType == 'assign_ds_adviser' || this.buttonType == 'change_ds_adviser') {
                 this.selectList = res.data.eocList
             } else {
                 this.selectList = res.data.qualityList
