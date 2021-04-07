@@ -257,11 +257,11 @@ methods: {
         this.resetData() 
     },
     loadBtn () {
-        console.log('loading btn')
         this.btn = []
         Object.keys(btns.fixList).forEach(key => {
             this.btn.push(btns.fixList[key])
         })
+        console.log(this.btn, 9321)
         setTimeout(() => {
             // let mergeBtn = {...btns.fixList, ...btns.dynamicList}
             // Object.keys(mergeBtn).forEach(key => {
@@ -291,10 +291,14 @@ methods: {
                 })
             }
             let mergeBtn = {...btns.dynamicList}
+            
             btnArr.map((v, i) => {
-                mergeBtn[v.buttonCode].label = v.buttonName
-                v = mergeBtn[v.buttonCode]
-                this.btn.push(v)
+                // console.log(mergeBtn[v.buttonCode], v.buttonCode, 9999)
+                if (mergeBtn[v.buttonCode]) {
+                    mergeBtn[v.buttonCode].label = v.buttonName
+                    v = mergeBtn[v.buttonCode]
+                    this.btn.push(v)
+                }
             })
             // Object.keys(mergeBtn).forEach(key => {
             //     btnArr.map(v => {
