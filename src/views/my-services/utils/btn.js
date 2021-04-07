@@ -246,6 +246,18 @@ export const btns = {
                 popover: true,
                 visible: false,
             },
+            "submit_adviser_verification": {
+                value: 'submit_adviser_verification',
+                label: '提交验收',
+                popover: true,
+                visible: false,
+            },
+            "confirm_programme": {
+                value: 'confirm_programme',
+                label: '确认方案',
+                popover: true,
+                visible: false,
+            },
             "programme_submit": {
                 value: 'programme_submit',
                 label: '提交方案',
