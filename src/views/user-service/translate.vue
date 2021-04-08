@@ -11,6 +11,11 @@
             <span>服务进度：{{detail.currentProgress || '--'}}</span>
             <span>更新时间：{{detail.updateTime || '--'}}</span>
           </div>
+          <div class="flow-head-info" v-if="detail.designerInfo">
+            <span>顾问姓名： {{detail.designerInfo.employeeName}}</span>
+            <span>手机： {{detail.designerInfo.mobile}}</span>
+            <span>邮箱： {{detail.designerInfo.workMail}}</span>
+          </div>
         </div>
         
         <div class="flow-setp">
