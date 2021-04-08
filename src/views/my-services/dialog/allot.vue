@@ -5,14 +5,18 @@
     v-model="value"
     :options="options"
     ref="refSubCat"
+    :filterable="true"
     @change="handleChange"
     placeholder="请选择团队"
     :props="{label: 'orgName', value:'orgId', expandTrigger: 'hover'}" v-if="buttonType == 'change_liability'"></el-cascader>
-    <el-select :disabled="selDisable" style="margin-left:20px;" placeholder="请选择员工" v-model="form.empId"
+    <el-select :disabled="selDisable"
+    filterable style="margin-left:20px;" placeholder="请选择员工" v-model="form.empId"
     v-if="buttonType != 'change_liability' && !term">
-        <el-option v-for="(item, idx) in selectList" :key="idx" :value="item.employeeId" :label="item.employeeName"></el-option>
+        <el-option v-for="(item, idx) in selectList"
+        filterable :key="idx" :value="item.employeeId" :label="item.employeeName"></el-option>
     </el-select>
-    <el-select :disabled="selDisable" style="margin-left:20px;" placeholder="请选择组织" v-model="form.orgId" v-if="term"
+    <el-select :disabled="selDisable" style="margin-left:20px;" placeholder="请选择组织"
+    filterable v-model="form.orgId" v-if="term"
     @change="selectChange">
         <el-option v-for="(item, idx) in selectList" :key="idx" :value="item.orgId" :label="item.orgName"></el-option>
     </el-select>
@@ -121,7 +125,7 @@ created() {
      || this.buttonType == 'change_designers' || this.buttonType == 'change_make' || this.buttonType == 'change_assistant'
      || this.buttonType == 'assign_mh_adviser' || this.buttonType == 'assign_ds_adviser'
      || this.buttonType == 'change_mh_adviser' || this.buttonType == 'change_ds_adviser') {
-        getServicesBtn({serviceCode: this.code, buttonType: 'get_assign_person'}).then(res => {
+        getServicesBtn({serviceCode: this.code, buttonType: 'get_assign_person', bCode:this.buttonType}).then(res => {
             // 获取设计师列表
 
             if (this.buttonType == 'assign_designers' || this.buttonType == 'change_designers') {
