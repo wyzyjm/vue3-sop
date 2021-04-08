@@ -384,27 +384,30 @@ function checkList(type, id) {
         //   fixed:'right',
           prop: ({ row }) => {
             let btnArr = []
+            let initBtn = {}
             let filterBtns = []
             if (row.buttonList && row.buttonList.length > 0) {
                 filterBtns = row.buttonList.filter(v=>root.$hasPermissions(v.buttonCode))
             }
             filterBtns.map((v, i) => {
                 if (btns.dynamicList[v.buttonCode]) {
-                    btns.dynamicList[v.buttonCode].label = v.buttonName
-                    v = btns.dynamicList[v.buttonCode]
-                    btnArr.push(v)
+                    // btns.dynamicList[v.buttonCode].label = v.buttonName
+                    // v = btns.dynamicList[v.buttonCode]
+                    btnArr.push(btns.dynamicList[v.buttonCode])
+                    initBtn[v.buttonCode] = v.buttonName
                 }
             })
+            // console.log(initBtn)
             // let btnArr = row.buttonList.filter(v=>root.$hasPermissions(v.buttonCode))
             if (btnArr.length > 1) {
                 let item = btnArr.slice(1).map((v, i) => {
                     return <el-dropdown-item>
-                            <div onClick={() => allotFun(row, i + 1, btnArr)}>{v.label}</div>
+                            <div onClick={() => allotFun(row, i + 1, btnArr)}>{initBtn[v.value] ? initBtn[v.value] : v.label}</div>
                         </el-dropdown-item>
                     
                 })
                 return [
-                    <s-button type="text" onClick={() => allotFun(row, 0, btnArr)}>{btnArr[0].label}</s-button>,
+                    <s-button type="text" onClick={() => allotFun(row, 0, btnArr)}>{initBtn[btnArr[0].value] ? initBtn[btnArr[0].value] : btnArr[0].label}</s-button>,
                     <el-dropdown>
                     <span class="el-dropdown-link el-button--text" style="margin-left:10px;cursor:pointer">
                         更多<i class="el-icon-arrow-down el-icon--right"></i>
@@ -417,7 +420,7 @@ function checkList(type, id) {
 
             } else if (btnArr.length == 1) {
                 return [
-                    <s-button type="text" onClick={() => allotFun(row, 0, btnArr)}>{btnArr[0].label}</s-button>
+                    <s-button type="text" onClick={() => allotFun(row, 0, btnArr)}>{initBtn[btnArr[0].value] ? initBtn[btnArr[0].value] : btnArr[0].label}</s-button>
                 ]
             } else {
                 return []

@@ -8,14 +8,14 @@
         width="160"
         :disabled="!btn.popover"
         v-model="btn.visible">
-        <p>您是否要{{btn.label}}?</p>
+        <p>您是否要{{initBtn[btn.value] ? initBtn[btn.value] : btn.label}}?</p>
         <div style="text-align: right; margin: 0">
             <el-button size="mini" type="default" @click="btn.visible = false">取消</el-button>
             <el-button type="primary" size="mini" @click="submitForm(btn)" :loading="loading">确定</el-button>
         </div>
         <!-- <el-button size="small" type="primary" style="margin:0 0 10px 10px" slot="reference" v-if="btn.popover">{{btn.label}}</el-button> -->
         <el-button size="small" type="primary" style="margin:0 0 10px 10px"
-        @click="handleShowBtn(btn)" slot="reference">{{btn.label}}</el-button>
+        @click="handleShowBtn(btn)" slot="reference">{{initBtn[btn.value] ? initBtn[btn.value] : btn.label}}</el-button>
         </el-popover>
     </span>
 
@@ -24,7 +24,7 @@
     class="drag_box" 
     v-if="dragDialogVisible">
         <!--标题-->
-        <p class="el-popover__title" v-if="!curBtn.hideTitle">{{curBtn.label}}</p>
+        <p class="el-popover__title" v-if="!curBtn.hideTitle">{{initBtn[curBtn.value] ? initBtn[curBtn.value] : curBtn.label}}</p>
         <!--业务展示-->
         <component :is="curBtn.fileName" 
         :code="code" 
@@ -79,6 +79,7 @@ return {
     id: 'drag_box',
     move: true,
     btn: [],
+    initBtn: {},
     loading: false,
     curBtn: {},
     form: {
@@ -258,6 +259,7 @@ methods: {
     },
     loadBtn () {
         this.btn = []
+        this.initBtn = {}
         Object.keys(btns.fixList).forEach(key => {
             this.btn.push(btns.fixList[key])
         })
@@ -269,37 +271,41 @@ methods: {
             // })
             let btnArr = []
             // let likeBtnArr = []
-            if (this.btnList.length > 0) {
-                this.btnList.map(v => {
-                    if (v.buttonCode.includes('pass*')) {
-                        this.btn.push({
-                            value: 'pass',
-                            label: v.buttonName,
-                            popover: true,
-                            visible: false,
-                        })
-                    } else if (v.buttonCode.includes('back*')) {
-                        this.btn.push({
-                            value: 'back',
-                            label: v.buttonName,
-                            popover: true,
-                            visible: false,
-                        })
-                    } else{
-                        btnArr.push(v)
-                    }
-                })
-            }
+            // if (this.btnList.length > 0) {
+            //     this.btnList.map(v => {
+            //         if (v.buttonCode.includes('pass*')) {
+            //             this.btn.push({
+            //                 value: 'pass',
+            //                 label: v.buttonName,
+            //                 popover: true,
+            //                 visible: false,
+            //             })
+            //         } else if (v.buttonCode.includes('back*')) {
+            //             this.btn.push({
+            //                 value: 'back',
+            //                 label: v.buttonName,
+            //                 popover: true,
+            //                 visible: false,
+            //             })
+            //         } else{
+            //             btnArr.push(v)
+            //         }
+            //     })
+            // }
             let mergeBtn = {...btns.dynamicList}
             
-            btnArr.map((v, i) => {
+            this.btnList.map((v, i) => {
                 // console.log(mergeBtn[v.buttonCode], v.buttonCode, 9999)
                 if (mergeBtn[v.buttonCode]) {
-                    mergeBtn[v.buttonCode].label = v.buttonName
-                    v = mergeBtn[v.buttonCode]
-                    this.btn.push(v)
+                    // mergeBtn[v.buttonCode].label = v.buttonName
+                    // v = mergeBtn[v.buttonCode]
+                    this.btn.push(mergeBtn[v.buttonCode])
+                    this.initBtn[v.buttonCode] = v.buttonName
+                    console.log(this.initBtn, 32)
                 }
+                
             })
+            // console.log(this.initBtn, 999)
             // Object.keys(mergeBtn).forEach(key => {
             //     btnArr.map(v => {
             //         if (v.buttonCode == key) {
