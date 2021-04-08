@@ -1,6 +1,6 @@
 <!-- 查看填写需求 -->
 <template>
-<div style="max-height:450px;overflow-y:scroll">
+<div style="max-height:400px;overflow-y:scroll">
     <p class="el-popover__title">消耗单品/运营
         <span style="float:right">本次消耗/可消耗量</span>
     </p>
