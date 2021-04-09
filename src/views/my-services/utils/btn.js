@@ -6,12 +6,12 @@ export const btns = {
                 fileName: 'log',
                 hideSubmit: true,
             },
-            "score_see": {
-                value: 'score_see',
-                label: '查看评分',
-                fileName: 'score',
-                hideSubmit: true,
-            },
+            // "score_see": {
+            //     value: 'score_see',
+            //     label: '查看评分',
+            //     fileName: 'score',
+            //     hideSubmit: true,
+            // },
             "evaluate_see": {
                 value: 'evaluate_see',
                 label: '查看评价',
@@ -26,13 +26,13 @@ export const btns = {
             //     hideTitle: true,
             //     hideSubmit: true,
             // },
-            "programme_see": {
-                value: 'programme_see',
-                label: '查看方案',
-                fileName: 'plan',
-                hideTitle: true,
-                hideSubmit: true,
-            },
+            // "programme_see": {
+            //     value: 'programme_see',
+            //     label: '查看方案',
+            //     fileName: 'plan',
+            //     hideTitle: true,
+            //     hideSubmit: true,
+            // },
             "web_preview": {
                 value: 'web_preview',
                 label: '网站预览',
@@ -41,7 +41,19 @@ export const btns = {
             }
         },
         dynamicList: {
-
+            "score_see": {
+                value: 'score_see',
+                label: '查看评分',
+                fileName: 'score',
+                hideSubmit: true,
+            },
+            "programme_see": {
+                value: 'programme_see',
+                label: '查看方案',
+                fileName: 'plan',
+                hideTitle: true,
+                hideSubmit: true,
+            },
             "programme_upload": {
                 value: 'programme_upload',
                 label: '上传方案',
