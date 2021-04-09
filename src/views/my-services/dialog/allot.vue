@@ -125,7 +125,7 @@ created() {
      || this.buttonType == 'change_designers' || this.buttonType == 'change_make' || this.buttonType == 'change_assistant'
      || this.buttonType == 'assign_mh_adviser' || this.buttonType == 'assign_ds_adviser'
      || this.buttonType == 'change_mh_adviser' || this.buttonType == 'change_ds_adviser') {
-        getServicesBtn({serviceCode: this.code, buttonType: 'get_assign_person', bCode:this.buttonType}).then(res => {
+        getServicesBtn({serviceCode: this.code, buttonType: 'get_assign_person', code:this.buttonType}).then(res => {
             // 获取设计师列表
 
             if (this.buttonType == 'assign_designers' || this.buttonType == 'change_designers') {
