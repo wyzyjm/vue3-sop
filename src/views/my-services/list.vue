@@ -198,7 +198,10 @@ function checkList(type, id) {
     }
     const getExpandListFun = (obj) => {
       return function () {
-        return getExpandList(obj)
+          if (!getExpandList[obj.serviceOrderId]) {
+              getExpandList[obj.serviceOrderId] = getExpandList(obj)
+          }
+        return getExpandList[obj.serviceOrderId]
       }
     }
     const table = reactive({
@@ -381,7 +384,7 @@ function checkList(type, id) {
         {
           label: '操作',
           width: 160,
-        //   fixed:'right',
+          fixed:'right',
           prop: ({ row }) => {
             let btnArr = []
             let initBtn = {}
