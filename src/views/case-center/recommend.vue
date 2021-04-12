@@ -171,6 +171,8 @@ export default defineComponent({
             message: msg
           })
         }
+
+        __getRecommend()
         __getPagelist();
       })
     }
