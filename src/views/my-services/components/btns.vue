@@ -101,8 +101,8 @@ return {
 //监听属性 类似于data概念
 computed: {
     filterButtons(){
-        // return this.btn
-        return this.btn.filter(v=>this.$hasPermissions(v.value))
+        return this.btn
+        // return this.btn.filter(v=>this.$hasPermissions(v.value))
     }
 },
 //监控data中的数据变化
