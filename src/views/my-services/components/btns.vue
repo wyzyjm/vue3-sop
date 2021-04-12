@@ -142,6 +142,8 @@ methods: {
         }
         this.loading = true
         let cloneOrderConsumeInfo = cloneDeep(this.form.orderConsumeInfo)
+        let clonePersonScoreJson = cloneDeep(this.form.personScoreJson)
+        this.form.personScoreJson = JSON.stringify(clonePersonScoreJson)
         // let cloneInstanceAccount = cloneDeep(this.form.instanceAccount)
         // 填写需求特殊处理
         if (this.form.buttonType == 'programme_upload') { // demand_write 填写需求暂时搁置 更换为上传方案
@@ -174,6 +176,7 @@ methods: {
         } else {
             getServicesBtn(this.form).then(res => {
                 this.form.orderConsumeInfo = cloneOrderConsumeInfo
+                this.form.personScoreJson = clonePersonScoreJson
                 if (res.status == 200) {
                     this.loading = false
                     this.$message.success(res.msg)

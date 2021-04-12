@@ -28,7 +28,7 @@
       prop="score"
       label="评分">
       <template slot-scope="scope">
-          <el-input type="number" v-model="form[scope.row.projectKey]" size="small"
+          <el-input type="number" v-model="form.personScoreJson[scope.row.projectKey]" size="small"
           :disabled="disable"></el-input>
           <!-- <el-tag type="info">{{scope.row.score}}</el-tag> -->
       </template>
@@ -51,7 +51,7 @@ import getServicesBtn from '@/api/1835-post-service-order-sevice-button-operate'
 export default {
 //import引入的组件需要注入到对象中才能使用
 components: {},
-props: ['code', 'buttonType'],
+props: ['code', 'buttonType', 'form'],
 data() {
 //这里存放数据
 return {
@@ -59,7 +59,7 @@ return {
     result: {},
     tableData: [],
     colLen: {},
-    form: {},
+    // form: {},
     disable: false
 };
 },
@@ -70,7 +70,7 @@ watch: {},
 //方法集合
 methods: {
     cancel () {
-        this.$store.commit('dialog/close')
+        // this.$store.commit('dialog/close')
     },
     save () {
         // let arr = []
@@ -108,11 +108,13 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
+    
     getServicesBtn({serviceCode: this.code, buttonType: 'score_config'}).then(res => {
         let obj = {}
+        this.form.personScoreJson = {}
         res.data.map(v => {
             if (this.buttonType != 'score_see') {
-                this.$set(this.form, v.projectKey, 0)
+                this.$set(this.form.personScoreJson, v.projectKey, 0)
             }
             if (obj[v.classifySort]) {
                 obj[v.classifySort]++
@@ -131,8 +133,9 @@ created() {
     if (this.buttonType == 'score_see') {
         this.disable = true
         getServicesBtn({serviceCode: this.code, buttonType: 'score_see'}).then(res => {
+            this.form.personScoreJson = {}
             res.data.map(v => {
-                this.$set(this.form, v.projectKey, v.projectValue)
+                this.$set(this.form.personScoreJson, v.projectKey, v.projectValue)
             })
             console.log(this.form, 8098)
             // let obj = {}
