@@ -116,6 +116,7 @@ created() {
         // this.form.personScoreJson = {}
         res.data.map(v => {
             if (this.buttonType != 'score_see') {
+                this.form.personScoreJson = {}
                 this.$set(this.form.personScoreJson, v.projectKey, 0)
             }
             if (obj[v.classifySort]) {
