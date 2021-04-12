@@ -42,24 +42,26 @@ export default defineComponent({
         },
         {
           label: '失败原因',
-          width: '180px',
           prop: 'failReason',
           showOverflowTooltip: true,
         },
         {
           label: '原始数据',
           width: '180px',
-          prop: 'failReason',
+          type:'expand',
+          // prop: 'failReason',
           prop: ({row}) => {
-              return [
-                <el-popover
-                    placement="top-start"
-                    width="500"
-                    trigger="hover"
-                    content={row.pushInfoJson}>
-                    <span slot="reference">{'查看'}</span>
-                </el-popover>
-              ]
+              return  <pre>{JSON.stringify(JSON.parse(row.pushInfoJson),null,2)}</pre>
+
+              // return [
+              //   <el-popover
+              //       placement="top-start"
+              //       trigger="hover"
+              //       >
+              //      <pre>{JSON.stringify(JSON.parse(row.pushInfoJson),null,2)}</pre>
+              //       <span slot="reference">{'查看'}</span>
+              //   </el-popover>
+              // ]
           }
         },
       ],
