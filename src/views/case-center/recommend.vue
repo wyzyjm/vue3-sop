@@ -101,7 +101,7 @@ export default defineComponent({
         },
         {
           label: '产品类型',
-          prop: 'productType',
+          prop: 'productTypeLable',
         },
         {
           label: '语言',
