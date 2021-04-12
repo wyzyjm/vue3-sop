@@ -28,8 +28,10 @@
       prop="score"
       label="评分">
       <template slot-scope="scope">
+          <!-- {{form.personScoreJson}} -->
           <el-input type="number" v-model="form.personScoreJson[scope.row.projectKey]" size="small"
           :disabled="disable"></el-input>
+
           <!-- <el-tag type="info">{{scope.row.score}}</el-tag> -->
       </template>
     </el-table-column>
@@ -111,9 +113,10 @@ created() {
     
     getServicesBtn({serviceCode: this.code, buttonType: 'score_config'}).then(res => {
         let obj = {}
-        this.form.personScoreJson = {}
+        // this.form.personScoreJson = {}
         res.data.map(v => {
             if (this.buttonType != 'score_see') {
+                this.form.personScoreJson = {}
                 this.$set(this.form.personScoreJson, v.projectKey, 0)
             }
             if (obj[v.classifySort]) {
@@ -133,11 +136,16 @@ created() {
     if (this.buttonType == 'score_see') {
         this.disable = true
         getServicesBtn({serviceCode: this.code, buttonType: 'score_see'}).then(res => {
-            this.form.personScoreJson = {}
+            // this.form.personScoreJson = {}
+            let obj = {}
             res.data.map(v => {
-                this.$set(this.form.personScoreJson, v.projectKey, v.projectValue)
+                 this.$set(obj, v.projectKey, v.projectValue)                
             })
-            console.log(this.form, 8098)
+            this.$nextTick(() => {
+                this.form.personScoreJson = obj
+                console.log(this.form.personScoreJson, 321321)
+            })
+            // console.log(this.form.personScoreJson, 8098)
             // let obj = {}
             // res.data.map(v => {
             //     this.$set(this.form, v.projectKey, 0)

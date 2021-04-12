@@ -241,22 +241,30 @@ export const btns = {
                 label: '转单分派门户营销顾问',
                 fileName: 'allot',
                 width: '400',
-                isTerm: true,
+                // isTerm: true,
                 requiredParam: {
-                    vaild: 'orgId',
-                    errorMsg: '请选择团队'
+                    vaild: 'empId',
+                    errorMsg: '请选择员工'
                 }
+                // requiredParam: {
+                //     vaild: 'orgId',
+                //     errorMsg: '请选择团队'
+                // }
             },
             "assign_ds_adviser01": {
                 value: 'assign_ds_adviser01',
                 label: '转单分派电商运营顾问',
                 fileName: 'allot',
                 width: '400',
-                isTerm: true,
+                // isTerm: true,
                 requiredParam: {
-                    vaild: 'orgId',
-                    errorMsg: '请选择团队'
+                    vaild: 'empId',
+                    errorMsg: '请选择员工'
                 }
+                // requiredParam: {
+                //     vaild: 'orgId',
+                //     errorMsg: '请选择团队'
+                // }
             },
 
             "to_assistant": {

@@ -44,6 +44,7 @@
         <div style="float:right;margin-bottom:15px;margin-top:-20px;">
              
             <el-button type="primary" size="small" :disabled="!table.disButton"
+            @click="handleBatch"
             >批量质检领取</el-button>
             <!-- @click="batchQulity" -->
         </div>
@@ -58,7 +59,33 @@ import getExpandList from '@/api/1829-get-service-order-sevice-order-info-get-se
 import useOptions from './utils/query'
 import useDialog from '@/hooks/use-dialog'
 import { btns } from './utils/btn.js'
+import getServicesBtn from '@/api/1835-post-service-order-sevice-button-operate'
 export default defineComponent({
+  methods: {
+      handleBatch () {
+        this.$confirm('是否批量领取选中数据？', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+            }).then(() => {
+                console.log(this.table.checked)
+                this.table.checked.map((v, i)=> {
+                    getServicesBtn({
+                        serviceCode: v.serviceCode,
+                        serviceId: v.id,
+                        buttonType: 'quality_receive'
+                    }).then(res => {
+                        if (i == this.table.checked.length - 1) {
+                            this.$message.success('操作成功')
+                        }
+                    })
+                })
+                
+            }).catch(() => {
+          
+            });
+      }
+  },
   setup(props, { root }) {
     const form = reactive({
       custName: '', // 客户名称
