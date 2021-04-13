@@ -418,6 +418,7 @@ function checkList(type, id) {
             let filterBtns = []
             if (row.buttonList && row.buttonList.length > 0) {
                 filterBtns = row.buttonList.filter(v=>root.$hasPermissions(v.buttonCode))
+                // filterBtns = row.buttonList
             }
             filterBtns.map((v, i) => {
                 if (btns.dynamicList[v.buttonCode]) {

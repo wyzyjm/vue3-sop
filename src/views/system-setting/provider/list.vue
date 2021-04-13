@@ -183,11 +183,11 @@ export default defineComponent({
               if (row.basicStatus == 0) {
                   return '服务中'
               } else if (row.basicStatus == 1) {
-                  return '暂停'
+                  return '已暂停'
               } else if (row.basicStatus == 2) {
                   return '清退中'
               } else if (row.basicStatus == 3) {
-                  return '关闭'
+                  return '已关闭'
               }
           }
         },

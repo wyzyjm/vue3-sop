@@ -34,7 +34,7 @@ export default defineComponent({
         {
           showOverflowTooltip: true,
           label: "售卖渠道",
-          prop: "salesChannelName"
+          prop: "completeSalesChannelName"
         },
         {
           label: "产品名称",
@@ -57,7 +57,7 @@ export default defineComponent({
     const form = reactive({
         name: ''
     });
-    getProviderScope({serviceProviderId: props.data[0].id}).then(res => {
+    getProviderScope({serviceProviderId: props.data[0].id, pageSize: -1}).then(res => {
         table.data = res.data.records || []
         
     })
