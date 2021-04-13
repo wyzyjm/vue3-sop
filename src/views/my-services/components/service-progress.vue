@@ -24,6 +24,8 @@
 import { defineComponent, ref } from '@vue/composition-api'
 import request from '@/api/1823-get-service-order-sevice-order-info-get-service-order-progress-{serviceorderid}'
 import Vue from 'vue'
+
+
 export default defineComponent({
   props: {
     serviceOrderId: {
@@ -36,6 +38,12 @@ export default defineComponent({
     const init = (serviceOrderId) => {
       list.value = []
       request({ serviceOrderId }).then((response) => {
+        // if (init.d) {
+        //   response = init.d
+        // } else {
+        //   init.d = response
+        //   init.id = serviceOrderId
+        // }
         response.data.forEach((v, i) => {
           if (i === response.data.length - 1) {
             list.value.push({ isLast: true, ...v })
@@ -58,6 +66,22 @@ export default defineComponent({
       return list
     }
 
+    // init.t = setInterval(() => {
+    //   const c = init.d.data.find((v) => v.nodeStatus === 1)
+    //   const n = init.d.data.find((v) => v.nodeStatus === 0)
+    //   if (c) {
+    //     c.nodeStatus = 2
+    //     if (n) {
+    //       n.statusName = Math.random() + ''
+    //       n.takeupTime = Date.now() + ''
+    //       n.nodeStatus = 1
+    //       init(init.id)
+    //     }
+    //   } else {
+    //     clearInterval(init.t)
+    //   }
+    // }, 9999)
+
     return { list, actived, init }
   },
 })
@@ -71,8 +95,8 @@ export default defineComponent({
     position: relative;
     &.finished {
       border-color: #18b398;
-      .dot{
-        background:#18b398;
+      .dot {
+        background: #18b398;
       }
     }
     &.first,

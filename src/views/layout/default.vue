@@ -235,6 +235,8 @@ export default defineComponent({
 .logo {
   display: block;
   img {
+    width: 180px;
+    margin:8px 0 0 8px;
     vertical-align: middle;
   }
 }
