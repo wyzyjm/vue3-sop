@@ -3,7 +3,7 @@
 <div class='box' style="position:relative">
     
     <div class='module-box'>
-        <div class="title-box">服务单进度</div>
+        <div class="title-box">服务单进度 <b class="green">{{$route.params.code}}</b></div>
         <p class="clear"></p>
         <div class="progress_box">
             <ServiceProgress ref="progress" :serviceOrderId="$route.params.id"></ServiceProgress>
