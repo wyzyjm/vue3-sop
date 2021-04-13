@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <s-table :data="table.data" :cols="table.cols" border>
+    <s-table :data="table.data" :cols="table.cols" border max-height="400">
         <s-form slot="form" :model="form" inline>
             <s-form-item label="当前服务商组织名称" prop="name">
                 <s-input v-model="form.name" clearable></s-input>
@@ -43,7 +43,10 @@ export default defineComponent({
         {
           label: "合作服务商/组织",
           showOverflowTooltip: true,
-          prop: "targetOrgName",
+          prop: "targetCompleteOrgName",
+            // prop: ({row}) => {
+            //     return `${row.targetOrgName}/${row.targetCompleteOrgName}`
+            // }
         },
         {
           label: "合作组织状态",
@@ -63,7 +66,7 @@ export default defineComponent({
         name: '',
         status: '',
     });
-    getOrgList({providerId: props.data[0].id}).then(res => {
+    getOrgList({providerId: props.data[0].id, pageSize: -1}).then(res => {
         table.data = res.data.records || []
         console.log(res)
     })

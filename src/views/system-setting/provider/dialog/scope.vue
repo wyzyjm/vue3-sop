@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <s-table :data="table.data" :cols="table.cols" border>
+    <s-table :data="table.data" :cols="table.cols" border max-height="400">
         <s-form slot="form" :model="form" >
             <!-- <s-form-item label="售卖渠道" prop="salesChannelId">
                 <s-input v-model="form.salesChannelId" clearable></s-input>

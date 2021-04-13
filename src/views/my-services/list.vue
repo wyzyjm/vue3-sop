@@ -2,6 +2,7 @@
   <div class="services_box">
     <s-dialog v-bind="openSearchDialog" @close="openSearchDialog.close" @changeSearch="changeSearch" @changeReset="resetFun" />
     <s-dialog v-bind="allotDialog" @close="allotDialog.close" />
+    <s-dialog v-bind="previewDialog" @close="previewDialog.close" />
     <s-simple-table ref="tableRef" :data="table.data" :cols="table.cols" v-model="table.checked">
       <s-form :model="form" size="small" slot="form">
         <el-row>
@@ -36,10 +37,10 @@
       </s-form>
       <!--批量操作按钮-->
       <div slot="top" class="mb20">
-        <!-- <el-radio-group v-model="form.status">
-            <el-radio-button label="全部"></el-radio-button>
-            <el-radio-button label="生产中"></el-radio-button>
-            <el-radio-button label="已完成"></el-radio-button>
+        <!-- <el-radio-group v-model="form.tab">
+            <el-radio-button label="全部" value=""></el-radio-button>
+            <el-radio-button label="生产中" value="producting"></el-radio-button>
+            <el-radio-button label="已完成" value="completed"></el-radio-button>
         </el-radio-group> -->
         <div style="float:right;margin-bottom:15px;margin-top:-20px;">
              
@@ -131,8 +132,38 @@ export default defineComponent({
       width: '600px',
       component: require('./dialog/allot'),
     })
+    const previewDialog = useDialog({
+      uid: 'webPreview',
+      title: '网站预览',
+      width: '600px',
+      component: require('./dialog/webPreview'),
+    })
     const allotFun = (row, i, btnArr) => {
-        console.log(i , 999)
+        console.log(i , btnArr[i].value, 999)
+        // 网站预览
+        if (btnArr[i].value == 'web_preview') {
+            previewDialog.open({
+                isBtn: true,
+                code: row.serviceCode, 
+                buttonType: btnArr[i].value,
+                curBtn: btnArr[i],
+                form:{
+                    annexList: [], // 附件ID集合
+                    buttonType: btnArr[i].value, // 按钮类型
+                    configId: '', // 配置ID
+                    demandContent: '', // 需求
+                    orgId: '', // 部门ID
+                    empId: '', // 员工ID
+                    personScoreJson: '', // 评分结果
+                    reason: '', // 原因
+                    serviceCode: row.serviceCode, // 服务单号
+                    serviceId: row.id, // 服务商ID
+                    serviceMainInstanceCode: '', // 实例号
+                    orderConsumeInfo: '', // 消耗单品
+                }
+            })
+            return false
+        }
             allotDialog.open({
                 isBtn: true,
                 code: row.serviceCode, 
@@ -320,8 +351,8 @@ function checkList(type, id) {
           //   prop: 'servicePersonal',
           prop: ({ row }) => {
             let tableData = [
-              { label: '设计师', date: row.designerEmpName || '----' },
-              { label: '制作员', date: row.makerEmpName || '----' },
+              { label: '顾问', date: row.designerEmpName || '----' },
+              { label: '设计师', date: row.makerEmpName || '----' },
               { label: '设计助理', date: row.entryClerkName || '----' },
               { label: '质检员', date: row.qualityInspectorName || '----' },
             ]
@@ -428,6 +459,12 @@ function checkList(type, id) {
                     initBtn[v.buttonCode] = v.buttonName
                 }
             })
+            btnArr.push({
+                value: 'web_preview',
+                label: '网站预览',
+                fileName: 'webPreview',
+                hideSubmit: true,
+            })
             // console.log(initBtn)
             // let btnArr = row.buttonList.filter(v=>root.$hasPermissions(v.buttonCode))
             if (btnArr.length > 1) {
@@ -478,7 +515,8 @@ function checkList(type, id) {
       changeSearch,
       advSearch,
       allotDialog,
-      allotFun
+      allotFun,
+      previewDialog
     }
   },
 })

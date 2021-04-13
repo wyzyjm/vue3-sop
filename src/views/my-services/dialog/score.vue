@@ -29,9 +29,21 @@
       label="评分">
       <template slot-scope="scope">
           <!-- {{form.personScoreJson}} -->
-          <el-input type="number" v-model="form.personScoreJson[scope.row.projectKey]" size="small"
-          :disabled="disable"></el-input>
+          <el-input type="text" v-model="form.personScoreJson[scope.row.projectKey]" size="small"
+          :disabled="disable"
+          @blur="blurFun(scope.row.projectKey)"></el-input>
 
+          <!-- <el-tag type="info">{{scope.row.score}}</el-tag> -->
+      </template>
+    </el-table-column>
+    <el-table-column
+      prop="score"
+      label="项目得分">
+      <template slot-scope="scope">
+          <!-- {{form.personScoreJson}} -->
+          <el-input :value="(form.personScoreJson[scope.row.projectKey] * scope.row.weight) ? 
+          (form.personScoreJson[scope.row.projectKey] * scope.row.weight).toFixed(3) : 0" size="small"
+          :readonly="true"></el-input>
           <!-- <el-tag type="info">{{scope.row.score}}</el-tag> -->
       </template>
     </el-table-column>
@@ -71,6 +83,20 @@ computed: {},
 watch: {},
 //方法集合
 methods: {
+    blurFun (key) {
+        // console.log(32132,this.form.personScoreJson[key])
+        let nv = Number(this.form.personScoreJson[key])
+        if (isNaN(nv)) {
+            this.form.personScoreJson[key] = 0
+            return
+        } else if (nv <= 0) {
+            this.form.personScoreJson[key] = 0
+        } else if (nv > 100) {
+            this.form.personScoreJson[key] = 100
+        } else if (String(this.form.personScoreJson[key]).indexOf('.') > -1) {
+            this.form.personScoreJson[key] = 0
+        }
+    },
     cancel () {
         // this.$store.commit('dialog/close')
     },

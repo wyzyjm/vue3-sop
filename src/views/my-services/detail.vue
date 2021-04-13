@@ -401,8 +401,8 @@ methods: {
         getServicesInfo({serviceOrderId: this.$route.params.id}).then(res => {
             this.servicesInfo = res.data || {}
             // this.servicesInfo.buttonList.push({
-            //     buttonName: '历史方案3213',
-            //     buttonCode: 'assign_mh_adviser01'
+            //     buttonName: '评分test',
+            //     buttonCode: 'score'
             // })
             // this.servicesInfo.buttonList.push({
             //     buttonName: '电商',
