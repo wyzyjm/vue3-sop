@@ -21,7 +21,7 @@
                 <el-option :value="1" label="启用"></el-option>
             </el-select>
         </s-form-item>
-        <s-form-item label="服务商" prop="providerId">
+        <s-form-item label="服务商1" prop="providerId">
             <el-select v-model="form.providerId" placeholder="请选择" clearable filterable
             @change="changeProvider()">
                 <el-option :value="item.id" :label="item.basicName" v-for="item in options.providerList" :key="item.id"></el-option>
@@ -32,7 +32,7 @@
                 clearable
                 :show-all-levels="false"
                 :key="1"
-                :disabled="this.form.providerId ? false : true"
+                :disabled="this.form.providerId || this.form.providerId == '0' ? false : true"
                 v-model="form.orgId"
                 placeholder="请选择所属组织"
                 style="width:195px"
@@ -99,7 +99,7 @@ export default defineComponent({
       changeProvider () {
           this.orgList = []
           this.form.orgId = ''
-          if (this.form.providerId) {
+          if (this.form.providerId || this.form.providerId == 0) {
             getOrgList({providerId: this.form.providerId}).then(res => {
                 console.log(res)
                 res.data.children = res.data.children.length > 0 ? this.getTreeData(res.data.children) : undefined

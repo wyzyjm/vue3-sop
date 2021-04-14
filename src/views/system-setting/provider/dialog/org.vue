@@ -1,12 +1,12 @@
 <template>
   <div class="box">
-    <s-table :data="table.data" :cols="table.cols" border max-height="400">
-        <s-form slot="form" :model="form" inline>
+    <s-simple-table :data="table.data" :cols="table.cols" border max-height="400">
+        <s-form slot="form" :model="form" inline size="small" style="margin-bottom:10px;">
             <s-form-item label="当前服务商组织名称" prop="name">
                 <s-input v-model="form.name" clearable></s-input>
             </s-form-item>
-            <s-form-item label="合作组织状态" prop="status">
-                <el-select v-model="form.status" placeholder="请选择" clearable>
+            <s-form-item label="合作组织状态" prop="targetOrgStatus">
+                <el-select v-model="form.targetOrgStatus" placeholder="请选择" clearable>
                     <el-option label="启用" :value="1"></el-option>
                     <el-option label="停用" :value="0"></el-option>
                 </el-select>
@@ -14,11 +14,11 @@
             <s-form-item>
                 <div class="query-box">
                     <s-button type="primary" run="form.search">查询</s-button>
-                    <s-button run="form.reset">重置</s-button>
+                    <!-- <s-button run="form.reset">重置</s-button> -->
                 </div>
             </s-form-item>
         </s-form>
-    </s-table>
+    </s-simple-table>
   </div>
 </template>
 <script>
@@ -32,8 +32,14 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const getOrgListFun = () => {
+      return function () {
+          console.log(form, 999)
+        return getOrgList({providerId: props.data[0].id})
+      }
+    }
     const table = reactive({
-      data: [],
+      data: getOrgListFun(),
       cols: [
         {
           showOverflowTooltip: true,
@@ -44,33 +50,26 @@ export default defineComponent({
           label: "合作服务商/组织",
           showOverflowTooltip: true,
           prop: "targetCompleteOrgName",
-            // prop: ({row}) => {
-            //     return `${row.targetOrgName}/${row.targetCompleteOrgName}`
-            // }
         },
         {
           label: "合作组织状态",
+          width: '140px',
           showOverflowTooltip: true,
         //   prop: "targetOrgStatus",
           prop: ({row}) => {
-              if (row.targetOrgStatus == 1) {
-                  return '启用'
-              } else {
-                  return '停用'
-              }
+              return [
+                <el-tag type={row.targetOrgStatus == 1 ? 'success' : 'danger'}>
+                {row.targetOrgStatus == 1 ? '启用' : '停用'}</el-tag>
+              ]
           }
         },
       ],
     });
     const form = reactive({
         name: '',
-        status: '',
+        targetOrgStatus: '',
     });
-    getOrgList({providerId: props.data[0].id, pageSize: -1}).then(res => {
-        table.data = res.data.records || []
-        console.log(res)
-    })
-    console.log(table, 99999)
+
     return {
       table,
       form,

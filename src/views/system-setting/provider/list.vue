@@ -111,7 +111,7 @@ export default defineComponent({
     const openOrgDialog = useDialog({
       uid: 'getOrgList',
       title: '合作组织',
-      width: '800px',
+      width: '1000px',
       component: require('./dialog/org'),
     })
     

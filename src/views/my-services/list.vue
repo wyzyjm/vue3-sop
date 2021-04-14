@@ -78,6 +78,7 @@ export default defineComponent({
                     }).then(res => {
                         if (i == this.table.checked.length - 1) {
                             this.$message.success('操作成功')
+                            root.$store.commit('table/update')
                         }
                     })
                 })
@@ -128,7 +129,7 @@ export default defineComponent({
 
     const allotDialog = useDialog({
       uid: 'allot',
-      title: '分派/转单',
+      title: '操作',
       width: '600px',
       component: require('./dialog/allot'),
     })
@@ -139,7 +140,29 @@ export default defineComponent({
       component: require('./dialog/webPreview'),
     })
     const allotFun = (row, i, btnArr) => {
-        console.log(i , btnArr[i].value, 999)
+        // console.log(i , btnArr[i].value, 999)
+        // 质检领取
+        if (btnArr[i].value == 'quality_receive') {
+            root.$confirm('是否确认领取质检?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+                    getServicesBtn({
+                        serviceCode: row.serviceCode, // 服务单号
+                        serviceId: row.id, // 服务商ID
+                        buttonType: 'quality_receive'
+                    }).then(res => {
+                        if (res.status == 200) {
+                            this.$message.success('操作成功')
+                            root.$store.commit('table/update')
+                        }
+                    })
+                }).catch(() => {
+            
+                });
+            return
+        }
         // 网站预览
         if (btnArr[i].value == 'web_preview') {
             previewDialog.open({

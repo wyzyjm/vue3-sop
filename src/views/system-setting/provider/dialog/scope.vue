@@ -1,10 +1,10 @@
 <template>
   <div class="box">
-    <s-table :data="table.data" :cols="table.cols" border max-height="400">
-        <s-form slot="form" :model="form" >
-            <!-- <s-form-item label="售卖渠道" prop="salesChannelId">
+    <s-simple-table :data="table.data" :cols="table.cols" border max-height="400">
+        <!-- <s-form slot="form" :model="form" inline size="small" style="margin-bottom:10px">
+            <s-form-item label="售卖渠道" prop="salesChannelId">
                 <s-input v-model="form.salesChannelId" clearable></s-input>
-            </s-form-item> -->
+            </s-form-item>
             <s-form-item label="产品名称" prop="name">
                 <s-input v-model="form.name" clearable></s-input>
             </s-form-item>
@@ -14,8 +14,8 @@
                     <s-button run="form.reset">重置</s-button>
                 </div>
             </s-form-item>
-        </s-form>
-    </s-table>
+        </s-form> -->
+    </s-simple-table>
   </div>
 </template>
 <script>
@@ -28,8 +28,14 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const getProviderScopeFun = () => {
+      return function () {
+          console.log(form, 999)
+        return getProviderScope({providerId: props.data[0].id})
+      }
+    }
     const table = reactive({
-      data: [],
+      data: getProviderScopeFun(),
       cols: [
         {
           showOverflowTooltip: true,
@@ -55,12 +61,14 @@ export default defineComponent({
       ],
     });
     const form = reactive({
-        name: ''
+        name: '',
+        status: '',
+        code: ''
     });
-    getProviderScope({serviceProviderId: props.data[0].id, pageSize: -1}).then(res => {
-        table.data = res.data.records || []
+    // getProviderScope({serviceProviderId: props.data[0].id, pageSize: -1}).then(res => {
+    //     table.data = res.data.records || []
         
-    })
+    // })
     console.log(table)
     return {
       table,
