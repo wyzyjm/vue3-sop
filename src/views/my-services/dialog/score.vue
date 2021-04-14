@@ -10,6 +10,7 @@
     style="width: 100%">
     <el-table-column
       prop="classifyName"
+      width="80px"
       label="分类">
     </el-table-column>
     <el-table-column
@@ -19,6 +20,7 @@
     </el-table-column>
     <el-table-column
       prop="weight"
+      width="80px"
       label="权重">
       <template slot-scope="scope">
           <el-tag type="info">{{scope.row.weight * 100}}%</el-tag>
@@ -26,6 +28,7 @@
     </el-table-column>
     <el-table-column
       prop="score"
+      width="100px"
       label="评分">
       <template slot-scope="scope">
           <!-- {{form.personScoreJson}} -->
@@ -38,6 +41,7 @@
     </el-table-column>
     <el-table-column
       prop="score"
+      width="100px"
       label="项目得分">
       <template slot-scope="scope">
           <!-- {{form.personScoreJson}} -->
@@ -136,13 +140,12 @@ methods: {
 },
 //生命周期 - 创建完成（可以访问当前this实例）
 created() {
-    
     getServicesBtn({serviceCode: this.code, buttonType: 'score_config'}).then(res => {
         let obj = {}
-        // this.form.personScoreJson = {}
+        this.form.personScoreJson = {}
         res.data.map(v => {
             if (this.buttonType != 'score_see') {
-                this.form.personScoreJson = {}
+                // this.form.personScoreJson = {}
                 this.$set(this.form.personScoreJson, v.projectKey, 0)
             }
             if (obj[v.classifySort]) {

@@ -21,7 +21,7 @@
                 <el-option :value="1" label="启用"></el-option>
             </el-select>
         </s-form-item>
-        <s-form-item label="服务商1" prop="providerId">
+        <s-form-item label="服务商" prop="providerId">
             <el-select v-model="form.providerId" placeholder="请选择" clearable filterable
             @change="changeProvider()">
                 <el-option :value="item.id" :label="item.basicName" v-for="item in options.providerList" :key="item.id"></el-option>

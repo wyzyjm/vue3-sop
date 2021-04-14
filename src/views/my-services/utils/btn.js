@@ -16,7 +16,6 @@ export const btns = {
                 value: 'evaluate_see',
                 label: '查看评价',
                 fileName: 'seeEvaluate',
-                width: '400',
                 hideSubmit: true,
             },
             // "demand_see": {
@@ -44,6 +43,7 @@ export const btns = {
             "score_see": {
                 value: 'score_see',
                 label: '查看评分',
+                width: '600px',
                 fileName: 'score',
                 hideSubmit: true,
             },
@@ -98,7 +98,6 @@ export const btns = {
                 value: 'assign_make',
                 label: '分派制作员',
                 fileName: 'allot',
-                width: '400',
                 requiredParam: {
                     vaild: 'empId',
                     errorMsg: '请选择员工'
@@ -106,9 +105,8 @@ export const btns = {
             },
             "assign_mh_adviser": {
                 value: 'assign_mh_adviser',
-                label: '分派门户营销顾问321',
+                label: '分派门户营销顾问',
                 fileName: 'allot',
-                width: '400',
                 requiredParam: {
                     vaild: 'empId',
                     errorMsg: '请选择员工'
@@ -118,7 +116,6 @@ export const btns = {
                 value: 'assign_ds_adviser',
                 label: '分派电商营销顾问',
                 fileName: 'allot',
-                width: '400',
                 requiredParam: {
                     vaild: 'empId',
                     errorMsg: '请选择员工'
@@ -128,7 +125,6 @@ export const btns = {
                 value: 'change_mh_adviser',
                 label: '更换门户营销顾问',
                 fileName: 'allot',
-                width: '400',
                 requiredParam: {
                     vaild: 'empId',
                     errorMsg: '请选择员工'
@@ -138,7 +134,6 @@ export const btns = {
                 value: 'change_ds_adviser',
                 label: '更换电商营销顾问',
                 fileName: 'allot',
-                width: '400',
                 requiredParam: {
                     vaild: 'empId',
                     errorMsg: '请选择员工'
@@ -148,7 +143,6 @@ export const btns = {
                 value: 'assign_assistant',
                 label: '分派助理',
                 fileName: 'allot',
-                width: '400',
                 requiredParam: {
                     vaild: 'empId',
                     errorMsg: '请选择员工'
@@ -158,7 +152,6 @@ export const btns = {
                 value: 'change_designers',
                 label: '更换设计师',
                 fileName: 'allot',
-                width: '400',
                 requiredParam: {
                     vaild: 'empId',
                     errorMsg: '请选择员工'
@@ -168,7 +161,6 @@ export const btns = {
                 value: 'change_make',
                 label: '更换制作员',
                 fileName: 'allot',
-                width: '400',
                 requiredParam: {
                     vaild: 'empId',
                     errorMsg: '请选择员工'
@@ -178,13 +170,11 @@ export const btns = {
                 value: 'change_assistant',
                 label: '更换助理',
                 fileName: 'allot',
-                width: '400'
             },
             "change_liability": {
                 value: 'change_liability',
                 label: '更换担责',
                 fileName: 'allot',
-                width: '400',
                 isTerm: true,
                 requiredParam: {
                     vaild: 'orgId',
@@ -195,7 +185,6 @@ export const btns = {
                 value: 'to_designers',
                 label: '转单设计',
                 fileName: 'allot',
-                width: '400',
                 isTerm: true,
                 requiredParam: {
                     vaild: 'orgId',
@@ -206,7 +195,6 @@ export const btns = {
                 value: 'to_make',
                 label: '转单制作',
                 fileName: 'allot',
-                width: '400',
                 isTerm: true,
                 requiredParam: {
                     vaild: 'orgId',
@@ -217,7 +205,6 @@ export const btns = {
                 value: 'to_ds_adviser',
                 label: '转单电商运营顾问',
                 fileName: 'allot',
-                width: '400',
                 isTerm: true,
                 requiredParam: {
                     vaild: 'orgId',
@@ -228,7 +215,6 @@ export const btns = {
                 value: 'to_mh_adviser',
                 label: '转单门户营销顾问',
                 fileName: 'allot',
-                width: '400',
                 isTerm: true,
                 requiredParam: {
                     vaild: 'orgId',
@@ -240,7 +226,6 @@ export const btns = {
                 value: 'assign_mh_adviser01',
                 label: '转单分派门户营销顾问',
                 fileName: 'allot',
-                width: '400',
                 // isTerm: true,
                 requiredParam: {
                     vaild: 'empId',
@@ -255,7 +240,6 @@ export const btns = {
                 value: 'assign_ds_adviser01',
                 label: '转单分派电商运营顾问',
                 fileName: 'allot',
-                width: '400',
                 // isTerm: true,
                 requiredParam: {
                     vaild: 'empId',
@@ -271,7 +255,6 @@ export const btns = {
                 value: 'to_assistant',
                 label: '转单助理',
                 fileName: 'allot',
-                width: '400',
                 isTerm: true,
                 requiredParam: {
                     vaild: 'orgId',
@@ -442,6 +425,7 @@ export const btns = {
             "score": {
                 value: 'score',
                 label: '评分',
+                width: '600px',
                 fileName: 'score'
             },
     

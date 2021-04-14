@@ -21,7 +21,8 @@
 
     <div v-bind:id="id" 
     @mousedown="mousedown" 
-    class="drag_box" 
+    class="drag_box"
+    :style="{width: curBtn.width ? curBtn.width : ''}" 
     v-if="dragDialogVisible">
         <!--标题-->
         <p class="el-popover__title" v-if="!curBtn.hideTitle">{{initBtn[curBtn.value] ? initBtn[curBtn.value] : curBtn.label}}</p>
@@ -34,9 +35,11 @@
         <!--底部操作按钮-->
         <div style="text-align:center;margin-top:20px">
             <el-button @click="submitForm(curBtn)" type="primary" size="small" 
-            v-if="!curBtn.hideSubmit" :loading="loading">确定</el-button>
+            v-if="!curBtn.hideSubmit" :loading="loading">{{curBtn.value == 'score' ? '通过' : '确定'}}</el-button>
             <!-- <el-button @click="$refs['dragForm'].resetFields()" size="small">重置</el-button> -->
             <el-button @click="closeDrag" type="danger" size="small">关闭</el-button>
+            <el-button @click="toBack" type="info" size="small" 
+            v-if="curBtn.value == 'score'">打回</el-button>
         </div>
     </div>
 </div>
@@ -115,6 +118,17 @@ watch: {
 },
 //方法集合
 methods: {
+    toBack () {
+        this.curBtn = {
+            value: 'quality_back',
+            label: '质检打回',
+            fileName: 'editForm',
+            requiredParam: {
+                vaild: 'reason',
+                errorMsg: '请输入原因'
+            }
+        }
+    },
     // 数据初始化
     resetData () {
         this.form = {
