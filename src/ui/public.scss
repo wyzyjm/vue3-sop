@@ -1,0 +1,64 @@
+/**
+ * 这里公用内置变量（为保持整体风格一致）
+ *
+ * 你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ * 可以直接在 scss 代码中使用如下变量，直接使用这些变量（无需 import 这个文件）
+ */
+
+// 主题变量 
+$sop-header-bg: #2F2F2F;
+$sop-header-height: 60px;
+$sop-sider-width: 240px;
+$sop-sider-bg: #2F2F2F;
+
+// 颜色 
+$sop-color-theme: #18B398;
+$sop-color-white:#ffffff;
+$sop-color-grey:#f8f8f8;
+$sop-color-0: #000000;
+$sop-color-3: #333333;
+$sop-color-6: #666666;
+$sop-color-9: #999999;
+$sop-color-f2: #F2F2F2;
+$sop-color-d9: #D9D9D9;
+$sop-color-border: #EBEBEB;
+$sop-color-hover:#f1f1f1;//点击状态颜色
+$sop-color-mask:rgba(0, 0, 0, 0.4);//遮罩颜色
+
+// 文字尺寸 
+$sop-font-size-sm:12px;
+$sop-font-size-base:14px;
+$sop-font-size-lg:16px;
+
+// 图片尺寸 
+$sop-img-size-sm:40px;
+$sop-img-size-base:52px;
+$sop-img-size-lg:80px;
+
+// 常用距离定义
+@for $i from 1 through 100
+{
+    .mr-#{$i}
+    {
+        margin-right:$i +'px';
+    }
+    .mt-#{$i}
+    {
+        margin-top:$i +'px';
+    }
+    .mb-#{$i}
+    {
+        margin-bottom:$i +'px';
+    }
+    .ml-#{$i}
+    {
+        margin-left:$i +'px';
+    }
+    .w-#{$i}{
+        width:$i +'px';
+    }
+    .h-#{$i}{
+        width:$i +'px';
+    }
+}
+

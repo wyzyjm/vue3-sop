@@ -1,0 +1,54 @@
+.box{
+
+}
+.title-box{
+    width:calc(100% - 30px);
+    height:50px;
+    line-height: 50px;
+    padding-left:30px;
+    font-size: 14px;
+    font-weight: 400;
+    color:#333;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.form-box{
+    width:840px;
+    margin:40px auto;
+}
+
+.w340{
+    width:340px !important
+}
+
+.w300{
+    width:300px;
+}
+
+.w700{
+    width:700px;
+}
+
+.ml20{
+    margin-left:20px !important
+}
+.ml14{
+    margin-left:14px;
+}
+
+.module-box{
+    width:100%;
+    margin-bottom:20px;
+    background: #fff;
+    border: 1px solid #EBEBEB;
+    border-radius: 6px;
+}
+.footer-box{
+    text-align: center;
+    margin:40px auto;
+    clear: both;
+}
+
+.w480{
+    width:480px
+}
